@@ -8,7 +8,6 @@ namespace App
         public Result(int sel)
         {
             this.sel = sel;
-            showResult();
         }
 
         public void print1(int rows)
@@ -20,7 +19,29 @@ namespace App
                 for (int n = 0; n < x; n++) Console.Write("*");
                 Console.WriteLine();
             }
-            Console.Read();
+        }
+
+        public void print2(int rows)
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                int x = 2 * (rows-i-1) + 1;
+                for (int n = 0; n < i; n++) Console.Write(" ");
+                for (int n = 0; n < x; n++) Console.Write("*");
+                Console.WriteLine();
+            }
+        }
+
+        public void print3(int rows)
+        {
+            print2(rows);
+            print1(rows);
+        }
+
+        public void print4(int rows)
+        {
+            print1(rows);
+            print2(rows);
         }
 
         public bool showResult()
@@ -50,7 +71,7 @@ namespace App
             else if (sel == 2) print3(rows);
             else if (sel == 3) print4(rows);
 
-            Console.ReadLine();
+            Console.Read();
 
             return false;
         }
@@ -106,6 +127,7 @@ namespace App
                     {
                         sel = (sel + 3) % 4;
                     }
+                    // console switching
                     if (key == ConsoleKey.Spacebar)
                     {
                         Console.Clear();
