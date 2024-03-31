@@ -4,7 +4,56 @@ namespace App
 {
     class Result
     {
+        int sel;
+        public Result(int sel)
+        {
+            this.sel = sel;
+            showResult();
+        }
 
+        public void print1(int rows)
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                int x = 2 * i + 1;
+                for (int n = 0; n < (2*rows+1 - x) / 2; n++) Console.Write(" ");
+                for (int n = 0; n < x; n++) Console.Write("*");
+                Console.WriteLine();
+            }
+            Console.Read();
+        }
+
+        public bool showResult()
+        {
+            int rows = 0;
+
+            while (true)
+            {
+                Console.Write("줄 수 입력 : ");
+                string str = Console.ReadLine();
+
+                // parse 가능하면 true 반환하고 row는 int값
+                // 아니면 false고 row는 0
+                int check = 0;
+                bool checkifInt = int.TryParse(str, out check);
+
+                // 옳은 값이면 break
+                if (checkifInt)
+                {
+                    rows = check;
+                    break;
+                }
+            }
+
+            if (sel == 0) print1(rows);
+            else if (sel == 1) print2(rows);
+            else if (sel == 2) print3(rows);
+            else if (sel == 3) print4(rows);
+
+            Console.ReadLine();
+
+            return false;
+        }
     }
 
     class Menu
@@ -35,14 +84,12 @@ namespace App
             if (sel == 3) changeColortoRed();
             Console.WriteLine("4. 다이아");
             changeColorToWhite();
+            Console.CursorVisible = false;
         }
 
         public void startGame()
         {
-            Console.WriteLine("1");
-            Console.WriteLine("2");
-            Console.WriteLine("3");
-            Console.WriteLine("4");
+            render();
 
             while (true)
             {
@@ -59,10 +106,16 @@ namespace App
                     {
                         sel = (sel + 3) % 4;
                     }
+                    if (key == ConsoleKey.Spacebar)
+                    {
+                        Console.Clear();
+                        Result result = new Result(sel);
+                        while (result.showResult()) ;
+                    }
                     Console.Clear();
                     render();
                 }
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(100);
             }
         }
     }
