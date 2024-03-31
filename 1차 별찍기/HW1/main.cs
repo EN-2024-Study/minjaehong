@@ -15,7 +15,7 @@ namespace App
             for (int i = 0; i < rows; i++)
             {
                 int x = 2 * i + 1;
-                for (int n = 0; n < (2*rows+1 - x) / 2; n++) Console.Write(" ");
+                for (int n = 0; n < rows-i-1; n++) Console.Write(" ");
                 for (int n = 0; n < x; n++) Console.Write("*");
                 Console.WriteLine();
             }
@@ -41,7 +41,28 @@ namespace App
         public void print4(int rows)
         {
             print1(rows);
-            print2(rows);
+            for (int i = 1; i < rows; i++)
+            {
+                int x = 2 * (rows - i - 1) + 1;
+                for (int n = 0; n < i; n++) Console.Write(" ");
+                for (int n = 0; n < x; n++) Console.Write("*");
+                Console.WriteLine();
+            }
+        }
+
+        public void checkifBackSpace()
+        {
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    ConsoleKey key = keyInfo.Key;
+
+                    // leftarrow 아니면 계속 돔
+                    if (key == ConsoleKey.LeftArrow) return;
+                }
+            }
         }
 
         public bool showResult()
@@ -71,7 +92,7 @@ namespace App
             else if (sel == 2) print3(rows);
             else if (sel == 3) print4(rows);
 
-            Console.Read();
+            checkifBackSpace();
 
             return false;
         }
