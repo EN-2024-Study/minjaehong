@@ -1,0 +1,77 @@
+# Visual Studio files
+.vs/
+*.vscode/
+*.suo
+*.user
+*.sln
+*.suo
+*.cache
+*.cachefile
+*.gpstate
+*.suo
+*.user
+*.vssscc
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.sdf
+*.opensdf
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+*.obj
+*.pdb
+*.log
+*.tlog/
+*.lastbuildstate
+*.ilk
+*.meta
+*.obj/
+*.pch
+*.idb
+*.db
+*.VC.opendb
+
+# ReSharper files
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings
+
+# Rider files
+.idea/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Bb]uild/
+
+# Visual Studio Code directories
+.vscode/
+
+# Paket dependency manager
+.paket/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# MonoDevelop
+*.pidb
+*.userprefs
+
+# Unity3D generated files
+Library/
+Temp/
+UnityGenerated/
