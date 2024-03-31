@@ -2,12 +2,67 @@ using System;
 
 namespace App
 {
+    // Result에서는 Console.Clear 없어도 됨
     class Result
     {
         int sel;
         public Result(int sel)
         {
             this.sel = sel;
+        }
+
+        ~Result()
+        {
+            
+        }
+
+        public int checkifValidNum()
+        {
+            string origin = "줄 수 입력 : ";
+
+            while (true)
+            {
+                string dummy = origin; 
+                string str = Console.ReadLine();
+
+                // parse 가능하면 true 반환하고 row는 int값
+                // 아니면 false고 row는 0
+                int check = 0;
+                bool checkifInt = int.TryParse(str, out check);
+
+                // 숫자면
+                if (checkifInt)
+                {
+                    if (check > 0)
+                    {
+                        return check;
+                    }
+                    else
+                    {
+                        // (x,y)
+                        Console.SetCursorPosition(0, 2);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("0보다 큰 정수 입력바람");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                }
+                else
+                {
+                    Console.SetCursorPosition(0, 2);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("유효한 값 입력바람");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+
+                // 여기까지 오는 경우는 틀린경우밖에
+
+                for (int i = 0; i < str.Length; i++) dummy += " ";
+
+                Console.SetCursorPosition(0, 0);
+                Console.Write(dummy);
+                Console.SetCursorPosition(0, 0);
+                Console.Write(origin);
+            }
         }
 
         public void print1(int rows)
@@ -59,39 +114,32 @@ namespace App
                     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                     ConsoleKey key = keyInfo.Key;
 
-                    // leftarrow 아니면 계속 돔
-                    if (key == ConsoleKey.LeftArrow) return;
+                    // backspace 아니면 계속 돔
+                    if (key == ConsoleKey.Backspace) return;
                 }
             }
         }
 
+        /*
+         * 0 줄 수 입력
+         * 1 예외
+         * 
+         * 3 결과
+        */ 
         public bool showResult()
         {
-            int rows = 0;
+            Console.Write("줄 수 입력 : ");
+            int rows = checkifValidNum();
 
-            while (true)
-            {
-                Console.Write("줄 수 입력 : ");
-                string str = Console.ReadLine();
-
-                // parse 가능하면 true 반환하고 row는 int값
-                // 아니면 false고 row는 0
-                int check = 0;
-                bool checkifInt = int.TryParse(str, out check);
-
-                // 옳은 값이면 break
-                if (checkifInt)
-                {
-                    rows = check;
-                    break;
-                }
-            }
+            // (x,y)
+            Console.SetCursorPosition(0, 3);
 
             if (sel == 0) print1(rows);
             else if (sel == 1) print2(rows);
             else if (sel == 2) print3(rows);
             else if (sel == 3) print4(rows);
 
+            Console.WriteLine("\nPRESS BACKSPACE TO GO BACK");
             checkifBackSpace();
 
             return false;
@@ -152,6 +200,7 @@ namespace App
                     if (key == ConsoleKey.Spacebar)
                     {
                         Console.Clear();
+                        // 이 객체 알아서 지워짐??
                         Result result = new Result(sel);
                         while (result.showResult()) ;
                     }
