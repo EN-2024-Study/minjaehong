@@ -128,7 +128,10 @@ namespace App
         */ 
         public bool showResult()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("줄 수 입력 : ");
+            Console.ForegroundColor = ConsoleColor.White;
+
             int rows = checkifValidNum();
 
             // (x,y)
@@ -148,36 +151,34 @@ namespace App
 
     class Menu
     {
-        int sel = 0; // 0~3
+        int sel = 0; // 0~4
 
-        public void changeColortoRed()
+        public void printSelectedLine(string str)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-        }
-
-        public void changeColorToWhite()
-        {
+            Console.WriteLine(str);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
         public void render()
         {
-            if (sel == 0) changeColortoRed();
-            Console.WriteLine("1. 가운데 정렬 별찍기");
-            changeColorToWhite();
-            if (sel == 1) changeColortoRed();
-            Console.WriteLine("2. 1번의 반대로 찍기");
-            changeColorToWhite();
-            if (sel == 2) changeColortoRed();
-            Console.WriteLine("3. 모래 시계");
-            changeColorToWhite();
-            if (sel == 3) changeColortoRed();
-            Console.WriteLine("4. 다이아");
-            changeColorToWhite();
-            Console.CursorVisible = false;
+            if (sel == 0) printSelectedLine("1. 가운데 정렬 별찍기");
+            else { Console.WriteLine("1. 가운데 정렬 별찍기"); }
+
+            if (sel == 1) printSelectedLine("2. 1번의 반대로 찍기");
+            else { Console.WriteLine("2. 1번의 반대로 찍기"); }
+
+            if (sel == 2) printSelectedLine("3. 모래 시계");
+            else { Console.WriteLine("3. 모래 시계"); }
+
+            if (sel == 3) printSelectedLine("4. 다이아");
+            else { Console.WriteLine("4. 다이아"); }
+
+            if (sel == 4) printSelectedLine("5. 종료하기");
+            else { Console.WriteLine("5. 종료하기"); }
         }
 
-        public void startGame()
+        public void showMenu()
         {
             render();
 
@@ -190,19 +191,22 @@ namespace App
 
                     if (key == ConsoleKey.UpArrow)
                     {
-                        sel = (sel + 1) % 4;
+                        sel = (sel + 1) % 5;
                     }
                     if (key == ConsoleKey.DownArrow)
                     {
-                        sel = (sel + 3) % 4;
+                        sel = (sel + 4) % 5;
                     }
                     // console switching
                     if (key == ConsoleKey.Spacebar)
                     {
+                        // 정상종료
+                        if(sel==4) { Environment.Exit(0);  }
+
                         Console.Clear();
                         // 이 객체 알아서 지워짐??
                         Result result = new Result(sel);
-                        while (result.showResult()) ;
+                        result.showResult();
                     }
                     Console.Clear();
                     render();
@@ -212,12 +216,68 @@ namespace App
         }
     }
 
-    class PrintStartApp
+    class Intro
+    {
+        int sel = 0;
+        Menu menu;
+
+        public Intro()
+        {
+            menu = new Menu();
+        }
+
+        public void render()
+        {
+            if (sel == 0) Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("1. 시작");
+            Console.ForegroundColor = ConsoleColor.White;
+            if (sel == 1) Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("2. 종료");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        // 메뉴 보여줌
+        // 0 시작하기
+        // 1 종료하기
+        public void startApp()
+        {
+            render();
+
+            while (true)
+            {
+                // 키 입력되었으면 검사
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    ConsoleKey key = keyInfo.Key;
+
+                    if (key == ConsoleKey.UpArrow || key == ConsoleKey.DownArrow) sel = (sel + 1) % 2;
+                    
+                    // console switching
+                    if (key == ConsoleKey.Spacebar)
+                    {
+                        // 1이면 정상종료
+                        if (sel == 1) { Environment.Exit(0); }
+
+                        Console.Clear();
+
+                        // 넘어가기
+                        menu.showMenu();
+                    }
+                    Console.Clear();
+                    render();
+                }
+            }
+        }
+    }
+
+    class PrintStarApp
     {
         public static void Main()
         {
-            Menu menu = new Menu();
-            menu.startGame();
+            Console.CursorVisible = false;
+            Intro intro = new Intro();
+            intro.startApp();
         }
     }
 }
