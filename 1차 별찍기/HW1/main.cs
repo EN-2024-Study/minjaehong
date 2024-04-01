@@ -18,11 +18,12 @@ namespace App
 
         public int checkifValidNum()
         {
-            string origin = "줄 수 입력 : ";
+            // cursor x 좌표
+            int left = Console.CursorLeft;
 
             while (true)
             {
-                string dummy = origin; 
+                string dummy = "";
                 string str = Console.ReadLine();
 
                 // parse 가능하면 true 반환하고 row는 int값
@@ -50,7 +51,7 @@ namespace App
                 {
                     Console.SetCursorPosition(0, 2);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("유효한 값 입력바람");
+                    Console.WriteLine("유효한 값 입력바람      ");
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
@@ -58,10 +59,9 @@ namespace App
 
                 for (int i = 0; i < str.Length; i++) dummy += " ";
 
-                Console.SetCursorPosition(0, 0);
+                Console.SetCursorPosition(left, 0);
                 Console.Write(dummy);
-                Console.SetCursorPosition(0, 0);
-                Console.Write(origin);
+                Console.SetCursorPosition(left, 0);
             }
         }
 
@@ -134,8 +134,9 @@ namespace App
 
             int rows = checkifValidNum();
 
-            // (x,y)
-            Console.SetCursorPosition(0, 3);
+            // 메세지 삭제 효과
+            Console.SetCursorPosition(0, 2);
+            Console.WriteLine("                      ");
 
             if (sel == 0) print1(rows);
             else if (sel == 1) print2(rows);
