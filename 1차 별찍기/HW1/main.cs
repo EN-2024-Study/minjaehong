@@ -1,9 +1,8 @@
 using System;
-using System.Runtime.InteropServices;
+using System.IO;
 
 namespace App
 {
-    // Result에서는 Console.Clear 없어도 됨
     class Result
     {
         int sel;
@@ -19,11 +18,16 @@ namespace App
 
         public int checkifValidNum()
         {
-            // cursor x 좌표
+
+            // 줄 수 입력 : 바로 옆 자리 저장
             int left = Console.CursorLeft;
+
+            int flag = 0;
 
             while (true)
             {
+                flag = Console.CursorLeft;
+
                 string dummy = "";
                 string str = Console.ReadLine();
 
@@ -52,16 +56,19 @@ namespace App
                 {
                     Console.SetCursorPosition(0, 2);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("유효한 값 입력바람      ");
+                    Console.WriteLine("유효한 값 입력바람    ");
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
                 // 여기까지 오는 경우는 틀린경우밖에
 
-                for (int i = 0; i < str.Length; i++) dummy += " ";
+                for (int i = 0; i < str.Length*2; i++) dummy += " ";
 
+                // 잘못입력된거 가리기
                 Console.SetCursorPosition(left, 0);
                 Console.Write(dummy);
+
+                // 줄 수 입력 : 바로 옆으로 커서 배치
                 Console.SetCursorPosition(left, 0);
             }
         }
@@ -129,10 +136,12 @@ namespace App
         */
         public void showResult()
         {
+            // 여기서 0 0 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("줄 수 입력 : ");
             Console.ForegroundColor = ConsoleColor.White;
 
+            // 옳은 값 입력될때까지
             int rows = checkifValidNum();
 
             // 메세지 삭제 효과
@@ -238,12 +247,12 @@ namespace App
                     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                     ConsoleKey key = keyInfo.Key;
 
-                    if (key == ConsoleKey.UpArrow)
+                    if (key == ConsoleKey.DownArrow)
                     {
                         before = sel;
                         sel = (sel + 1) % 5;
                     }
-                    if (key == ConsoleKey.DownArrow)
+                    if (key == ConsoleKey.UpArrow)
                     {
                         before = sel;
                         sel = (sel + 4) % 5;
@@ -255,8 +264,8 @@ namespace App
                         if (sel == 4) { Environment.Exit(0); }
 
                         Console.Clear();
-                        // 이 객체 알아서 지워짐??
-                        Result result = new Result(sel);
+
+                        Result result = new Result(sel); // gc?
                         result.showResult();
 
                         Console.Clear();
@@ -281,6 +290,7 @@ namespace App
 
         public void render()
         {
+            Console.SetCursorPosition(0, 0);
             if (sel == 0) Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("1. 시작");
             Console.ForegroundColor = ConsoleColor.White;
@@ -317,7 +327,7 @@ namespace App
                         // 넘어가기
                         menu.showMenu();
                     }
-                    Console.Clear();
+
                     render();
                 }
             }
@@ -329,6 +339,7 @@ namespace App
         public static void Main()
         {
             Console.Title = "별찍기별찍기";
+            //Console.SetWindowSize(80, 40);
 
             Console.CursorVisible = false;
             Intro intro = new Intro();
