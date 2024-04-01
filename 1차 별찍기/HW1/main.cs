@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 
 namespace App
 {
@@ -13,7 +14,7 @@ namespace App
 
         ~Result()
         {
-            
+
         }
 
         public int checkifValidNum()
@@ -70,7 +71,7 @@ namespace App
             for (int i = 0; i < rows; i++)
             {
                 int x = 2 * i + 1;
-                for (int n = 0; n < rows-i-1; n++) Console.Write(" ");
+                for (int n = 0; n < rows - i - 1; n++) Console.Write(" ");
                 for (int n = 0; n < x; n++) Console.Write("*");
                 Console.WriteLine();
             }
@@ -80,7 +81,7 @@ namespace App
         {
             for (int i = 0; i < rows; i++)
             {
-                int x = 2 * (rows-i-1) + 1;
+                int x = 2 * (rows - i - 1) + 1;
                 for (int n = 0; n < i; n++) Console.Write(" ");
                 for (int n = 0; n < x; n++) Console.Write("*");
                 Console.WriteLine();
@@ -125,8 +126,8 @@ namespace App
          * 1 예외
          * 
          * 3 결과
-        */ 
-        public bool showResult()
+        */
+        public void showResult()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("줄 수 입력 : ");
@@ -145,42 +146,89 @@ namespace App
 
             Console.WriteLine("\nPRESS BACKSPACE TO GO BACK");
             checkifBackSpace();
-
-            return false;
         }
     }
 
     class Menu
     {
         int sel = 0; // 0~4
+        int before = -1;
 
-        public void printSelectedLine(string str)
+        public void printSelectedLine(int sel)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(str);
+            switch (sel)
+            {
+                case 0:
+                    Console.SetCursorPosition(0, 0);
+                    Console.Write("1. 가운데 정렬 별찍기");
+                    break;
+                case 1:
+                    Console.SetCursorPosition(0, 1);
+                    Console.Write("2. 1번의 반대로 찍기");
+                    break;
+                case 2:
+                    Console.SetCursorPosition(0, 2);
+                    Console.Write("3. 모래 시계");
+                    break;
+                case 3:
+                    Console.SetCursorPosition(0, 3);
+                    Console.Write("4. 다이아");
+                    break;
+                case 4:
+                    Console.SetCursorPosition(0, 4);
+                    Console.Write("5. 종료하기");
+                    break;
+            }
             Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public void eraseSelectedLine(int before)
+        {
+            switch (before)
+            {
+                case 0:
+                    Console.SetCursorPosition(0, 0);
+                    Console.Write("1. 가운데 정렬 별찍기");
+                    break;
+                case 1:
+                    Console.SetCursorPosition(0, 1);
+                    Console.Write("2. 1번의 반대로 찍기");
+                    break;
+                case 2:
+                    Console.SetCursorPosition(0, 2);
+                    Console.Write("3. 모래 시계");
+                    break;
+                case 3:
+                    Console.SetCursorPosition(0, 3);
+                    Console.Write("4. 다이아");
+                    break;
+                case 4:
+                    Console.SetCursorPosition(0, 4);
+                    Console.Write("5. 종료하기");
+                    break;
+            }
         }
 
         public void render()
         {
-            if (sel == 0) printSelectedLine("1. 가운데 정렬 별찍기");
-            else { Console.WriteLine("1. 가운데 정렬 별찍기"); }
+            printSelectedLine(sel);
+            eraseSelectedLine(before);
+        }
 
-            if (sel == 1) printSelectedLine("2. 1번의 반대로 찍기");
-            else { Console.WriteLine("2. 1번의 반대로 찍기"); }
-
-            if (sel == 2) printSelectedLine("3. 모래 시계");
-            else { Console.WriteLine("3. 모래 시계"); }
-
-            if (sel == 3) printSelectedLine("4. 다이아");
-            else { Console.WriteLine("4. 다이아"); }
-
-            if (sel == 4) printSelectedLine("5. 종료하기");
-            else { Console.WriteLine("5. 종료하기"); }
+        public void initial_render()
+        {
+            Console.WriteLine("1. 가운데 정렬 별찍기");
+            Console.WriteLine("2. 1번의 반대로 찍기");
+            Console.WriteLine("3. 모래 시계");
+            Console.WriteLine("4. 다이아");
+            Console.WriteLine("5. 종료하기");
         }
 
         public void showMenu()
         {
+            // 맨 처음 예외
+            initial_render();
             render();
 
             while (true)
@@ -192,24 +240,28 @@ namespace App
 
                     if (key == ConsoleKey.UpArrow)
                     {
+                        before = sel;
                         sel = (sel + 1) % 5;
                     }
                     if (key == ConsoleKey.DownArrow)
                     {
+                        before = sel;
                         sel = (sel + 4) % 5;
                     }
                     // console switching
                     if (key == ConsoleKey.Spacebar)
                     {
                         // 정상종료
-                        if(sel==4) { Environment.Exit(0);  }
+                        if (sel == 4) { Environment.Exit(0); }
 
                         Console.Clear();
                         // 이 객체 알아서 지워짐??
                         Result result = new Result(sel);
                         result.showResult();
+
+                        Console.Clear();
+                        initial_render();
                     }
-                    Console.Clear();
                     render();
                 }
                 System.Threading.Thread.Sleep(100);
@@ -253,7 +305,7 @@ namespace App
                     ConsoleKey key = keyInfo.Key;
 
                     if (key == ConsoleKey.UpArrow || key == ConsoleKey.DownArrow) sel = (sel + 1) % 2;
-                    
+
                     // console switching
                     if (key == ConsoleKey.Spacebar)
                     {
@@ -276,6 +328,8 @@ namespace App
     {
         public static void Main()
         {
+            Console.Title = "별찍기별찍기";
+
             Console.CursorVisible = false;
             Intro intro = new Intro();
             intro.startApp();
