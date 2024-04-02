@@ -4,11 +4,11 @@ namespace App
 {
     public static class Default
     {
-        public const int START_X = 28;
+        public const int START_X = 25;
         public const int START_Y = 10;
         public const int WIDTH = 80; // 약 2배
         public const int HEIGHT = 40;
-        public const int MAX_INPUT = 12;
+        public const int MAX_INPUT = 23;
 
         public static bool flag = false;
 
@@ -119,19 +119,30 @@ namespace App
                     {
                         Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("최대치를 넘은 숫자임!     ");
+                        Console.WriteLine("결과가 콘솔창을 넘어가는 숫자입니다        ");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     else if (check > 0)
                     {
-                        return check;
+                        // 다이아 예외처리
+                        if (sel == 3 && check % 2 == 0)
+                        {
+                            Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("다이아는 홀수만 가능합니다               ");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        else
+                        {
+                            return check;
+                        }
                     }
                     else
                     {
                         // (x,y)
                         Console.SetCursorPosition(Default.START_X, Default.START_Y+2);
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("0보다 큰 정수 입력바람!");
+                        Console.Write("0보다 크고 "+Default.MAX_INPUT+"보다 작은 정수만 가능합니다");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
@@ -139,7 +150,7 @@ namespace App
                 {
                     Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("유효한 값 입력바람!     ");
+                    Console.Write("0보다 크고 " + Default.MAX_INPUT + "보다 작은 정수만 가능합니다");
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
@@ -227,6 +238,8 @@ namespace App
             Default.initCursorPos();
             Default.starty += 3;
 
+            rows = rows/2 + 1;
+
             for (int i = 0; i < rows; i++)
             {
                 int x = 2 * i + 1;
@@ -278,10 +291,10 @@ namespace App
             // 옳은 값 입력될때까지
             int rows = checkifValidNum();
 
-            // 메세지 삭제 효과
+            // 오류 메시지 삭제
             Default.initCursorPos();
             Default.starty += 2;
-            Default.write("                           ");
+            Default.write("                                             ");
 
             if (sel == 0) print1(rows);
             else if (sel == 1) print2(rows);
@@ -289,7 +302,7 @@ namespace App
             else if (sel == 3) print4(rows);
 
             Default.starty++;
-            Default.write("PRESS BACKSPACE TO GO BACK!");
+            Default.write("PRESS BACKSPACE TO GO BACK");
             checkifBackSpace();
         }
     }
@@ -491,7 +504,7 @@ namespace App
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
-                Console.Write("ctrl+c 금지");
+                Console.Write("ctrl+c 금지입니다");
                 Console.ForegroundColor = ConsoleColor.White;
 
                 Console.SetCursorPosition(curleft, curtop);
@@ -502,7 +515,7 @@ namespace App
                 curtop = Console.CursorTop;
 
                 Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
-                Console.Write("           ");
+                Console.Write("                  ");
 
                 Console.SetCursorPosition(curleft, curtop);
                 Default.flag = false;
