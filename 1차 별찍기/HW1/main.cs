@@ -113,7 +113,7 @@ namespace App
                     {
                         Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("이 숫자는 너무 크다!    ");
+                        Console.WriteLine("이 숫자는 너무 크다!     ");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     else if (check > 0)
@@ -133,7 +133,7 @@ namespace App
                 {
                     Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("유효한 값 입력바람!    ");
+                    Console.WriteLine("유효한 값 입력바람!     ");
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
@@ -260,7 +260,7 @@ namespace App
             // 메세지 삭제 효과
             Default.initCursorPos();
             Default.starty += 2;
-            Default.write("                      ");
+            Default.write("                           ");
 
             if (sel == 0) print1(rows);
             else if (sel == 1) print2(rows);
@@ -397,12 +397,12 @@ namespace App
         }
     }
 
-    class Intro
+    class Front
     {
         int sel = 0;
         Menu menu;
 
-        public Intro()
+        public Front()
         {
             menu = new Menu();
         }
@@ -456,21 +456,7 @@ namespace App
 
     class PrintStarApp
     {
-        public static void Main()
-        {
-            Console.Title = "별찍기별찍기";
-
-            // ctrl+c handling
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(myHandler);
-
-            Default.drawBoard();
-            Console.CursorVisible = true;
-
-            Intro intro = new Intro();
-            intro.startApp();
-        }
-
-        protected static void myHandler(Object sender, ConsoleCancelEventArgs args)
+        protected static void ctrlcHandler(Object sender, ConsoleCancelEventArgs args)
         {
             // ctrl+c 무효처리
             args.Cancel = true;
@@ -479,7 +465,7 @@ namespace App
             int curtop = Console.CursorTop;
 
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.SetCursorPosition(Default.START_X, Default.START_Y-3);
+            Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
             Console.Write("ctrl+c 금지");
             Console.ForegroundColor = ConsoleColor.White;
 
@@ -494,6 +480,20 @@ namespace App
             Console.Write("           ");
 
             Console.SetCursorPosition(curleft, curtop);
+        }
+
+        public static void Main()
+        {
+            Console.Title = "별찍기별찍기";
+
+            // ctrl+c handling
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlcHandler);
+
+            Default.drawBoard();
+            Console.CursorVisible = true;
+
+            Front front = new Front();
+            front.startApp();
         }
     }
 }
