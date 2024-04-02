@@ -6,11 +6,12 @@ namespace App
 {
     public static class Default
     {
-        public const int START_X = 25;
+        public const int START_X = 28;
         public const int START_Y = 10;
         public const int WIDTH = 80; // 약 2배
         public const int HEIGHT = 40;
-        
+        public const int MAX_INPUT = 12;
+
         // 동적 커서
         public static int startx;
         public static int starty;
@@ -97,6 +98,9 @@ namespace App
                 string dummy = "";
                 string str = Console.ReadLine();
 
+                // ctrl+c 예외처리
+                if (str == null) str = "";
+
                 // parse 가능하면 true 반환하고 row는 int값
                 // 아니면 false고 row는 0
                 int check = 0;
@@ -105,7 +109,14 @@ namespace App
                 // 숫자면
                 if (checkifInt)
                 {
-                    if (check > 0)
+                    if (check > Default.MAX_INPUT)
+                    {
+                        Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("이 숫자는 너무 크다!    ");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else if (check > 0)
                     {
                         return check;
                     }
@@ -114,7 +125,7 @@ namespace App
                         // (x,y)
                         Console.SetCursorPosition(Default.START_X, Default.START_Y+2);
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("0보다 큰 정수 입력바람");
+                        Console.WriteLine("0보다 큰 정수 입력바람!");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
@@ -122,7 +133,7 @@ namespace App
                 {
                     Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("유효한 값 입력바람    ");
+                    Console.WriteLine("유효한 값 입력바람!    ");
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
@@ -257,7 +268,7 @@ namespace App
             else if (sel == 3) print4(rows);
 
             Default.starty++;
-            Default.write("PRESS BACKSPACE TO GO BACK");
+            Default.write("PRESS BACKSPACE TO GO BACK!");
             checkifBackSpace();
         }
     }
@@ -449,12 +460,40 @@ namespace App
         {
             Console.Title = "별찍기별찍기";
 
-            // first and last drawBoard
+            // ctrl+c handling
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(myHandler);
+
             Default.drawBoard();
             Console.CursorVisible = true;
 
             Intro intro = new Intro();
             intro.startApp();
+        }
+
+        protected static void myHandler(Object sender, ConsoleCancelEventArgs args)
+        {
+            // ctrl+c 무효처리
+            args.Cancel = true;
+
+            int curleft = Console.CursorLeft;
+            int curtop = Console.CursorTop;
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.SetCursorPosition(Default.START_X, Default.START_Y-3);
+            Console.Write("ctrl+c 금지");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.SetCursorPosition(curleft, curtop);
+
+            System.Threading.Thread.Sleep(2000);
+
+            curleft = Console.CursorLeft;
+            curtop = Console.CursorTop;
+
+            Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
+            Console.Write("           ");
+
+            Console.SetCursorPosition(curleft, curtop);
         }
     }
 }
