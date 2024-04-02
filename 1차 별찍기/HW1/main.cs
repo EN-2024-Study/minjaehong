@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Runtime.ConstrainedExecution;
 
 namespace App
 {
@@ -12,16 +10,20 @@ namespace App
         public const int HEIGHT = 40;
         public const int MAX_INPUT = 12;
 
+        public static bool flag = false;
+
         // 동적 커서
         public static int startx;
         public static int starty;
         
+        // START_X START_Y로 커서 옮기기
         public static void initCursorPos()
         {
             startx = START_X;
             starty = START_Y;
         }
 
+        // 중앙에 WRITELINE
         public static void writeLine(string str)
         {
             Console.SetCursorPosition(startx, starty);
@@ -32,6 +34,7 @@ namespace App
             starty++;  
         }
 
+        // 중앙에 WRITE
         public static void write(string str)
         {
             Console.SetCursorPosition(startx, starty);
@@ -39,7 +42,7 @@ namespace App
             startx++;
         }
 
-        // 맨 처음 딱 한번 호출 후 더 이상 호출 안해도 되게
+        // 테두리 그리기
         public static void drawBoard()
         {
             for (int i = 0; i < WIDTH; i++)
@@ -99,7 +102,10 @@ namespace App
                 string str = Console.ReadLine();
 
                 // ctrl+c 예외처리
-                if (str == null) str = "";
+                if (str == null)
+                {
+                    continue;
+                }
 
                 // parse 가능하면 true 반환하고 row는 int값
                 // 아니면 false고 row는 0
@@ -113,7 +119,7 @@ namespace App
                     {
                         Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("이 숫자는 너무 크다!     ");
+                        Console.WriteLine("최대치를 넘은 숫자임!     ");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     else if (check > 0)
@@ -179,10 +185,23 @@ namespace App
             }
         }
 
+        // 모래시계
         public void print3(int rows)
         {
             Default.initCursorPos();
             Default.starty += 3;
+
+            int start = 0;
+            if (rows % 2 == 0)
+            {
+                start = 0;
+                rows /= 2;
+            }
+            else
+            {
+                start = 1;
+                rows = rows / 2 + 1;
+            }
 
             for (int i = 0; i < rows; i++)
             {
@@ -191,7 +210,8 @@ namespace App
                 for (int n = 0; n < x; n++) Default.write("*");
                 Default.writeLine("");
             }
-            for (int i = 0; i < rows; i++)
+
+            for (int i = start; i < rows; i++)
             {
                 int x = 2 * i + 1;
                 for (int n = 0; n < rows - i - 1; n++) Default.write(" "); // startx++;
@@ -200,6 +220,7 @@ namespace App
             }
         }
 
+        // 다이아
         public void print4(int rows)
         {
             // 커서 초기화
@@ -286,23 +307,23 @@ namespace App
             {
                 case 0:
                     Console.SetCursorPosition(Default.startx, Default.starty);
-                    Console.Write("1. 가운데 정렬 별찍기");
+                    Console.Write("① 가운데 정렬 별찍기");
                     break;
                 case 1:
                     Console.SetCursorPosition(Default.startx, Default.starty+1);
-                    Console.Write("2. 1번의 반대로 찍기");
+                    Console.Write("② 1번의 반대로 찍기");
                     break;
                 case 2:
                     Console.SetCursorPosition(Default.startx, Default.starty+2);
-                    Console.Write("3. 모래 시계");
+                    Console.Write("③ 모래 시계");
                     break;
                 case 3:
                     Console.SetCursorPosition(Default.startx, Default.starty+3);
-                    Console.Write("4. 다이아");
+                    Console.Write("④ 다이아");
                     break;
                 case 4:
                     Console.SetCursorPosition(Default.startx, Default.starty+4);
-                    Console.Write("5. 종료하기");
+                    Console.Write("⑤ 종료하기");
                     break;
             }
             Console.ForegroundColor = ConsoleColor.White;
@@ -315,23 +336,23 @@ namespace App
             {
                 case 0:
                     Console.SetCursorPosition(Default.startx, Default.starty);
-                    Console.Write("1. 가운데 정렬 별찍기");
+                    Console.Write("① 가운데 정렬 별찍기");
                     break;
                 case 1:
                     Console.SetCursorPosition(Default.startx, Default.starty+1);
-                    Console.Write("2. 1번의 반대로 찍기");
+                    Console.Write("② 1번의 반대로 찍기");
                     break;
                 case 2:
                     Console.SetCursorPosition(Default.startx, Default.starty+2);
-                    Console.Write("3. 모래 시계");
+                    Console.Write("③ 모래 시계");
                     break;
                 case 3:
                     Console.SetCursorPosition(Default.startx, Default.starty+3);
-                    Console.Write("4. 다이아");
+                    Console.Write("④ 다이아");
                     break;
                 case 4:
                     Console.SetCursorPosition(Default.startx, Default.starty+4);
-                    Console.Write("5. 종료하기");
+                    Console.Write("⑤ 종료하기");
                     break;
             }
         }
@@ -346,11 +367,11 @@ namespace App
         {
             Default.drawBoard();
             Default.initCursorPos();
-            Default.writeLine("1. 가운데 정렬 별찍기");
-            Default.writeLine("2. 1번의 반대로 찍기");
-            Default.writeLine("3. 모래 시계");
-            Default.writeLine("4. 다이아");
-            Default.writeLine("5. 종료하기");
+            Default.writeLine("① 가운데 정렬 별찍기");
+            Default.writeLine("② 1번의 반대로 찍기");
+            Default.writeLine("③ 모래 시계");
+            Default.writeLine("④ 다이아");
+            Default.writeLine("⑤ 종료하기");
         }
 
         public void showMenu()
@@ -412,10 +433,10 @@ namespace App
             // 커서 초기화
             Default.initCursorPos();
             if (sel == 0) Console.ForegroundColor = ConsoleColor.Red;
-            Default.writeLine("1. 시작");
+            Default.writeLine("① 시작");
             Console.ForegroundColor = ConsoleColor.White;
             if (sel == 1) Console.ForegroundColor = ConsoleColor.Red;
-            Default.writeLine("2. 종료");
+            Default.writeLine("② 종료");
             Console.ForegroundColor = ConsoleColor.White;
         }
 
@@ -458,28 +479,34 @@ namespace App
     {
         protected static void ctrlcHandler(Object sender, ConsoleCancelEventArgs args)
         {
-            // ctrl+c 무효처리
-            args.Cancel = true;
+            // static flag 사용하기
+            if (!Default.flag)
+            {
+                Default.flag = true;
+                // ctrl+c 무효처리
+                args.Cancel = true;
 
-            int curleft = Console.CursorLeft;
-            int curtop = Console.CursorTop;
+                int curleft = Console.CursorLeft;
+                int curtop = Console.CursorTop;
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
-            Console.Write("ctrl+c 금지");
-            Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
+                Console.Write("ctrl+c 금지");
+                Console.ForegroundColor = ConsoleColor.White;
 
-            Console.SetCursorPosition(curleft, curtop);
+                Console.SetCursorPosition(curleft, curtop);
 
-            System.Threading.Thread.Sleep(2000);
+                System.Threading.Thread.Sleep(2000);
 
-            curleft = Console.CursorLeft;
-            curtop = Console.CursorTop;
+                curleft = Console.CursorLeft;
+                curtop = Console.CursorTop;
 
-            Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
-            Console.Write("           ");
+                Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
+                Console.Write("           ");
 
-            Console.SetCursorPosition(curleft, curtop);
+                Console.SetCursorPosition(curleft, curtop);
+                Default.flag = false;
+            }
         }
 
         public static void Main()
@@ -490,7 +517,7 @@ namespace App
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlcHandler);
 
             Default.drawBoard();
-            Console.CursorVisible = true;
+            Console.CursorVisible = false;
 
             Front front = new Front();
             front.startApp();
