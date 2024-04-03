@@ -1,11 +1,18 @@
 using System;
+using System.Threading;
 
 namespace App
 {
     public static class Default
     {
-        public const int START_X = 25;
-        public const int START_Y = 10;
+        // 원래 25 10
+        // 테스트용도로 좀 내리기
+        public static int START_X = 30;
+        public static int START_Y = 20;
+
+        public const int LOGO_X = 5;
+        public const int LOGO_Y = 5;
+
         public const int WIDTH = 80; // 약 2배
         public const int HEIGHT = 40;
         public const int MAX_INPUT = 23;
@@ -15,7 +22,7 @@ namespace App
         // 동적 커서
         public static int startx;
         public static int starty;
-        
+
         // START_X START_Y로 커서 옮기기
         public static void initCursorPos()
         {
@@ -31,7 +38,7 @@ namespace App
 
             // 개행처리
             startx = START_X;
-            starty++;  
+            starty++;
         }
 
         // 중앙에 WRITE
@@ -85,7 +92,7 @@ namespace App
     class Result
     {
         int sel;
-        public Result(int sel) 
+        public Result(int sel)
         {
             this.sel = sel;
         }
@@ -140,9 +147,9 @@ namespace App
                     else
                     {
                         // (x,y)
-                        Console.SetCursorPosition(Default.START_X, Default.START_Y+2);
+                        Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("0보다 크고 "+Default.MAX_INPUT+"보다 작은 정수만 가능합니다");
+                        Console.Write("0보다 크고 " + Default.MAX_INPUT + "보다 작은 정수만 가능합니다");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
@@ -156,7 +163,7 @@ namespace App
 
                 // 여기까지 오는 경우는 틀린경우밖에
 
-                for (int i = 0; i < str.Length*2; i++) dummy += " ";
+                for (int i = 0; i < str.Length * 2; i++) dummy += " ";
 
                 // 잘못입력된거 가리기
                 Console.SetCursorPosition(left, Default.starty);
@@ -238,7 +245,7 @@ namespace App
             Default.initCursorPos();
             Default.starty += 3;
 
-            rows = rows/2 + 1;
+            rows = rows / 2 + 1;
 
             for (int i = 0; i < rows; i++)
             {
@@ -323,19 +330,19 @@ namespace App
                     Console.Write("① 가운데 정렬 별찍기");
                     break;
                 case 1:
-                    Console.SetCursorPosition(Default.startx, Default.starty+1);
+                    Console.SetCursorPosition(Default.startx, Default.starty + 1);
                     Console.Write("② 1번의 반대로 찍기");
                     break;
                 case 2:
-                    Console.SetCursorPosition(Default.startx, Default.starty+2);
+                    Console.SetCursorPosition(Default.startx, Default.starty + 2);
                     Console.Write("③ 모래 시계");
                     break;
                 case 3:
-                    Console.SetCursorPosition(Default.startx, Default.starty+3);
+                    Console.SetCursorPosition(Default.startx, Default.starty + 3);
                     Console.Write("④ 다이아");
                     break;
                 case 4:
-                    Console.SetCursorPosition(Default.startx, Default.starty+4);
+                    Console.SetCursorPosition(Default.startx, Default.starty + 4);
                     Console.Write("⑤ 종료하기");
                     break;
             }
@@ -352,19 +359,19 @@ namespace App
                     Console.Write("① 가운데 정렬 별찍기");
                     break;
                 case 1:
-                    Console.SetCursorPosition(Default.startx, Default.starty+1);
+                    Console.SetCursorPosition(Default.startx, Default.starty + 1);
                     Console.Write("② 1번의 반대로 찍기");
                     break;
                 case 2:
-                    Console.SetCursorPosition(Default.startx, Default.starty+2);
+                    Console.SetCursorPosition(Default.startx, Default.starty + 2);
                     Console.Write("③ 모래 시계");
                     break;
                 case 3:
-                    Console.SetCursorPosition(Default.startx, Default.starty+3);
+                    Console.SetCursorPosition(Default.startx, Default.starty + 3);
                     Console.Write("④ 다이아");
                     break;
                 case 4:
-                    Console.SetCursorPosition(Default.startx, Default.starty+4);
+                    Console.SetCursorPosition(Default.startx, Default.starty + 4);
                     Console.Write("⑤ 종료하기");
                     break;
             }
@@ -414,7 +421,11 @@ namespace App
                     if (key == ConsoleKey.Spacebar)
                     {
                         // 정상종료
-                        if (sel == 4) { Environment.Exit(0); }
+                        if (sel == 4) {
+                            Environment.Exit(0);
+                            //Console.Clear();
+                            //return; 
+                        }
 
                         Console.Clear();
 
@@ -426,7 +437,7 @@ namespace App
                     }
                     render();
                 }
-                System.Threading.Thread.Sleep(100);
+                //System.Threading.Thread.Sleep(100);
             }
         }
     }
@@ -441,6 +452,63 @@ namespace App
             menu = new Menu();
         }
 
+        private void showLogo()
+        {
+            while (true)
+            {
+                printLogo();
+                Thread.Sleep(1000);
+                eraseLogo();
+                Thread.Sleep(1000);
+            }
+        }
+
+        // 로고 보여주기
+        private void printLogo()
+        {
+            Default.startx = Default.LOGO_X;
+            Default.starty = Default.LOGO_Y;
+
+            Default.writeLine("______        _         _    _                 _____  _                ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("| ___ \\      (_)       | |  (_)               /  ___|| |               ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("| |_/ / _ __  _  _ __  | |_  _  _ __    __ _  \\ `--. | |_   __ _  _ __ ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("|  __/ | '__|| || '_ \\ | __|| || '_ \\  / _` |  `--. \\| __| / _` || '__|");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("| |    | |   | || | | || |_ | || | | || (_| | /\\__/ /| |_ | (_| || |   ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("\\_|    |_|   |_||_| |_| \\__||_||_| |_| \\__, | \\____/  \\__| \\__,_||_|   ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                        __/ |                          ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                       |___/                           ");
+        }
+
+        // 로고 지우기
+        private void eraseLogo()
+        {
+            Default.startx = Default.LOGO_X;
+            Default.starty = Default.LOGO_Y;
+
+            Default.writeLine("                                                                         ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                                                         ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                                                         ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                                                         ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                                                         ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                                                         ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                                                         ");
+            Default.startx = Default.LOGO_X;
+            Default.writeLine("                                                                         ");
+        }
+
         public void render()
         {
             // 커서 초기화
@@ -453,12 +521,12 @@ namespace App
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        // 메뉴 보여줌
-        // 0 시작하기
-        // 1 종료하기
         public void startApp()
         {
+            // 초기세팅
             render();
+            Thread logothread = new Thread(showLogo);
+            logothread.Start();
 
             while (true)
             {
@@ -478,8 +546,14 @@ namespace App
 
                         Console.Clear();
 
-                        // 넘어가기
+                        // 쓰레드 일시중단 메뉴로 넘어가기
+                        //logothread.Suspend();
+                        logothread.Abort();
+                        Default.START_X = 25;
+                        Default.START_Y = 10;
                         menu.showMenu();
+                        // 메뉴에서 넘어오면 다시 시작
+                        //logothread.Resume();
                     }
 
                     render();
@@ -528,7 +602,6 @@ namespace App
 
             // ctrl+c handling
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlcHandler);
-
             Default.drawBoard();
             Console.CursorVisible = false;
 
