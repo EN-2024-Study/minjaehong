@@ -7,8 +7,8 @@ namespace App
     {
         // 원래 25 10
         // 테스트용도로 좀 내리기
-        public static int START_X = 30;
-        public static int START_Y = 20;
+        public static int START_X = 35;
+        public static int START_Y = 15;
 
         public const int LOGO_X = 5;
         public const int LOGO_Y = 5;
@@ -24,6 +24,7 @@ namespace App
         public static int starty;
 
         // START_X START_Y로 커서 옮기기
+        // 이거 initCursorPos(int x,int y)로 바꾸기
         public static void initCursorPos()
         {
             startx = START_X;
@@ -319,7 +320,8 @@ namespace App
         int sel = 0; // 0~4
         int before = -1;
 
-        public void printSelectedLine(int sel)
+        // render에서 사용
+        void printSelectedLine(int sel)
         {
             Default.initCursorPos();
             Console.ForegroundColor = ConsoleColor.Red;
@@ -349,7 +351,8 @@ namespace App
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        public void eraseSelectedLine(int before)
+        // render에서 사용
+        void eraseSelectedLine(int before)
         {
             Default.initCursorPos();
             switch (before)
@@ -377,13 +380,16 @@ namespace App
             }
         }
 
-        public void render()
+        // 바뀐 것들만 렌더링
+        void render()
         {
             printSelectedLine(sel);
             eraseSelectedLine(before);
         }
 
-        public void initial_render()
+        // 메뉴 모두 출력
+        // 초기에 한번만 사용
+        void initial_render()
         {
             Default.drawBoard();
             Default.initCursorPos();
@@ -421,7 +427,8 @@ namespace App
                     if (key == ConsoleKey.Spacebar)
                     {
                         // 정상종료
-                        if (sel == 4) {
+                        if (sel == 4)
+                        {
                             Environment.Exit(0);
                             //Console.Clear();
                             //return; 
@@ -437,7 +444,6 @@ namespace App
                     }
                     render();
                 }
-                //System.Threading.Thread.Sleep(100);
             }
         }
     }
@@ -457,9 +463,9 @@ namespace App
             while (true)
             {
                 printLogo();
-                Thread.Sleep(1000);
+                Thread.Sleep(700);
                 eraseLogo();
-                Thread.Sleep(1000);
+                Thread.Sleep(700);
             }
         }
 
@@ -509,7 +515,7 @@ namespace App
             Default.writeLine("                                                                         ");
         }
 
-        public void render()
+        private void render()
         {
             // 커서 초기화
             Default.initCursorPos();
@@ -549,8 +555,8 @@ namespace App
                         // 쓰레드 일시중단 메뉴로 넘어가기
                         //logothread.Suspend();
                         logothread.Abort();
-                        Default.START_X = 25;
-                        Default.START_Y = 10;
+                        Default.START_X = 28;
+                        Default.START_Y = 8;
                         menu.showMenu();
                         // 메뉴에서 넘어오면 다시 시작
                         //logothread.Resume();
@@ -566,34 +572,28 @@ namespace App
     {
         protected static void ctrlcHandler(Object sender, ConsoleCancelEventArgs args)
         {
-            // static flag 사용하기
-            if (!Default.flag)
-            {
-                Default.flag = true;
-                // ctrl+c 무효처리
-                args.Cancel = true;
+            // ctrl+c 무효처리
+            args.Cancel = true;
 
-                int curleft = Console.CursorLeft;
-                int curtop = Console.CursorTop;
+            int curleft = Console.CursorLeft;
+            int curtop = Console.CursorTop;
 
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
-                Console.Write("ctrl+c 금지입니다");
-                Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
+            Console.Write("ctrl+c 금지입니다");
+            Console.ForegroundColor = ConsoleColor.White;
 
-                Console.SetCursorPosition(curleft, curtop);
+            Console.SetCursorPosition(curleft, curtop);
 
-                System.Threading.Thread.Sleep(2000);
+            Thread.Sleep(2000);
 
-                curleft = Console.CursorLeft;
-                curtop = Console.CursorTop;
+            curleft = Console.CursorLeft;
+            curtop = Console.CursorTop;
 
-                Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
-                Console.Write("                  ");
+            Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
+            Console.Write("                  ");
 
-                Console.SetCursorPosition(curleft, curtop);
-                Default.flag = false;
-            }
+            Console.SetCursorPosition(curleft, curtop);
         }
 
         public static void Main()
