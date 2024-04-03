@@ -3,18 +3,18 @@ using System.Threading;
 
 namespace App
 {
+    // 콘솔창 정보 및 중앙 출력을 위한 static 클래스
     public static class Default
     {
-        // 원래 25 10
-        // 테스트용도로 좀 내리기
         public static int START_X = 35;
         public static int START_Y = 15;
 
         public const int LOGO_X = 5;
         public const int LOGO_Y = 5;
 
-        public const int WIDTH = 80; // 약 2배
-        public const int HEIGHT = 40;
+        public static int WIDTH = 80;
+        public static int HEIGHT = 40;
+
         public const int MAX_INPUT = 23;
 
         public static bool flag = false;
@@ -53,6 +53,7 @@ namespace App
         // 테두리 그리기
         public static void drawBoard()
         {
+            Console.SetCursorPosition(0, 0);
             for (int i = 0; i < WIDTH; i++)
             {
                 Console.Write("─");
@@ -90,6 +91,7 @@ namespace App
         }
     }
 
+    // 결과 창
     class Result
     {
         int sel;
@@ -98,7 +100,8 @@ namespace App
             this.sel = sel;
         }
 
-        public int checkifValidNum()
+        // 유효한 값인지 확인해주는 함수
+        private int checkifValidNum()
         {
             // 줄 수 입력 : 바로 옆 자리 저장
             // Default.startx Default.starty 적용 되어 있음
@@ -110,19 +113,23 @@ namespace App
                 string str = Console.ReadLine();
 
                 // ctrl+c 예외처리
-                if (str == null)
-                {
-                    continue;
-                }
+                if (str == null) { continue; }
 
                 // parse 가능하면 true 반환하고 row는 int값
                 // 아니면 false고 row는 0
                 int check = 0;
                 bool checkifInt = int.TryParse(str, out check);
 
+                // 0으로 시작하는 숫자문자열이면 문자열처리
+                if (str.StartsWith("0"))
+                {
+                    checkifInt = false;
+                }
+
                 // 숫자면
                 if (checkifInt)
                 {
+                    // 콘솔창을 넘어가는 출력이면
                     if (check > Default.MAX_INPUT)
                     {
                         Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
@@ -142,18 +149,20 @@ namespace App
                         }
                         else
                         {
+                            // 성공으로 row 값 반환
                             return check;
                         }
                     }
                     else
                     {
-                        // (x,y)
+                        // 음수일때
                         Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write("0보다 크고 " + Default.MAX_INPUT + "보다 작은 정수만 가능합니다");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
+                // 문자열일때
                 else
                 {
                     Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
@@ -162,20 +171,23 @@ namespace App
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
-                // 여기까지 오는 경우는 틀린경우밖에
+                // ============== 틀린 경우면 입력된 값 가리기 =====================
 
                 for (int i = 0; i < str.Length * 2; i++) dummy += " ";
 
                 // 잘못입력된거 가리기
                 Console.SetCursorPosition(left, Default.starty);
                 Console.Write(dummy);
+                
+                Default.drawBoard();
 
-                // 줄 수 입력 : 바로 옆으로 커서 배치
+                // 다시 입력받을 수 있게 "줄 수 입력 :" 바로 옆으로 커서 배치
                 Console.SetCursorPosition(left, Default.starty);
             }
         }
 
-        public void print1(int rows)
+        // 별찍기 1
+        private void print1(int rows)
         {
             // 커서 초기화
             Default.initCursorPos();
@@ -190,7 +202,8 @@ namespace App
             }
         }
 
-        public void print2(int rows)
+        // 별찍기 2
+        private void print2(int rows)
         {
             Default.initCursorPos();
             Default.starty += 3;
@@ -204,8 +217,8 @@ namespace App
             }
         }
 
-        // 모래시계
-        public void print3(int rows)
+        // 별찍기 3
+        private void print3(int rows)
         {
             Default.initCursorPos();
             Default.starty += 3;
@@ -239,8 +252,8 @@ namespace App
             }
         }
 
-        // 다이아
-        public void print4(int rows)
+        // 별찍기 4
+        private void print4(int rows)
         {
             // 커서 초기화
             Default.initCursorPos();
@@ -265,33 +278,29 @@ namespace App
             }
         }
 
-        public void checkifBackSpace()
+        // backspace 눌렸는지 확인
+        private void checkifBackSpace()
         {
             while (true)
             {
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                  
                     ConsoleKey key = keyInfo.Key;
 
-                    // backspace 아니면 계속 돔
                     if (key == ConsoleKey.Backspace) return;
                 }
             }
         }
 
-        /*
-         * 0 줄 수 입력
-         * 1 예외
-         * 
-         * 3 결과
-        */
+        // 결과창 함수
         public void showResult()
         {
+            // 커서 초기화
             Default.drawBoard();
             Default.initCursorPos();
 
-            // 여기서 0 0 
             Console.ForegroundColor = ConsoleColor.Green;
             Default.write("줄 수 입력 : ");
             Console.ForegroundColor = ConsoleColor.White;
@@ -299,16 +308,20 @@ namespace App
             // 옳은 값 입력될때까지
             int rows = checkifValidNum();
 
-            // 오류 메시지 삭제
+            // ================ 유효한 값이 입력되었으면 아래 실행 =============== // 
+            
+            // 오류 메시지 삭제하기
             Default.initCursorPos();
             Default.starty += 2;
             Default.write("                                             ");
 
+            // 결과 출력
             if (sel == 0) print1(rows);
             else if (sel == 1) print2(rows);
             else if (sel == 2) print3(rows);
             else if (sel == 3) print4(rows);
 
+            // BackSpace 입력되었으면 다시 메뉴창으로 
             Default.starty++;
             Default.write("PRESS BACKSPACE TO GO BACK");
             checkifBackSpace();
@@ -317,7 +330,7 @@ namespace App
 
     class Menu
     {
-        int sel = 0; // 0~4
+        int sel = 0;
         int before = -1;
 
         // render에서 사용
@@ -398,6 +411,8 @@ namespace App
             Default.writeLine("③ 모래 시계");
             Default.writeLine("④ 다이아");
             Default.writeLine("⑤ 종료하기");
+            Default.writeLine("");
+            Default.writeLine("PRESS SPACE TO SELECT!");
         }
 
         public void showMenu()
@@ -430,8 +445,6 @@ namespace App
                         if (sel == 4)
                         {
                             Environment.Exit(0);
-                            //Console.Clear();
-                            //return; 
                         }
 
                         Console.Clear();
@@ -463,58 +476,58 @@ namespace App
             while (true)
             {
                 printLogo();
-                Thread.Sleep(700);
+                Thread.Sleep(900);
                 eraseLogo();
-                Thread.Sleep(700);
+                Thread.Sleep(900);
             }
         }
 
-        // 로고 보여주기
+        // 쓰레드 - 로고 보여주기
         private void printLogo()
         {
-            Default.startx = Default.LOGO_X;
-            Default.starty = Default.LOGO_Y;
+            int starty = Default.LOGO_Y;
 
-            Default.writeLine("______        _         _    _                 _____  _                ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("| ___ \\      (_)       | |  (_)               /  ___|| |               ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("| |_/ / _ __  _  _ __  | |_  _  _ __    __ _  \\ `--. | |_   __ _  _ __ ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("|  __/ | '__|| || '_ \\ | __|| || '_ \\  / _` |  `--. \\| __| / _` || '__|");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("| |    | |   | || | | || |_ | || | | || (_| | /\\__/ /| |_ | (_| || |   ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("\\_|    |_|   |_||_| |_| \\__||_||_| |_| \\__, | \\____/  \\__| \\__,_||_|   ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                        __/ |                          ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                       |___/                           ");
+            Console.SetCursorPosition(Default.LOGO_X, starty);
+            Console.WriteLine("______        _         _    _                 _____  _                ");
+            Console.SetCursorPosition(Default.LOGO_X,++starty);
+            Console.WriteLine("| ___ \\      (_)       | |  (_)               /  ___|| |               ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("| |_/ / _ __  _  _ __  | |_  _  _ __    __ _  \\ `--. | |_   __ _  _ __ ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("|  __/ |  __|| ||  _ \\ | __|| ||  _ \\  / _  |  `--. \\| __| / _  ||  __|");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("| |    | |   | || | | || |_ | || | | || (_| | /\\__/ /| |_ | (_| || |   ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("\\_|    |_|   |_||_| |_| \\__||_||_| |_| \\__, | \\____/  \\__| \\__,_||_|   ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                        __/ |                          ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                       |___/                           ");
         }
 
-        // 로고 지우기
+        // 쓰레드 - 로고 지우기
         private void eraseLogo()
         {
-            Default.startx = Default.LOGO_X;
-            Default.starty = Default.LOGO_Y;
-
-            Default.writeLine("                                                                         ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                                                         ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                                                         ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                                                         ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                                                         ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                                                         ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                                                         ");
-            Default.startx = Default.LOGO_X;
-            Default.writeLine("                                                                         ");
+            int starty = Default.LOGO_Y;
+            Console.SetCursorPosition(Default.LOGO_X, starty);
+            Console.WriteLine("                                                                         ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                                                         ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                                                         ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                                                         ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                                                         ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                                                         ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                                                         ");
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
+            Console.WriteLine("                                                                         ");
         }
 
+        // 입력에 따라 색깔 바꿔주기
         private void render()
         {
             // 커서 초기화
@@ -531,6 +544,11 @@ namespace App
         {
             // 초기세팅
             render();
+
+            Default.drawBoard();
+
+            // 로고 쓰레드
+            // 테두리 그린 후에 실행
             Thread logothread = new Thread(showLogo);
             logothread.Start();
 
@@ -553,13 +571,12 @@ namespace App
                         Console.Clear();
 
                         // 쓰레드 일시중단 메뉴로 넘어가기
-                        //logothread.Suspend();
                         logothread.Abort();
                         Default.START_X = 28;
                         Default.START_Y = 8;
+                        Console.Clear();
+                        //Console.Out.Flush();
                         menu.showMenu();
-                        // 메뉴에서 넘어오면 다시 시작
-                        //logothread.Resume();
                     }
 
                     render();
@@ -570,43 +587,29 @@ namespace App
 
     class PrintStarApp
     {
-        protected static void ctrlcHandler(Object sender, ConsoleCancelEventArgs args)
+        protected static void ctrlHandler(Object sender, ConsoleCancelEventArgs args)
         {
-            // ctrl+c 무효처리
             args.Cancel = true;
-
-            int curleft = Console.CursorLeft;
-            int curtop = Console.CursorTop;
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
-            Console.Write("ctrl+c 금지입니다");
-            Console.ForegroundColor = ConsoleColor.White;
-
-            Console.SetCursorPosition(curleft, curtop);
-
-            Thread.Sleep(2000);
-
-            curleft = Console.CursorLeft;
-            curtop = Console.CursorTop;
-
-            Console.SetCursorPosition(Default.START_X, Default.START_Y - 3);
-            Console.Write("                  ");
-
-            Console.SetCursorPosition(curleft, curtop);
         }
 
         public static void Main()
         {
             Console.Title = "별찍기별찍기";
 
-            // ctrl+c handling
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlcHandler);
-            Default.drawBoard();
+            int width = Console.LargestWindowWidth;
+            int height = Console.LargestWindowHeight;
+
+            // 창 크기 설정
+            Console.SetWindowSize(width, height);
+            Console.SetBufferSize(width, height);
+            
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlHandler);
             Console.CursorVisible = false;
 
             Front front = new Front();
             front.startApp();
+
+            Console.Out.Flush();
         }
     }
 }
