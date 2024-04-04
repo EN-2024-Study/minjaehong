@@ -1,25 +1,35 @@
 using System;
+// dll import 하기 위해 추가
+using System.Runtime.InteropServices;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace App
 {
     // 콘솔창 정보 및 중앙 출력을 위한 static 클래스
     public static class Default
     {
+        // 현재 보여줄 화면 idx
+        public static int pageidx = 0;
+        // 사용자가 선택한 번호
+        public static int sel = 0;
+
+        // 중앙출력 시작 좌표
         public static int START_X = 35;
         public static int START_Y = 15;
 
+        // 로고 출력 시작 좌표
         public const int LOGO_X = 5;
         public const int LOGO_Y = 5;
 
+        // 콘솔 창 너비 높이
         public static int WIDTH = 80;
         public static int HEIGHT = 40;
 
+        // 최대 줄 수
         public const int MAX_INPUT = 23;
 
-        public static bool flag = false;
-
-        // 동적 커서
+        // 중앙 출력을 위한 동적 커서
         public static int startx;
         public static int starty;
 
@@ -91,13 +101,54 @@ namespace App
         }
     }
 
-    // 결과 창
-    class Result
+    abstract class Page
     {
-        int sel;
-        public Result(int sel)
+        abstract public int show();
+        abstract public void render();
+    }
+
+    // 결과 창
+    class Result : Page
+    {
+        public override void render() { }
+
+        // 결과창 함수
+        public override int show()
         {
-            this.sel = sel;
+            // 커서 초기화
+            Default.drawBoard();
+            Default.initCursorPos();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Default.write("줄 수 입력 : ");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            // 옳은 값 입력될때까지
+            int rows = checkifValidNum();
+
+            // ================ 유효한 값이 입력되었으면 아래 실행 =============== // 
+
+            // 오류 메시지 삭제하기
+            Default.initCursorPos();
+            Default.starty += 2;
+            Default.write("                                             ");
+
+            int sel = Default.sel;
+
+            // 결과 출력
+            if (sel == 0) print1(rows);
+            else if (sel == 1) print2(rows);
+            else if (sel == 2) print3(rows);
+            else if (sel == 3) print4(rows);
+
+            Default.starty++;
+            Default.write("PRESS BACKSPACE TO GO BACK");
+            // backspace 입력 기다리기
+            checkifBackSpace();
+
+            // 무조건 메뉴창으로
+            Console.Clear();
+            return -1;
         }
 
         // 유효한 값인지 확인해주는 함수
@@ -140,7 +191,7 @@ namespace App
                     else if (check > 0)
                     {
                         // 다이아 예외처리
-                        if (sel == 3 && check % 2 == 0)
+                        if (Default.sel == 3 && check % 2 == 0)
                         {
                             Console.SetCursorPosition(Default.START_X, Default.START_Y + 2);
                             Console.ForegroundColor = ConsoleColor.Red;
@@ -178,7 +229,7 @@ namespace App
                 // 잘못입력된거 가리기
                 Console.SetCursorPosition(left, Default.starty);
                 Console.Write(dummy);
-                
+
                 Default.drawBoard();
 
                 // 다시 입력받을 수 있게 "줄 수 입력 :" 바로 옆으로 커서 배치
@@ -286,52 +337,69 @@ namespace App
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                  
+
                     ConsoleKey key = keyInfo.Key;
 
                     if (key == ConsoleKey.Backspace) return;
                 }
             }
         }
-
-        // 결과창 함수
-        public void showResult()
-        {
-            // 커서 초기화
-            Default.drawBoard();
-            Default.initCursorPos();
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Default.write("줄 수 입력 : ");
-            Console.ForegroundColor = ConsoleColor.White;
-
-            // 옳은 값 입력될때까지
-            int rows = checkifValidNum();
-
-            // ================ 유효한 값이 입력되었으면 아래 실행 =============== // 
-            
-            // 오류 메시지 삭제하기
-            Default.initCursorPos();
-            Default.starty += 2;
-            Default.write("                                             ");
-
-            // 결과 출력
-            if (sel == 0) print1(rows);
-            else if (sel == 1) print2(rows);
-            else if (sel == 2) print3(rows);
-            else if (sel == 3) print4(rows);
-
-            // BackSpace 입력되었으면 다시 메뉴창으로 
-            Default.starty++;
-            Default.write("PRESS BACKSPACE TO GO BACK");
-            checkifBackSpace();
-        }
     }
 
-    class Menu
+    class Menu : Page
     {
         int sel = 0;
         int before = -1;
+
+        override public void render()
+        {
+            printSelectedLine(sel);
+            eraseSelectedLine(before);
+        }
+
+        override public int show()
+        {
+            // 맨 처음 예외
+            initial_render();
+            render();
+
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    ConsoleKey key = keyInfo.Key;
+
+                    if (key == ConsoleKey.DownArrow)
+                    {
+                        before = sel;
+                        sel = (sel + 1) % 5;
+                    }
+                    if (key == ConsoleKey.UpArrow)
+                    {
+                        before = sel;
+                        sel = (sel + 4) % 5;
+                    }
+                    // console switching
+                    if (key == ConsoleKey.Spacebar)
+                    {
+                        Console.Clear();
+
+                        // 시작화면으로 가기
+                        if (sel == 4)
+                        {
+                            return -1;
+                        }
+                        // 결과창으로 가기
+                        return 1;
+                    }
+                    render();
+
+                    // Result에서 표현할 sel 최신화
+                    Default.sel = sel;
+                }
+            }
+        }
 
         // render에서 사용
         void printSelectedLine(int sel)
@@ -358,7 +426,7 @@ namespace App
                     break;
                 case 4:
                     Console.SetCursorPosition(Default.startx, Default.starty + 4);
-                    Console.Write("⑤ 종료하기");
+                    Console.Write("⑤ 시작화면");
                     break;
             }
             Console.ForegroundColor = ConsoleColor.White;
@@ -388,16 +456,9 @@ namespace App
                     break;
                 case 4:
                     Console.SetCursorPosition(Default.startx, Default.starty + 4);
-                    Console.Write("⑤ 종료하기");
+                    Console.Write("⑤ 시작화면");
                     break;
             }
-        }
-
-        // 바뀐 것들만 렌더링
-        void render()
-        {
-            printSelectedLine(sel);
-            eraseSelectedLine(before);
         }
 
         // 메뉴 모두 출력
@@ -410,65 +471,75 @@ namespace App
             Default.writeLine("② 1번의 반대로 찍기");
             Default.writeLine("③ 모래 시계");
             Default.writeLine("④ 다이아");
-            Default.writeLine("⑤ 종료하기");
+            Default.writeLine("⑤ 시작화면");
             Default.writeLine("");
             Default.writeLine("PRESS SPACE TO SELECT!");
         }
+    }
 
-        public void showMenu()
+    class Front : Page
+    {
+        int sel = 0;
+
+        // 입력에 따라 색깔 바꿔주기
+        override public void render()
         {
-            // 맨 처음 예외
-            initial_render();
+            // 커서 초기화
+            Default.initCursorPos();
+            if (sel == 0) Console.ForegroundColor = ConsoleColor.Red;
+            Default.writeLine("① 시작");
+            Console.ForegroundColor = ConsoleColor.White;
+            if (sel == 1) Console.ForegroundColor = ConsoleColor.Red;
+            Default.writeLine("② 종료");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        override public int show()
+        {
+            // 초기화면 출력 위치로 바꿔주기
+            Default.START_X = 35;
+            Default.START_Y = 15;
+
+            // 초기세팅
             render();
+            Default.drawBoard();
+
+            // 로고 쓰레드
+            // 테두리 그린 후에 실행
+            Thread logothread = new Thread(showLogo);
+            logothread.Start();
 
             while (true)
             {
+                // 키 입력되었으면 검사
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                     ConsoleKey key = keyInfo.Key;
 
-                    if (key == ConsoleKey.DownArrow)
-                    {
-                        before = sel;
-                        sel = (sel + 1) % 5;
-                    }
-                    if (key == ConsoleKey.UpArrow)
-                    {
-                        before = sel;
-                        sel = (sel + 4) % 5;
-                    }
+                    if (key == ConsoleKey.UpArrow || key == ConsoleKey.DownArrow) sel = (sel + 1) % 2;
+
                     // console switching
                     if (key == ConsoleKey.Spacebar)
                     {
-                        // 정상종료
-                        if (sel == 4)
-                        {
-                            Environment.Exit(0);
-                        }
+                        // 1이면 정상종료
+                        if (sel == 1) { Environment.Exit(0); }
 
+                        // 쓰레드 일시중 메뉴로 넘어가기
+                        logothread.Abort();
+
+                        // 중앙출력을 위해 Default 값 바꾸기
+                        Default.START_X = 28;
+                        Default.START_Y = 8;
                         Console.Clear();
 
-                        Result result = new Result(sel); // gc?
-                        result.showResult();
-
-                        Console.Clear();
-                        initial_render();
+                        // menu로 넘어가기
+                        return 1;
                     }
+
                     render();
                 }
             }
-        }
-    }
-
-    class Front
-    {
-        int sel = 0;
-        Menu menu;
-
-        public Front()
-        {
-            menu = new Menu();
         }
 
         private void showLogo()
@@ -489,7 +560,7 @@ namespace App
 
             Console.SetCursorPosition(Default.LOGO_X, starty);
             Console.WriteLine("______        _         _    _                 _____  _                ");
-            Console.SetCursorPosition(Default.LOGO_X,++starty);
+            Console.SetCursorPosition(Default.LOGO_X, ++starty);
             Console.WriteLine("| ___ \\      (_)       | |  (_)               /  ___|| |               ");
             Console.SetCursorPosition(Default.LOGO_X, ++starty);
             Console.WriteLine("| |_/ / _ __  _  _ __  | |_  _  _ __    __ _  \\ `--. | |_   __ _  _ __ ");
@@ -526,90 +597,76 @@ namespace App
             Console.SetCursorPosition(Default.LOGO_X, ++starty);
             Console.WriteLine("                                                                         ");
         }
+    }
+    
+    class Program
+    {
+        private List<Page> pages;
 
-        // 입력에 따라 색깔 바꿔주기
-        private void render()
+        public Program()
         {
-            // 커서 초기화
-            Default.initCursorPos();
-            if (sel == 0) Console.ForegroundColor = ConsoleColor.Red;
-            Default.writeLine("① 시작");
-            Console.ForegroundColor = ConsoleColor.White;
-            if (sel == 1) Console.ForegroundColor = ConsoleColor.Red;
-            Default.writeLine("② 종료");
-            Console.ForegroundColor = ConsoleColor.White;
+            // 페이지 생성
+            pages = new List<Page>(3);
+            pages.Add(new Front());
+            pages.Add(new Menu());
+            pages.Add(new Result());
         }
 
-        public void startApp()
+        // 프로그램 돌리기
+        public void run()
         {
-            // 초기세팅
-            render();
-
-            Default.drawBoard();
-
-            // 로고 쓰레드
-            // 테두리 그린 후에 실행
-            Thread logothread = new Thread(showLogo);
-            logothread.Start();
-
             while (true)
             {
-                // 키 입력되었으면 검사
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                    ConsoleKey key = keyInfo.Key;
-
-                    if (key == ConsoleKey.UpArrow || key == ConsoleKey.DownArrow) sel = (sel + 1) % 2;
-
-                    // console switching
-                    if (key == ConsoleKey.Spacebar)
-                    {
-                        // 1이면 정상종료
-                        if (sel == 1) { Environment.Exit(0); }
-
-                        Console.Clear();
-
-                        // 쓰레드 일시중단 메뉴로 넘어가기
-                        logothread.Abort();
-                        Default.START_X = 28;
-                        Default.START_Y = 8;
-                        Console.Clear();
-                        //Console.Out.Flush();
-                        menu.showMenu();
-                    }
-
-                    render();
-                }
+                Default.pageidx += pages[Default.pageidx].show();
             }
         }
     }
 
     class PrintStarApp
     {
+        // Import the SetConsoleDisplayMode function from kernel32.dll
+        [DllImport("kernel32.dll")]
+        public static extern bool SetConsoleDisplayMode(IntPtr ConsoleOutput, uint Flags, out COORD NewScreenBufferDimensions);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct COORD
+        {
+            public short X;
+            public short Y;
+        }
+
+        // Import the GetStdHandle function from kernel32.dll
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GetStdHandle(int nStdHandle);
+
         protected static void ctrlHandler(Object sender, ConsoleCancelEventArgs args)
         {
             args.Cancel = true;
         }
 
-        public static void Main()
+        public static void initializeConsole()
         {
+
+            //Get the handle of the console output
+            IntPtr consoleOutput = GetStdHandle(-11); // STD_OUTPUT_HANDLE
+
+            //Set display mode to full screen
+            COORD newDimensions;
+            SetConsoleDisplayMode(consoleOutput, 1, out newDimensions);
+            Console.WindowHeight = newDimensions.Y;
+            Console.WindowWidth = newDimensions.X;
+
             Console.Title = "별찍기별찍기";
 
-            int width = Console.LargestWindowWidth;
-            int height = Console.LargestWindowHeight;
-
-            // 창 크기 설정
-            Console.SetWindowSize(width, height);
-            Console.SetBufferSize(width, height);
-            
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlHandler);
             Console.CursorVisible = false;
+        }
 
-            Front front = new Front();
-            front.startApp();
-
-            Console.Out.Flush();
+        public static void Main()
+        {
+            initializeConsole();
+            Program p = new Program();
+            p.run();
         }
     }
 }
