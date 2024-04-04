@@ -1,120 +1,27 @@
 using System;
-// dll import 하기 위해 추가
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Collections.Generic;
 
-namespace App
+namespace HW1
 {
-    // 콘솔창 정보 및 중앙 출력을 위한 static 클래스
-    public static class Default
+    interface Page
     {
-        // 현재 보여줄 화면 idx
-        public static int pageidx = 0;
-        // 사용자가 선택한 번호
-        public static int sel = 0;
-
-        // 중앙출력 시작 좌표
-        public static int START_X = 35;
-        public static int START_Y = 15;
-
-        // 로고 출력 시작 좌표
-        public const int LOGO_X = 5;
-        public const int LOGO_Y = 5;
-
-        // 콘솔 창 너비 높이
-        public static int WIDTH = 80;
-        public static int HEIGHT = 40;
-
-        // 최대 줄 수
-        public const int MAX_INPUT = 23;
-
-        // 중앙 출력을 위한 동적 커서
-        public static int startx;
-        public static int starty;
-
-        // START_X START_Y로 커서 옮기기
-        // 이거 initCursorPos(int x,int y)로 바꾸기
-        public static void initCursorPos()
-        {
-            startx = START_X;
-            starty = START_Y;
-        }
-
-        // 중앙에 WRITELINE
-        public static void writeLine(string str)
-        {
-            Console.SetCursorPosition(startx, starty);
-            Console.Write(str);
-
-            // 개행처리
-            startx = START_X;
-            starty++;
-        }
-
-        // 중앙에 WRITE
-        public static void write(string str)
-        {
-            Console.SetCursorPosition(startx, starty);
-            Console.Write(str);
-            startx++;
-        }
-
-        // 테두리 그리기
-        public static void drawBoard()
-        {
-            Console.SetCursorPosition(0, 0);
-            for (int i = 0; i < WIDTH; i++)
-            {
-                Console.Write("─");
-            }
-
-            for (int k = 1; k < HEIGHT; k++)
-            {
-                Console.SetCursorPosition(0, k);
-                Console.Write("│");
-            }
-
-            Console.SetCursorPosition(0, HEIGHT);
-            for (int i = 0; i < WIDTH; i++)
-            {
-                Console.Write("─");
-            }
-
-            for (int k = 1; k < HEIGHT; k++)
-            {
-                Console.SetCursorPosition(WIDTH, k);
-                Console.Write("│");
-            }
-
-            Console.SetCursorPosition(0, 0);
-            Console.Write("┌");
-
-            Console.SetCursorPosition(WIDTH, 0);
-            Console.Write("┐");
-
-            Console.SetCursorPosition(0, HEIGHT);
-            Console.Write("└");
-
-            Console.SetCursorPosition(WIDTH, HEIGHT);
-            Console.Write("┘");
-        }
-    }
-
-    abstract class Page
-    {
-        // return 1 or -1
-        abstract public int show();
+        // 무조건 구현
+        // 항상 Console.Clear()하고 끝남
+        int show();
 
         // show 안에서 호출됨
-        public void render() { }
+        void render();    
     }
 
     // 결과 창
     class Result : Page
     {
+        // 결과창은 렌더링 필요가 없음
+        public void render() { }
+
         // 결과창 함수
-        public override int show()
+        public int show()
         {
             // 커서 초기화
             Default.drawBoard();
@@ -359,7 +266,7 @@ namespace App
             eraseSelectedLine(before);
         }
 
-        override public int show()
+        public int show()
         {
             // 맨 처음 예외
             initial_render();
@@ -386,14 +293,7 @@ namespace App
                     if (key == ConsoleKey.Spacebar)
                     {
                         Console.Clear();
-
-                        // 이전 페이지인 시작화면으로 가기
-                        if (sel == 4)
-                        {
-                            return -1;
-                        }
-                        // 다음 페이지인 결과창으로 가기
-                        return 1;
+                        return (sel == 4) ? -1 : 1;
                     }
                     render();
 
@@ -496,7 +396,7 @@ namespace App
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        override public int show()
+        public int show()
         {
             // 초기화면 출력 위치로 바꿔주기
             Default.START_X = 35;
@@ -529,7 +429,7 @@ namespace App
 
                         // 쓰레드 중지
                         logothread.Abort();
-
+                        
                         // 중앙출력을 위해 Default 값 바꾸기
                         Default.START_X = 28;
                         Default.START_Y = 8;
