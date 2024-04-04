@@ -103,15 +103,16 @@ namespace App
 
     abstract class Page
     {
+        // return 1 or -1
         abstract public int show();
-        abstract public void render();
+
+        // show 안에서 호출됨
+        public void render() { }
     }
 
     // 결과 창
     class Result : Page
     {
-        public override void render() { }
-
         // 결과창 함수
         public override int show()
         {
@@ -351,7 +352,8 @@ namespace App
         int sel = 0;
         int before = -1;
 
-        override public void render()
+        // 입력에 따라 색깔바꿔주기
+        public void render()
         {
             printSelectedLine(sel);
             eraseSelectedLine(before);
@@ -385,12 +387,12 @@ namespace App
                     {
                         Console.Clear();
 
-                        // 시작화면으로 가기
+                        // 이전 페이지인 시작화면으로 가기
                         if (sel == 4)
                         {
                             return -1;
                         }
-                        // 결과창으로 가기
+                        // 다음 페이지인 결과창으로 가기
                         return 1;
                     }
                     render();
@@ -482,7 +484,7 @@ namespace App
         int sel = 0;
 
         // 입력에 따라 색깔 바꿔주기
-        override public void render()
+        public void render()
         {
             // 커서 초기화
             Default.initCursorPos();
@@ -525,7 +527,7 @@ namespace App
                         // 1이면 정상종료
                         if (sel == 1) { Environment.Exit(0); }
 
-                        // 쓰레드 일시중 메뉴로 넘어가기
+                        // 쓰레드 중지
                         logothread.Abort();
 
                         // 중앙출력을 위해 Default 값 바꾸기
@@ -533,7 +535,7 @@ namespace App
                         Default.START_Y = 8;
                         Console.Clear();
 
-                        // menu로 넘어가기
+                        // 다음 페이지인 menu로 넘어가기
                         return 1;
                     }
 
@@ -580,6 +582,7 @@ namespace App
         private void eraseLogo()
         {
             int starty = Default.LOGO_Y;
+
             Console.SetCursorPosition(Default.LOGO_X, starty);
             Console.WriteLine("                                                                         ");
             Console.SetCursorPosition(Default.LOGO_X, ++starty);
@@ -615,6 +618,8 @@ namespace App
         // 프로그램 돌리기
         public void run()
         {
+            // show가 +1 return하면 다음 페이지로
+            // show가 -1 return하면 이전 페이지로
             while (true)
             {
                 Default.pageidx += pages[Default.pageidx].show();
@@ -624,40 +629,17 @@ namespace App
 
     class PrintStarApp
     {
-        // Import the SetConsoleDisplayMode function from kernel32.dll
-        [DllImport("kernel32.dll")]
-        public static extern bool SetConsoleDisplayMode(IntPtr ConsoleOutput, uint Flags, out COORD NewScreenBufferDimensions);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct COORD
-        {
-            public short X;
-            public short Y;
-        }
-
-        // Import the GetStdHandle function from kernel32.dll
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr GetStdHandle(int nStdHandle);
-
+        // ctrl handler
         protected static void ctrlHandler(Object sender, ConsoleCancelEventArgs args)
         {
             args.Cancel = true;
         }
 
+        // 콘솔 버퍼 키우기 및 콘솔 창 환경설정
         public static void initializeConsole()
         {
-
-            //Get the handle of the console output
-            IntPtr consoleOutput = GetStdHandle(-11); // STD_OUTPUT_HANDLE
-
-            //Set display mode to full screen
-            COORD newDimensions;
-            SetConsoleDisplayMode(consoleOutput, 1, out newDimensions);
-            Console.WindowHeight = newDimensions.Y;
-            Console.WindowWidth = newDimensions.X;
-
+            Console.SetWindowSize(120, 120);
             Console.Title = "별찍기별찍기";
-
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlHandler);
             Console.CursorVisible = false;
         }
