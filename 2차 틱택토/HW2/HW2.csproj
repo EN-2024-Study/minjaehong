@@ -37,8 +37,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
-    <Compile Include="ConsoleHelper.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="Front.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="History.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="MyConsole.cs" />
+    <Compile Include="Page.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
