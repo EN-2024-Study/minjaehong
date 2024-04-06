@@ -13,6 +13,7 @@ namespace TicTacToe
             
         }
 
+        // 메뉴 보여주기
         public void ShowMenu()
         {
             Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y-2);
@@ -25,6 +26,8 @@ namespace TicTacToe
             myconsole.WriteLine("④ 시작으로");
         }
 
+        // 특정 메뉴만 출력하기
+        // lineNum 입력받으면 해당 줄에 해당하는 메뉴만 출력
         private void PrintCertainLine(int lineNum)
         {
             switch (lineNum)
@@ -48,6 +51,7 @@ namespace TicTacToe
             }
         }
 
+        // 해당 메뉴 빨간색으로 출력하기
         public void ColorLineRed(int lineNum)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -55,25 +59,33 @@ namespace TicTacToe
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        // 해당 메뉴 흰색으로 출력하기
         public void ColorLineWhite(int lineNum)
         {
             Console.ForegroundColor = ConsoleColor.White;
             PrintCertainLine(lineNum);
         }
 
-        public void Render(int cur, int before)
+        // rendering menu
+        public void Render(int cur, int beforeMenu)
         {
             ColorLineRed(cur);
-            ColorLineWhite(before);
+            ColorLineWhite(beforeMenu);
         }
 
+        public void ChangePage(int selectedMenu)
+        {
+
+        }
+
+        // MENU 화면 보여주고 사용자 입력받기
         override public int Show()
         {
-            int mode = 0;
-            int before = -1;
+            int selectedMenu = 0;
+            int beforeMenu = -1;
 
             ShowMenu();
-            Render(mode, before);
+            Render(selectedMenu, beforeMenu);
 
             // 선택할때까지 이 함수에서 대기
             while (true)
@@ -85,13 +97,13 @@ namespace TicTacToe
 
                     if (key == ConsoleKey.DownArrow)
                     {
-                        before = mode;
-                        mode = (mode + 1) % 4;
+                        beforeMenu = selectedMenu;
+                        selectedMenu = (selectedMenu + 1) % 4;
                     }
                     if (key == ConsoleKey.UpArrow)
                     {
-                        before = mode;
-                        mode = (mode + 3) % 4;
+                        beforeMenu = selectedMenu;
+                        selectedMenu = (selectedMenu + 3) % 4;
                     }
                     // 화면이동일때
                     if (key == ConsoleKey.Spacebar)
@@ -99,19 +111,23 @@ namespace TicTacToe
                         // 화면 지우고 다음 화면으로 넘어갈 준비
                         Console.Clear();
 
-                        // 시작하기이면 -1
-                        if (GameInfo.GetInstance().mode == 3) return -1;
-                        // HISTORY이면 +2
-                        else if (GameInfo.GetInstance().mode == 2) return 2;
-                        // VS COM OR VS USER 이면 +1
-                        else
+                        switch (selectedMenu)
                         {
-                            return 1;
+                            case 0:
+                                gameInfo.mode = GameInfo.Mode.CVP;
+                                return +1;
+                            case 1:
+                                gameInfo.mode = GameInfo.Mode.PVP;
+                                return +1;
+                            case 2:
+                                return +2;
+                            case 3:
+                                return -1;
+
                         }
                     }
 
-                    GameInfo.GetInstance().mode = mode;
-                    Render(mode, before);
+                    Render(selectedMenu, beforeMenu);
                 }
             }
         }

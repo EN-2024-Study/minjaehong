@@ -30,16 +30,22 @@ namespace TicTacToe
             return instance;
         }
 
+        public enum Mode
+        {
+            CVP = 0,
+            PVP = 1
+        }
+
         // 보여줄 페이지
         public int pageidx = 0;
         // 현재 진행중인 모드
-        public int mode = 0;
+        public Mode mode;
         // 현재 USER 이름
         public string username;
 
         public int comWin = 0;
         public int usrWin = 0;
-        
+
         //==================================//
 
         // 콘솔 창 너비 높이
