@@ -13,7 +13,7 @@ namespace TicTacToe
             
         }
 
-        // 메뉴 보여주기
+        // 메뉴 출력
         public void ShowMenu()
         {
             Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y-2);
@@ -71,11 +71,6 @@ namespace TicTacToe
         {
             ColorLineRed(cur);
             ColorLineWhite(beforeMenu);
-        }
-
-        public void ChangePage(int selectedMenu)
-        {
-
         }
 
         // MENU 화면 보여주고 사용자 입력받기

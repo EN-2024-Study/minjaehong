@@ -6,9 +6,21 @@ namespace TicTacToe
 {
     class Game : Page
     {
-        char[,] grid;
-        BitArray p1, p2, com;
-        
+        char[,] grid; // 출력할때 참조할 grid
+        BitArray p1, p2, com; // 각자 어디에 뒀는지 기록하는 용도
+
+        // 이기는 방법 가짓수
+        int[,] winningrows = {
+            {0,4,8 },
+            {2,4,6 },
+            {0,1,2 },
+            {3,4,5 },
+            {6,7,8 },
+            {0,3,6 },
+            {1,4,7 },
+            {2,5,8 }
+        };
+
         public Game(GameInfo gameInfo, MyConsole myconsole) : base(gameInfo, myconsole)
         {
             grid = new char[3, 3];
@@ -17,6 +29,7 @@ namespace TicTacToe
             com = new BitArray(9);
         }
 
+        // 매번 게임 시작 전 Grid 초기화
         void IntializeGrid()
         {
             for (int i = 0; i < 3; i++)
@@ -28,6 +41,7 @@ namespace TicTacToe
             }
         }
 
+        // 매번 게임 시작 전 BitSet 초기화
         void InitializeBitset()
         {
             p1.SetAll(false);
@@ -47,6 +61,7 @@ namespace TicTacToe
             Console.Write(dummy);
         }
 
+        // 꽉 찼는지 확인
         private bool IsGridFull()
         {
             for (int i = 0; i < 3; i++)
@@ -88,7 +103,9 @@ namespace TicTacToe
             else return true;
         }
 
-        void PlaceOX(int input, int turn)
+        // User의 OX 놔주는 함수
+        // PVP CVP에 둘 다 사용됨
+        void PlaceOXByUser(int input, int turn)
         {
             // 사용자는 1~9까지 입력하고 배열에서는 0~8로 인식
             // 그래서 하나 까주기
@@ -98,11 +115,13 @@ namespace TicTacToe
             int y = input / 3;
             int x = input % 3;
 
+            // p1이면
             if (turn == 1)
             {
                 grid[y, x] = 'O';
                 p1[input] = true;
             }
+            // p2이면
             else if(turn == 2)
             {
                 grid[y, x] = 'X';
@@ -110,64 +129,66 @@ namespace TicTacToe
             }
         }
 
-        void ShowWinner(int turn)
+        void ShowWinner(BitArray bs1, BitArray bs2)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y - 3);
 
-            if (turn == 0) Console.Write("무승부");
-            else if(turn==1) Console.Write("p2 win");
-            else if(turn==2) Console.Write("p1 win");
+            if (gameInfo.mode == GameInfo.Mode.CVP)
+            {
+                if (IsWinner(bs1)) Console.Write("com win!");
+                else if (IsWinner(bs2)) Console.Write("usr win!");
+                else Console.Write("무승부");
+            }
+
+            if(gameInfo.mode==GameInfo.Mode.PVP)
+            {
+                if (IsWinner(bs1)) Console.Write("p1 win!");
+                else if (IsWinner(bs2)) Console.Write("p2 win!");
+                else Console.Write("무승부");
+            }
 
             Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 10);
             Console.Write("PRESS BACKSPACE TO GO BACK...");
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        int[,] winningrows = {
-            {0,4,8 },
-            {2,4,6 },
-            {0,1,2 },
-            {3,4,5 },
-            {6,7,8 },
-            {0,3,6 },
-            {1,4,7 },
-            {2,5,8 }
-        };
-
+        // Com의 OX 놔주는 함수
+        // CVP에만 사용됨
         void PlaceOXByCom()
         {
+            // 맨 처음에는 정해져있음
             if (GetBitSetCount(com) == 0)
             {
-                // 사용자가 첫수로 중앙에 놨으면
+                // 사용자가 첫 수로 중앙에 놨으면
                 if (p1[4])
                 {
-                    // 아무 모서리
+                    // 아무 모서리에 놔도 됨
                     // 여기서는 0 0에 놓기
                     grid[0, 0] = 'X';
                     com[0] = true;
                 }
                 else
                 {
-                    // 아니면 내가 중앙에 놓기
+                    // 아니면 Com이 중앙에 놓기
                     grid[1, 1] = 'X';
                     com[4] = true;
                 }
                 return;
             }
 
-            // 내가 이길 수 있을때 이기기
+            // Com이 이길 수 있을때는 이겨야함
             for (int i = 0; i < 8; i++)
             {
                 int x = winningrows[i, 0];
                 int y = winningrows[i, 1];
                 int z = winningrows[i, 2];
 
-                // 2개씩 채워져있을때 + p1이 안채웠을때
+                // 2개씩 채워져있을때 + p1이 남은 자리에 안놓았을때
                 if (com[x] == false && com[y] == true && com[z] == true && p1[x] == false)
                 {
                     com[x] = true;
-                    grid[z / 3, z % 3] = 'X';
+                    grid[x / 3, x % 3] = 'X';
                     return;
                 }
                 if (com[x] == true && com[y] == false && com[z] == true && p1[y] == false)
@@ -184,14 +205,14 @@ namespace TicTacToe
                 }
             }
 
-            // 플레이어가 다음번에 이길 수 있을때 채워서 막기
+            // User가 담턴에 이길 수 있을때는 채워서 막아야함
             for (int i = 0; i < 8; i++)
             {
                 int x = winningrows[i, 0];
                 int y = winningrows[i, 1];
                 int z = winningrows[i, 2];
 
-                // 2개씩 채워져있을때 + 내가 남은 자리에 놓을 수 있을때 
+                // user꺼가 2개씩 채워져있을때 + Com이 남은 자리에 아직 안놓았을때 
                 if(p1[x]==false && p1[y]==true && p1[z]==true && com[x]==false)
                 {
                     com[x] = true;
@@ -212,9 +233,12 @@ namespace TicTacToe
                 }
             }
 
-            // 딱히 놓을 곳 없으면
+            // 딱히 놓을 곳 없으면 아무데나 놓아도 무방
+            // 지지만 않으면 된다
             for(int i = 0; i < 8; i++)
             {
+                // 둘 다 안놓은 곳에 아무데나 놓기
+                // 여기서는 앞순서만
                 if(p1[i]==false && com[i] == false)
                 {
                     com[i] = true;
@@ -226,6 +250,7 @@ namespace TicTacToe
             return;
         }
 
+        // bitset 내 true값 count
         int GetBitSetCount(BitArray bitset)
         {
             int ret = 0;
@@ -236,6 +261,7 @@ namespace TicTacToe
             return ret;
         }
 
+        // 사용자 입력 받아서 유효한 grid 내 번호 return
         int GetUserInput()
         {
             string str;
@@ -286,14 +312,14 @@ namespace TicTacToe
             int turn = 0;
             int input;
             
-            // p1이 승리했거나 com이 승리했을때 종료
+            // 둘 중 한 명이 이기기 전까지 돌림
             while (!IsWinner(p1) && !IsWinner(com))
             {
                 // user 입력받기
                 input = GetUserInput();
 
-                // p1이 OX 놔주기
-                PlaceOX(input, 1);
+                // p1으로 OX 놔주기
+                PlaceOXByUser(input, 1);
                 myconsole.DrawBoard(grid);
                 if (IsGridFull()) break;
                 if (IsWinner(p1))
@@ -314,7 +340,7 @@ namespace TicTacToe
                 }
             }
             // Winner 출력
-            ShowWinner(turn);
+            ShowWinner(com, p1);
         }
 
         void GameModePVP()
@@ -325,26 +351,22 @@ namespace TicTacToe
             // 한 명이 승리 했을때까지 돌리기
             while (!IsWinner(p1) && !IsWinner(p2))
             {
-                // rendering
+                // 매턴마다 rendering 해주기
                 myconsole.DrawBoard(grid);
+
+                if (IsGridFull()) break;
 
                 input = GetUserInput();
 
                 // OX 놔주기
-                PlaceOX(input, turn);
+                PlaceOXByUser(input, turn);
 
                 // PVP니까 매번 turn 바꿔주기
                 if (turn == 1) turn = 2;
                 else if (turn == 2) turn = 1;
-
-                // 만약 칸이 다 찼다면 무승부처리
-                if (IsGridFull())
-                {
-                    break;
-                }
             }
             // Winner 출력
-            ShowWinner(turn);
+            ShowWinner(p1, p2);
         }
 
         // 틱택토 게임 화면

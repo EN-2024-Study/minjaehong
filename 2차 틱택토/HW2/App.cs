@@ -17,8 +17,6 @@ namespace TicTacToe
         // 콘솔 버퍼 키우기 및 콘솔 창 환경설정
         private static void InitializeConsole()
         {
-            
-
             int width = Console.LargestWindowWidth/2;
             int height = Console.LargestWindowHeight/2;
 
