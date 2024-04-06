@@ -18,12 +18,15 @@ namespace TicTacToe
 
             myconsole.InitCursorPos();
             myconsole.writeLine("[history]");
+            myconsole.writeLine("");
             myconsole.writeLine("com win : " + common.comWin.ToString());
-            myconsole.writeLine("usr1 win : " + common.usr1Win.ToString());
-            myconsole.writeLine("usr2 win : " + common.usr2Win.ToString());
-            myconsole.writeLine("PRESS BACK SPACE TO GO BACK");
+            myconsole.writeLine("usr win : " + common.usrWin.ToString());
+            myconsole.writeLine("");
+            Console.ForegroundColor = ConsoleColor.Red;
+            myconsole.writeLine("PRESS BACKSPACE TO GO BACK...");
+            Console.ForegroundColor = ConsoleColor.White;
 
-            Console.ReadLine();
+            Exception.CheckIfBackSpace();
 
             // 끝나면 무조건 메뉴로 
             // 4 -> 2

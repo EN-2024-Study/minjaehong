@@ -37,9 +37,8 @@ namespace TicTacToe
         public string username;
 
         public int comWin = 0;
-        public int usr1Win = 0;
-        public int usr2Win = 0;
-
+        public int usrWin = 0;
+        
         //==================================//
 
         // 콘솔 창 너비 높이
