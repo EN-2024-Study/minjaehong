@@ -138,6 +138,78 @@ namespace TicTacToe
             {2,5,8 }
         };
 
+        void PlaceByCom()
+        {
+            // 플레이어가 다음번에 이길 수 있을때 채워서 막기
+            for (int i = 0; i < 8; i++)
+            {
+                int x = winningrows[i, 0];
+                int y = winningrows[i, 1];
+                int z = winningrows[i, 2];
+
+                // 2개씩 채워져있을때 + 내가 남은 자리에 놓을 수 있을때 
+                if(p1[x]==false && p1[y]==true && p1[z]==true && com[x]==false)
+                {
+                    com[x] = true;
+                    grid[z / 3, z % 3] = 'X';
+                    return;
+                }
+                if(p1[x]==true && p1[y]==false && p1[z] == true && com[y]==false)
+                {
+                    com[y] = true;
+                    grid[y / 3,y % 3] = 'X';
+                    return;
+                }
+                if(p1[x]==true && p1[y]==true && p1[z] == false && com[z]==false)
+                {
+                    com[z] = true;
+                    grid[z / 3, z % 3] = 'X';
+                    return;
+                }
+            }
+
+            // 내가 이길 수 있을때 이기기
+            for(int i = 0; i < 8; i++)
+            {
+                int x = winningrows[i, 0];
+                int y = winningrows[i, 1];
+                int z = winningrows[i, 2];
+
+                // 2개씩 채워져있을때 + p1이 안채웠을때
+                if (com[x] == false && com[y] == true && com[z] == true && p1[x]==false)
+                {
+                    com[x] = true;
+                    grid[z / 3, z % 3] = 'X';
+                    return;
+                }
+                if (com[x] == true && com[y] == false && com[z] == true && p1[y]==false)
+                {
+                    com[y] = true;
+                    grid[y / 3, y % 3] = 'X';
+                    return;
+                }
+                if (com[x] == true && com[y] == true && com[z] == false && p1[z]==false)
+                {
+                    com[z] = true;
+                    grid[z / 3, z % 3] = 'X';
+                    return;
+                }
+            }
+
+            // 딱히 놓을 곳 없으면
+            for(int i = 0; i < 8; i++)
+            {
+                if(p1[i]==false && com[i] == false)
+                {
+                    com[i] = true;
+                    grid[i / 3, i % 3] = 'X';
+                    return;
+                }
+            }
+
+            return;
+        }
+
         int GetBitSetCount(BitArray bitset)
         {
             int ret = 0;
