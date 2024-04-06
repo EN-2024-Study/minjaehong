@@ -8,6 +8,7 @@ namespace TicTacToe
 {
     abstract class Page
     {
+        // 공용객체 참조할 수 있게 참조변수 선언
         protected GameInfo gameInfo;
         protected MyConsole myconsole;
 

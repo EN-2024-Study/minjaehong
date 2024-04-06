@@ -10,11 +10,10 @@ namespace TicTacToe
     // 오로지 한 객체만 생성됨
     public class GameInfo
     {
-        // static 참조변수
-        // 자기가 자기 자신을 참조
+        // static 참조변수 - 자기가 자기 자신을 참조
         private static GameInfo instance;
 
-        // 외부에서 객체 생성 못하게 막기
+        // private으로 외부에서 객체 생성 못하게 막기
         private GameInfo()
         {
 

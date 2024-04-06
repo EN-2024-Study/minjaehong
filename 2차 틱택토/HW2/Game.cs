@@ -309,11 +309,10 @@ namespace TicTacToe
         void GameModeCVP()
         {
             myconsole.DrawBoard(grid);
-            int turn = 0;
             int input;
             
             // 둘 중 한 명이 이기기 전까지 돌림
-            while (!IsWinner(p1) && !IsWinner(com))
+            while (true)
             {
                 // user 입력받기
                 input = GetUserInput();
@@ -324,7 +323,6 @@ namespace TicTacToe
                 if (IsGridFull()) break;
                 if (IsWinner(p1))
                 {
-                    turn = 2;
                     gameInfo.usrWin++;
                     break;
                 }
@@ -334,11 +332,11 @@ namespace TicTacToe
                 if (IsGridFull()) break;
                 if (IsWinner(com))
                 {
-                    turn = 1;
                     gameInfo.comWin++;
                     break;
                 }
             }
+
             // Winner 출력
             ShowWinner(com, p1);
         }
@@ -349,12 +347,12 @@ namespace TicTacToe
             int input;
 
             // 한 명이 승리 했을때까지 돌리기
-            while (!IsWinner(p1) && !IsWinner(p2))
+            while (true)
             {
                 // 매턴마다 rendering 해주기
                 myconsole.DrawBoard(grid);
 
-                if (IsGridFull()) break;
+                if (IsWinner(p1) || IsWinner(p2) || IsGridFull()) break;
 
                 input = GetUserInput();
 
@@ -365,6 +363,7 @@ namespace TicTacToe
                 if (turn == 1) turn = 2;
                 else if (turn == 2) turn = 1;
             }
+
             // Winner 출력
             ShowWinner(p1, p2);
         }
