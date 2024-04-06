@@ -11,7 +11,7 @@ namespace TicTacToe
     public class Common
     {
         // static 참조변수
-        // 자기가 자기 자신을 참조?
+        // 자기가 자기 자신을 참조
         private static Common instance;
 
         // 외부에서 객체 생성 못하게 막기
