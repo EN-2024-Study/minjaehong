@@ -8,21 +8,21 @@ namespace TicTacToe
 {
     class Menu : Page
     {
-        public Menu(Common common, MyConsole myconsole) : base(common, myconsole)
+        public Menu(GameInfo gameInfo, MyConsole myconsole) : base(gameInfo, myconsole)
         {
             
         }
 
         public void ShowMenu()
         {
-            Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y-2);
-            Console.Write("[HELLO USER "+common.username+"!]");
+            Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y-2);
+            Console.Write("[HELLO USER "+gameInfo.username+"!]");
             
             myconsole.InitCursorPos();
-            myconsole.writeLine("① VS COM");
-            myconsole.writeLine("② VS USER");
-            myconsole.writeLine("③ HISTORY");
-            myconsole.writeLine("④ 시작으로");
+            myconsole.WriteLine("① VS COM");
+            myconsole.WriteLine("② VS USER");
+            myconsole.WriteLine("③ HISTORY");
+            myconsole.WriteLine("④ 시작으로");
         }
 
         private void PrintCertainLine(int lineNum)
@@ -30,19 +30,19 @@ namespace TicTacToe
             switch (lineNum)
             {
                 case 0:
-                    Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y);
+                    Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y);
                     Console.WriteLine("① VS COM");
                     break;
                 case 1:
-                    Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y+1);
+                    Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y+1);
                     Console.WriteLine("② VS USER");
                     break;
                 case 2:
-                    Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y+2);
+                    Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y+2);
                     Console.WriteLine("③ HISTORY");
                     break;
                 case 3:
-                    Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y+3);
+                    Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y+3);
                     Console.WriteLine("④ 시작으로");
                     break;
             }
@@ -100,9 +100,9 @@ namespace TicTacToe
                         Console.Clear();
 
                         // 시작하기이면 -1
-                        if (Common.GetInstance().mode == 3) return -1;
+                        if (GameInfo.GetInstance().mode == 3) return -1;
                         // HISTORY이면 +2
-                        else if (Common.GetInstance().mode == 2) return 2;
+                        else if (GameInfo.GetInstance().mode == 2) return 2;
                         // VS COM OR VS USER 이면 +1
                         else
                         {
@@ -110,7 +110,7 @@ namespace TicTacToe
                         }
                     }
 
-                    Common.GetInstance().mode = mode;
+                    GameInfo.GetInstance().mode = mode;
                     Render(mode, before);
                 }
             }

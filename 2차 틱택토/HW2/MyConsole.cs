@@ -38,7 +38,7 @@ namespace TicTacToe
         }
 
         // 중앙에 WRITELINE
-        public void writeLine(string str)
+        public void WriteLine(string str)
         {
             Console.SetCursorPosition(curx, cury);
             Console.Write(str);
@@ -49,24 +49,24 @@ namespace TicTacToe
         }
 
         // 중앙에 WRITE
-        public void write(string str)
+        public void Write(string str)
         {
             Console.SetCursorPosition(curx, cury);
             Console.Write(str);
             curx+=str.Length;
         }
 
-        public void drawboard(char[,] grid)
+        public void DrawBoard(char[,] grid)
         {
             // 중앙으로 커서 위치 변경
             InitCursorPos();
-            writeLine("┌───┬───┬───┐");
-            writeLine("│ " + grid[0,0] + " │ "+ grid[0,1] +" │ "+ grid[0,2] +" │");
-            writeLine("├───┼───┼───┤");
-            writeLine("│ " + grid[1, 0] + " │ " + grid[1, 1] + " │ " + grid[1, 2] + " │");
-            writeLine("├───┼───┼───┤");
-            writeLine("│ " + grid[2, 0] + " │ " + grid[2, 1] + " │ " + grid[2, 2] + " │");
-            writeLine("└───┴───┴───┘");
+            WriteLine("┌───┬───┬───┐");
+            WriteLine("│ " + grid[0,0] + " │ "+ grid[0,1] +" │ "+ grid[0,2] +" │");
+            WriteLine("├───┼───┼───┤");
+            WriteLine("│ " + grid[1, 0] + " │ " + grid[1, 1] + " │ " + grid[1, 2] + " │");
+            WriteLine("├───┼───┼───┤");
+            WriteLine("│ " + grid[2, 0] + " │ " + grid[2, 1] + " │ " + grid[2, 2] + " │");
+            WriteLine("└───┴───┴───┘");
         }
     }
 }

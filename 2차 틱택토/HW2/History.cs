@@ -8,7 +8,7 @@ namespace TicTacToe
 {
     class History : Page
     {
-        public History(Common common, MyConsole myconsole) : base(common, myconsole)
+        public History(GameInfo gameInfo, MyConsole myconsole) : base(gameInfo, myconsole)
         {
 
         }
@@ -17,13 +17,13 @@ namespace TicTacToe
         {
 
             myconsole.InitCursorPos();
-            myconsole.writeLine("[history]");
-            myconsole.writeLine("");
-            myconsole.writeLine("com win : " + common.comWin.ToString());
-            myconsole.writeLine("usr win : " + common.usrWin.ToString());
-            myconsole.writeLine("");
+            myconsole.WriteLine("[history]");
+            myconsole.WriteLine("");
+            myconsole.WriteLine("com win : " + gameInfo.comWin.ToString());
+            myconsole.WriteLine("usr win : " + gameInfo.usrWin.ToString());
+            myconsole.WriteLine("");
             Console.ForegroundColor = ConsoleColor.Red;
-            myconsole.writeLine("PRESS BACKSPACE TO GO BACK...");
+            myconsole.WriteLine("PRESS BACKSPACE TO GO BACK...");
             Console.ForegroundColor = ConsoleColor.White;
 
             Exception.CheckIfBackSpace();

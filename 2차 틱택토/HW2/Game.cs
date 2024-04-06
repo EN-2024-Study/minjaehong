@@ -11,7 +11,7 @@ namespace TicTacToe
         char[,] grid;
         BitArray p1, p2, com;
         
-        public Game(Common common, MyConsole myconsole) : base(common, myconsole)
+        public Game(GameInfo gameInfo, MyConsole myconsole) : base(gameInfo, myconsole)
         {
             grid = new char[3, 3];
             p1 = new BitArray(9);
@@ -116,13 +116,13 @@ namespace TicTacToe
         void ShowWinner(int turn)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(Common.GAME_X, Common.GAME_Y - 3);
+            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y - 3);
 
             if (turn == 0) Console.Write("무승부");
             else if(turn==1) Console.Write("p2 win");
             else if(turn==2) Console.Write("p1 win");
 
-            Console.SetCursorPosition(Common.GAME_X, Common.GAME_Y + 10);
+            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 10);
             Console.Write("PRESS BACKSPACE TO GO BACK...");
             Console.ForegroundColor = ConsoleColor.White;
         }
@@ -225,6 +225,7 @@ namespace TicTacToe
                     return;
                 }
             }
+
             return;
         }
 
@@ -245,10 +246,10 @@ namespace TicTacToe
             InitializeBitset();
 
             // vs com
-            if (common.mode == 1)
+            if (gameInfo.mode == 1)
             {
                 int turn = 1;
-                myconsole.drawboard(grid);
+                myconsole.DrawBoard(grid);
                 string str;
                 int input = 0;
 
@@ -258,8 +259,8 @@ namespace TicTacToe
                     bool right_input = false;
 
                     // 위치 입력 : 찍기
-                    Console.SetCursorPosition(Common.GAME_X, Common.GAME_Y + 8);
-                    myconsole.write("위치 입력 : ");
+                    Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 8);
+                    myconsole.Write("위치 입력 : ");
                     int left = Console.CursorLeft;
                     int top = Console.CursorTop;
 
@@ -272,7 +273,7 @@ namespace TicTacToe
                         // 유효한 값이면
                         if ((input = Exception.CheckIfValidInput(str)) != 0 && IsPossible(input))
                         {
-                            Console.SetCursorPosition(Common.GAME_X, Common.GAME_Y + 9);
+                            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 9);
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write("                                  ");
                             Console.ForegroundColor = ConsoleColor.White;
@@ -283,7 +284,7 @@ namespace TicTacToe
                         else
                         {
                             // 경고 문자 띄우고
-                            Console.SetCursorPosition(Common.GAME_X, Common.GAME_Y + 9);
+                            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 9);
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write("0~9 에서 고르시오");
                             Console.ForegroundColor = ConsoleColor.White;
@@ -301,7 +302,7 @@ namespace TicTacToe
                     else if (turn == 2) turn = 1;
 
                     // 최신화 반영해서 다시 그려주기
-                    myconsole.drawboard(grid);
+                    myconsole.DrawBoard(grid);
 
                     // 만약 칸이 다 찼다면 무승부처리
                     if (IsGridFull())
@@ -320,9 +321,9 @@ namespace TicTacToe
             }
 
             // ======================= USER VS COM ======================
-            if (common.mode == 0)
+            if (gameInfo.mode == 0)
             {
-                myconsole.drawboard(grid);
+                myconsole.DrawBoard(grid);
                 string str;
                 int input = 0;
                 int turn = 0;
@@ -333,8 +334,8 @@ namespace TicTacToe
                     bool right_input = false;
 
                     // 위치 입력 : 찍기
-                    Console.SetCursorPosition(Common.GAME_X, Common.GAME_Y + 8);
-                    myconsole.write("위치 입력 : ");
+                    Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 8);
+                    myconsole.Write("위치 입력 : ");
                     int left = Console.CursorLeft;
                     int top = Console.CursorTop;
 
@@ -347,7 +348,7 @@ namespace TicTacToe
                         // 유효한 값이면
                         if ((input = Exception.CheckIfValidInput(str)) != 0 && IsPossible(input))
                         {
-                            Console.SetCursorPosition(Common.GAME_X, Common.GAME_Y + 9);
+                            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 9);
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write("                                  ");
                             Console.ForegroundColor = ConsoleColor.White;
@@ -358,7 +359,7 @@ namespace TicTacToe
                         else
                         {
                             // 경고 문자 띄우고
-                            Console.SetCursorPosition(Common.GAME_X, Common.GAME_Y + 9);
+                            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 9);
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write("0~9 에서 고르시오");
                             Console.ForegroundColor = ConsoleColor.White;
@@ -370,20 +371,22 @@ namespace TicTacToe
 
                     // p1이 OX 놔주기
                     PlaceOX(input, 1);
-                    myconsole.drawboard(grid);
+                    myconsole.DrawBoard(grid);
                     if (IsGridFull()) break;
                     if (IsWinner(p1))
                     {
                         turn = 2;
+                        gameInfo.usrWin++;
                         break;
                     }
 
                     PlaceOXByCom();
-                    myconsole.drawboard(grid);
+                    myconsole.DrawBoard(grid);
                     if (IsGridFull()) break;
-                    if (IsWinner(p2))
+                    if (IsWinner(com))
                     {
                         turn = 1;
+                        gameInfo.comWin++; 
                         break;
                     }
                 }

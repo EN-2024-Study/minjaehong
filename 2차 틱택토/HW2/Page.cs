@@ -8,12 +8,12 @@ namespace TicTacToe
 {
     abstract class Page
     {
-        protected Common common;
+        protected GameInfo gameInfo;
         protected MyConsole myconsole;
 
-        public Page(Common common, MyConsole myconsole)
+        public Page(GameInfo gameInfo, MyConsole myconsole)
         {
-            this.common = common;
+            this.gameInfo = gameInfo;
             this.myconsole = myconsole;
         }
 

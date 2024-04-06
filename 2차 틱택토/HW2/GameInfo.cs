@@ -8,23 +8,23 @@ namespace TicTacToe
 {
     // Singleton
     // 오로지 한 객체만 생성됨
-    public class Common
+    public class GameInfo
     {
         // static 참조변수
         // 자기가 자기 자신을 참조
-        private static Common instance;
+        private static GameInfo instance;
 
         // 외부에서 객체 생성 못하게 막기
-        private Common()
+        private GameInfo()
         {
 
         }
 
-        public static Common GetInstance()
+        public static GameInfo GetInstance()
         {
             if(instance==null)
             {
-                instance = new Common();
+                instance = new GameInfo();
             }
             // 이미 있으면 기존 객체 반환
             return instance;
