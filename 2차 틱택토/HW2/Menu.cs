@@ -15,7 +15,7 @@ namespace TicTacToe
 
         public void ShowMenu()
         {
-            Console.SetCursorPosition(common.MENU_X, common.MENU_Y-2);
+            Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y-2);
             Console.Write("[HELLO USER "+common.username+"!]");
             
             myconsole.InitCursorPos();
@@ -30,19 +30,19 @@ namespace TicTacToe
             switch (lineNum)
             {
                 case 0:
-                    Console.SetCursorPosition(common.MENU_X, common.MENU_Y);
+                    Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y);
                     Console.WriteLine("① VS COM");
                     break;
                 case 1:
-                    Console.SetCursorPosition(common.MENU_X, common.MENU_Y+1);
+                    Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y+1);
                     Console.WriteLine("② VS USER");
                     break;
                 case 2:
-                    Console.SetCursorPosition(common.MENU_X, common.MENU_Y+2);
+                    Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y+2);
                     Console.WriteLine("③ HISTORY");
                     break;
                 case 3:
-                    Console.SetCursorPosition(common.MENU_X, common.MENU_Y+3);
+                    Console.SetCursorPosition(Common.MENU_X, Common.MENU_Y+3);
                     Console.WriteLine("④ 시작으로");
                     break;
             }
@@ -98,13 +98,16 @@ namespace TicTacToe
                     {
                         // 화면 지우고 다음 화면으로 넘어갈 준비
                         Console.Clear();
-                        
+
                         // 시작하기이면 -1
                         if (Common.GetInstance().mode == 3) return -1;
                         // HISTORY이면 +2
                         else if (Common.GetInstance().mode == 2) return 2;
                         // VS COM OR VS USER 이면 +1
-                        return 1;
+                        else
+                        {
+                            return 1;
+                        }
                     }
 
                     Common.GetInstance().mode = mode;

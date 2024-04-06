@@ -22,8 +22,9 @@ namespace TicTacToe
             int width = Console.LargestWindowWidth/2;
             int height = Console.LargestWindowHeight/2;
 
-            Console.SetWindowSize(80, 40); // set the size of the console window
-            Console.SetBufferSize(80, 40); // set the size of the console buffer
+            Console.SetWindowPosition(0, 0);
+            Console.SetWindowSize(213, 62); // set the size of the console window
+            //Console.SetBufferSize(100, 80); // set the size of the console buffer
 
             Console.Title = "틱택토틱택토";
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlHandler);

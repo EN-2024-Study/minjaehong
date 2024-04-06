@@ -68,45 +68,5 @@ namespace TicTacToe
             writeLine("│ " + grid[2, 0] + " │ " + grid[2, 1] + " │ " + grid[2, 2] + " │");
             writeLine("└───┴───┴───┘");
         }
-
-        // 테두리 그리기
-        public void drawBoard()
-        {
-            Console.SetCursorPosition(0, 0);
-            for (int i = 0; i < Common.GetInstance().WIDTH; i++)
-            {
-                Console.Write("─");
-            }
-
-            for (int k = 1; k < Common.GetInstance().HEIGHT; k++)
-            {
-                Console.SetCursorPosition(0, k);
-                Console.Write("│");
-            }
-
-            Console.SetCursorPosition(0, Common.GetInstance().HEIGHT);
-            for (int i = 0; i < Common.GetInstance().WIDTH; i++)
-            {
-                Console.Write("─");
-            }
-
-            for (int k = 1; k < Common.GetInstance().HEIGHT; k++)
-            {
-                Console.SetCursorPosition(Common.GetInstance().WIDTH, k);
-                Console.Write("│");
-            }
-
-            Console.SetCursorPosition(0, 0);
-            Console.Write("┌");
-
-            Console.SetCursorPosition(Common.GetInstance().WIDTH, 0);
-            Console.Write("┐");
-
-            Console.SetCursorPosition(0, Common.GetInstance().HEIGHT);
-            Console.Write("└");
-
-            Console.SetCursorPosition(Common.GetInstance().WIDTH, Common.GetInstance().HEIGHT);
-            Console.Write("┘");
-        }
     }
 }
