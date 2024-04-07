@@ -11,7 +11,6 @@ namespace TicTacToe
     // 2.GameModePVP
     // 3.PlaceOXbyUser
     // 4.PlaceOXbyCom
-    // 5.
     partial class Game : Page
     {
         // CVP Game일때
