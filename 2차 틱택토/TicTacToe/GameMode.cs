@@ -11,7 +11,7 @@ namespace TicTacToe
     // 2.GameModePVP
     // 3.PlaceOXbyUser
     // 4.PlaceOXbyCom
-
+    // 5.
     partial class Game : Page
     {
         // CVP Game일때
@@ -188,20 +188,31 @@ namespace TicTacToe
                 }
             }
 
-            // 딱히 놓을 곳 없으면 아무데나 놓아도 무방
-            // 아무데나 놓아도 지지는 않는다 ??
-            for (int i = 0; i < 8; i++)
+            int idx = 0;
+
+            // 딱히 놓을 곳 없으면 모서리부터 선점
+            // 모서리에 둘 다 안놓았으면
+            if (p1[0] == false && com[0] == false) idx = 0;
+            else if (p1[2] == false && com[2] == false) idx = 2;
+            else if (p1[6] == false && com[6] == false) idx = 6;
+            else if (p1[8] == false && com[8] == false) idx = 8;
+            // 모서리도 꽉찼으면
+            // 진짜 아무데나 놔도 지지는 않음
+            else
             {
-                // 둘 다 안놓은 곳에 아무데나 놓기
-                // 여기서는 앞순서만
-                if (p1[i] == false && com[i] == false)
+                // 앞순서부터 안놔진곳 찾아서 놓기
+                for (int i = 0; i < 8; i++)
                 {
-                    com[i] = true;
-                    grid[i / 3, i % 3] = 'X';
-                    return;
+                    if (p1[i] == false && com[i] == false)
+                    {
+                        idx = i;
+                        break;
+                    }
                 }
             }
 
+            com[idx] = true;
+            grid[idx / 3, idx % 3] = 'X';
             return;
         }
     }
