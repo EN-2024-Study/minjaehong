@@ -70,7 +70,7 @@ namespace TicTacToe
         // 사용자가 잘못된 값을 입력했을때
         // 해당 입력 값만 화면에서 지워주는 함수
         // == "위치 입력 : " 오른쪽에 씌여진 것들 모두 제거해줌
-        private void EraseUserInput(string str, int left, int top)
+        void EraseUserInput(string str, int left, int top)
         {
             Console.SetCursorPosition(left, top);
             // 기존 사용자 입력값 지우기
@@ -80,7 +80,7 @@ namespace TicTacToe
         }
 
         // 꽉 찼는지 확인
-        private bool IsGridFull()
+        bool IsGridFull()
         {
             for (int i = 0; i < 3; i++)
             {
@@ -106,7 +106,7 @@ namespace TicTacToe
             return false;
         }
 
-                // winner이면 console창에 winner라고 print해주는 함수
+        // winner이면 console창에 winner라고 print해주는 함수
         void PrintWinner(BitArray bs1, BitArray bs2)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -119,7 +119,7 @@ namespace TicTacToe
                 else Console.Write("DRAW!");
             }
 
-            if(gameInfo.mode==GameInfo.Mode.PVP)
+            if (gameInfo.mode == GameInfo.Mode.PVP)
             {
                 if (IsWinner(bs1)) Console.Write("P1 WON!");
                 else if (IsWinner(bs2)) Console.Write("P2 WON!");

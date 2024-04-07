@@ -30,7 +30,7 @@ namespace TicTacToe
         // 중앙 출력일때 맨 초기에 원하는 곳으로 옮기기
         public void InitCursorPos()
         {
-            curx = 35;
+            curx = GameInfo.MENU_X;
             cury = 15;
         }
 
@@ -41,7 +41,7 @@ namespace TicTacToe
             Console.Write(str);
 
             // 개행처리
-            curx = 35;
+            curx = GameInfo.MENU_X;
             cury++;
         }
 
