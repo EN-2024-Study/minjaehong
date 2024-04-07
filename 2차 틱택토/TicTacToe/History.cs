@@ -17,10 +17,10 @@ namespace TicTacToe
         {
 
             myconsole.InitCursorPos();
-            myconsole.WriteLine("[history]");
+            myconsole.WriteLine("[HISTORY]");
             myconsole.WriteLine("");
-            myconsole.WriteLine("com win : " + gameInfo.comWin.ToString());
-            myconsole.WriteLine("usr win : " + gameInfo.usrWin.ToString());
+            myconsole.WriteLine("COM WIN : " + gameInfo.comWin.ToString());
+            myconsole.WriteLine("USER WIN : " + gameInfo.usrWin.ToString());
             myconsole.WriteLine("");
             Console.ForegroundColor = ConsoleColor.Red;
             myconsole.WriteLine("PRESS BACKSPACE TO GO BACK...");

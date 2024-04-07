@@ -21,6 +21,7 @@ namespace TicTacToe
             {2,5,8 }
         };
 
+        // 생성자로 게임에 사용할 3x3배열과 bitArray 3개 생성
         public Game(GameInfo gameInfo, MyConsole myconsole) : base(gameInfo, myconsole)
         {
             grid = new char[3, 3];
@@ -74,22 +75,47 @@ namespace TicTacToe
             return true;
         }
 
+        // winningrows 8가지를 모두 돌며 winner인지 확인하는 함수
         bool IsWinner(BitArray visited)
         {
-            if ((visited[0] & visited[4] & visited[8]) || // 대각선 2개
-               (visited[2] & visited[4] & visited[6]) ||
-               (visited[0] & visited[1] & visited[2]) || // 가로 3개
-               (visited[3] & visited[4] & visited[5]) ||
-               (visited[6] & visited[7] & visited[8]) ||
-               (visited[0] & visited[3] & visited[6]) || // 세로 3개
-               (visited[1] & visited[4] & visited[7]) ||
-               (visited[2] & visited[5] & visited[8]))
+            for(int i = 0; i < 8; i++)
             {
-                return true;
+                int x = winningrows[i, 0];
+                int y = winningrows[i, 1];
+                int z = winningrows[i, 2];
+                if(visited[x] & visited[y] & visited[z]) return true;
+
             }
             return false;
         }
 
+                // winner이면 console창에 winner라고 print해주는 함수
+        void PrintWinner(BitArray bs1, BitArray bs2)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y - 3);
+
+            if (gameInfo.mode == GameInfo.Mode.CVP)
+            {
+                if (IsWinner(bs1)) Console.Write("COM WON!");
+                else if (IsWinner(bs2)) Console.Write("USER WON!");
+                else Console.Write("DRAW!");
+            }
+
+            if(gameInfo.mode==GameInfo.Mode.PVP)
+            {
+                if (IsWinner(bs1)) Console.Write("P1 WON!");
+                else if (IsWinner(bs2)) Console.Write("P2 WON!");
+                else Console.Write("DRAW!");
+            }
+
+            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 10);
+            Console.Write("PRESS BACKSPACE TO GO BACK...");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        // 해당 빈칸에 놓을 수 있는지 확인
+        // input으로는 이미 유효처리가 된 숫자가 들어옴
         bool IsPossible(int input)
         {
             input--;
@@ -103,7 +129,7 @@ namespace TicTacToe
             else return true;
         }
 
-        // User의 OX 놔주는 함수
+        // USER의 OX 놔주는 함수
         // PVP CVP에 둘 다 사용됨
         void PlaceOXByUser(int input, int turn)
         {
@@ -129,36 +155,14 @@ namespace TicTacToe
             }
         }
 
-        void ShowWinner(BitArray bs1, BitArray bs2)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y - 3);
-
-            if (gameInfo.mode == GameInfo.Mode.CVP)
-            {
-                if (IsWinner(bs1)) Console.Write("com win!");
-                else if (IsWinner(bs2)) Console.Write("usr win!");
-                else Console.Write("무승부");
-            }
-
-            if(gameInfo.mode==GameInfo.Mode.PVP)
-            {
-                if (IsWinner(bs1)) Console.Write("p1 win!");
-                else if (IsWinner(bs2)) Console.Write("p2 win!");
-                else Console.Write("무승부");
-            }
-
-            Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 10);
-            Console.Write("PRESS BACKSPACE TO GO BACK...");
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-
-        // Com의 OX 놔주는 함수
+        // COM의 OX 놔주는 함수
         // CVP에만 사용됨
         void PlaceOXByCom()
         {
-            // 맨 처음에는 정해져있음
-            if (GetBitSetCount(com) == 0)
+
+            // 예외 - 맨 처음에는 정해져있음
+            // COM의 bitarray에 true 개수가 0개면 com의 첫 수 라는 뜻
+            if (GetBitSetCount(com)==0)
             {
                 // 사용자가 첫 수로 중앙에 놨으면
                 if (p1[4])
@@ -170,21 +174,23 @@ namespace TicTacToe
                 }
                 else
                 {
-                    // 아니면 Com이 중앙에 놓기
+                    // 아니면 COM이 중앙에 놓기
                     grid[1, 1] = 'X';
                     com[4] = true;
                 }
                 return;
             }
 
-            // Com이 이길 수 있을때는 이겨야함
+            // COM이 이길 수 있을때는 이겨야함
+            // 담턴에 이길 수 있는지 확인
+            // winningrows 순회하며 담턴에 놓았을때 이길 수 있는 경우가 있는지 확인
             for (int i = 0; i < 8; i++)
             {
                 int x = winningrows[i, 0];
                 int y = winningrows[i, 1];
                 int z = winningrows[i, 2];
 
-                // 2개씩 채워져있을때 + p1이 남은 자리에 안놓았을때
+                // COM이 2개씩 채웠을때 + USER가 남은 자리에 안놓았을때
                 if (com[x] == false && com[y] == true && com[z] == true && p1[x] == false)
                 {
                     com[x] = true;
@@ -205,14 +211,15 @@ namespace TicTacToe
                 }
             }
 
-            // User가 담턴에 이길 수 있을때는 채워서 막아야함
+            // USER가 담턴에 이길 수 있을때는 채워서 막아야함
+            // COM이 지지만 않으면 됨
             for (int i = 0; i < 8; i++)
             {
                 int x = winningrows[i, 0];
                 int y = winningrows[i, 1];
                 int z = winningrows[i, 2];
 
-                // user꺼가 2개씩 채워져있을때 + Com이 남은 자리에 아직 안놓았을때 
+                // USER가 이미 2개씩 채웠고 + COM이 남은 자리에 아직 안놓았을때 
                 if(p1[x]==false && p1[y]==true && p1[z]==true && com[x]==false)
                 {
                     com[x] = true;
@@ -234,7 +241,7 @@ namespace TicTacToe
             }
 
             // 딱히 놓을 곳 없으면 아무데나 놓아도 무방
-            // 지지만 않으면 된다
+            // 아무데나 놓아도 지지는 않는다 ??
             for(int i = 0; i < 8; i++)
             {
                 // 둘 다 안놓은 곳에 아무데나 놓기
@@ -296,7 +303,7 @@ namespace TicTacToe
                     // 경고 문자 띄우고
                     Console.SetCursorPosition(GameInfo.GAME_X, GameInfo.GAME_Y + 9);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("0~9 에서 고르시오");
+                    Console.Write("1~9 중 빈칸인 곳을 고르시오");
                     Console.ForegroundColor = ConsoleColor.White;
 
                     // 사용자가 입력한 값만 지워주기
@@ -338,7 +345,7 @@ namespace TicTacToe
             }
 
             // Winner 출력
-            ShowWinner(com, p1);
+            PrintWinner(com, p1);
         }
 
         void GameModePVP()
@@ -365,7 +372,7 @@ namespace TicTacToe
             }
 
             // Winner 출력
-            ShowWinner(p1, p2);
+            PrintWinner(p1, p2);
         }
 
         // 틱택토 게임 화면

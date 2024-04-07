@@ -16,10 +16,7 @@ namespace TicTacToe
         private int curx;
         private int cury;
 
-        private MyConsole()
-        {
-            
-        }
+        private MyConsole() { }
         
         public static MyConsole GetInstance()
         {
@@ -56,6 +53,7 @@ namespace TicTacToe
             curx+=str.Length;
         }
 
+        // 틱택토 보드 그려주기
         public void DrawBoard(char[,] grid)
         {
             // 중앙으로 커서 위치 변경
