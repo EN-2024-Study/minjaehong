@@ -17,9 +17,9 @@ namespace TicTacToe
         {
             // 이름 입력받고 공용객체에 저장
             myconsole.InitCursorPos();
-            myconsole.WriteLine("[ENTER USERNAME...]");
+            myconsole.WriteLine("[ LETS PLAY TICTACTOE ]");
             myconsole.WriteLine("");
-            myconsole.Write("username : ");
+            myconsole.Write("Enter username : ");
             GameInfo.GetInstance().username = Console.ReadLine();
 
             // 이름 입력되면 무조건 다음화면으로

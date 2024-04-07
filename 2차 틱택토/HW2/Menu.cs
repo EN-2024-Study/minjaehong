@@ -17,13 +17,17 @@ namespace TicTacToe
         public void ShowMenu()
         {
             Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y-2);
-            Console.Write("[HELLO USER "+gameInfo.username+"!]");
+            Console.Write("HELLO "+gameInfo.username+"!");
             
             myconsole.InitCursorPos();
             myconsole.WriteLine("① VS COM");
             myconsole.WriteLine("② VS USER");
             myconsole.WriteLine("③ HISTORY");
-            myconsole.WriteLine("④ 시작으로");
+            myconsole.WriteLine("④ LOGOUT");
+            myconsole.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            myconsole.Write("PRESS SPACEBAR TO SELECT...");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         // 특정 메뉴만 출력하기
@@ -46,7 +50,7 @@ namespace TicTacToe
                     break;
                 case 3:
                     Console.SetCursorPosition(GameInfo.MENU_X, GameInfo.MENU_Y+3);
-                    Console.WriteLine("④ 시작으로");
+                    Console.WriteLine("④ LOGOUT");
                     break;
             }
         }
@@ -82,8 +86,10 @@ namespace TicTacToe
             ShowMenu();
             Render(selectedMenu, beforeMenu);
 
-            // 선택할때까지 이 함수에서 대기
-            while (true)
+            bool pressedSpaceBar = false;
+
+            // SpaceBar 누를때까지 대기
+            while (!pressedSpaceBar)
             {
                 if (Console.KeyAvailable)
                 {
@@ -103,28 +109,30 @@ namespace TicTacToe
                     // 화면이동일때
                     if (key == ConsoleKey.Spacebar)
                     {
-                        // 화면 지우고 다음 화면으로 넘어갈 준비
-                        Console.Clear();
-
-                        switch (selectedMenu)
-                        {
-                            case 0:
-                                gameInfo.mode = GameInfo.Mode.CVP;
-                                return +1;
-                            case 1:
-                                gameInfo.mode = GameInfo.Mode.PVP;
-                                return +1;
-                            case 2:
-                                return +2;
-                            case 3:
-                                return -1;
-
-                        }
+                        pressedSpaceBar = true;
                     }
 
                     Render(selectedMenu, beforeMenu);
                 }
             }
+
+            Console.Clear();
+            switch (selectedMenu)
+            {
+                case 0:
+                    gameInfo.mode = GameInfo.Mode.CVP;
+                    return +1;
+                case 1:
+                    gameInfo.mode = GameInfo.Mode.PVP;
+                    return +1;
+                case 2:
+                    return +2;
+                case 3:
+                    gameInfo.comWin = 0;
+                    gameInfo.usrWin = 0;
+                    return -1;
+            }
+            return 0;
         }
     }
 }
