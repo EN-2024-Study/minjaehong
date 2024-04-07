@@ -55,6 +55,7 @@
     <Compile Include="Exception.cs" />
     <Compile Include="Front.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameMode.cs" />
     <Compile Include="History.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="App.cs" />
