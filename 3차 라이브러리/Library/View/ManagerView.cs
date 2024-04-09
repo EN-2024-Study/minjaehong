@@ -44,7 +44,7 @@ namespace Library
         {
             Console.Clear();
 
-            string[] findBookArr = { "제목으로 찾기 :", "작가명으로 찾기"};
+            string[] findBookArr = { "FIND BY NAME :", "FIND BY AUTHOR : "};
             
             MyConsole.PrintHeader("[FIND BOOK]");
             MyConsole.PrintAllMenu(findBookArr);
@@ -60,7 +60,7 @@ namespace Library
             Console.Clear();
             BookDTO newBook = new BookDTO();
 
-            string[] addBookArr = { "1. NAME : ", "2. AUTHOR : ", "3. PUBLISHER : ", "4. QUANTITY : ", "5. PRICE : " };
+            string[] addBookArr = { "1. NAME : ", "2. AUTHOR : ", "3. PUBLISHER : ", "4. PRICE : ", "5. QUANTITY"};
             MyConsole.PrintHeader("[ADD BOOK]");
             MyConsole.PrintAllMenu(addBookArr);
             
@@ -119,7 +119,7 @@ namespace Library
         {
             Console.Clear();
 
-            string[] updateBookArr= { "1. NAME : ", "2. AUTHOR : ", "3. PUBLISHER : ", "4. QUANTITY : ", "5. PRICE : " };
+            string[] updateBookArr= { "1. NAME : ", "2. AUTHOR : ", "3. PUBLISHER : ", "4. PRICE : ", "5. QUANTITY" };
             
             // 화면 구성
             MyConsole.PrintHeader("[UPDATE BOOK FORM]");
@@ -131,30 +131,25 @@ namespace Library
             return updatedBookInfo;
         }
 
-        public void PrintAllBooks(List<BookDTO> allBooks)
+        public void PrintAllBooksForm(List<BookDTO> allBooks)
         {
-            PrintSelectedBookForm(allBooks);
+            PrintSelectedBooksForm(allBooks);
         }
 
-        public void PrintSelectedBookForm(List<BookDTO> selectedBooks)
+        public void PrintSelectedBooksForm(List<BookDTO> selectedBooks)
         {
-            BookDTO curBook;
-
             Console.Clear();
 
-            for(int i = 0; i < selectedBooks.Count; i++)
-            {
-                curBook = selectedBooks[i];
-                
-                Console.WriteLine("==============================\n");
-             
-                Console.WriteLine("      ID : " + curBook.GetId());
-                Console.WriteLine("    NAME : " + curBook.GetName());
-                Console.WriteLine("  AUTHOR : " + curBook.GetAuthor());
-                Console.WriteLine("   PRICE : " + curBook.GetPrice());
-                Console.WriteLine("QUANTITY : " + curBook.GetQuantity());
+            if (selectedBooks.Count == 0){
+                MyConsole.PrintHeader("[NO RESULT]");
             }
+            else
+            {
+                MyConsole.PrintHeader("[YOUR RESULTS]");
 
+                MyConsole.PrintBooks(selectedBooks);
+            }
+            
             // 뭐 누르면 화면 바뀜
             Console.ReadLine();
         }

@@ -37,28 +37,35 @@ namespace Library
         // retList controller로 보내주면 다시 view로 넘겨서 print 해줘야함
         public List<BookDTO> FindBook(List<string> dataFromView)
         {
-            int flag = 0;
-            
             string bookName = dataFromView[0];
             string author = dataFromView[1];
 
             List<BookDTO> retList = new List<BookDTO>();
 
-            for(int i = 0; i < bookDB.Count; i++)
+            // resultMatched는 검색결과에 맞는 것인지 확인해주는 변수
+            // 2가 되면 매칭하는 책이라는 뜻임
+            int resultMatched = 0;
+
+            for (int i = 0; i < bookDB.Count; i++)
             {
-                if (bookName == "") flag++;
+                resultMatched = 0;
+
+                // 아무것도 입력없었으면 검색결과 일치 처리
+                if (bookName == "") resultMatched++;
                 else
                 {
-                    if (bookDB[i].GetName() == bookName) flag++;
+                    if (bookDB[i].GetName() == bookName) resultMatched++;
                 }
 
-                if (author == "") flag++;
+                // 아무것도 입력없었으면 검색결과 일치 처리
+                if (author == "") resultMatched++;
                 else
                 {
-                    if (bookDB[i].GetAuthor() == author) flag++;
+                    if (bookDB[i].GetAuthor() == author) resultMatched++;
                 }
 
-                if (flag == 2)
+                // bookName author 둘 다 매칭되었으면 List에 추가
+                if (resultMatched == 2)
                 {
                     retList.Add(bookDB[i]);
                 }
@@ -89,6 +96,7 @@ namespace Library
 
             if (updatingBook.GetName() != "") bookDB[updatingBookID].SetName(updatingBook.GetName());
             if (updatingBook.GetAuthor() != "") bookDB[updatingBookID].SetAuthor(updatingBook.GetAuthor());
+            if (updatingBook.GetPublisher() != "") bookDB[updatingBookID].SetPublisher(updatingBook.GetPublisher());
             if (updatingBook.GetPrice() != "") bookDB[updatingBookID].SetPrice(updatingBook.GetPrice());
             if (updatingBook.GetQuantity() != "") bookDB[updatingBookID].SetQuantity(updatingBook.GetQuantity());
 

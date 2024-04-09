@@ -79,7 +79,7 @@ namespace Library
 
                     case ManagerMenuState.PRINTALLBOOK:
                         List<BookDTO> allBooks = bookModel.GetAllBooks();
-                        view.PrintAllBooks(allBooks);
+                        view.PrintAllBooksForm(allBooks);
                         break;
 
                     case ManagerMenuState.MEMBERMANAGEMENT:

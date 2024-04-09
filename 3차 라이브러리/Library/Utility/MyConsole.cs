@@ -84,17 +84,28 @@ namespace Library
 
         //===================== BOOK PRINT FUNCTION ==================//
 
-        public static void Print(BookDTO book)
+        public static void PrintBooks(List<BookDTO> selectedBooks)
         {
             Console.SetCursorPosition(BOOK_STARTX, BOOK_STARTY);
 
-        }
-
-        public static void PrintBooks(List<BookDTO> selectedBooks)
-        {
             for(int i = 0; i < selectedBooks.Count; i++)
             {
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("ID : " + selectedBooks[i].GetId());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("NAME : " + selectedBooks[i].GetName());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("AUTHOR : " + selectedBooks[i].GetAuthor());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("PUBLISHER : " + selectedBooks[i].GetPublisher());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("PRICE : " + selectedBooks[i].GetPrice());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("QUANTITY : " + selectedBooks[i].GetQuantity());
 
+                Console.WriteLine("");
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("==============================");
             }
         }
 

@@ -30,6 +30,8 @@ namespace Library
             this.quantity = quantity;
         }
 
+        // view에서 List<string> 으로 책정보가 넘어왔을때
+        // BookDTO로 변환시켜주기 위한 생성자
         public BookDTO(List<string> dataFromView)
         {
             this.name = dataFromView[0];
@@ -42,28 +44,15 @@ namespace Library
         public void SetId(int keyId) { this.id = keyId; } // DB에서 알아서 넣어줌
         public void SetName(string name) { this.name = name; }
         public void SetAuthor(string author) { this.author = author; }
+        public void SetPublisher(string publisher) { this.publisher = publisher; }
         public void SetPrice(string price) { this.price = price; }
         public void SetQuantity(string quantity) { this.quantity = quantity; }
 
         public int GetId() { return id; }
-
-        public string GetName()
-        {
-            return name;        }
-
-        public string GetAuthor()
-        {
-            return author ;
-        }
-
-        public string GetPrice()
-        {
-            return price;
-        }
-
-        public string GetQuantity()
-        {
-            return quantity;
-        }
+        public string GetName() { return name; }
+        public string GetAuthor() { return author; }
+        public string GetPublisher() { return publisher; }
+        public string GetPrice() { return price; }
+        public string GetQuantity() { return quantity; }
     }
 }
