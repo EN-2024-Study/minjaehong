@@ -10,10 +10,10 @@ namespace Library
     {
         public static void Main()
         {
-            ModelInterface model = new Model();
-            View view = new View();
-            Controller controller = new Controller(model, view);
-            controller.run();
+            // MainController.GetInstance() 호출하면 singleton 생성자들 다 호출되면서
+            // 모든 객체와 참조관계가 다 세팅되고 시작함
+            MainController mainController = MainController.GetInstance();
+            mainController.run();
         }
     }
 }
