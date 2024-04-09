@@ -52,7 +52,7 @@ namespace Library
 
                         dataFromView = view.FindBookForm();
                         List<BookDTO> retList = bookModel.FindBook(dataFromView);
-                        view.PrintSelectedBookForm(retList);
+                        view.PrintSelectedBooksForm(retList);
                         break;
 
                     case ManagerMenuState.ADDBOOK:

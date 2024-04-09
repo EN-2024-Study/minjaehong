@@ -10,8 +10,8 @@ namespace Library
     // 그냥 static 써서 올려?
     static class MyConsole
     {
-        private const int HEADER_X = 40; // HEADER가 끝나야하는 X좌표
-        private const int HEADER_Y = 6; // HEADER가 찍혀야하는 Y좌표
+        private const int HEADER_X = 25; // HEADER가 끝나야하는 X좌표
+        private const int HEADER_Y = 5; // HEADER가 찍혀야하는 Y좌표
 
         private const int MENU_STARTX = 20; // MENU가 끝나야하는 X좌표
         private const int MENU_STARTY = 8; // MENU가 찍혀야하는 Y좌표
@@ -45,7 +45,7 @@ namespace Library
         public static void PrintHeader(string header)
         {
             int headerLen = header.Length;
-            Console.SetCursorPosition(HEADER_X-headerLen, HEADER_Y);
+            Console.SetCursorPosition(HEADER_X, HEADER_Y);
             Console.Write(header);
         }
 
@@ -91,17 +91,17 @@ namespace Library
             for(int i = 0; i < selectedBooks.Count; i++)
             {
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("ID : " + selectedBooks[i].GetId());
+                Console.WriteLine("ID         : " + selectedBooks[i].GetId());
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("NAME : " + selectedBooks[i].GetName());
+                Console.WriteLine("NAME       : " + selectedBooks[i].GetName());
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("AUTHOR : " + selectedBooks[i].GetAuthor());
+                Console.WriteLine("AUTHOR     : " + selectedBooks[i].GetAuthor());
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("PUBLISHER : " + selectedBooks[i].GetPublisher());
+                Console.WriteLine("PUBLISHER  : " + selectedBooks[i].GetPublisher());
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("PRICE : " + selectedBooks[i].GetPrice());
+                Console.WriteLine("PRICE      : " + selectedBooks[i].GetPrice());
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("QUANTITY : " + selectedBooks[i].GetQuantity());
+                Console.WriteLine("QUANTITY   : " + selectedBooks[i].GetQuantity());
 
                 Console.WriteLine("");
                 Console.CursorLeft = BOOK_STARTX;
@@ -118,6 +118,7 @@ namespace Library
         // 입력 값들을 List로 반환해줌
         public static List<string> GetUserInputs(int rows)
         {
+            Console.CursorVisible = true;
             List<string> retList = new List<string>();
 
             for(int i = 0; i < rows; i++)
@@ -125,6 +126,7 @@ namespace Library
                 Console.SetCursorPosition(INPUT_STARTX, INPUT_STARTY + i);
                 retList.Add(Console.ReadLine()); // ENTER찍으면 하나씩 list에 저장
             }
+            Console.CursorVisible = false;
             return retList;
         }
 

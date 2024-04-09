@@ -28,11 +28,11 @@ namespace Library
         {
             Console.Clear();
 
-            string[] ManagerMenuArr = { "도서 찾기", "도서 추가", "도서 삭제", "도서 수정", "전체 도서", "회원 관리", "대여 내역", "네이버 검색", "로그 관리", "요청 도서" };
+            string[] managerMenuArr = { "도서 찾기", "도서 추가", "도서 삭제", "도서 수정", "전체 도서", "회원 관리", "대여 내역", "네이버 검색", "로그 관리", "요청 도서" };
 
             MyConsole.PrintHeader("[MANAGER MENU]");
-            MyConsole.PrintAllMenu(ManagerMenuArr);
-            ManagerMenuState selectedMenu = (ManagerMenuState)MyConsole.GetUserSelection(ManagerMenuArr);
+            MyConsole.PrintAllMenu(managerMenuArr);
+            ManagerMenuState selectedMenu = (ManagerMenuState)MyConsole.GetUserSelection(managerMenuArr);
 
             return selectedMenu;
         }
@@ -44,7 +44,8 @@ namespace Library
         {
             Console.Clear();
 
-            string[] findBookArr = { "FIND BY NAME :", "FIND BY AUTHOR : "};
+            string[] findBookArr = { "FIND BY NAME",
+                                     "FIND BY AUTHOR"};
             
             MyConsole.PrintHeader("[FIND BOOK]");
             MyConsole.PrintAllMenu(findBookArr);
@@ -60,7 +61,8 @@ namespace Library
             Console.Clear();
             BookDTO newBook = new BookDTO();
 
-            string[] addBookArr = { "1. NAME : ", "2. AUTHOR : ", "3. PUBLISHER : ", "4. PRICE : ", "5. QUANTITY"};
+            string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. QUANTITY"};
+
             MyConsole.PrintHeader("[ADD BOOK]");
             MyConsole.PrintAllMenu(addBookArr);
             
@@ -119,8 +121,8 @@ namespace Library
         {
             Console.Clear();
 
-            string[] updateBookArr= { "1. NAME : ", "2. AUTHOR : ", "3. PUBLISHER : ", "4. PRICE : ", "5. QUANTITY" };
-            
+            string[] updateBookArr= { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. QUANTITY" };
+
             // 화면 구성
             MyConsole.PrintHeader("[UPDATE BOOK FORM]");
             MyConsole.PrintAllMenu(updateBookArr);

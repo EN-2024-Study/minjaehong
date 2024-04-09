@@ -46,7 +46,7 @@ namespace Library
             // 2가 되면 매칭하는 책이라는 뜻임
             int resultMatched = 0;
 
-            for (int i = 0; i < bookDB.Count; i++)
+            foreach(int curKey in bookDB.Keys)
             {
                 resultMatched = 0;
 
@@ -54,20 +54,20 @@ namespace Library
                 if (bookName == "") resultMatched++;
                 else
                 {
-                    if (bookDB[i].GetName() == bookName) resultMatched++;
+                    if (bookDB[curKey].GetName() == bookName) resultMatched++;
                 }
 
                 // 아무것도 입력없었으면 검색결과 일치 처리
                 if (author == "") resultMatched++;
                 else
                 {
-                    if (bookDB[i].GetAuthor() == author) resultMatched++;
+                    if (bookDB[curKey].GetAuthor() == author) resultMatched++;
                 }
 
                 // bookName author 둘 다 매칭되었으면 List에 추가
                 if (resultMatched == 2)
                 {
-                    retList.Add(bookDB[i]);
+                    retList.Add(bookDB[curKey]);
                 }
             }
 
