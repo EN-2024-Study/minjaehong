@@ -49,33 +49,54 @@ namespace Library
                 switch (selectedMenu)
                 {
                     case ManagerMenuState.FINDBOOK:
+
                         dataFromView = view.FindBookForm();
-                        bookModel.FindBook(dataFromView);
+                        List<BookDTO> retList = bookModel.FindBook(dataFromView);
+                        view.PrintSelectedBookForm(retList);
                         break;
+
                     case ManagerMenuState.ADDBOOK:
-                        book = view.AddBookForm();
-                        bookModel.AddNewBook(book);
+
+                        List<string> newBookInfo = view.AddBookForm();
+                        BookDTO newBook = new BookDTO(newBookInfo);
+                        bookModel.AddNewBook(newBook);
                         break;
+                    
                     case ManagerMenuState.DELETEBOOK:
-                        bookId = view.DeleteBookForm();
-                        bookModel.DeleteBook(bookId);
+
+                        int deletingBookID = view.DeleteBookForm();
+                        bookModel.DeleteBook(deletingBookID);
                         break;
+                    
                     case ManagerMenuState.UPDATEBOOK:
-                        bookId = view.UpdateBookSelectForm();
-                        book = view.UpdateBookForm();
-                        book.SetId(bookId);
-                        bookModel.UpdateBook(book);
+
+                        int updatingBookID = view.UpdateBookSelectForm();
+                        List<string> updatedBookInfo = view.UpdateBookForm();
+                        BookDTO updatedBook = new BookDTO(updatedBookInfo);
+                        updatedBook.SetId(updatingBookID);
+                        bookModel.UpdateBook(updatedBook);
                         break;
+
+                    case ManagerMenuState.PRINTALLBOOK:
+                        List<BookDTO> allBooks = bookModel.GetAllBooks();
+                        view.PrintAllBooks(allBooks);
+                        break;
+
                     case ManagerMenuState.MEMBERMANAGEMENT:
                         break;
+                    
                     case ManagerMenuState.BORROWLIST:
                         break;
+                    
                     case ManagerMenuState.NAVERSEARCH:
                         break;
+                    
                     case ManagerMenuState.LOGMANAGEMENT:
                         break;
+                    
                     case ManagerMenuState.REQUESTEDBOOK:
                         break;
+                    
                     default:
                         break;
                 }

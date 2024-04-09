@@ -43,7 +43,6 @@
     <Compile Include="Enums.cs" />
     <Compile Include="LibraryApp.cs" />
     <Compile Include="Model\BookModel.cs" />
-    <Compile Include="Model\MemberDTO.cs" />
     <Compile Include="Model\MemberModel.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\MainView.cs" />

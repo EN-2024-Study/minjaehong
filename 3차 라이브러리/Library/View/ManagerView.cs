@@ -28,7 +28,7 @@ namespace Library
         {
             Console.Clear();
 
-            string[] ManagerMenuArr = { "도서 찾기", "도서 추가", "도서 삭제", "도서 수정", "회원 관리", "대여 내역", "네이버 검색", "로그 관리", "요청 도서" };
+            string[] ManagerMenuArr = { "도서 찾기", "도서 추가", "도서 삭제", "도서 수정", "전체 도서", "회원 관리", "대여 내역", "네이버 검색", "로그 관리", "요청 도서" };
 
             MyConsole.PrintHeader("[MANAGER MENU]");
             MyConsole.PrintAllMenu(ManagerMenuArr);
@@ -37,99 +37,125 @@ namespace Library
             return selectedMenu;
         }
 
+        // 1. 도서 찾기
         // USER가 입력한 걸 List로 반환
         // 해당 List 해석에 따른 BookDTO 반환은 Model에서 해줌
         public List<string> FindBookForm()
         {
             Console.Clear();
 
-            string[] FindBookArr = { "제목으로 찾기 :", "작가명으로 찾기", "출판사로 찾기" };
+            string[] findBookArr = { "제목으로 찾기 :", "작가명으로 찾기"};
             
             MyConsole.PrintHeader("[FIND BOOK]");
-            MyConsole.PrintAllMenu(FindBookArr);
-            return MyConsole.GetUserInputs(FindBookArr.Length);
+            MyConsole.PrintAllMenu(findBookArr);
+            return MyConsole.GetUserInputs(findBookArr.Length);
         }
 
-        public BookDTO AddBookForm()
+        // 2. 도서 추가
+        // USER가 입력한걸 List로 반환
+        // 해당 List 값들로 BookDTO 만드는건 Model에서 해줌
+        // Model에서 BookDTO로 만들고 추가까지 해줌
+        public List<string> AddBookForm()
         {
             Console.Clear();
             BookDTO newBook = new BookDTO();
 
-            Console.WriteLine("          [Add Book]");
-            Console.WriteLine("");
-
-            Console.WriteLine("          book name : ");            
-            Console.WriteLine("        book author : ");
-            Console.WriteLine("         book price : ");
-            Console.WriteLine("      book quantity : ");
-
-            newBook.SetName(Console.ReadLine());
-            newBook.SetAuthor(Console.ReadLine());
-            newBook.SetPrice(Console.ReadLine());
-            newBook.SetQuantity(Console.ReadLine());
-
-            return newBook;
+            string[] addBookArr = { "1. NAME : ", "2. AUTHOR : ", "3. PUBLISHER : ", "4. QUANTITY : ", "5. PRICE : " };
+            MyConsole.PrintHeader("[ADD BOOK]");
+            MyConsole.PrintAllMenu(addBookArr);
+            
+            List<string> bookInfo = MyConsole.GetUserInputs(addBookArr.Length);
+            return bookInfo;
         }
 
-        // view에서 controller로 id만 전달
+        // 3. 도서 삭제
+        // view에서 controller로 ID만 전달
+        // controller에서는 model로 ID 그대로 전달
         public int DeleteBookForm()
         {
             Console.Clear();
-            Console.WriteLine("DELETING BOOK ID : ");
-            int deletingBookId = int.Parse(Console.ReadLine());
-            return deletingBookId;
+
+            string[] deleteBookArr = { "DELETING BOOK ID : " };
+
+            // 화면 구성
+            MyConsole.PrintHeader("[DELETE BOOK]");
+            MyConsole.PrintAllMenu(deleteBookArr);
+
+            // user 입력 받기
+            List<string> userInput = MyConsole.GetUserInputs(deleteBookArr.Length);
+
+            int deletingBookID = int.Parse(userInput[0]);
+
+            return deletingBookID;
         }
 
-        // view에서 controller로 id만 전달
+        // 4. 도서 수정 - 수정할 도서 선택
+        // view에서 controller로 ID만 전달
+        // 그럼 다시 controller에서 UpdateBookForm 불러서 수정사항 작성시키기
         public int UpdateBookSelectForm()
         {
             Console.Clear();
-            int updatingBookId;
-            Console.WriteLine("UPDATING BOOK ID :");
-            updatingBookId = int.Parse(Console.ReadLine());
-            return updatingBookId;
+
+            string[] updateBookArr = { "UPDATING BOOK ID : " };
+            
+            int updatingBookID;
+
+            // 화면 구성
+            MyConsole.PrintHeader("[UPDATE BOOK]");
+            MyConsole.PrintAllMenu(updateBookArr);
+
+            // USER 입력 받기            
+            List<string> userInput = MyConsole.GetUserInputs(updateBookArr.Length);
+            
+            updatingBookID = int.Parse(userInput[0]);
+            
+            return updatingBookID;
         }
 
-        // view에서 controller로 BookDTO로 전달
-        public BookDTO UpdateBookForm()
-        {
-            Console.Clear();
-            BookDTO updatingBook = new BookDTO();
-
-            Console.WriteLine("[Update Book]");
-            Console.WriteLine("");
-
-            Console.WriteLine("book name : ");
-            updatingBook.SetName(Console.ReadLine());
-
-            Console.WriteLine("book author: ");
-            updatingBook.SetAuthor(Console.ReadLine());
-
-            Console.WriteLine("book price : ");
-            updatingBook.SetPrice(Console.ReadLine());
-
-            Console.WriteLine("book quantity: ");
-            updatingBook.SetQuantity(Console.ReadLine());
-
-            return updatingBook;
-        }
-
-        public void PrintAllBookForm(List<BookDTO> bookList)
+        // 4-2. 도서 수정 - 수정 사항 입력시키기
+        // view에서 controller로 List<string> 으로 전달
+        // controller에서 BookDTO로 바꿔서 model로 보내주기
+        public List<string> UpdateBookForm()
         {
             Console.Clear();
 
-            for(int i = 0; i < bookList.Count; i++)
+            string[] updateBookArr= { "1. NAME : ", "2. AUTHOR : ", "3. PUBLISHER : ", "4. QUANTITY : ", "5. PRICE : " };
+            
+            // 화면 구성
+            MyConsole.PrintHeader("[UPDATE BOOK FORM]");
+            MyConsole.PrintAllMenu(updateBookArr);
+
+            // USER 입력받기
+            List<string> updatedBookInfo = MyConsole.GetUserInputs(updateBookArr.Length);
+
+            return updatedBookInfo;
+        }
+
+        public void PrintAllBooks(List<BookDTO> allBooks)
+        {
+            PrintSelectedBookForm(allBooks);
+        }
+
+        public void PrintSelectedBookForm(List<BookDTO> selectedBooks)
+        {
+            BookDTO curBook;
+
+            Console.Clear();
+
+            for(int i = 0; i < selectedBooks.Count; i++)
             {
-                BookDTO curBook = bookList[i];
-
-                Console.WriteLine("====================================\n");
-                Console.WriteLine("book id : " + curBook.GetId());
-                Console.WriteLine("book name : " + curBook.GetName());
-                Console.WriteLine("book author : " + curBook.GetAuthor());
-                Console.WriteLine("book price : " + curBook.GetPrice());
-                Console.WriteLine("book quantity : " + curBook.GetQuantity());
-                Console.WriteLine("");
+                curBook = selectedBooks[i];
+                
+                Console.WriteLine("==============================\n");
+             
+                Console.WriteLine("      ID : " + curBook.GetId());
+                Console.WriteLine("    NAME : " + curBook.GetName());
+                Console.WriteLine("  AUTHOR : " + curBook.GetAuthor());
+                Console.WriteLine("   PRICE : " + curBook.GetPrice());
+                Console.WriteLine("QUANTITY : " + curBook.GetQuantity());
             }
+
+            // 뭐 누르면 화면 바뀜
             Console.ReadLine();
         }
     }

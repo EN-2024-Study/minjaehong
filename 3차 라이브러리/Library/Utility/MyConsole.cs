@@ -13,8 +13,11 @@ namespace Library
         private const int HEADER_X = 40; // HEADER가 끝나야하는 X좌표
         private const int HEADER_Y = 6; // HEADER가 찍혀야하는 Y좌표
 
-        private const int MENU_STARTX = 30; // MENU가 끝나야하는 X좌표
+        private const int MENU_STARTX = 20; // MENU가 끝나야하는 X좌표
         private const int MENU_STARTY = 8; // MENU가 찍혀야하는 Y좌표
+
+        private const int BOOK_STARTX = 20;
+        private const int BOOK_STARTY = 8;
 
         private const int INPUT_STARTX = 40;
         private const int INPUT_STARTY = 8;
@@ -36,7 +39,7 @@ namespace Library
 
         //===================== SINGELTON ========================//
 
-        //===================== PRINT FUNCTIONS ==================//
+        //===================== HEADER PRINT FUNCTION ==================//
         
         // HEADER 출력 함수
         public static void PrintHeader(string header)
@@ -45,6 +48,8 @@ namespace Library
             Console.SetCursorPosition(HEADER_X-headerLen, HEADER_Y);
             Console.Write(header);
         }
+
+        //===================== MENU PRINT FUNCTION ==================//
 
         // 전체메뉴 출력해줌
         public static void PrintAllMenu(string[] menuArr)
@@ -75,6 +80,22 @@ namespace Library
             Console.ForegroundColor = ConsoleColor.Red;
             PrintMenu(menuArr[curSel], curSel);
             Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        //===================== BOOK PRINT FUNCTION ==================//
+
+        public static void Print(BookDTO book)
+        {
+            Console.SetCursorPosition(BOOK_STARTX, BOOK_STARTY);
+
+        }
+
+        public static void PrintBooks(List<BookDTO> selectedBooks)
+        {
+            for(int i = 0; i < selectedBooks.Count; i++)
+            {
+
+            }
         }
 
         //===================== INPUT FUNCTIONS =================//

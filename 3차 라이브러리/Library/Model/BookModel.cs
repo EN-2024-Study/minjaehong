@@ -13,7 +13,7 @@ namespace Library
         
         private BookModel()
         {
-            keyId = 0;
+            keyID = 0;
             bookDB = new Dictionary<int, BookDTO>();
         }
 
@@ -31,41 +31,71 @@ namespace Library
         // Model에 BookDTO들 저장할 Dictionary 있음
         Dictionary<int, BookDTO> bookDB;
         // Dictionary Key값으로 사용할거임
-        private int keyId;
+        private int keyID;
 
-        // book 존재 여부 확인
-        public bool FindBookByName(string name)
+        // BookDTO 조회 - view에서 제목 작가 넘어온거
+        // retList controller로 보내주면 다시 view로 넘겨서 print 해줘야함
+        public List<BookDTO> FindBook(List<string> dataFromView)
         {
+            int flag = 0;
+            
+            string bookName = dataFromView[0];
+            string author = dataFromView[1];
+
+            List<BookDTO> retList = new List<BookDTO>();
+
             for(int i = 0; i < bookDB.Count; i++)
             {
-                if (bookDB[i].GetName() == name) return true;
+                if (bookName == "") flag++;
+                else
+                {
+                    if (bookDB[i].GetName() == bookName) flag++;
+                }
+
+                if (author == "") flag++;
+                else
+                {
+                    if (bookDB[i].GetAuthor() == author) flag++;
+                }
+
+                if (flag == 2)
+                {
+                    retList.Add(bookDB[i]);
+                }
             }
-            return false;
+
+            return retList;
         }
 
-        public bool AddNewBook(BookDTO newBook)
+        public void AddNewBook(BookDTO newBook)
         {
-            keyId++;
-            // db에 넣고 true 반환
-            newBook.SetId(keyId);
-            bookDB.Add(keyId, newBook);
-            return true;
+            // Model에서는 ID만 설정해주고 저장해줌
+            newBook.SetId(keyID);
+            bookDB.Add(keyID, newBook);
+
+            // 다음 ID를 위해
+            keyID++;
         }
 
-        public bool DeleteBook(int deletingBookId)
+        public bool DeleteBook(int deletingBookID)
         {
-            bookDB.Remove(deletingBookId);
+            bookDB.Remove(deletingBookID);
             return true;
         }
 
         public bool UpdateBook(BookDTO updatingBook)
         {
-            DeleteBook(updatingBook.GetId());
-            AddNewBook(updatingBook);
+            int updatingBookID = updatingBook.GetId();
+
+            if (updatingBook.GetName() != "") bookDB[updatingBookID].SetName(updatingBook.GetName());
+            if (updatingBook.GetAuthor() != "") bookDB[updatingBookID].SetAuthor(updatingBook.GetAuthor());
+            if (updatingBook.GetPrice() != "") bookDB[updatingBookID].SetPrice(updatingBook.GetPrice());
+            if (updatingBook.GetQuantity() != "") bookDB[updatingBookID].SetQuantity(updatingBook.GetQuantity());
+
             return true;
         }
 
-        public List<BookDTO> GetAllBook()
+        public List<BookDTO> GetAllBooks()
         {
             return bookDB.Values.ToList();
         }
