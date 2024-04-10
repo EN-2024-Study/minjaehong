@@ -33,9 +33,15 @@ namespace Library
         // Dictionary Key값으로 사용할거임
         private int keyID;
 
-        public bool FindBookById(int Id)
+        public bool FindBookById(int bookID)
         {
-            return bookDB.ContainsKey(Id);
+            return bookDB.ContainsKey(bookID);
+        }
+
+        public BookDTO GetBookDTO(int bookID)
+        {
+            //if (FindBookById(bookID))
+            return bookDB[bookID];
         }
 
         // BookDTO 조회 - view에서 제목 작가 넘어온거
@@ -119,13 +125,14 @@ namespace Library
         {
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
             int bookID = int.Parse(miniDTO.GetBookID());
-            
-            // 남은 수량 계산
-            int curNum = int.Parse(bookDB[bookID].GetQuantity());
+            // 계산을 위해 빌리는 책 수 도 int로 형변환 시키기
             int borrowNum = int.Parse(miniDTO.GetBookNum());
+
+            // 남은 수량 업뎃
+            int curNum = int.Parse(bookDB[bookID].GetQuantity());
             int updatedBookNum = curNum - borrowNum;
 
-            // bookDB에 적용하기
+            // bookDB에 반영
             bookDB[bookID].SetQuantity(updatedBookNum.ToString());
         }
 
@@ -133,13 +140,14 @@ namespace Library
         {
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
             int bookID = int.Parse(miniDTO.GetBookID());
-
-            // 남은 수량 계산
-            int curNum = int.Parse(bookDB[bookID].GetQuantity());
+            // 계산을 위해 return 책 수 도 int로 형변환 시키기
             int returnedNum = int.Parse(miniDTO.GetBookNum());
+
+            // 남은 수량 업뎃
+            int curNum = int.Parse(bookDB[bookID].GetQuantity());
             int updatedBookNum = curNum + returnedNum;
 
-            // bookDB에 적용하기
+            // bookDB에 반영
             bookDB[bookID].SetQuantity(updatedBookNum.ToString());
         }
     }

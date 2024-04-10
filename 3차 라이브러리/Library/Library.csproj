@@ -36,18 +36,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\BookDTO.cs" />
+    <Compile Include="Controller\UserFrontController.cs" />
+    <Compile Include="DTO\BookDTO.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Controller\ManagerController.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="LibraryApp.cs" />
     <Compile Include="Model\BookModel.cs" />
-    <Compile Include="Model\MemberDTO.cs" />
+    <Compile Include="DTO\MemberDTO.cs" />
     <Compile Include="Model\MemberModel.cs" />
+    <Compile Include="DTO\MiniDTO.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\MainView.cs" />
     <Compile Include="View\ManagerView.cs" />
+    <Compile Include="View\UserFrontView.cs" />
     <Compile Include="View\UserView.cs" />
   </ItemGroup>
   <ItemGroup />
