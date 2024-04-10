@@ -10,6 +10,8 @@ namespace Library
     {
         private static MainView instance;
 
+        private MainView() { }
+
         public static MainView GetInstance()
         {
             if (instance == null)
@@ -21,60 +23,32 @@ namespace Library
 
         //===================== SINGELTON ========================//
 
-        private MainView()
-        {
-            
-        }
-
-        string[] modeSelectMenuArr = { "1. USER MODE", "2. MANAGER MODE" };
-
-        public LibraryMode ModeSelectForm()
+        // USER MODE 인지 MANAGER MODE인지 입력받고 return
+        public LibraryMode MainModeSelectForm()
         {
             Console.Clear();
 
-            MyConsole.PrintHeader("[SELECT MODE]");
+            string[] modeSelectMenuArr = { "1. USER MODE", "2. MANAGER MODE" };
 
+            MyConsole.PrintHeader("[SELECT MODE]");
             MyConsole.PrintAllMenu(modeSelectMenuArr);
+
             LibraryMode selectedMode = (LibraryMode)MyConsole.GetUserSelection(modeSelectMenuArr);
 
             return selectedMode;
         }
 
-        public void UserLoginForm()
-        {
-            Console.Clear();
-
-            bool loginSuccess = false;
-
-            Console.WriteLine("[USER LOGIN]");
-            Console.WriteLine("ID : ");
-            Console.WriteLine("PW : ");
-
-            
-            /*
-            while (!loginSuccess)
-            {
-
-            }
-            */
-        }
-
+        // MANAGER MODE 로그인 담당
+        // 로그인 확인 절차 거쳐야함
         public void ManagerLoginForm()
         {
             Console.Clear();
 
-            bool loginSuccess = false;
+            string[] managerFormArr = { "ID", "PW" };
 
-            Console.WriteLine("[MANAGER LOGIN]");
-            Console.WriteLine("ID : ");
-            Console.WriteLine("PW : ");
+            MyConsole.PrintHeader("[MANAGER LOGIN]");
+            MyConsole.PrintAllMenu(managerFormArr);
 
-            /*
-            while (!loginSuccess)
-            {
-
-            }
-            */
         }
     }
 }

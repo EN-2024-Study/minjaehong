@@ -10,16 +10,16 @@ namespace Library
     // 그냥 static 써서 올려?
     static class MyConsole
     {
-        private const int HEADER_X = 25; // HEADER가 끝나야하는 X좌표
-        private const int HEADER_Y = 5; // HEADER가 찍혀야하는 Y좌표
+        private const int HEADER_X = 55; // HEADER가 끝나야하는 X좌표
+        private const int HEADER_Y = 6; // HEADER가 찍혀야하는 Y좌표
 
-        private const int MENU_STARTX = 20; // MENU가 끝나야하는 X좌표
+        private const int MENU_STARTX = 50; // MENU가 끝나야하는 X좌표
         private const int MENU_STARTY = 8; // MENU가 찍혀야하는 Y좌표
 
-        private const int BOOK_STARTX = 20;
-        private const int BOOK_STARTY = 8;
+        private const int BOOK_STARTX = 50;
+        private const int BOOK_STARTY = 11;
 
-        private const int INPUT_STARTX = 40;
+        private const int INPUT_STARTX = 70;
         private const int INPUT_STARTY = 8;
         
         /*
@@ -90,6 +90,10 @@ namespace Library
 
             for(int i = 0; i < selectedBooks.Count; i++)
             {
+                Console.WriteLine("");
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("==============================");
+                Console.WriteLine("");
                 Console.CursorLeft = BOOK_STARTX;
                 Console.WriteLine("ID         : " + selectedBooks[i].GetId());
                 Console.CursorLeft = BOOK_STARTX;
@@ -101,12 +105,39 @@ namespace Library
                 Console.CursorLeft = BOOK_STARTX;
                 Console.WriteLine("PRICE      : " + selectedBooks[i].GetPrice());
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("QUANTITY   : " + selectedBooks[i].GetQuantity());
+                Console.WriteLine("IN STOCK   : " + selectedBooks[i].GetQuantity());
+            }
+            Console.WriteLine("");
+            Console.CursorLeft = BOOK_STARTX;
+            Console.WriteLine("==============================");
+        }
 
+        //===================== MEMBER PRINT FUNCTION ==================//
+
+        public static void PrintAllMembers(List<MemberDTO> allMembers)
+        {
+            Console.SetCursorPosition(BOOK_STARTX, BOOK_STARTY);
+
+            for (int i = 0; i < allMembers.Count; i++)
+            {
                 Console.WriteLine("");
                 Console.CursorLeft = BOOK_STARTX;
                 Console.WriteLine("==============================");
+                Console.WriteLine("");
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("ID       : " + allMembers[i].GetId());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("PW       : " + allMembers[i].GetPw());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("NAME     : " + allMembers[i].GetName());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("AGE      : " + allMembers[i].GetAge());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("PHONENUM : " + allMembers[i].GetPhoneNum());
             }
+            Console.WriteLine("");
+            Console.CursorLeft = BOOK_STARTX;
+            Console.WriteLine("==============================");
         }
 
         //===================== INPUT FUNCTIONS =================//
@@ -144,6 +175,8 @@ namespace Library
 
             bool pressedSpaceBar = false;
 
+            RenderMenu(menuArr, beforeSel, curSel);
+
             // SpaceBar 누를때까지 대기
             while (!pressedSpaceBar)
             {
@@ -157,17 +190,20 @@ namespace Library
                         beforeSel = curSel;
                         curSel = (curSel + 1) % menuNum;
                     }
-                    if (key == ConsoleKey.UpArrow)
+                    else if (key == ConsoleKey.UpArrow)
                     {
                         beforeSel = curSel;
                         curSel = (curSel + menuNum - 1) % menuNum;
                     }
                     // 화면이동일때
-                    if (key == ConsoleKey.Spacebar)
+                    else if (key == ConsoleKey.Spacebar)
                     {
                         pressedSpaceBar = true;
                     }
-
+                    else if (key == ConsoleKey.Backspace)
+                    {
+                        return -1;
+                    }
                     RenderMenu(menuArr, beforeSel, curSel);
                 }
             }

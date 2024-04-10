@@ -43,13 +43,6 @@ namespace Library
             memberDB.Remove(deletingMemberID);
         }
 
-        // 무조건 존재하는 member에 대한 ID 값만 들어옴
-        // 내 정보 수정할때 띄우려고
-        public MemberDTO GetMember(string requestedMemberID)
-        {
-            return memberDB[requestedMemberID];
-        }
-
         // controller에서 MemberDTO로 넘어오면
         // 다른 값들 찾아서 업뎃해줌
         public bool UpdateMember(MemberDTO updatingMember)
@@ -59,7 +52,7 @@ namespace Library
             if (updatingMember.GetName() != "") memberDB[updatingMemberID].SetName(updatingMember.GetName());
             if (updatingMember.GetAge() != "") memberDB[updatingMemberID].SetAge(updatingMember.GetAge());
             if (updatingMember.GetPhoneNum() != "") memberDB[updatingMemberID].SetPhoneNum(updatingMember.GetPhoneNum());
-            
+
             return true;
         }
 
@@ -73,6 +66,20 @@ namespace Library
         public List<int> GetMemberReturnedBooks(string curUserID)
         {
             return memberDB[curUserID].GetReturnedBooks().Keys.ToList();
+        }
+
+        //====================== MEMBER INFO  =====================//
+
+        // 무조건 존재하는 member에 대한 ID 값만 들어옴
+        // 내 정보 수정할때 띄우려고
+        public MemberDTO GetMember(string requestedMemberID)
+        {
+            return memberDB[requestedMemberID];
+        }
+
+        public List<MemberDTO> GetAllMember()
+        {
+            return memberDB.Values.ToList();
         }
 
         //=================== BORROW AND RETURN ===================//
@@ -134,7 +141,7 @@ namespace Library
             return false;
         }
 
-        //=================== LOGIN ===================//
+        //======================== LOGIN ========================//
 
         public bool CheckIfValidLogin(List<string> loginInfo)
         {

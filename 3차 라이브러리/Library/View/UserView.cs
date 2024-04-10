@@ -28,7 +28,7 @@ namespace Library
         {
             Console.Clear();
 
-            string[] userMenuArr = { "도서 찾기", "도서 대여", "대여 확인", "도서 반납", "반납 확인", "정보 수정", "계정 삭제", "네이버 검색", "요청 도서 내역" };
+            string[] userMenuArr = { "전체 도서", "도서 찾기", "도서 대여", "대여 확인", "도서 반납", "반납 확인", "정보 수정", "계정 삭제", "네이버 검색", "요청 도서 내역" };
 
             MyConsole.PrintHeader("[USER MENU]");
             MyConsole.PrintAllMenu(userMenuArr);
@@ -39,7 +39,7 @@ namespace Library
         // 1. 도서 찾기
         // 찾을 도서 이름과 작가를 controller에게 전달
         // controller는 BookModel에 가서 해당 매칭 결과를 List<string> 으로 받음
-        // controller는 printBook으로 출력
+        // controller는 PrintSelectedBooks로 출력
         public List<string> FindBookForm()
         {
             Console.Clear();
@@ -48,6 +48,7 @@ namespace Library
 
             MyConsole.PrintHeader("[FIND BOOK]");
             MyConsole.PrintAllMenu(findBookArr);
+
             return MyConsole.GetUserInputs(findBookArr.Length);
         }
 
@@ -56,7 +57,7 @@ namespace Library
         {
             Console.Clear();
 
-            string[] borrowBookArr = { "BOOK ID", "BOOK NUM" };
+            string[] borrowBookArr = { "BOOK ID", "QUANTITY" };
 
             MyConsole.PrintHeader("[LETS BORROW A BOOK]");
             MyConsole.PrintAllMenu(borrowBookArr);
@@ -66,21 +67,34 @@ namespace Library
         }
 
         // 3. 도서 대여 확인
-        // controller가 BookModel
-        public void CheckBorrowedForm()
+        // controller가 BookModel에서 로그인한 USER가 BORROW한 책들을 List<BOOKDTO>로 보내줌
+        // 여기서는 PrintSelectedBooks 이용해서 출력
+        public void CheckBorrowedForm(List<BookDTO> curUserBorrowedBooks)
         {
+            PrintSelectedBooksForm(curUserBorrowedBooks);
             Console.Clear();
         }
 
         // 4. 도서 반납
-        public void ReturnForm()
+        public List<string> ReturnBookForm()
         {
             Console.Clear();
+
+            string[] returnBookArr = { "BOOK ID", "QUANTITY" };
+
+            MyConsole.PrintHeader("[LETS RETURN BOOK]");
+            MyConsole.PrintAllMenu(returnBookArr);
+
+            // ID NUM 입력받아 controller한테 전달
+            return MyConsole.GetUserInputs(returnBookArr.Length);
         }
 
         // 5. 도서 반납 확인
-        public void CheckReturnedForm()
+        // controller가 BookModel에서 로그인한 USER가 RETURN한 책들을 List<BOOKDTO>로 보내줌
+        // 여기서는 PrintSelectedBooks 이용해서 출력
+        public void CheckReturnedForm(List<BookDTO> curUserReturnedBooks)
         {
+            PrintSelectedBooksForm(curUserReturnedBooks);
             Console.Clear();
         }
 

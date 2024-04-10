@@ -53,6 +53,11 @@ namespace Library
                         isManagerModeRunning = false;
                         break;
 
+                    case ManagerMenuState.PRINTALLBOOK:
+                        List<BookDTO> allBooks = bookModel.GetAllBooks();
+                        view.PrintAllBooksForm(allBooks);
+                        break;
+
                     case ManagerMenuState.FINDBOOK:
 
                         dataFromView = view.FindBookForm();
@@ -82,12 +87,9 @@ namespace Library
                         bookModel.UpdateBook(updatedBook);
                         break;
 
-                    case ManagerMenuState.PRINTALLBOOK:
-                        List<BookDTO> allBooks = bookModel.GetAllBooks();
-                        view.PrintAllBooksForm(allBooks);
-                        break;
-
                     case ManagerMenuState.MEMBERMANAGEMENT:
+                        List<MemberDTO> allMembers = memberModel.GetAllMember();
+                        view.PrintAllMembersForm(allMembers);
                         break;
                     
                     case ManagerMenuState.BORROWLIST:

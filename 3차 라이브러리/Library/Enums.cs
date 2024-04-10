@@ -8,10 +8,10 @@ namespace Library
 {
     public enum LibraryMode { USER_MODE = 0, MANAGER_MODE = 1 };
 
-    public enum UserFrontMode { USER_LOGIN = 0, USER_CREATE_ACCOUNT = 1 };
+    public enum UserFrontMode { GOBACK = -1, USER_LOGIN = 0, USER_CREATE_ACCOUNT = 1 };
 
-    public enum ManagerMenuState { FINDBOOK = 0, ADDBOOK = 1, DELETEBOOK = 2, UPDATEBOOK = 3, PRINTALLBOOK = 4, 
+    public enum ManagerMenuState { GOBACK = -1, PRINTALLBOOK = 0, FINDBOOK = 1, ADDBOOK = 2, DELETEBOOK = 3, UPDATEBOOK = 4, 
                                     MEMBERMANAGEMENT=5, BORROWLIST=6, NAVERSEARCH=7, LOGMANAGEMENT=8, REQUESTEDBOOK=9};
-    public enum UserMenuState { FIND = 0, BORROW = 1, CHECKBORROW = 2, RETURN = 3, CHECKRETURN = 4, UPDATEINFO = 5,
-                                    DELETEMYSELF = 6, NAVERSEARCH = 7, REQUESTED = 8};
+    public enum UserMenuState { GOBACK = -1, PRINTALLBOOK = 0, FIND = 1, BORROW = 2, CHECKBORROW = 3, RETURN = 4, CHECKRETURN = 5, UPDATEINFO = 6,
+                                    DELETEMYSELF = 7, NAVERSEARCH = 8, REQUESTED = 9};
 }

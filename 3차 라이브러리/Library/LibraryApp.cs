@@ -13,9 +13,9 @@ namespace Library
             BookModel bookModel = BookModel.GetInstance();
             MemberModel memberModel = MemberModel.GetInstance();
 
-            List<string> dummyArr1 = new List<string> { "AAA", "AAA", "AAA", "100", "10" };
-            List<string> dummyArr2= new List<string> { "BBB", "BBB", "BBB", "200", "5" };
-            List<string> dummyArr3 = new List<string> { "CCC", "CCC", "CCC", "300", "3" };
+            List<string> dummyArr1 = new List<string> { "AAA", "AAA", "AAA", "1000", "10" };
+            List<string> dummyArr2= new List<string> { "BBB", "BBB", "BBB", "2500", "5" };
+            List<string> dummyArr3 = new List<string> { "CCC", "CCC", "CCC", "3000", "3" };
             bookModel.AddNewBook(new BookDTO(dummyArr1));
             bookModel.AddNewBook(new BookDTO(dummyArr2));
             bookModel.AddNewBook(new BookDTO(dummyArr3));

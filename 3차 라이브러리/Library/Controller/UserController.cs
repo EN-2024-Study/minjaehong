@@ -62,6 +62,12 @@ namespace Library
                         isUserModeRunning = false;
                         break;
 
+                    case UserMenuState.PRINTALLBOOK:
+
+                        retList = bookModel.GetAllBooks();
+                        view.PrintAllBooksForm(retList);
+                        break;
+
                     case UserMenuState.FIND:
                        
                         // 찾을 책에 대한 정보를 view에서 받아오기
