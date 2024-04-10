@@ -10,16 +10,7 @@ namespace Library
     {
         private static UserController instance;
 
-        public static UserController GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new UserController();
-            }
-            return instance;
-        }
-
-        //===================== SINGELTON ========================//
+        private string curUserID;
 
         UserView view;
         MemberModel memberModel;
@@ -33,17 +24,23 @@ namespace Library
             this.bookModel = BookModel.GetInstance();
         }
 
-        /*
-        // 로그인한 ID로 controller 초기화 해주기
-        // 매번 새로 로그인할때마다 호출됨
-        // curUserID를 알아야 대출 반납을 memberDTO에 적용가능함
-        void InitializeUserController(string curUserID)
+        public static UserController GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new UserController();
+            }
+            return instance;
+        }
+
+        //===================== SINGELTON ========================//
+
+        // UserFrontController에서 LOGIN 후 UserController.run이 실행되기 전에
+        // 매번 이 함수가 호출되어 curUserID를 초기화해줌
+        public void InitializeUserController(string curUserID)
         {
             this.curUserID = curUserID;
         }
-        */
-
-        //======================== RUN ==========================//
 
         public void run()
         {
@@ -53,14 +50,20 @@ namespace Library
             List<BookDTO> retList;
             MiniDTO miniDTO;
 
-            while (true)
+            bool isUserModeRunning = true;
+
+            while (isUserModeRunning)
             {
                 selectedMenu = view.UserMenuForm();
 
                 switch (selectedMenu)
                 {
+                    case UserMenuState.GOBACK:
+                        isUserModeRunning = false;
+                        break;
+
                     case UserMenuState.FIND:
-                        
+                       
                         // 찾을 책에 대한 정보를 view에서 받아오기
                         dataFromView = view.FindBookForm();
                         // bookModel로 전달해서 매칭된 List<BookDTO> 받아오기
@@ -71,29 +74,53 @@ namespace Library
 
                     case UserMenuState.BORROW:
                         
-                        // 빌릴 책에 대한 정보를 view에서 받아오기
+                        // BORROW할 책에 대한 정보를 view에서 받아오기
                         dataFromView = view.BorrowBookForm();
                         // 책 정보를 MiniDTO에 담아주기
                         miniDTO = new MiniDTO(dataFromView);
                         // bookModel에 누가 빌린거 적용해주기
                         bookModel.UpdateBorrowed(miniDTO);
                         // 성공하면 memberModel로 가서 저장해주기
-                        
+                        memberModel.UpdateBorrowed(curUserID, miniDTO);
                         break;
 
                     case UserMenuState.CHECKBORROW:
-                        
-                        view.CheckBorrowedForm();
-                        break;
 
+                        List<int> curUserBorrowedBookIDs = memberModel.GetMemberBorrowedBooks(curUserID);
+                        List<BookDTO> curUserBorrowedBooks = new List<BookDTO>();
+
+                        for(int i = 0; i < curUserBorrowedBookIDs.Count; i++)
+                        {
+                            int curId = curUserBorrowedBookIDs[i];
+                            curUserBorrowedBooks.Add(bookModel.GetBookDTO(curId));
+                        }
+                        view.CheckBorrowedForm(curUserBorrowedBooks);
+                        break;
+                        
                     case UserMenuState.RETURN:
 
-                        view.ReturnForm();
+                        // RETURN할 책에 대한 정보를 view에서 받아오기
+                        dataFromView = view.ReturnBookForm();
+                        // 책 정보를 MiniDTO에 담아주기
+                        miniDTO = new MiniDTO(dataFromView);
+                        // bookModel에 누가 반납한거 적용해주기
+                        bookModel.UpdateReturned(miniDTO);
+                        // 성공하면 memberModel로 가서 저장해주기
+                        memberModel.UpdateReturned(curUserID, miniDTO);
+
                         break;
                     
                     case UserMenuState.CHECKRETURN:
 
-                        view.CheckReturnedForm();
+                        List<int> curUserReturnedBookIDs = memberModel.GetMemberReturnedBooks(curUserID);
+                        List<BookDTO> curUserReturnedBooks = new List<BookDTO>();
+
+                        for (int i = 0; i < curUserReturnedBookIDs.Count; i++)
+                        {
+                            int curId = curUserReturnedBookIDs[i];
+                            curUserReturnedBooks.Add(bookModel.GetBookDTO(curId));
+                        }
+                        view.CheckReturnedForm(curUserReturnedBooks);
                         break;
                     
                     case UserMenuState.UPDATEINFO:

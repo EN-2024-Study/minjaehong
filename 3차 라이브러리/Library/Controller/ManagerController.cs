@@ -10,6 +10,11 @@ namespace Library
     {
         private static ManagerController instance;
 
+        // ManagerController와 연결되어야하는 애들
+        ManagerView view;
+        BookModel bookModel;
+        MemberModel memberModel;
+        
         // 생성자로 MVC 연결
         private ManagerController() {
             this.bookModel = BookModel.GetInstance();
@@ -28,26 +33,26 @@ namespace Library
 
         //===================== SINGELTON ========================//
 
-        // Controller는 Data 전달을 위해 두 개를 참조해야함
-        BookModel bookModel;
-        MemberModel memberModel;
-        ManagerView view;
-
         public void run()
         {
             ManagerMenuState selectedMenu; // magic number로 switch문 더 쉽게
 
             BookDTO book;
-            int bookId;
             List<string> dataFromView;
 
+            bool isManagerModeRunning = true;
+
             // MANAGER_MODE 일때
-            while (true)
+            while (isManagerModeRunning)
             {
                 selectedMenu = view.ManagerMenuForm();
 
                 switch (selectedMenu)
                 {
+                    case ManagerMenuState.GOBACK:
+                        isManagerModeRunning = false;
+                        break;
+
                     case ManagerMenuState.FINDBOOK:
 
                         dataFromView = view.FindBookForm();

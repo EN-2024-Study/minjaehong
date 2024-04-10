@@ -7,8 +7,21 @@ using System.Threading.Tasks;
 namespace Library
 {
     class MainController
-    {
+    { 
         private static MainController instance;
+
+        // MainController와 연결되어야하는 애들
+        UserFrontController userFrontController;
+        ManagerController managerController;
+        MainView mainView;
+
+        private MainController()
+        {
+            // 의존성 주입 느낌
+            this.userFrontController = UserFrontController.GetInstance();
+            this.managerController = ManagerController.GetInstance();
+            this.mainView = MainView.GetInstance();
+        }
 
         public static MainController GetInstance()
         {
@@ -21,35 +34,28 @@ namespace Library
 
         //===================== SINGELTON ========================//
 
-        // Main 내에서만 사용하는 참조변수들
-        UserController userController;
-        ManagerController managerController;
-        MainView mainView;
-
-        private MainController()
-        {
-            // 의존성 주입 느낌
-            this.userController = UserController.GetInstance();
-            this.managerController = ManagerController.GetInstance();
-            this.mainView = MainView.GetInstance();
-        }
-
         public void run()
         {
             LibraryMode mode;
 
+            bool isProgramRunning = true;
+
             // Library 시작점
-            while (true)
+            while (isProgramRunning)
             {
-                mode = mainView.ModeSelectForm();
+                mode = mainView.MainModeSelectForm();
 
                 switch (mode)
                 {
                     case LibraryMode.USER_MODE:
-                        mainView.UserLoginForm();
-                        userController.run();
+                        
+                        // USERFRONTCONTROLLER 단으로 들어감
+                        userFrontController.run();
                         break;
+
                     case LibraryMode.MANAGER_MODE:
+                        // MANAGERMODE이면 별로 할게 없기 때문에
+                        // ID PW 확인만 하고 managercontroller를 여기서 바로 실행시켜줘도 됨
                         mainView.ManagerLoginForm();
                         managerController.run();
                         break;

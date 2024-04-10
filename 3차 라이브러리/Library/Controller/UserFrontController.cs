@@ -36,14 +36,19 @@ namespace Library
         public void run()
         {
             UserFrontMode userMode;
+            bool isUserFrontRunning = true;
 
-            while (true)
+            while (isUserFrontRunning)
             {
                 // USER MODE 보여주기
                 userMode = userFrontView.UserFrontForm();
 
                 switch (userMode)
                 {
+                    case UserFrontMode.GOBACK:
+                        isUserFrontRunning = false;
+                        break;
+
                     case UserFrontMode.USER_LOGIN:
 
                         List<string> loginInfo = userFrontView.UserLoginForm();
