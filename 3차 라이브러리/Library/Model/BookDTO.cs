@@ -18,7 +18,7 @@ namespace Library
 
         public BookDTO()
         {
-
+           
         }
 
         public BookDTO(string name, string author, string publisher, string price, string quantity)

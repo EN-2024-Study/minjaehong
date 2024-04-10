@@ -33,6 +33,11 @@ namespace Library
         // Dictionary Key값으로 사용할거임
         private int keyID;
 
+        public bool FindBookById(int Id)
+        {
+            return bookDB.ContainsKey(Id);
+        }
+
         // BookDTO 조회 - view에서 제목 작가 넘어온거
         // retList controller로 보내주면 다시 view로 넘겨서 print 해줘야함
         public List<BookDTO> FindBook(List<string> dataFromView)
@@ -106,6 +111,36 @@ namespace Library
         public List<BookDTO> GetAllBooks()
         {
             return bookDB.Values.ToList();
+        }
+
+        //=================== BORROW AND RETURN ===================//
+
+        public void UpdateBorrowed(MiniDTO miniDTO)
+        {
+            // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
+            int bookID = int.Parse(miniDTO.GetBookID());
+            
+            // 남은 수량 계산
+            int curNum = int.Parse(bookDB[bookID].GetQuantity());
+            int borrowNum = int.Parse(miniDTO.GetBookNum());
+            int updatedBookNum = curNum - borrowNum;
+
+            // bookDB에 적용하기
+            bookDB[bookID].SetQuantity(updatedBookNum.ToString());
+        }
+
+        public void UpdateReturned(MiniDTO miniDTO)
+        {
+            // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
+            int bookID = int.Parse(miniDTO.GetBookID());
+
+            // 남은 수량 계산
+            int curNum = int.Parse(bookDB[bookID].GetQuantity());
+            int returnedNum = int.Parse(miniDTO.GetBookNum());
+            int updatedBookNum = curNum + returnedNum;
+
+            // bookDB에 적용하기
+            bookDB[bookID].SetQuantity(updatedBookNum.ToString());
         }
     }
 }
