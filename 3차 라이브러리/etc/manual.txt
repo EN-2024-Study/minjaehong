@@ -1,0 +1,18 @@
+[member ID/PW]
+
+1. dog/dog123
+2. cat/cat123
+3. dolphin/dolphin123
+
+[manager ID/PW]
+
+----------
+
+예외처리를 못해서 제대로된 값을 입력해야 돌아갑니다
+
+화면 이동 = spacebar
+뒤로 가기 = backspace
+
+지금으로서는
+bookID 입력 = 무조건 숫자로 해야합니다
+대여 대출 개수(quantity) = 무조건 숫자로 해야합니다
