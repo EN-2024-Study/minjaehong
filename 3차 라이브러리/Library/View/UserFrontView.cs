@@ -8,20 +8,7 @@ namespace Library
 {
     class UserFrontView
     {
-        private static UserFrontView instance;
-
-        private UserFrontView() { }
-
-        public static UserFrontView GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new UserFrontView();
-            }
-            return instance;
-        }
-
-        //===================== SINGELTON ========================//
+        public UserFrontView() { }
 
         public UserFrontMode UserFrontForm()
         {

@@ -8,29 +8,18 @@ namespace Library
 {
     class UserController
     {
-        private static UserController instance;
-
         private string curUserID;
 
         UserView view;
         MemberModel memberModel;
         BookModel bookModel;
 
-        private UserController()
+        public UserController()
         {
-            // 의존관계 주입
-            this.view = UserView.GetInstance();
-            this.memberModel = MemberModel.GetInstance();
-            this.bookModel = BookModel.GetInstance();
-        }
+            memberModel = MemberModel.GetInstance();
+            bookModel = BookModel.GetInstance();
 
-        public static UserController GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new UserController();
-            }
-            return instance;
+            view = new UserView();
         }
 
         //===================== SINGELTON ========================//

@@ -7,38 +7,24 @@ using System.Threading.Tasks;
 namespace Library
 {
     class ManagerController
-    {
-        private static ManagerController instance;
-
+    { 
         // ManagerController와 연결되어야하는 애들
         ManagerView view;
         BookModel bookModel;
         MemberModel memberModel;
         
-        // 생성자로 MVC 연결
-        private ManagerController() {
-            this.bookModel = BookModel.GetInstance();
-            this.memberModel = MemberModel.GetInstance();
-            this.view = ManagerView.GetInstance();
-        }
+        // 생성자로 필요한 MVC 연결
+        public ManagerController() {
+            bookModel = BookModel.GetInstance();
+            memberModel = MemberModel.GetInstance();
 
-        public static ManagerController GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new ManagerController();
-            }
-            return instance;
+            view = new ManagerView();
         }
-
-        //===================== SINGELTON ========================//
 
         public void Run()
         {
             ManagerMenuState selectedMenu; // magic number로 switch문 더 쉽게
 
-
-            BookDTO book;
             List<string> dataFromView;
 
             bool isManagerModeRunning = true;

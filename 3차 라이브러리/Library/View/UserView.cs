@@ -8,20 +8,7 @@ namespace Library
 {
     class UserView
     {
-        private static UserView instance;
-
-        private UserView() { }
-
-        public static UserView GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new UserView();
-            }
-            return instance;
-        }
-
-        //===================== SINGELTON ========================//
+        public UserView() { }
 
         // menu 보여주고 user가 select 한 걸 controller 한테 반환
         public UserMenuState UserMenuForm(string curUserName)

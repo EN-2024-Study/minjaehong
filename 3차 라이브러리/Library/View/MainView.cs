@@ -8,20 +8,7 @@ namespace Library
 {
     class MainView
     {
-        private static MainView instance;
-
-        private MainView() { }
-
-        public static MainView GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new MainView();
-            }
-            return instance;
-        }
-
-        //===================== SINGELTON ========================//
+        public MainView() { }
 
         // USER MODE 인지 MANAGER MODE인지 입력받고 return
         public LibraryMode MainModeSelectForm()

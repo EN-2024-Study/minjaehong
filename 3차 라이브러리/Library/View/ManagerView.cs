@@ -8,20 +8,7 @@ namespace Library
 {
     class ManagerView
     {
-        private static ManagerView instance;
-
-        private ManagerView() { }
-
-        public static ManagerView GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new ManagerView();
-            }
-            return instance;
-        }
-
-        //===================== SINGELTON ========================//
+        public ManagerView() { }
 
         // MANAGER MODE의 초기화면
         public ManagerMenuState ManagerMenuForm()
