@@ -85,7 +85,7 @@ namespace Library
             Console.Clear();
             BookDTO newBook = new BookDTO();
 
-            string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. QUANTITY"};
+            string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK"};
 
             MyConsole.PrintHeader("[ADD BOOK]");
             MyConsole.PrintAllMenu(addBookArr);
@@ -145,7 +145,7 @@ namespace Library
         {
             Console.Clear();
 
-            string[] updateBookArr= { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. QUANTITY" };
+            string[] updateBookArr= { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK" };
 
             // 화면 구성
             MyConsole.PrintHeader("[UPDATE BOOK FORM]");

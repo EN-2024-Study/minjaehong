@@ -105,7 +105,7 @@ namespace Library
                 Console.CursorLeft = BOOK_STARTX;
                 Console.WriteLine("PRICE      : " + selectedBooks[i].GetPrice());
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("IN STOCK   : " + selectedBooks[i].GetQuantity());
+                Console.WriteLine("IN STOCK   : " + selectedBooks[i].GetInStock());
             }
             Console.WriteLine("");
             Console.CursorLeft = BOOK_STARTX;

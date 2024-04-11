@@ -14,7 +14,7 @@ namespace Library
         private string age;
         private string phoneNum;
 
-        // <bookID,num>
+        // <bookID,quantity>
         private Dictionary<int,int> borrowed; // 빌린 책들 담기
         private Dictionary<int,int> returned; // 반납한 책들 담기
 

@@ -109,7 +109,7 @@ namespace Library
             if (updatingBook.GetAuthor() != "") bookDB[updatingBookID].SetAuthor(updatingBook.GetAuthor());
             if (updatingBook.GetPublisher() != "") bookDB[updatingBookID].SetPublisher(updatingBook.GetPublisher());
             if (updatingBook.GetPrice() != "") bookDB[updatingBookID].SetPrice(updatingBook.GetPrice());
-            if (updatingBook.GetQuantity() != "") bookDB[updatingBookID].SetQuantity(updatingBook.GetQuantity());
+            if (updatingBook.GetInStock() != "") bookDB[updatingBookID].SetInStock(updatingBook.GetInStock());
 
             return true;
         }
@@ -129,11 +129,11 @@ namespace Library
             int borrowNum = int.Parse(miniDTO.GetBookNum());
 
             // 남은 수량 업뎃
-            int curNum = int.Parse(bookDB[bookID].GetQuantity());
+            int curNum = int.Parse(bookDB[bookID].GetInStock());
             int updatedBookNum = curNum - borrowNum;
 
             // bookDB에 반영
-            bookDB[bookID].SetQuantity(updatedBookNum.ToString());
+            bookDB[bookID].SetInStock(updatedBookNum.ToString());
         }
 
         public void UpdateReturned(MiniDTO miniDTO)
@@ -144,11 +144,11 @@ namespace Library
             int returnedNum = int.Parse(miniDTO.GetBookNum());
 
             // 남은 수량 업뎃
-            int curNum = int.Parse(bookDB[bookID].GetQuantity());
+            int curNum = int.Parse(bookDB[bookID].GetInStock());
             int updatedBookNum = curNum + returnedNum;
 
             // bookDB에 반영
-            bookDB[bookID].SetQuantity(updatedBookNum.ToString());
+            bookDB[bookID].SetInStock(updatedBookNum.ToString());
         }
     }
 }
