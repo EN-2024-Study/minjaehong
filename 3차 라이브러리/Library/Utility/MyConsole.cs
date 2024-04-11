@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Library
 {
-    // 이거 굳이 싱글톤으로?
-    // 그냥 static 써서 올려?
+    // static class
+    // static class이면 member들도 모두 자동으로 static으로 박힘
+    // const member는 static으로 쳐져서 static 명시 안해도 됨
     static class MyConsole
     {
         private const int HEADER_X = 45; // HEADER가 끝나야하는 X좌표
@@ -25,25 +26,8 @@ namespace Library
         private const int INPUT_STARTX = 60;
         private const int INPUT_STARTY = 8;
         
-        /*
-        private static MyConsole instance;
-
-        private MyConsole() { }
-
-        public static MyConsole GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new MyConsole();
-            }
-            return instance;
-        }
-        */
-
-        //===================== SINGELTON ========================//
-
         //===================== HEADER PRINT FUNCTION ==================//
-        
+       
         // HEADER 출력 함수
         public static void PrintHeader(string header)
         {
@@ -187,7 +171,7 @@ namespace Library
 
             RenderMenu(menuArr, beforeSel, curSel);
 
-            // SpaceBar 누를때까지 대기
+            // SPACEBAR 누를때까지 대기
             while (!pressedSpaceBar)
             {
                 if (Console.KeyAvailable)

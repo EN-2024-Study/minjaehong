@@ -28,13 +28,11 @@ namespace Library
         {
             Console.Clear();
 
-            string[] managerMenuArr = { "전체 도서", "도서 찾기", "도서 추가", "도서 삭제", "도서 수정", "회원 관리", "대여 내역", "네이버 검색", "로그 관리", "요청 도서" };
-
             MyConsole.PrintHeader("[MANAGER MENU]");
-            MyConsole.PrintAllMenu(managerMenuArr);
+            MyConsole.PrintAllMenu(Constants.managerMenuArr);
             MyConsole.PrintUserName("manager");
 
-            ManagerMenuState selectedMenu = (ManagerMenuState)MyConsole.GetUserSelection(managerMenuArr);
+            ManagerMenuState selectedMenu = (ManagerMenuState)MyConsole.GetUserSelection(Constants.managerMenuArr);
 
             return selectedMenu;
         }
@@ -51,14 +49,13 @@ namespace Library
         public List<string> FindBookForm()
         {
             Console.Clear();
-
-            string[] findBookArr = { "FIND BY NAME",
-                                     "FIND BY AUTHOR"};
             
             MyConsole.PrintHeader("[FIND BOOK]");
-            MyConsole.PrintAllMenu(findBookArr);
-            return MyConsole.GetUserInputs(findBookArr.Length);
+            MyConsole.PrintAllMenu(Constants.findBookArr);
+
+            return MyConsole.GetUserInputs(Constants.findBookArr.Length);
         }
+
         public void PrintSelectedBooksForm(List<BookDTO> selectedBooks)
         {
             Console.Clear();
@@ -85,14 +82,11 @@ namespace Library
         public List<string> AddBookForm()
         {
             Console.Clear();
-            BookDTO newBook = new BookDTO();
-
-            string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK"};
 
             MyConsole.PrintHeader("[ADD BOOK]");
-            MyConsole.PrintAllMenu(addBookArr);
+            MyConsole.PrintAllMenu(Constants.addBookArr);
             
-            List<string> bookInfo = MyConsole.GetUserInputs(addBookArr.Length);
+            List<string> bookInfo = MyConsole.GetUserInputs(Constants.addBookArr.Length);
             return bookInfo;
         }
 
@@ -103,14 +97,12 @@ namespace Library
         {
             Console.Clear();
 
-            string[] deleteBookArr = { "DELETING BOOK ID : " };
-
             // 화면 구성
             MyConsole.PrintHeader("[DELETE BOOK]");
-            MyConsole.PrintAllMenu(deleteBookArr);
+            MyConsole.PrintAllMenu(Constants.deleteBookArr);
 
             // user 입력 받기
-            List<string> userInput = MyConsole.GetUserInputs(deleteBookArr.Length);
+            List<string> userInput = MyConsole.GetUserInputs(Constants.deleteBookArr.Length);
 
             int deletingBookID = int.Parse(userInput[0]);
 
@@ -124,16 +116,14 @@ namespace Library
         {
             Console.Clear();
 
-            string[] updateBookArr = { "UPDATING BOOK ID : " };
-            
             int updatingBookID;
 
             // 화면 구성
             MyConsole.PrintHeader("[UPDATE BOOK]");
-            MyConsole.PrintAllMenu(updateBookArr);
+            MyConsole.PrintAllMenu(Constants.updateBookSelectArr);
 
             // USER 입력 받기            
-            List<string> userInput = MyConsole.GetUserInputs(updateBookArr.Length);
+            List<string> userInput = MyConsole.GetUserInputs(Constants.updateBookSelectArr.Length);
             
             updatingBookID = int.Parse(userInput[0]);
             
@@ -147,14 +137,12 @@ namespace Library
         {
             Console.Clear();
 
-            string[] updateBookArr= { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK" };
-
             // 화면 구성
             MyConsole.PrintHeader("[UPDATE BOOK FORM]");
-            MyConsole.PrintAllMenu(updateBookArr);
+            MyConsole.PrintAllMenu(Constants.updateBookArr);
 
             // USER 입력받기
-            List<string> updatedBookInfo = MyConsole.GetUserInputs(updateBookArr.Length);
+            List<string> updatedBookInfo = MyConsole.GetUserInputs(Constants.updateBookArr.Length);
 
             return updatedBookInfo;
         }
@@ -173,7 +161,6 @@ namespace Library
             else
             {
                 MyConsole.PrintHeader("[YOUR RESULTS]");
-
                 MyConsole.PrintAllMembers(allMembers);
             }
 

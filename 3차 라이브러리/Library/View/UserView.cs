@@ -24,18 +24,17 @@ namespace Library
         //===================== SINGELTON ========================//
 
         // menu 보여주고 user가 select 한 걸 controller 한테 반환
-        public UserMenuState UserMenuForm(string curUserID)
+        public UserMenuState UserMenuForm(string curUserName)
         {
             Console.Clear();
 
-            string[] userMenuArr = { "전체 도서", "도서 찾기", "도서 대여", "대여 확인", "도서 반납", "반납 확인", "정보 수정", "계정 삭제", "네이버 검색", "요청 도서 내역" };
 
             MyConsole.PrintHeader("[USER MENU]");
-            MyConsole.PrintAllMenu(userMenuArr);
+            MyConsole.PrintAllMenu(Constants.userMenuArr);
 
-            MyConsole.PrintUserName(curUserID);
+            MyConsole.PrintUserName(curUserName);
 
-            return (UserMenuState)MyConsole.GetUserSelection(userMenuArr);
+            return (UserMenuState)MyConsole.GetUserSelection(Constants.userMenuArr);
         }
 
         // 1. 도서 찾기
@@ -46,12 +45,11 @@ namespace Library
         {
             Console.Clear();
 
-            string[] findBookArr = { "FIND BY NAME", "FIND BY AUTHOR" };
 
             MyConsole.PrintHeader("[FIND BOOK]");
-            MyConsole.PrintAllMenu(findBookArr);
+            MyConsole.PrintAllMenu(Constants.findBookArr);
 
-            return MyConsole.GetUserInputs(findBookArr.Length);
+            return MyConsole.GetUserInputs(Constants.findBookArr.Length);
         }
 
         // 2. 도서 대여
@@ -59,13 +57,12 @@ namespace Library
         {
             Console.Clear();
 
-            string[] borrowBookArr = { "BOOK ID", "QUANTITY" };
 
             MyConsole.PrintHeader("[LETS BORROW A BOOK]");
-            MyConsole.PrintAllMenu(borrowBookArr);
+            MyConsole.PrintAllMenu(Constants.borrowBookArr);
             
             // ID NUM 입력받아 controller한테 전달
-            return MyConsole.GetUserInputs(borrowBookArr.Length);
+            return MyConsole.GetUserInputs(Constants.borrowBookArr.Length);
         }
 
         // 3. 도서 대여 확인
@@ -82,13 +79,12 @@ namespace Library
         {
             Console.Clear();
 
-            string[] returnBookArr = { "BOOK ID", "QUANTITY" };
 
             MyConsole.PrintHeader("[LETS RETURN BOOK]");
-            MyConsole.PrintAllMenu(returnBookArr);
+            MyConsole.PrintAllMenu(Constants.returnBookArr);
 
             // ID NUM 입력받아 controller한테 전달
-            return MyConsole.GetUserInputs(returnBookArr.Length);
+            return MyConsole.GetUserInputs(Constants.returnBookArr.Length);
         }
 
         // 5. 도서 반납 확인
@@ -105,14 +101,13 @@ namespace Library
         {
             Console.Clear();
 
-            string[] updateUserArr = { "1. PW","2. NAME","3. AGE","4. PHONENUM" };
 
             // 화면 구성
             MyConsole.PrintHeader("[UPDATE USER]");
-            MyConsole.PrintAllMenu(updateUserArr);
+            MyConsole.PrintAllMenu(Constants.updateUserArr);
 
             // 업데이트할 PW NAME AGE PHONENUM 입력받기
-            List<string> updatedUserInfo = MyConsole.GetUserInputs(updateUserArr.Length);
+            List<string> updatedUserInfo = MyConsole.GetUserInputs(Constants.updateUserArr.Length);
 
             // ID는 입력받는게 아니므로 그냥 0번에 추가해서 ID PW NAME AGE PHONENUM 받은 것처럼 만들기
             updatedUserInfo.Insert(0, "");

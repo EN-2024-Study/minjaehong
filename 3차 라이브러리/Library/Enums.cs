@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library
 {
+    // MODE AND MENU STATE
     public enum LibraryMode { USER_MODE = 0, MANAGER_MODE = 1 };
 
     public enum UserFrontMode { GOBACK = -1, USER_LOGIN = 0, USER_CREATE_ACCOUNT = 1 };

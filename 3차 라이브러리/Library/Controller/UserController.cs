@@ -42,7 +42,7 @@ namespace Library
             this.curUserID = curUserID;
         }
 
-        public void run()
+        public void Run()
         {
             UserMenuState selectedMenu;
 
@@ -54,7 +54,7 @@ namespace Library
 
             while (isUserModeRunning)
             {
-                selectedMenu = view.UserMenuForm(curUserID);
+                selectedMenu = view.UserMenuForm(memberModel.GetMember(curUserID).GetName());
 
                 switch (selectedMenu)
                 {

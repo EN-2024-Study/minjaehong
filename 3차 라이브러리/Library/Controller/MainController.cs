@@ -40,7 +40,7 @@ namespace Library
 
         //===================== SINGELTON ========================//
 
-        public void run()
+        public void Run()
         {
             LibraryMode mode;
 
@@ -56,7 +56,7 @@ namespace Library
                     case LibraryMode.USER_MODE:
                         
                         // USERFRONTCONTROLLER 단으로 들어감
-                        userFrontController.run();
+                        userFrontController.Run();
                         break;
 
                     case LibraryMode.MANAGER_MODE:
@@ -70,7 +70,7 @@ namespace Library
                         // ID PW 이 둘 다 맞으면
                         if (managerID == inputID && managerPW == inputPW)
                         {
-                            managerController.run();
+                            managerController.Run();
                         }
                         break;
                 }

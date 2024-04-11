@@ -32,8 +32,7 @@ namespace Library
         }
 
         //===================== SINGELTON ========================//
-
-        public void run()
+        public void Run()
         {
             UserFrontMode userMode;
             bool isUserFrontRunning = true;
@@ -58,7 +57,7 @@ namespace Library
                         {
                             string curUserID = loginInfo[0];
                             userController.InitializeUserController(curUserID);
-                            userController.run();
+                            userController.Run();
                         }
                         break;
 

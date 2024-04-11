@@ -23,7 +23,7 @@ namespace Library
             return instance;
         }
 
-        //================== SINGLETON ===============
+        //================== SINGLETON ===============//
 
         // MemberDB
         // ID가 고유키임

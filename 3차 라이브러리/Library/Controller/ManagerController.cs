@@ -33,9 +33,10 @@ namespace Library
 
         //===================== SINGELTON ========================//
 
-        public void run()
+        public void Run()
         {
             ManagerMenuState selectedMenu; // magic number로 switch문 더 쉽게
+
 
             BookDTO book;
             List<string> dataFromView;

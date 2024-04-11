@@ -27,12 +27,10 @@ namespace Library
         {
             Console.Clear();
 
-            string[] userFrontMenuArr = { "LOGIN", "CREATE ACCOUNT" };
-
             MyConsole.PrintHeader("[USER MODE]");
-            MyConsole.PrintAllMenu(userFrontMenuArr);
+            MyConsole.PrintAllMenu(Constants.userFrontMenuArr);
 
-            return (UserFrontMode)MyConsole.GetUserSelection(userFrontMenuArr);
+            return (UserFrontMode)MyConsole.GetUserSelection(Constants.userFrontMenuArr);
         }
 
         // 1. LOGIN
@@ -40,12 +38,10 @@ namespace Library
         {
             Console.Clear();
 
-            string[] loginFormArr = { "ID", "PW" };
-
             MyConsole.PrintHeader("[USER LOGIN]");
-            MyConsole.PrintAllMenu(loginFormArr);
+            MyConsole.PrintAllMenu(Constants.loginFormArr);
 
-            List<string> loginInfo = MyConsole.GetUserInputs(loginFormArr.Length);
+            List<string> loginInfo = MyConsole.GetUserInputs(Constants.loginFormArr.Length);
             
             return loginInfo;
         }
@@ -57,11 +53,9 @@ namespace Library
         {
             Console.Clear();
 
-            string[] createAccountArr = { "ID", "PW", "NAME", "AGE", "PHONENUM" };
-
             MyConsole.PrintHeader("[USER CREATE ACCOUNT]");
-            MyConsole.PrintAllMenu(createAccountArr);
-            List<string> newMemberInfo = MyConsole.GetUserInputs(createAccountArr.Length);
+            MyConsole.PrintAllMenu(Constants.createAccountArr);
+            List<string> newMemberInfo = MyConsole.GetUserInputs(Constants.createAccountArr.Length);
 
             return newMemberInfo;
         }

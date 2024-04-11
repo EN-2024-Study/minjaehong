@@ -28,12 +28,10 @@ namespace Library
         {
             Console.Clear();
 
-            string[] modeSelectMenuArr = { "1. USER MODE", "2. MANAGER MODE" };
-
             MyConsole.PrintHeader("[SELECT MODE]");
-            MyConsole.PrintAllMenu(modeSelectMenuArr);
+            MyConsole.PrintAllMenu(Constants.modeSelectMenuArr);
 
-            LibraryMode selectedMode = (LibraryMode)MyConsole.GetUserSelection(modeSelectMenuArr);
+            LibraryMode selectedMode = (LibraryMode)MyConsole.GetUserSelection(Constants.modeSelectMenuArr);
 
             return selectedMode;
         }
@@ -43,12 +41,10 @@ namespace Library
         {
             Console.Clear();
 
-            string[] managerFormArr = { "ID", "PW" };
-
             MyConsole.PrintHeader("[MANAGER LOGIN]");
-            MyConsole.PrintAllMenu(managerFormArr);
+            MyConsole.PrintAllMenu(Constants.managerFormArr);
 
-            return MyConsole.GetUserInputs(managerFormArr.Length);
+            return MyConsole.GetUserInputs(Constants.managerFormArr.Length);
         }
     }
 }
