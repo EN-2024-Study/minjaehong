@@ -49,6 +49,7 @@ namespace Library
         {
             string updatingMemberID = updatingMember.GetId();
 
+            if (updatingMember.GetPw() != "") memberDB[updatingMemberID].SetPw(updatingMember.GetPw());
             if (updatingMember.GetName() != "") memberDB[updatingMemberID].SetName(updatingMember.GetName());
             if (updatingMember.GetAge() != "") memberDB[updatingMemberID].SetAge(updatingMember.GetAge());
             if (updatingMember.GetPhoneNum() != "") memberDB[updatingMemberID].SetPhoneNum(updatingMember.GetPhoneNum());

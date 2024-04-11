@@ -32,6 +32,8 @@ namespace Library
 
             MyConsole.PrintHeader("[MANAGER MENU]");
             MyConsole.PrintAllMenu(managerMenuArr);
+            MyConsole.PrintUserName("manager");
+
             ManagerMenuState selectedMenu = (ManagerMenuState)MyConsole.GetUserSelection(managerMenuArr);
 
             return selectedMenu;

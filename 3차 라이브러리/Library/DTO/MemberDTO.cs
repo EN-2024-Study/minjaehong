@@ -51,6 +51,7 @@ namespace Library
         //=================== SETTER =====================//
 
         public void SetId(string id) { this.id = id; }
+        public void SetPw(string pw) { this.pw = pw; }
         public void SetName(string name) { this.name = name; }
         public void SetAge(string age) { this.age = age; }
         public void SetPhoneNum(string phoneNum) { this.phoneNum = phoneNum; }

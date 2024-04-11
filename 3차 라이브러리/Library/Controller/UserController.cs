@@ -135,7 +135,13 @@ namespace Library
                     
                     case UserMenuState.UPDATEINFO:
 
-                        view.UpdateMyInfoForm();
+                        // PW NAME AGE PHONENUM 입력받은거 가져오기
+                        List<string> updatedUserInfo = view.UpdateMyInfoForm();
+                        
+                        MemberDTO updatedMember = new MemberDTO(updatedUserInfo);
+                        // ID는 controller에서 따로 세팅
+                        updatedMember.SetId(curUserID);
+                        memberModel.UpdateMember(updatedMember);
                         break;
                     
                     case UserMenuState.DELETEMYSELF:

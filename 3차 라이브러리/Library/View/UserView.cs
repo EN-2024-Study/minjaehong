@@ -101,9 +101,22 @@ namespace Library
         }
 
         // 6. 정보 수정
-        public void UpdateMyInfoForm()
+        public List<string> UpdateMyInfoForm()
         {
             Console.Clear();
+
+            string[] updateUserArr = { "1. PW","2. NAME","3. AGE","4. PHONENUM" };
+
+            // 화면 구성
+            MyConsole.PrintHeader("[UPDATE USER]");
+            MyConsole.PrintAllMenu(updateUserArr);
+
+            // 업데이트할 PW NAME AGE PHONENUM 입력받기
+            List<string> updatedUserInfo = MyConsole.GetUserInputs(updateUserArr.Length);
+
+            // ID는 입력받는게 아니므로 그냥 0번에 추가해서 ID PW NAME AGE PHONENUM 받은 것처럼 만들기
+            updatedUserInfo.Insert(0, "");
+            return updatedUserInfo;
         }
 
         // 7. 계정 삭제
