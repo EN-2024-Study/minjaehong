@@ -32,20 +32,7 @@ namespace Library
             MyConsole.PrintHeader("[USER MODE]");
             MyConsole.PrintAllMenu(userFrontMenuArr);
 
-            // UserFrontMode userFrontMode = 
             return (UserFrontMode)MyConsole.GetUserSelection(userFrontMenuArr);
-
-            /*
-            // Redirect 느낌으로??
-            if (userFrontMode == UserFrontMode.USER_LOGIN)
-            {
-                UserLoginForm();
-            }
-            else
-            {
-                UserCreateAccountForm();                
-            }
-            */
         }
 
         // 1. LOGIN

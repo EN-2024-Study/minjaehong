@@ -10,6 +10,9 @@ namespace Library
     { 
         private static MainController instance;
 
+        private string managerID;
+        private string managerPW;
+
         // MainController와 연결되어야하는 애들
         UserFrontController userFrontController;
         ManagerController managerController;
@@ -17,6 +20,9 @@ namespace Library
 
         private MainController()
         {
+            managerID = "manager";
+            managerPW = "manager123";
+
             // 의존성 주입 느낌
             this.userFrontController = UserFrontController.GetInstance();
             this.managerController = ManagerController.GetInstance();
@@ -56,8 +62,16 @@ namespace Library
                     case LibraryMode.MANAGER_MODE:
                         // MANAGERMODE이면 별로 할게 없기 때문에
                         // ID PW 확인만 하고 managercontroller를 여기서 바로 실행시켜줘도 됨
-                        mainView.ManagerLoginForm();
-                        managerController.run();
+                        List<string> loginInfo = mainView.ManagerLoginForm();
+
+                        string inputID = loginInfo[0];
+                        string inputPW = loginInfo[1];
+
+                        // ID PW 이 둘 다 맞으면
+                        if (managerID == inputID && managerPW == inputPW)
+                        {
+                            managerController.run();
+                        }
                         break;
                 }
             }

@@ -84,6 +84,27 @@ namespace Library
 
         //=================== BORROW AND RETURN ===================//
 
+        // USER가 진짜 빌린 책인지 확인
+        public bool CheckIfUserBorrowed(string curUserID, MiniDTO miniDTO)
+        {
+            int tryReturningBookID = int.Parse(miniDTO.GetBookID());
+            int tryReturningQuantity = int.Parse(miniDTO.GetBookNum());
+
+            MemberDTO curUserDTO = memberDB[curUserID];
+            // 해당 책을 진짜로 빌렸고
+            if (curUserDTO.GetBorrowedBooks().ContainsKey(tryReturningBookID))
+            {
+                // 반납 개수가 빌린 개수보다 작으면
+                if(tryReturningQuantity <= curUserDTO.GetBorrowedBooks()[tryReturningBookID])
+                {
+                    // 그럼 진짜로 반납할 수 있는거임
+                    return true;
+                }
+            }
+            // 아니면 반납 못함
+            return false;
+        }
+
         public void UpdateBorrowed(string curUserID, MiniDTO miniDTO)
         {
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까

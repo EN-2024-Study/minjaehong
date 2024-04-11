@@ -38,9 +38,8 @@ namespace Library
             return selectedMode;
         }
 
-        // MANAGER MODE 로그인 담당
-        // 로그인 확인 절차 거쳐야함
-        public void ManagerLoginForm()
+        // MANAGER LOGIN
+        public List<string> ManagerLoginForm()
         {
             Console.Clear();
 
@@ -49,6 +48,7 @@ namespace Library
             MyConsole.PrintHeader("[MANAGER LOGIN]");
             MyConsole.PrintAllMenu(managerFormArr);
 
+            return MyConsole.GetUserInputs(managerFormArr.Length);
         }
     }
 }

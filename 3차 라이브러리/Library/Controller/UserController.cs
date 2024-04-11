@@ -54,7 +54,7 @@ namespace Library
 
             while (isUserModeRunning)
             {
-                selectedMenu = view.UserMenuForm();
+                selectedMenu = view.UserMenuForm(curUserID);
 
                 switch (selectedMenu)
                 {
@@ -109,11 +109,15 @@ namespace Library
                         dataFromView = view.ReturnBookForm();
                         // 책 정보를 MiniDTO에 담아주기
                         miniDTO = new MiniDTO(dataFromView);
-                        // bookModel에 누가 반납한거 적용해주기
-                        bookModel.UpdateReturned(miniDTO);
-                        // 성공하면 memberModel로 가서 저장해주기
-                        memberModel.UpdateReturned(curUserID, miniDTO);
 
+                        // 만약 진짜로 빌린거면
+                        if (memberModel.CheckIfUserBorrowed(curUserID, miniDTO))
+                        {
+                            // bookModel에 누가 반납한거 적용해주기
+                            bookModel.UpdateReturned(miniDTO);
+                            // 성공하면 memberModel로 가서 저장해주기
+                            memberModel.UpdateReturned(curUserID, miniDTO);
+                        }
                         break;
                     
                     case UserMenuState.CHECKRETURN:

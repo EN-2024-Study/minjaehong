@@ -26,14 +26,14 @@ namespace Library
             bookModel.AddNewBook(new BookDTO(dummyArr5));
             bookModel.AddNewBook(new BookDTO(dummyArr6));
 
-            List<string> dummyArr7 = new List<string> { "dog", "dog123", "개", "5", "010" };
+            List<string> dummyArr7 = new List<string> { "dog", "dog123", "강아지", "5", "010" };
             List<string> dummyArr8 = new List<string> { "cat", "cat123", "고양이", "4", "010" };
             List<string> dummyArr9 = new List<string> { "dolphin", "dolphin123", "돌고래", "7", "010" };
             memberModel.AddNewMember(new MemberDTO(dummyArr7));
             memberModel.AddNewMember(new MemberDTO(dummyArr8));
             memberModel.AddNewMember(new MemberDTO(dummyArr9));
         }
-
+        
         public static void Main()
         {
             Console.CursorVisible = false;

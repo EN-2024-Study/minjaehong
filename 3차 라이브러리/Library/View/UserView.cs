@@ -24,7 +24,7 @@ namespace Library
         //===================== SINGELTON ========================//
 
         // menu 보여주고 user가 select 한 걸 controller 한테 반환
-        public UserMenuState UserMenuForm()
+        public UserMenuState UserMenuForm(string curUserID)
         {
             Console.Clear();
 
@@ -32,6 +32,8 @@ namespace Library
 
             MyConsole.PrintHeader("[USER MENU]");
             MyConsole.PrintAllMenu(userMenuArr);
+
+            MyConsole.PrintUserName(curUserID);
 
             return (UserMenuState)MyConsole.GetUserSelection(userMenuArr);
         }

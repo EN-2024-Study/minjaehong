@@ -10,16 +10,19 @@ namespace Library
     // 그냥 static 써서 올려?
     static class MyConsole
     {
-        private const int HEADER_X = 55; // HEADER가 끝나야하는 X좌표
-        private const int HEADER_Y = 6; // HEADER가 찍혀야하는 Y좌표
+        private const int HEADER_X = 45; // HEADER가 끝나야하는 X좌표
+        private const int HEADER_Y = 4; // HEADER가 찍혀야하는 Y좌표
 
-        private const int MENU_STARTX = 50; // MENU가 끝나야하는 X좌표
+        private const int USERNAME_X = 40;
+        private const int USERNAME_Y = 6;
+
+        private const int MENU_STARTX = 40; // MENU가 끝나야하는 X좌표
         private const int MENU_STARTY = 8; // MENU가 찍혀야하는 Y좌표
 
-        private const int BOOK_STARTX = 50;
-        private const int BOOK_STARTY = 11;
+        private const int BOOK_STARTX = 40;
+        private const int BOOK_STARTY = 8;
 
-        private const int INPUT_STARTX = 70;
+        private const int INPUT_STARTX = 60;
         private const int INPUT_STARTY = 8;
         
         /*
@@ -44,9 +47,16 @@ namespace Library
         // HEADER 출력 함수
         public static void PrintHeader(string header)
         {
-            int headerLen = header.Length;
             Console.SetCursorPosition(HEADER_X, HEADER_Y);
             Console.Write(header);
+        }
+
+        public static void PrintUserName(string curUserID)
+        {
+            Console.SetCursorPosition(USERNAME_X, USERNAME_Y);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("HELLO " + curUserID +"!");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         //===================== MENU PRINT FUNCTION ==================//
