@@ -26,9 +26,9 @@ namespace Library
             bookModel.AddNewBook(new BookDTO(dummyArr5));
             bookModel.AddNewBook(new BookDTO(dummyArr6));
 
-            List<string> dummyArr7 = new List<string> { "dog", "dog123", "강아지", "5", "010-1234-5678" };
-            List<string> dummyArr8 = new List<string> { "cat", "cat123", "고양이", "4", "010-5647-8497" };
-            List<string> dummyArr9 = new List<string> { "dolphin", "dolphin123", "돌고래", "7", "010-3781-3649" };
+            List<string> dummyArr7 = new List<string> { "dog", "dog123", "DOG", "5", "010-1234-5678" };
+            List<string> dummyArr8 = new List<string> { "cat", "cat123", "CAT", "4", "010-5647-8497" };
+            List<string> dummyArr9 = new List<string> { "dolphin", "dolphin123", "DOLPHIN", "7", "010-3781-3649" };
             memberModel.AddNewMember(new MemberDTO(dummyArr7));
             memberModel.AddNewMember(new MemberDTO(dummyArr8));
             memberModel.AddNewMember(new MemberDTO(dummyArr9));

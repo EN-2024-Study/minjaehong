@@ -16,15 +16,53 @@ namespace Library
         // 커서는 각 메뉴의 ":" 바로 옆부터 시작함
         // enter 치면 바로 거기부터 시작
         // 입력 값들을 List로 반환해줌
-        public static List<string> GetUserInputs(int rows)
+        public static List<string> GetUserInputs(int rows, ExceptionState[] exceptionArr)
         {
             Console.CursorVisible = true;
-            List<string> retList = new List<string>();
 
+            string input="";
+            ExceptionState exceptionState;
+
+            List<string> retList = new List<string>();
+            
             for (int i = 0; i < rows; i++)
             {
-                Console.SetCursorPosition(INPUT_STARTX, INPUT_STARTY + i);
-                retList.Add(Console.ReadLine()); // ENTER찍으면 하나씩 list에 저장
+                exceptionState = exceptionArr[i];
+                
+                bool isCorrectInput = false;
+
+                // USER가 제대로 된 INPUT을 입력했을때까지 계속함
+                while (!isCorrectInput)
+                {
+                    Console.SetCursorPosition(INPUT_STARTX, INPUT_STARTY + i);
+                    input = Console.ReadLine();
+
+                    switch (exceptionState)
+                    {
+                        case ExceptionState.INT_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfIntOnlyInput(input);
+                            break;
+
+                        case ExceptionState.ENGLISH_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfEnglishOnlyInput(input);
+                            break;
+
+                        case ExceptionState.ENGLISH_INT_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfEnglistAndIntOnlyInput(input);
+                            break;
+
+                        case ExceptionState.PHONENUM_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfPhoneNumInput(input);
+                            break;
+
+                        case ExceptionState.ISBN_ONLY:
+                            break;
+                        case ExceptionState.DATE_ONLY:
+                            break;
+                    }
+                }
+
+                retList.Add(input); // ENTER찍으면 하나씩 list에 저장
             }
             Console.CursorVisible = false;
             return retList;

@@ -31,11 +31,10 @@ namespace Library
         {
             Console.Clear();
 
-
             MyConsole.PrintHeader("[FIND BOOK]");
             MyConsole.PrintAllMenu(Constants.findBookArr);
 
-            return InputHandler.GetUserInputs(Constants.findBookArr.Length);
+            return InputHandler.GetUserInputs(Constants.findBookArr.Length, ExceptionHandler.findBookExceptionArr);
         }
 
         // 2. 도서 대여
@@ -47,7 +46,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.borrowBookArr);
             
             // ID NUM 입력받아 controller한테 전달
-            return InputHandler.GetUserInputs(Constants.borrowBookArr.Length);
+            return InputHandler.GetUserInputs(Constants.borrowBookArr.Length, ExceptionHandler.borrowBookExceptionArr);
         }
 
         // 3. 도서 대여 확인
@@ -69,7 +68,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.returnBookArr);
 
             // ID NUM 입력받아 controller한테 전달
-            return InputHandler.GetUserInputs(Constants.returnBookArr.Length);
+            return InputHandler.GetUserInputs(Constants.returnBookArr.Length, ExceptionHandler.returnBookExceptionArr);
         }
 
         // 5. 도서 반납 확인
@@ -91,7 +90,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.updateUserArr);
 
             // 업데이트할 PW NAME AGE PHONENUM 입력받기
-            List<string> updatedUserInfo = InputHandler.GetUserInputs(Constants.updateUserArr.Length);
+            List<string> updatedUserInfo = InputHandler.GetUserInputs(Constants.updateUserArr.Length, ExceptionHandler.updateUserExceptionArr);
 
             // ID는 입력받는게 아니므로 그냥 0번에 추가해서 ID PW NAME AGE PHONENUM 받은 것처럼 만들기
             updatedUserInfo.Insert(0, "");
@@ -120,7 +119,6 @@ namespace Library
             else
             {
                 MyConsole.PrintHeader("[YOUR RESULTS]");
-
                 MyConsole.PrintBooks(selectedBooks);
             }
 

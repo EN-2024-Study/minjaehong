@@ -29,9 +29,9 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[MANAGER LOGIN]");
-            MyConsole.PrintAllMenu(Constants.managerFormArr);
+            MyConsole.PrintAllMenu(Constants.managerLoginArr);
 
-            return InputHandler.GetUserInputs(Constants.managerFormArr.Length);
+            return InputHandler.GetUserInputs(Constants.managerLoginArr.Length, ExceptionHandler.managerLoginExceptionArr);
         }
     }
 }

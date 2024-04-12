@@ -18,15 +18,15 @@ namespace Library
         // MAINVIEW
         public static string[] modeSelectMenuArr = { "1. USER MODE", "2. MANAGER MODE" };
 
-        public static string[] managerFormArr = { "ID", "PW" };
+        public static string[] managerLoginArr = { "ID", "PW" };
 
         // ManagerView
         public static string[] managerMenuArr = { "전체 도서", "도서 찾기", "도서 추가", "도서 삭제", "도서 수정", "회원 관리", "대여 내역", "네이버 검색", "로그 관리", "요청 도서" };
 
         public static string[] findBookArr = { "FIND BY NAME", "FIND BY AUTHOR" };
-        
-        public static string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK"};
 
+        public static string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK"};
+        
         public static string[] deleteBookArr = { "DELETING BOOK ID : " };
 
         public static string[] updateBookSelectArr = { "UPDATING BOOK ID : " };
@@ -35,9 +35,9 @@ namespace Library
 
         // UserFrontView
         public static string[] createAccountArr = { "ID", "PW", "NAME", "AGE", "PHONENUM" };
-
-        public static string[] loginFormArr = { "ID", "PW" };
-
+        
+        public static string[] userLoginArr = { "ID", "PW" };
+        
         public static string[] userFrontMenuArr = { "LOGIN", "CREATE ACCOUNT" };
 
         // UserView
@@ -50,6 +50,5 @@ namespace Library
         public static string[] returnBookArr = {"BOOK ID"};
 
         public static string[] updateUserArr = { "1. PW", "2. NAME", "3. AGE", "4. PHONENUM" };
-
     }
 }

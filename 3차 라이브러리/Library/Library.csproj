@@ -49,7 +49,7 @@
     <Compile Include="DTO\MemberDTO.cs" />
     <Compile Include="Model\MemberModel.cs" />
     <Compile Include="DTO\MiniDTO.cs" />
-    <Compile Include="Utility\Exception.cs" />
+    <Compile Include="Utility\ExceptionHandler.cs" />
     <Compile Include="Utility\InputHandler.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\MainView.cs" />

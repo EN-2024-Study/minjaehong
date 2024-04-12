@@ -26,9 +26,9 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[USER LOGIN]");
-            MyConsole.PrintAllMenu(Constants.loginFormArr);
+            MyConsole.PrintAllMenu(Constants.userLoginArr);
 
-            List<string> loginInfo = InputHandler.GetUserInputs(Constants.loginFormArr.Length);
+            List<string> loginInfo = InputHandler.GetUserInputs(Constants.userLoginArr.Length, ExceptionHandler.userLoginExceptionArr);
             
             return loginInfo;
         }
@@ -42,7 +42,7 @@ namespace Library
 
             MyConsole.PrintHeader("[USER CREATE ACCOUNT]");
             MyConsole.PrintAllMenu(Constants.createAccountArr);
-            List<string> newMemberInfo = InputHandler.GetUserInputs(Constants.createAccountArr.Length);
+            List<string> newMemberInfo = InputHandler.GetUserInputs(Constants.createAccountArr.Length, ExceptionHandler.userCreateAccountExceptionArr);
 
             return newMemberInfo;
         }

@@ -40,7 +40,7 @@ namespace Library
             MyConsole.PrintHeader("[FIND BOOK]");
             MyConsole.PrintAllMenu(Constants.findBookArr);
 
-            return InputHandler.GetUserInputs(Constants.findBookArr.Length);
+            return InputHandler.GetUserInputs(Constants.findBookArr.Length, ExceptionHandler.findBookExceptionArr);
         }
 
         public void PrintSelectedBooksForm(List<BookDTO> selectedBooks)
@@ -73,7 +73,7 @@ namespace Library
             MyConsole.PrintHeader("[ADD BOOK]");
             MyConsole.PrintAllMenu(Constants.addBookArr);
             
-            List<string> bookInfo = InputHandler.GetUserInputs(Constants.addBookArr.Length);
+            List<string> bookInfo = InputHandler.GetUserInputs(Constants.addBookArr.Length, ExceptionHandler.addBookExceptionArr);
             return bookInfo;
         }
 
@@ -89,7 +89,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.deleteBookArr);
 
             // user 입력 받기
-            List<string> userInput = InputHandler.GetUserInputs(Constants.deleteBookArr.Length);
+            List<string> userInput = InputHandler.GetUserInputs(Constants.deleteBookArr.Length, ExceptionHandler.deleteBookExceptionArr);
 
             int deletingBookID = int.Parse(userInput[0]);
 
@@ -110,7 +110,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.updateBookSelectArr);
 
             // USER 입력 받기            
-            List<string> userInput = InputHandler.GetUserInputs(Constants.updateBookSelectArr.Length);
+            List<string> userInput = InputHandler.GetUserInputs(Constants.updateBookSelectArr.Length, ExceptionHandler.updateBookSelectExceptionArr);
             
             updatingBookID = int.Parse(userInput[0]);
             
@@ -129,7 +129,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.updateBookArr);
 
             // USER 입력받기
-            List<string> updatedBookInfo = InputHandler.GetUserInputs(Constants.updateBookArr.Length);
+            List<string> updatedBookInfo = InputHandler.GetUserInputs(Constants.updateBookArr.Length, ExceptionHandler.updateBookExceptionArr);
 
             return updatedBookInfo;
         }
