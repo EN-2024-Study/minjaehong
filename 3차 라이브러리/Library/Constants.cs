@@ -45,9 +45,9 @@ namespace Library
 
         //public static string[] findBookArr = { "FIND BY NAME", "FIND BY AUTHOR" };
 
-        public static string[] borrowBookArr = { "BOOK ID", "QUANTITY" };
+        public static string[] borrowBookArr = {"BOOK ID"};
 
-        public static string[] returnBookArr = { "BOOK ID", "QUANTITY" };
+        public static string[] returnBookArr = {"BOOK ID"};
 
         public static string[] updateUserArr = { "1. PW", "2. NAME", "3. AGE", "4. PHONENUM" };
 

@@ -18,7 +18,7 @@ namespace Library
             MyConsole.PrintHeader("[SELECT MODE]");
             MyConsole.PrintAllMenu(Constants.modeSelectMenuArr);
 
-            LibraryMode selectedMode = (LibraryMode)MyConsole.GetUserSelection(Constants.modeSelectMenuArr);
+            LibraryMode selectedMode = (LibraryMode)InputHandler.GetUserSelection(Constants.modeSelectMenuArr);
 
             return selectedMode;
         }
@@ -31,7 +31,7 @@ namespace Library
             MyConsole.PrintHeader("[MANAGER LOGIN]");
             MyConsole.PrintAllMenu(Constants.managerFormArr);
 
-            return MyConsole.GetUserInputs(Constants.managerFormArr.Length);
+            return InputHandler.GetUserInputs(Constants.managerFormArr.Length);
         }
     }
 }

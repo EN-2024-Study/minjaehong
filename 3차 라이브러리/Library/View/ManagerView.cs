@@ -19,7 +19,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.managerMenuArr);
             MyConsole.PrintUserName("manager");
 
-            ManagerMenuState selectedMenu = (ManagerMenuState)MyConsole.GetUserSelection(Constants.managerMenuArr);
+            ManagerMenuState selectedMenu = (ManagerMenuState)InputHandler.GetUserSelection(Constants.managerMenuArr);
 
             return selectedMenu;
         }
@@ -40,7 +40,7 @@ namespace Library
             MyConsole.PrintHeader("[FIND BOOK]");
             MyConsole.PrintAllMenu(Constants.findBookArr);
 
-            return MyConsole.GetUserInputs(Constants.findBookArr.Length);
+            return InputHandler.GetUserInputs(Constants.findBookArr.Length);
         }
 
         public void PrintSelectedBooksForm(List<BookDTO> selectedBooks)
@@ -73,7 +73,7 @@ namespace Library
             MyConsole.PrintHeader("[ADD BOOK]");
             MyConsole.PrintAllMenu(Constants.addBookArr);
             
-            List<string> bookInfo = MyConsole.GetUserInputs(Constants.addBookArr.Length);
+            List<string> bookInfo = InputHandler.GetUserInputs(Constants.addBookArr.Length);
             return bookInfo;
         }
 
@@ -89,7 +89,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.deleteBookArr);
 
             // user 입력 받기
-            List<string> userInput = MyConsole.GetUserInputs(Constants.deleteBookArr.Length);
+            List<string> userInput = InputHandler.GetUserInputs(Constants.deleteBookArr.Length);
 
             int deletingBookID = int.Parse(userInput[0]);
 
@@ -110,7 +110,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.updateBookSelectArr);
 
             // USER 입력 받기            
-            List<string> userInput = MyConsole.GetUserInputs(Constants.updateBookSelectArr.Length);
+            List<string> userInput = InputHandler.GetUserInputs(Constants.updateBookSelectArr.Length);
             
             updatingBookID = int.Parse(userInput[0]);
             
@@ -129,7 +129,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.updateBookArr);
 
             // USER 입력받기
-            List<string> updatedBookInfo = MyConsole.GetUserInputs(Constants.updateBookArr.Length);
+            List<string> updatedBookInfo = InputHandler.GetUserInputs(Constants.updateBookArr.Length);
 
             return updatedBookInfo;
         }

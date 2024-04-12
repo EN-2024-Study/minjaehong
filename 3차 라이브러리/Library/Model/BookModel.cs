@@ -126,7 +126,7 @@ namespace Library
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
             int bookID = int.Parse(miniDTO.GetBookID());
             // 계산을 위해 빌리는 책 수 도 int로 형변환 시키기
-            int borrowNum = int.Parse(miniDTO.GetBookNum());
+            int borrowNum = int.Parse(miniDTO.GetQuantity());
 
             // 남은 수량 업뎃
             int curNum = int.Parse(bookDB[bookID].GetInStock());
@@ -141,7 +141,7 @@ namespace Library
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
             int bookID = int.Parse(miniDTO.GetBookID());
             // 계산을 위해 return 책 수 도 int로 형변환 시키기
-            int returnedNum = int.Parse(miniDTO.GetBookNum());
+            int returnedNum = int.Parse(miniDTO.GetQuantity());
 
             // 남은 수량 업뎃
             int curNum = int.Parse(bookDB[bookID].GetInStock());

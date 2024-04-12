@@ -15,13 +15,12 @@ namespace Library
         {
             Console.Clear();
 
-
             MyConsole.PrintHeader("[USER MENU]");
             MyConsole.PrintAllMenu(Constants.userMenuArr);
 
             MyConsole.PrintUserName(curUserName);
 
-            return (UserMenuState)MyConsole.GetUserSelection(Constants.userMenuArr);
+            return (UserMenuState)InputHandler.GetUserSelection(Constants.userMenuArr);
         }
 
         // 1. 도서 찾기
@@ -36,7 +35,7 @@ namespace Library
             MyConsole.PrintHeader("[FIND BOOK]");
             MyConsole.PrintAllMenu(Constants.findBookArr);
 
-            return MyConsole.GetUserInputs(Constants.findBookArr.Length);
+            return InputHandler.GetUserInputs(Constants.findBookArr.Length);
         }
 
         // 2. 도서 대여
@@ -44,12 +43,11 @@ namespace Library
         {
             Console.Clear();
 
-
             MyConsole.PrintHeader("[LETS BORROW A BOOK]");
             MyConsole.PrintAllMenu(Constants.borrowBookArr);
             
             // ID NUM 입력받아 controller한테 전달
-            return MyConsole.GetUserInputs(Constants.borrowBookArr.Length);
+            return InputHandler.GetUserInputs(Constants.borrowBookArr.Length);
         }
 
         // 3. 도서 대여 확인
@@ -71,7 +69,7 @@ namespace Library
             MyConsole.PrintAllMenu(Constants.returnBookArr);
 
             // ID NUM 입력받아 controller한테 전달
-            return MyConsole.GetUserInputs(Constants.returnBookArr.Length);
+            return InputHandler.GetUserInputs(Constants.returnBookArr.Length);
         }
 
         // 5. 도서 반납 확인
@@ -88,13 +86,12 @@ namespace Library
         {
             Console.Clear();
 
-
             // 화면 구성
             MyConsole.PrintHeader("[UPDATE USER]");
             MyConsole.PrintAllMenu(Constants.updateUserArr);
 
             // 업데이트할 PW NAME AGE PHONENUM 입력받기
-            List<string> updatedUserInfo = MyConsole.GetUserInputs(Constants.updateUserArr.Length);
+            List<string> updatedUserInfo = InputHandler.GetUserInputs(Constants.updateUserArr.Length);
 
             // ID는 입력받는게 아니므로 그냥 0번에 추가해서 ID PW NAME AGE PHONENUM 받은 것처럼 만들기
             updatedUserInfo.Insert(0, "");

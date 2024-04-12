@@ -50,6 +50,7 @@
     <Compile Include="Model\MemberModel.cs" />
     <Compile Include="DTO\MiniDTO.cs" />
     <Compile Include="Utility\Exception.cs" />
+    <Compile Include="Utility\InputHandler.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\MainView.cs" />
     <Compile Include="View\ManagerView.cs" />

@@ -17,7 +17,7 @@ namespace Library
             MyConsole.PrintHeader("[USER MODE]");
             MyConsole.PrintAllMenu(Constants.userFrontMenuArr);
 
-            return (UserFrontMode)MyConsole.GetUserSelection(Constants.userFrontMenuArr);
+            return (UserFrontMode)InputHandler.GetUserSelection(Constants.userFrontMenuArr);
         }
 
         // 1. LOGIN
@@ -28,7 +28,7 @@ namespace Library
             MyConsole.PrintHeader("[USER LOGIN]");
             MyConsole.PrintAllMenu(Constants.loginFormArr);
 
-            List<string> loginInfo = MyConsole.GetUserInputs(Constants.loginFormArr.Length);
+            List<string> loginInfo = InputHandler.GetUserInputs(Constants.loginFormArr.Length);
             
             return loginInfo;
         }
@@ -42,7 +42,7 @@ namespace Library
 
             MyConsole.PrintHeader("[USER CREATE ACCOUNT]");
             MyConsole.PrintAllMenu(Constants.createAccountArr);
-            List<string> newMemberInfo = MyConsole.GetUserInputs(Constants.createAccountArr.Length);
+            List<string> newMemberInfo = InputHandler.GetUserInputs(Constants.createAccountArr.Length);
 
             return newMemberInfo;
         }

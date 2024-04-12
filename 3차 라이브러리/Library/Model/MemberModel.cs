@@ -89,7 +89,7 @@ namespace Library
         public bool CheckIfUserBorrowed(string curUserID, MiniDTO miniDTO)
         {
             int tryReturningBookID = int.Parse(miniDTO.GetBookID());
-            int tryReturningQuantity = int.Parse(miniDTO.GetBookNum());
+            int tryReturningQuantity = int.Parse(miniDTO.GetQuantity());
 
             MemberDTO curUserDTO = memberDB[curUserID];
             // 해당 책을 진짜로 빌렸고
@@ -111,7 +111,7 @@ namespace Library
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
             int bookID = int.Parse(miniDTO.GetBookID());
             // 빌린 책 수 int로 형변환 해주기
-            int borrowNum = int.Parse(miniDTO.GetBookNum());
+            int borrowNum = int.Parse(miniDTO.GetQuantity());
 
             Dictionary<int, int> curUserBorrowedBooks = memberDB[curUserID].GetBorrowedBooks();
 
@@ -134,8 +134,9 @@ namespace Library
         {
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
             int bookID = int.Parse(miniDTO.GetBookID());
-            // 빌린 책 수 int로 형변환 해주기
-            int borrowNum = int.Parse(miniDTO.GetBookNum());
+
+            // 빌린 책 수 int로 형변환 해주기. 이건 항상 1임
+            int borrowNum = int.Parse(miniDTO.GetQuantity());
 
             Dictionary<int, int> curUserBorrowedBooks = memberDB[curUserID].GetBorrowedBooks();
             Dictionary<int, int> curUserReturnedBooks = memberDB[curUserID].GetReturnedBooks();

@@ -17,6 +17,7 @@ namespace Library
             memberModel = MemberModel.GetInstance();
 
             userController = new UserController();
+
             userFrontView = new UserFrontView();
         }
 

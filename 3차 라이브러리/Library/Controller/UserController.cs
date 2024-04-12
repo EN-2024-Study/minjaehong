@@ -10,7 +10,7 @@ namespace Library
     {
         private string curUserID;
 
-        UserView view;
+        UserView userView;
         MemberModel memberModel;
         BookModel bookModel;
 
@@ -19,7 +19,7 @@ namespace Library
             memberModel = MemberModel.GetInstance();
             bookModel = BookModel.GetInstance();
 
-            view = new UserView();
+            userView = new UserView();
         }
 
         //===================== SINGELTON ========================//
@@ -43,7 +43,7 @@ namespace Library
 
             while (isUserModeRunning)
             {
-                selectedMenu = view.UserMenuForm(memberModel.GetMember(curUserID).GetName());
+                selectedMenu = userView.UserMenuForm(memberModel.GetMember(curUserID).GetName());
 
                 switch (selectedMenu)
                 {
@@ -54,23 +54,23 @@ namespace Library
                     case UserMenuState.PRINTALLBOOK:
 
                         retList = bookModel.GetAllBooks();
-                        view.PrintAllBooksForm(retList);
+                        userView.PrintAllBooksForm(retList);
                         break;
 
                     case UserMenuState.FIND:
                        
-                        // 찾을 책에 대한 정보를 view에서 받아오기
-                        dataFromView = view.FindBookForm();
+                        // 찾을 책에 대한 정보를 userView에서 받아오기
+                        dataFromView = userView.FindBookForm();
                         // bookModel로 전달해서 매칭된 List<BookDTO> 받아오기
                         retList = bookModel.FindBook(dataFromView);
-                        // 다시 view에 전달해서 매칭된 책들 모두 출력해서 보여주기
-                        view.PrintSelectedBooksForm(retList);
+                        // 다시 userView에 전달해서 매칭된 책들 모두 출력해서 보여주기
+                        userView.PrintSelectedBooksForm(retList);
                         break;
 
                     case UserMenuState.BORROW:
                         
-                        // BORROW할 책에 대한 정보를 view에서 받아오기
-                        dataFromView = view.BorrowBookForm();
+                        // BORROW할 책에 대한 정보를 userView에서 받아오기
+                        dataFromView = userView.BorrowBookForm();
                         // 책 정보를 MiniDTO에 담아주기
                         miniDTO = new MiniDTO(dataFromView);
                         // bookModel에 누가 빌린거 적용해주기
@@ -89,13 +89,13 @@ namespace Library
                             int curId = curUserBorrowedBookIDs[i];
                             curUserBorrowedBooks.Add(bookModel.GetBookDTO(curId));
                         }
-                        view.CheckBorrowedForm(curUserBorrowedBooks);
+                        userView.CheckBorrowedForm(curUserBorrowedBooks);
                         break;
                         
                     case UserMenuState.RETURN:
 
-                        // RETURN할 책에 대한 정보를 view에서 받아오기
-                        dataFromView = view.ReturnBookForm();
+                        // RETURN할 책에 대한 정보를 userView에서 받아오기
+                        dataFromView = userView.ReturnBookForm();
                         // 책 정보를 MiniDTO에 담아주기
                         miniDTO = new MiniDTO(dataFromView);
 
@@ -119,13 +119,13 @@ namespace Library
                             int curId = curUserReturnedBookIDs[i];
                             curUserReturnedBooks.Add(bookModel.GetBookDTO(curId));
                         }
-                        view.CheckReturnedForm(curUserReturnedBooks);
+                        userView.CheckReturnedForm(curUserReturnedBooks);
                         break;
                     
                     case UserMenuState.UPDATEINFO:
 
                         // PW NAME AGE PHONENUM 입력받은거 가져오기
-                        List<string> updatedUserInfo = view.UpdateMyInfoForm();
+                        List<string> updatedUserInfo = userView.UpdateMyInfoForm();
                         
                         MemberDTO updatedMember = new MemberDTO(updatedUserInfo);
                         // ID는 controller에서 따로 세팅
@@ -135,7 +135,7 @@ namespace Library
                     
                     case UserMenuState.DELETEMYSELF:
 
-                        view.DeleteMyselfForm();
+                        userView.DeleteMyselfForm();
                         break;
                     
                     case UserMenuState.NAVERSEARCH:

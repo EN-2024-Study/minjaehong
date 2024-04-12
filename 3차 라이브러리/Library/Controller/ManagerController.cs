@@ -9,7 +9,7 @@ namespace Library
     class ManagerController
     { 
         // ManagerController와 연결되어야하는 애들
-        ManagerView view;
+        ManagerView managerView;
         BookModel bookModel;
         MemberModel memberModel;
         
@@ -18,7 +18,7 @@ namespace Library
             bookModel = BookModel.GetInstance();
             memberModel = MemberModel.GetInstance();
 
-            view = new ManagerView();
+            managerView = new ManagerView();
         }
 
         public void Run()
@@ -32,7 +32,7 @@ namespace Library
             // MANAGER_MODE 일때
             while (isManagerModeRunning)
             {
-                selectedMenu = view.ManagerMenuForm();
+                selectedMenu = managerView.ManagerMenuForm();
 
                 switch (selectedMenu)
                 {
@@ -42,33 +42,33 @@ namespace Library
 
                     case ManagerMenuState.PRINTALLBOOK:
                         List<BookDTO> allBooks = bookModel.GetAllBooks();
-                        view.PrintAllBooksForm(allBooks);
+                        managerView.PrintAllBooksForm(allBooks);
                         break;
 
                     case ManagerMenuState.FINDBOOK:
 
-                        dataFromView = view.FindBookForm();
+                        dataFromView = managerView.FindBookForm();
                         List<BookDTO> retList = bookModel.FindBook(dataFromView);
-                        view.PrintSelectedBooksForm(retList);
+                        managerView.PrintSelectedBooksForm(retList);
                         break;
 
                     case ManagerMenuState.ADDBOOK:
 
-                        List<string> newBookInfo = view.AddBookForm();
+                        List<string> newBookInfo = managerView.AddBookForm();
                         BookDTO newBook = new BookDTO(newBookInfo);
                         bookModel.AddNewBook(newBook);
                         break;
                     
                     case ManagerMenuState.DELETEBOOK:
 
-                        int deletingBookID = view.DeleteBookForm();
+                        int deletingBookID = managerView.DeleteBookForm();
                         bookModel.DeleteBook(deletingBookID);
                         break;
                     
                     case ManagerMenuState.UPDATEBOOK:
 
-                        int updatingBookID = view.UpdateBookSelectForm();
-                        List<string> updatedBookInfo = view.UpdateBookForm();
+                        int updatingBookID = managerView.UpdateBookSelectForm();
+                        List<string> updatedBookInfo = managerView.UpdateBookForm();
                         BookDTO updatedBook = new BookDTO(updatedBookInfo);
                         updatedBook.SetId(updatingBookID);
                         bookModel.UpdateBook(updatedBook);
@@ -76,7 +76,7 @@ namespace Library
 
                     case ManagerMenuState.MEMBERMANAGEMENT:
                         List<MemberDTO> allMembers = memberModel.GetAllMember();
-                        view.PrintAllMembersForm(allMembers);
+                        managerView.PrintAllMembersForm(allMembers);
                         break;
                     
                     case ManagerMenuState.BORROWLIST:

@@ -13,20 +13,22 @@ namespace Library
         private string bookID;
         private string quantity;
 
-        public MiniDTO(string bookID, string quantity)
+        public MiniDTO(string bookID)
         {
             this.bookID = bookID;
-            this.quantity = quantity;
+            this.quantity = "1";
         }
+
+        // public MiniDTO(string bookID, string quantity)
 
         public MiniDTO(List<string> dataFromView)
         {
             this.bookID = dataFromView[0];
-            this.quantity = dataFromView[1];
+            this.quantity = "1";
         }
 
         public string GetBookID() { return bookID; }
-        public string GetBookNum() { return quantity; }
+        public string GetQuantity() { return quantity; }
 
     }
 }
