@@ -11,6 +11,9 @@ namespace Library
         private const int INPUT_STARTX = 60;
         private const int INPUT_STARTY = 8;
 
+        private const int WARNING_STARTX = 40;
+        private const int WARNING_STARTY = 6;
+
         // 정보입력 창에 쓰임
         // 원하는 위치부터 ReadLine 해주는 함수
         // 커서는 각 메뉴의 ":" 바로 옆부터 시작함
@@ -35,8 +38,9 @@ namespace Library
                 while (!isCorrectInput)
                 {
                     Console.SetCursorPosition(INPUT_STARTX, INPUT_STARTY + i);
-                    EraseUserInput(INPUT_STARTX, INPUT_STARTY + i);
+                    Eraser(INPUT_STARTX, INPUT_STARTY + i);
                     input = Console.ReadLine();
+                    Eraser(WARNING_STARTX, WARNING_STARTY);
 
                     switch (exceptionState)
                     {
@@ -57,9 +61,18 @@ namespace Library
                             break;
 
                         case ExceptionState.ISBN_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfISBNInput(input);
                             break;
+
                         case ExceptionState.DATE_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfDateInput(input);
                             break;
+                    }
+
+                    // 만약 USER가 제대로 입력안했으면
+                    if (!isCorrectInput)
+                    {
+                        PrintWarning(exceptionState);
                     }
                 }
 
@@ -71,12 +84,41 @@ namespace Library
 
         // 지우개 함수
         // 지우고 CursorPosition 제자리로 돌려놓음
-        public static void EraseUserInput(int eraseStartX, int eraseStartY)
+        public static void Eraser(int eraseStartX, int eraseStartY)
         {
             Console.SetCursorPosition(eraseStartX, eraseStartY);
             string eraser = "                         ";
             Console.WriteLine(eraser);
             Console.SetCursorPosition(eraseStartX, eraseStartY);
+        }
+
+        public static void PrintWarning(ExceptionState exceptionState)
+        {
+            Console.SetCursorPosition(WARNING_STARTX, WARNING_STARTY);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+
+            switch (exceptionState)
+            {
+                case ExceptionState.INT_ONLY:
+                    Console.Write("ONLY INT AVAILABLE");
+                    break;
+                case ExceptionState.ENGLISH_ONLY:
+                    Console.Write("ONLY ENGLISH AVAILABLE");
+                    break;
+                case ExceptionState.ENGLISH_INT_ONLY:
+                    Console.Write("ONLY ENGLISH AND INT AVAILABLE");
+                    break;
+                case ExceptionState.PHONENUM_ONLY:
+                    Console.Write("ONLY PHONENUM AVAILABLE");
+                    break;
+                case ExceptionState.DATE_ONLY:
+                    Console.Write("ONLY DATE AVAILABLE");
+                    break;
+                case ExceptionState.ISBN_ONLY:
+                    Console.Write("ONLY ISBN AVAILABLE");
+                    break;
+            }
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         // 메뉴 선택에 쓰임

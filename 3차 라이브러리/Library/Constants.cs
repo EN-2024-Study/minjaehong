@@ -25,13 +25,13 @@ namespace Library
 
         public static string[] findBookArr = { "FIND BY NAME", "FIND BY AUTHOR" };
 
-        public static string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK"};
+        public static string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK", "6. DATE","7. ISBN"};
         
         public static string[] deleteBookArr = { "DELETING BOOK ID : " };
 
         public static string[] updateBookSelectArr = { "UPDATING BOOK ID : " };
 
-        public static string[] updateBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK" };
+        public static string[] updateBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK", "6. DATE", "7. ISBN"};
 
         // UserFrontView
         public static string[] createAccountArr = { "ID", "PW", "NAME", "AGE", "PHONENUM" };

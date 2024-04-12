@@ -60,11 +60,34 @@ namespace Library
             return match.Success;
         }
 
+        // 010-XXXX-XXXX 만 가능
         public static bool CheckIfPhoneNumInput(string input)
         {
             string phoneNumPattern = @"^010-\d{4}-\d{4}$";
 
             Regex regex = new Regex(phoneNumPattern);
+            Match match = regex.Match(input);
+
+            return match.Success;
+        }
+
+        // XXXXXX 형식만 가능
+        public static bool CheckIfDateInput(string input)
+        {
+            string dateNumPattern = @"^\d{6}$";
+
+            Regex regex = new Regex(dateNumPattern);
+            Match match = regex.Match(input);
+
+            return match.Success;
+        }
+
+        // XXX-XX-XXXX 형식만 가능
+        public static bool CheckIfISBNInput(string input)
+        {
+            string isbnPattern = @"^\d{3}-\d{2}-\d{4}$";
+
+            Regex regex = new Regex(isbnPattern);
             Match match = regex.Match(input);
 
             return match.Success;

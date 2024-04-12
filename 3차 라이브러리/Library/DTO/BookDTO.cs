@@ -15,19 +15,23 @@ namespace Library
         private string publisher; // dataFromView[2]
         private string price; // dataFromView[3]
         private string inStock; // dataFromView[4]
+        private string date; // dataFromView[5]
+        private string isbn; // dataFromView[6]
 
         public BookDTO()
         {
            
         }
 
-        public BookDTO(string name, string author, string publisher, string price, string inStock)
+        public BookDTO(string name, string author, string publisher, string price, string inStock, string date, string isbn)
         {
             this.name = name;
             this.author = author;
             this.publisher = publisher;
             this.price = price;
             this.inStock = inStock;
+            this.date = date;
+            this.isbn = isbn;
         }
 
         // view에서 List<string> 으로 책정보가 넘어왔을때
@@ -39,6 +43,8 @@ namespace Library
             this.publisher = dataFromView[2];
             this.price = dataFromView[3];
             this.inStock = dataFromView[4];
+            this.date = dataFromView[5];
+            this.isbn = dataFromView[6];
         }
 
         public void SetId(int keyId) { this.id = keyId; } // DB에서 알아서 넣어줌
@@ -47,6 +53,8 @@ namespace Library
         public void SetPublisher(string publisher) { this.publisher = publisher; }
         public void SetPrice(string price) { this.price = price; }
         public void SetInStock(string inStock) { this.inStock = inStock; }
+        public void SetDate(string date) { this.date = date; }
+        public void SetIsbn(string isbn) { this.isbn = isbn; }
 
         public int GetId() { return id; }
         public string GetName() { return name; }
@@ -54,5 +62,7 @@ namespace Library
         public string GetPublisher() { return publisher; }
         public string GetPrice() { return price; }
         public string GetInStock() { return inStock; }
+        public string GetDate() { return date; }
+        public string GetIsbn() { return isbn; }
     }
 }

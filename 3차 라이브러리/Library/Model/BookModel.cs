@@ -13,7 +13,7 @@ namespace Library
         
         private BookModel()
         {
-            keyID = 0;
+            keyID = 1;
             bookDB = new Dictionary<int, BookDTO>();
         }
 

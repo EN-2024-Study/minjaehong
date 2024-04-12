@@ -97,6 +97,10 @@ namespace Library
                 Console.WriteLine("PRICE      : " + selectedBooks[i].GetPrice());
                 Console.CursorLeft = BOOK_STARTX;
                 Console.WriteLine("IN STOCK   : " + selectedBooks[i].GetInStock());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("DATE       : " + selectedBooks[i].GetDate());
+                Console.CursorLeft = BOOK_STARTX;
+                Console.WriteLine("ISBN       : " + selectedBooks[i].GetIsbn());
             }
             Console.WriteLine("");
             Console.CursorLeft = BOOK_STARTX;
