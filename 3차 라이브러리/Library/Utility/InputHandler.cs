@@ -35,6 +35,7 @@ namespace Library
                 while (!isCorrectInput)
                 {
                     Console.SetCursorPosition(INPUT_STARTX, INPUT_STARTY + i);
+                    EraseUserInput(INPUT_STARTX, INPUT_STARTY + i);
                     input = Console.ReadLine();
 
                     switch (exceptionState)
@@ -66,6 +67,16 @@ namespace Library
             }
             Console.CursorVisible = false;
             return retList;
+        }
+
+        // 지우개 함수
+        // 지우고 CursorPosition 제자리로 돌려놓음
+        public static void EraseUserInput(int eraseStartX, int eraseStartY)
+        {
+            Console.SetCursorPosition(eraseStartX, eraseStartY);
+            string eraser = "                         ";
+            Console.WriteLine(eraser);
+            Console.SetCursorPosition(eraseStartX, eraseStartY);
         }
 
         // 메뉴 선택에 쓰임
