@@ -11,14 +11,17 @@ namespace Library
         // MainController와 연결되어야하는 애들
         UserFrontController userFrontController;
         ManagerController managerController;
+        
         MainView mainView;
+        RuntimeView runtimeView;
 
         public MainController()
         {
             // 의존성 주입 느낌
             userFrontController = new UserFrontController();
             managerController = new ManagerController();
-            
+
+            runtimeView = new RuntimeView();
             mainView = new MainView();
         }
 
@@ -51,9 +54,20 @@ namespace Library
                         string inputPW = loginInfo[1];
 
                         // ID PW 이 둘 다 맞으면
-                        if (Constants.managerID == inputID && Constants.managerPW == inputPW)
+                        if (Constants.managerID == inputID)
                         {
-                            managerController.Run();
+                            if (Constants.managerPW == inputPW)
+                            {
+                                managerController.Run();
+                            }
+                            else
+                            {
+                                runtimeView.PrintRuntimeException("MANAGER PASSWORD IS INCORRECT!");
+                            }
+                        }
+                        else
+                        {
+                            runtimeView.PrintRuntimeException("MANAGER ID IS INCORRECT!");
                         }
                         break;
                 }

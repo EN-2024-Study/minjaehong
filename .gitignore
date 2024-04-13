@@ -3,7 +3,6 @@
 *.vscode/
 *.suo
 *.user
-*.sln
 *.suo
 *.cache
 *.cachefile

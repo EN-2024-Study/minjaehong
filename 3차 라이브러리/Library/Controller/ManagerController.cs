@@ -10,6 +10,8 @@ namespace Library
     { 
         // ManagerController와 연결되어야하는 애들
         ManagerView managerView;
+        RuntimeView runtimeView;
+
         BookModel bookModel;
         MemberModel memberModel;
         
@@ -19,6 +21,7 @@ namespace Library
             memberModel = MemberModel.GetInstance();
 
             managerView = new ManagerView();
+            runtimeView = new RuntimeView();
         }
 
         public void Run()
@@ -33,6 +36,7 @@ namespace Library
             while (isManagerModeRunning)
             {
                 selectedMenu = managerView.ManagerMenuForm();
+                bool executionSuccess = false;
 
                 switch (selectedMenu)
                 {
@@ -57,12 +61,22 @@ namespace Library
                         List<string> newBookInfo = managerView.AddBookForm();
                         BookDTO newBook = new BookDTO(newBookInfo);
                         bookModel.AddNewBook(newBook);
+                        runtimeView.PrintRuntimeException("BOOK IS SUCCESSFULLY ADDED!");
                         break;
                     
                     case ManagerMenuState.DELETEBOOK:
 
                         int deletingBookID = managerView.DeleteBookForm();
-                        bookModel.DeleteBook(deletingBookID);
+                        executionSuccess = bookModel.DeleteBook(deletingBookID);
+
+                        if (executionSuccess)
+                        {
+                            runtimeView.PrintRuntimeException("BOOK IS SUCCESSFULLY DELETED!");
+                        }
+                        else
+                        {
+                            runtimeView.PrintRuntimeException("THERE IS NO SUCH BOOK!");
+                        }
                         break;
                     
                     case ManagerMenuState.UPDATEBOOK:
@@ -76,6 +90,11 @@ namespace Library
                             BookDTO updatedBook = new BookDTO(updatedBookInfo);
                             updatedBook.SetId(updatingBookID);
                             bookModel.UpdateBook(updatedBook);
+                            runtimeView.PrintRuntimeException("BOOK IS SUCCESSFULLY UPDATED!");
+                        }
+                        else
+                        {
+                            runtimeView.PrintRuntimeException("THERE IS NO SUCH BOOK!");
                         }
                         break;
 

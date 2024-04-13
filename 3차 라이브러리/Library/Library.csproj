@@ -54,6 +54,7 @@
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\MainView.cs" />
     <Compile Include="View\ManagerView.cs" />
+    <Compile Include="View\RuntimeView.cs" />
     <Compile Include="View\UserFrontView.cs" />
     <Compile Include="View\UserView.cs" />
   </ItemGroup>

@@ -87,7 +87,7 @@ namespace Library
         public static void Eraser(int eraseStartX, int eraseStartY)
         {
             Console.SetCursorPosition(eraseStartX, eraseStartY);
-            string eraser = "                         ";
+            string eraser = "                                         ";
             Console.WriteLine(eraser);
             Console.SetCursorPosition(eraseStartX, eraseStartY);
         }

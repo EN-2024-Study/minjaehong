@@ -11,6 +11,8 @@ namespace Library
         private string curUserID;
 
         UserView userView;
+        RuntimeView runtimeView;
+
         MemberModel memberModel;
         BookModel bookModel;
 
@@ -20,6 +22,7 @@ namespace Library
             bookModel = BookModel.GetInstance();
 
             userView = new UserView();
+            runtimeView = new RuntimeView();
         }
 
         //===================== SINGELTON ========================//
@@ -80,7 +83,13 @@ namespace Library
                         {
                             bookModel.UpdateBorrowed(miniDTO);
                             memberModel.UpdateBorrowed(curUserID, miniDTO);
+                            runtimeView.PrintRuntimeException("BORROW SUCCESSFUL!");
                         }
+                        else
+                        {
+                            runtimeView.PrintRuntimeException("THERE IS NO SUCH BOOK!");
+                        }
+
                         break;
 
                     case UserMenuState.CHECKBORROW:
@@ -110,6 +119,11 @@ namespace Library
                             bookModel.UpdateReturned(miniDTO);
                             // 성공하면 memberModel로 가서 저장해주기
                             memberModel.UpdateReturned(curUserID, miniDTO);
+                            runtimeView.PrintRuntimeException("BOOK RETURN SUCCESSFUL!");
+                        }
+                        else
+                        {
+                            runtimeView.PrintRuntimeException("YOU DIDNT BORROW ID#" +miniDTO.GetBookID()+" BOOK!");
                         }
                         break;
                     
@@ -135,6 +149,7 @@ namespace Library
                         // ID는 controller에서 따로 세팅
                         updatedMember.SetId(curUserID);
                         memberModel.UpdateMember(updatedMember);
+                        runtimeView.PrintRuntimeException("USER INFO UPDATE SUCCESSFUL!");
                         break;
                     
                     case UserMenuState.DELETEMYSELF:
