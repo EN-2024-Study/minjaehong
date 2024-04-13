@@ -63,7 +63,6 @@ namespace Library
         {
             Console.Clear();
 
-
             MyConsole.PrintHeader("[LETS RETURN BOOK]");
             MyConsole.PrintAllMenu(Constants.returnBookArr);
 

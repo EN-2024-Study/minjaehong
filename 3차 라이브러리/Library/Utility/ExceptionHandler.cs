@@ -2,6 +2,8 @@
 
 namespace Library
 {
+    // 지금으로써는 VIEW에서만 사용되고
+    // VIEW에서 InputHandler를 사용할때 InputHandler가 얘를 사용해서 유효성 검사함
     static class ExceptionHandler
     {
         // MAIN VIEW
@@ -10,13 +12,13 @@ namespace Library
         // MANAGER VIEW
         public static ExceptionState[] findBookExceptionArr = { ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_ONLY };
 
-        public static ExceptionState[] addBookExceptionArr = { ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY };
+        public static ExceptionState[] addBookExceptionArr = { ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.DATE_ONLY, ExceptionState.ISBN_ONLY };
 
         public static ExceptionState[] deleteBookExceptionArr = { ExceptionState.INT_ONLY };
 
         public static ExceptionState[] updateBookSelectExceptionArr = { ExceptionState.INT_ONLY };
 
-        public static ExceptionState[] updateBookExceptionArr = { ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY };
+        public static ExceptionState[] updateBookExceptionArr = { ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.DATE_ONLY, ExceptionState.ISBN_ONLY };
 
         // USER FRONT VIEW
         public static ExceptionState[] userCreateAccountExceptionArr = { ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.INT_ONLY, ExceptionState.PHONENUM_ONLY };

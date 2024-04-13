@@ -72,7 +72,7 @@ namespace Library
                     // 만약 USER가 제대로 입력안했으면
                     if (!isCorrectInput)
                     {
-                        PrintWarning(exceptionState);
+                        PrintException(exceptionState);
                     }
                 }
 
@@ -92,13 +92,15 @@ namespace Library
             Console.SetCursorPosition(eraseStartX, eraseStartY);
         }
 
-        public static void PrintWarning(ExceptionState exceptionState)
+        // 제대로 입력안했을때 뜸
+        public static void PrintException(ExceptionState exceptionState)
         {
             Console.SetCursorPosition(WARNING_STARTX, WARNING_STARTY);
             Console.ForegroundColor = ConsoleColor.Cyan;
 
             switch (exceptionState)
             {
+                // FORMAT EXCEPTION
                 case ExceptionState.INT_ONLY:
                     Console.Write("ONLY INT AVAILABLE");
                     break;
@@ -117,7 +119,25 @@ namespace Library
                 case ExceptionState.ISBN_ONLY:
                     Console.Write("ONLY ISBN AVAILABLE");
                     break;
+
+                // RUNTIME EXCEPTION
+                case ExceptionState.EXISTING_ID:
+                    Console.Write("ID ALREADY EXISTS");
+                    break;
+
+                case ExceptionState.NONEXISTING_ID:
+                    Console.Write("NON-EXISTING ID");
+                    break;
+
+                case ExceptionState.DONT_HAVE_CERTAIN_BOOK:
+                    Console.Write("NON-BORROWED BOOK");
+                    break;
+
+                case ExceptionState.NOT_ENOUGH_QUANTITY:
+                    Console.Write("NOT ENOUGH QUANTITY");
+                    break;
             }
+
             Console.ForegroundColor = ConsoleColor.White;
         }
 

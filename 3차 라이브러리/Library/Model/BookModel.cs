@@ -10,7 +10,7 @@ namespace Library
     class BookModel
     {
         private static BookModel instance;
-        
+
         private BookModel()
         {
             keyID = 1;
@@ -57,7 +57,7 @@ namespace Library
             // 2가 되면 매칭하는 책이라는 뜻임
             int resultMatched = 0;
 
-            foreach(int curKey in bookDB.Keys)
+            foreach (int curKey in bookDB.Keys)
             {
                 resultMatched = 0;
 
@@ -97,10 +97,16 @@ namespace Library
 
         public bool DeleteBook(int deletingBookID)
         {
-            bookDB.Remove(deletingBookID);
-            return true;
+            // BOOK 존재 확인 후 진행
+            if (FindBookById(deletingBookID))
+            {
+                bookDB.Remove(deletingBookID);
+                return true;
+            }
+            return false;
         }
 
+        // 얘는 책 존재성 확인 후에 호출되서 안에서 예외처리 안해줘도 됨 
         public bool UpdateBook(BookDTO updatingBook)
         {
             int updatingBookID = updatingBook.GetId();
@@ -110,7 +116,6 @@ namespace Library
             if (updatingBook.GetPublisher() != "") bookDB[updatingBookID].SetPublisher(updatingBook.GetPublisher());
             if (updatingBook.GetPrice() != "") bookDB[updatingBookID].SetPrice(updatingBook.GetPrice());
             if (updatingBook.GetInStock() != "") bookDB[updatingBookID].SetInStock(updatingBook.GetInStock());
-
             return true;
         }
 

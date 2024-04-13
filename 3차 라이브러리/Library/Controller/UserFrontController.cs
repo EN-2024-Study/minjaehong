@@ -39,22 +39,37 @@ namespace Library
 
                     case UserFrontMode.USER_LOGIN:
 
-                        List<string> loginInfo = userFrontView.UserLoginForm();
+                        bool isLoginSuccessful = false;
 
-                        // ID PW 이 둘 다 맞으면
-                        if (memberModel.CheckIfValidLogin(loginInfo))
+                        while (!isLoginSuccessful)
                         {
-                            string curUserID = loginInfo[0];
-                            userController.InitializeUserController(curUserID);
-                            userController.Run();
+                            List<string> loginInfo = userFrontView.UserLoginForm();
+
+                            // ID가 존재를 하고 && ID PW 이 둘 다 맞으면
+                            if (memberModel.CheckIfIdExists(loginInfo) && memberModel.CheckIfValidLogin(loginInfo))
+                            {
+                                isLoginSuccessful = true;
+                                // login 성공한 userID 추출해서 userController에 전달하고 userController 실행
+                                string curUserID = loginInfo[0];
+                                userController.InitializeUserController(curUserID);
+                                userController.Run();
+                            }
                         }
                         break;
 
                     case UserFrontMode.USER_CREATE_ACCOUNT:
 
-                        List<string> dataFromView = userFrontView.UserCreateAccountForm();
-                        MemberDTO newMember = new MemberDTO(dataFromView);
-                        memberModel.AddNewMember(newMember);
+                        bool isCreateAccountSuccessful = false;
+
+                        // 중복되지 않은 ID로 가입할때까지
+                        while (!isCreateAccountSuccessful)
+                        {
+                            List<string> dataFromView = userFrontView.UserCreateAccountForm();
+                            //if(!isCreateAccountSuccessful) InputHandler.PrintException(ExceptionState.EXISTING_ID);
+
+                            MemberDTO newMember = new MemberDTO(dataFromView);
+                            isCreateAccountSuccessful = memberModel.AddNewMember(newMember);
+                        }
 
                         break;
                 };

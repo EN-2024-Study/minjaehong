@@ -68,10 +68,15 @@ namespace Library
                     case ManagerMenuState.UPDATEBOOK:
 
                         int updatingBookID = managerView.UpdateBookSelectForm();
-                        List<string> updatedBookInfo = managerView.UpdateBookForm();
-                        BookDTO updatedBook = new BookDTO(updatedBookInfo);
-                        updatedBook.SetId(updatingBookID);
-                        bookModel.UpdateBook(updatedBook);
+
+                        // BOOK이 존재하면 수정 폼으로 이동
+                        if (bookModel.FindBookById(updatingBookID))
+                        {
+                            List<string> updatedBookInfo = managerView.UpdateBookForm();
+                            BookDTO updatedBook = new BookDTO(updatedBookInfo);
+                            updatedBook.SetId(updatingBookID);
+                            bookModel.UpdateBook(updatedBook);
+                        }
                         break;
 
                     case ManagerMenuState.MEMBERMANAGEMENT:

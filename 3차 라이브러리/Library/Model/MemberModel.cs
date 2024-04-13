@@ -30,11 +30,20 @@ namespace Library
         Dictionary<string, MemberDTO> memberDB;
 
         // controller에서 MemberDTO 형식으로 보내주면
-        // 그냥 그대로 저장만 해주면 됨
-        public void AddNewMember(MemberDTO newMember)
+        // 존재 여부 체크하고 저장해주면 됨
+        public bool AddNewMember(MemberDTO newMember)
         {
+            string newMemberID = newMember.GetId();
+
+            // 이미 존재하는 id이면 return false
+            if (memberDB.ContainsKey(newMemberID))
+            {
+                return false;
+            }
             // <ID, MemberDTO> 형식으로 DB에 저장
             memberDB.Add(newMember.GetId(), newMember);
+
+            return true;
         }
 
         // controller에서 ID넘기면 삭제해줌
@@ -166,6 +175,20 @@ namespace Library
 
         //======================== LOGIN ========================//
 
+        // 특정 ID 존재유무 파악
+        public bool CheckIfIdExists(List<string> loginInfo)
+        {
+            string userID = loginInfo[0];
+
+            foreach(string curKey in memberDB.Keys)
+            {
+                // 만약 ID가 DB에 존재하면 true 반환
+                if (curKey == userID) return true;
+            }
+            return false;
+        }
+
+        // ID PW 유효성 검사
         public bool CheckIfValidLogin(List<string> loginInfo)
         {
             string userID = loginInfo[0];

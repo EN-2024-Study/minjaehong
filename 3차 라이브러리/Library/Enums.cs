@@ -16,5 +16,12 @@ namespace Library
     public enum UserMenuState { GOBACK = -1, PRINTALLBOOK = 0, FIND = 1, BORROW = 2, CHECKBORROW = 3, RETURN = 4, CHECKRETURN = 5, UPDATEINFO = 6,
                                     DELETEMYSELF = 7, NAVERSEARCH = 8, REQUESTED = 9};
 
-    public enum ExceptionState { INT_ONLY, ENGLISH_ONLY, ENGLISH_INT_ONLY, PHONENUM_ONLY, ISBN_ONLY, DATE_ONLY};
+    public enum ExceptionState {
+                                // FORMAT EXCEPTION
+                                INT_ONLY, ENGLISH_ONLY, ENGLISH_INT_ONLY, PHONENUM_ONLY, ISBN_ONLY, DATE_ONLY,
+                                    
+                                // RUNTIME EXCEPTION
+                                EXISTING_ID, NONEXISTING_ID, DONT_HAVE_CERTAIN_BOOK, NOT_ENOUGH_QUANTITY
+            
+                                };
 }

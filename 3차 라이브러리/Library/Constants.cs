@@ -5,11 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Library
-{
-    // static vs const
-    // const : 컴파일 시간에 알려진 변경할 수 없는 값입니다. 프로그램 수명 동안 변경하지 마세요.
-    // static class : 프로그램이 시작되어 클래스가 인스턴스화되기 전에 static 생성자가 호출됩니다.
-    // static member : 
+{ 
     class Constants
     {
         public static string managerID = "manager";
