@@ -73,10 +73,14 @@ namespace Library
                         dataFromView = userView.BorrowBookForm();
                         // 책 정보를 MiniDTO에 담아주기
                         miniDTO = new MiniDTO(dataFromView);
-                        // bookModel에 누가 빌린거 적용해주기
-                        bookModel.UpdateBorrowed(miniDTO);
-                        // 성공하면 memberModel로 가서 저장해주기
-                        memberModel.UpdateBorrowed(curUserID, miniDTO);
+
+                        // 해당 책이 존재하면 bookModel에 누가 빌린거 적용해주기
+                        int bookID = int.Parse(miniDTO.GetBookID());
+                        if (bookModel.FindBookById(bookID))
+                        {
+                            bookModel.UpdateBorrowed(miniDTO);
+                            memberModel.UpdateBorrowed(curUserID, miniDTO);
+                        }
                         break;
 
                     case UserMenuState.CHECKBORROW:

@@ -111,11 +111,14 @@ namespace Library
         {
             int updatingBookID = updatingBook.GetId();
 
-            if (updatingBook.GetName() != "") bookDB[updatingBookID].SetName(updatingBook.GetName());
-            if (updatingBook.GetAuthor() != "") bookDB[updatingBookID].SetAuthor(updatingBook.GetAuthor());
-            if (updatingBook.GetPublisher() != "") bookDB[updatingBookID].SetPublisher(updatingBook.GetPublisher());
-            if (updatingBook.GetPrice() != "") bookDB[updatingBookID].SetPrice(updatingBook.GetPrice());
-            if (updatingBook.GetInStock() != "") bookDB[updatingBookID].SetInStock(updatingBook.GetInStock());
+            if (FindBookById(updatingBookID))
+            {
+                if (updatingBook.GetName() != "") bookDB[updatingBookID].SetName(updatingBook.GetName());
+                if (updatingBook.GetAuthor() != "") bookDB[updatingBookID].SetAuthor(updatingBook.GetAuthor());
+                if (updatingBook.GetPublisher() != "") bookDB[updatingBookID].SetPublisher(updatingBook.GetPublisher());
+                if (updatingBook.GetPrice() != "") bookDB[updatingBookID].SetPrice(updatingBook.GetPrice());
+                if (updatingBook.GetInStock() != "") bookDB[updatingBookID].SetInStock(updatingBook.GetInStock());
+            }
             return true;
         }
 
@@ -126,34 +129,45 @@ namespace Library
 
         //=================== BORROW AND RETURN ===================//
 
-        public void UpdateBorrowed(MiniDTO miniDTO)
+        public bool UpdateBorrowed(MiniDTO miniDTO)
         {
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
             int bookID = int.Parse(miniDTO.GetBookID());
             // 계산을 위해 빌리는 책 수 도 int로 형변환 시키기
             int borrowNum = int.Parse(miniDTO.GetQuantity());
 
-            // 남은 수량 업뎃
-            int curNum = int.Parse(bookDB[bookID].GetInStock());
-            int updatedBookNum = curNum - borrowNum;
+            // BOOK이 존재하고 빌릴 수 있는만큼 QUANTITY가 남아있으면
+            if (FindBookById(bookID))
+            {
+                // 남은 수량 업뎃
+                int curNum = int.Parse(bookDB[bookID].GetInStock());
+                int updatedBookNum = curNum - borrowNum;
 
-            // bookDB에 반영
-            bookDB[bookID].SetInStock(updatedBookNum.ToString());
+                // bookDB에 반영
+                bookDB[bookID].SetInStock(updatedBookNum.ToString());
+                return true;
+            }
+            return false;
         }
 
-        public void UpdateReturned(MiniDTO miniDTO)
+        public bool UpdateReturned(MiniDTO miniDTO)
         {
             // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
             int bookID = int.Parse(miniDTO.GetBookID());
             // 계산을 위해 return 책 수 도 int로 형변환 시키기
             int returnedNum = int.Parse(miniDTO.GetQuantity());
 
-            // 남은 수량 업뎃
-            int curNum = int.Parse(bookDB[bookID].GetInStock());
-            int updatedBookNum = curNum + returnedNum;
+            if (FindBookById(bookID))
+            {
+                // 남은 수량 업뎃
+                int curNum = int.Parse(bookDB[bookID].GetInStock());
+                int updatedBookNum = curNum + returnedNum;
 
-            // bookDB에 반영
-            bookDB[bookID].SetInStock(updatedBookNum.ToString());
+                // bookDB에 반영
+                bookDB[bookID].SetInStock(updatedBookNum.ToString());
+                return true;
+            }
+            return false;
         }
     }
 }
