@@ -25,8 +25,6 @@ namespace Library
             runtimeView = new RuntimeView();
         }
 
-        //===================== SINGELTON ========================//
-
         // UserFrontController에서 LOGIN 후 UserController.run이 실행되기 전에
         // 매번 이 함수가 호출되어 curUserID를 초기화해줌
         public void InitializeUserController(string curUserID)

@@ -48,10 +48,10 @@ namespace Library
                         // ID가 존재를 하고 && ID PW 이 둘 다 맞으면
                         if (memberModel.CheckIfIdExists(loginInfo) && memberModel.CheckIfValidLogin(loginInfo))
                         {
-                            //isLoginSuccessful = true;
-                            // login 성공한 userID 추출해서 userController에 전달하고 userController 실행
+                            // login 성공한 userID 추출해서
                             string curUserID = loginInfo[0];
-                            userController.InitializeUserController(curUserID);
+                            // userController에게 userID 전달해서 세팅하고 실행
+                            userController.InitializeUserController(curUserID); 
                             userController.Run();
                         }
                         else

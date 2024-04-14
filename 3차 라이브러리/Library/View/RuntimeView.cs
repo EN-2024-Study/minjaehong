@@ -13,12 +13,13 @@ namespace Library
 
         public RuntimeView() { }
 
-        public void RuntimeMessageForm(string exceptionMessage)
+        // 사용자의 행동에 따른 동적으로 나타나는 VIEW
+        public void RuntimeMessageForm(string message)
         {
             Console.Clear();
             Console.SetCursorPosition(RUNTIME_MESSAGE_X, RUNTIME_MESSAGE_Y);
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(exceptionMessage);
+            Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
 
             Console.SetCursorPosition(RUNTIME_MESSAGE_X, RUNTIME_MESSAGE_Y + 2);

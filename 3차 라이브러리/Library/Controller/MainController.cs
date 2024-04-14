@@ -17,7 +17,6 @@ namespace Library
 
         public MainController()
         {
-            // 의존성 주입 느낌
             userFrontController = new UserFrontController();
             managerController = new ManagerController();
 
