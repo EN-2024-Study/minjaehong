@@ -21,16 +21,16 @@ namespace Library
 
         public static string[] findBookArr = { "FIND BY NAME", "FIND BY AUTHOR" };
 
-        public static string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK", "6. DATE","7. ISBN"};
+        public static string[] addBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK", "6. DATE(XXXXXX)","7. ISBN(3-2-4)"};
         
         public static string[] deleteBookArr = { "DELETING BOOK ID : " };
 
         public static string[] updateBookSelectArr = { "UPDATING BOOK ID : " };
 
-        public static string[] updateBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK", "6. DATE", "7. ISBN"};
+        public static string[] updateBookArr = { "1. NAME", "2. AUTHOR", "3. PUBLISHER", "4. PRICE", "5. IN STOCK", "6. DATE(XXXXXX)", "7. ISBN(3-2-4)"};
 
         // UserFrontView
-        public static string[] createAccountArr = { "ID", "PW", "NAME", "AGE", "PHONENUM" };
+        public static string[] createAccountArr = { "ID", "PW", "NAME", "AGE", "PHONENUM(010~)" };
         
         public static string[] userLoginArr = { "ID", "PW" };
         
@@ -45,6 +45,6 @@ namespace Library
 
         public static string[] returnBookArr = {"BOOK ID"};
 
-        public static string[] updateUserArr = { "1. PW", "2. NAME", "3. AGE", "4. PHONENUM" };
+        public static string[] updateUserArr = { "1. PW", "2. NAME", "3. AGE", "4. PHONENUM(010~)" };
     }
 }

@@ -56,7 +56,7 @@ namespace Library
                         }
                         else
                         {
-                            runtimeView.PrintRuntimeException("CHECK YOUR ID AND PASSWORD!");
+                            runtimeView.RuntimeMessageForm("CHECK YOUR ID AND PASSWORD!");
                         }
 
                         break;
@@ -72,11 +72,11 @@ namespace Library
 
                         if (isCreateAccountSuccessful)
                         {
-                            runtimeView.PrintRuntimeException("NEW ACCOUNT IS CREATED!");
+                            runtimeView.RuntimeMessageForm("NEW ACCOUNT IS CREATED!");
                         }
                         else
                         {
-                            runtimeView.PrintRuntimeException("THIS ID ALREADY EXISTS!");
+                            runtimeView.RuntimeMessageForm("THIS ID ALREADY EXISTS!");
                         }
                         break;
                 };

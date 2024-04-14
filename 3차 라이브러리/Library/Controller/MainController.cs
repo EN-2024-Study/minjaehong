@@ -62,12 +62,12 @@ namespace Library
                             }
                             else
                             {
-                                runtimeView.PrintRuntimeException("MANAGER PASSWORD IS INCORRECT!");
+                                runtimeView.RuntimeMessageForm("MANAGER PASSWORD IS INCORRECT!");
                             }
                         }
                         else
                         {
-                            runtimeView.PrintRuntimeException("MANAGER ID IS INCORRECT!");
+                            runtimeView.RuntimeMessageForm("MANAGER ID IS INCORRECT!");
                         }
                         break;
                 }

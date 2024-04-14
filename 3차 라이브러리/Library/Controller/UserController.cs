@@ -83,11 +83,11 @@ namespace Library
                         {
                             bookModel.UpdateBorrowed(miniDTO);
                             memberModel.UpdateBorrowed(curUserID, miniDTO);
-                            runtimeView.PrintRuntimeException("BORROW SUCCESSFUL!");
+                            runtimeView.RuntimeMessageForm("BORROW SUCCESSFUL!");
                         }
                         else
                         {
-                            runtimeView.PrintRuntimeException("THERE IS NO SUCH BOOK!");
+                            runtimeView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
                         }
 
                         break;
@@ -119,11 +119,11 @@ namespace Library
                             bookModel.UpdateReturned(miniDTO);
                             // 성공하면 memberModel로 가서 저장해주기
                             memberModel.UpdateReturned(curUserID, miniDTO);
-                            runtimeView.PrintRuntimeException("BOOK RETURN SUCCESSFUL!");
+                            runtimeView.RuntimeMessageForm("BOOK RETURN SUCCESSFUL!");
                         }
                         else
                         {
-                            runtimeView.PrintRuntimeException("YOU DIDNT BORROW ID#" +miniDTO.GetBookID()+" BOOK!");
+                            runtimeView.RuntimeMessageForm("YOU DIDNT BORROW ID#" +miniDTO.GetBookID()+" BOOK!");
                         }
                         break;
                     
@@ -149,12 +149,23 @@ namespace Library
                         // ID는 controller에서 따로 세팅
                         updatedMember.SetId(curUserID);
                         memberModel.UpdateMember(updatedMember);
-                        runtimeView.PrintRuntimeException("USER INFO UPDATE SUCCESSFUL!");
+                        runtimeView.RuntimeMessageForm("USER INFO UPDATE SUCCESSFUL!");
                         break;
                     
                     case UserMenuState.DELETEMYSELF:
 
-                        userView.DeleteMyselfForm();
+                        if (memberModel.GetMemberBorrowedBooks(curUserID).Count() == 0)
+                        {
+                            memberModel.DeleteMember(curUserID);
+                            runtimeView.RuntimeMessageForm("PERMANANT DELETE SUCCESSFUL!");
+                            // usercontroller 자체를 빠져나가기
+                            return;
+                        }
+                        else
+                        {
+                            runtimeView.RuntimeMessageForm("PLEASE RETURN ALL YOUR BOOKS FIRST");
+
+                        }
                         break;
                     
                     case UserMenuState.NAVERSEARCH:

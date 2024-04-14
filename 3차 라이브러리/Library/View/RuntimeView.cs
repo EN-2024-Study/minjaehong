@@ -8,23 +8,20 @@ namespace Library
 {
     class RuntimeView
     {
-        private const int EXCEPTION_MESSAGE_X = 40;
-        private const int EXCEPTION_MESSAGE_Y = 4;
+        private const int RUNTIME_MESSAGE_X = 40;
+        private const int RUNTIME_MESSAGE_Y = 4;
 
-        public RuntimeView()
-        {
+        public RuntimeView() { }
 
-        }
-
-        public void PrintRuntimeException(string exceptionMessage)
+        public void RuntimeMessageForm(string exceptionMessage)
         {
             Console.Clear();
-            Console.SetCursorPosition(EXCEPTION_MESSAGE_X, EXCEPTION_MESSAGE_Y);
+            Console.SetCursorPosition(RUNTIME_MESSAGE_X, RUNTIME_MESSAGE_Y);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(exceptionMessage);
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.SetCursorPosition(EXCEPTION_MESSAGE_X, EXCEPTION_MESSAGE_Y+2);
+            Console.SetCursorPosition(RUNTIME_MESSAGE_X, RUNTIME_MESSAGE_Y + 2);
             Console.WriteLine("PRESS ENTER TO GO BACK...");
 
             bool pressedEnter = false;
@@ -38,7 +35,6 @@ namespace Library
 
                     if (key == ConsoleKey.Enter) pressedEnter = true;
                 }
-
             }
         }
     }

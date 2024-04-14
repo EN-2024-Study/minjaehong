@@ -61,7 +61,7 @@ namespace Library
                         List<string> newBookInfo = managerView.AddBookForm();
                         BookDTO newBook = new BookDTO(newBookInfo);
                         bookModel.AddNewBook(newBook);
-                        runtimeView.PrintRuntimeException("BOOK IS SUCCESSFULLY ADDED!");
+                        runtimeView.RuntimeMessageForm("BOOK IS SUCCESSFULLY ADDED!");
                         break;
                     
                     case ManagerMenuState.DELETEBOOK:
@@ -71,11 +71,11 @@ namespace Library
 
                         if (executionSuccess)
                         {
-                            runtimeView.PrintRuntimeException("BOOK IS SUCCESSFULLY DELETED!");
+                            runtimeView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
                         }
                         else
                         {
-                            runtimeView.PrintRuntimeException("THERE IS NO SUCH BOOK!");
+                            runtimeView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
                         }
                         break;
                     
@@ -90,11 +90,11 @@ namespace Library
                             BookDTO updatedBook = new BookDTO(updatedBookInfo);
                             updatedBook.SetId(updatingBookID);
                             bookModel.UpdateBook(updatedBook);
-                            runtimeView.PrintRuntimeException("BOOK IS SUCCESSFULLY UPDATED!");
+                            runtimeView.RuntimeMessageForm("BOOK IS SUCCESSFULLY UPDATED!");
                         }
                         else
                         {
-                            runtimeView.PrintRuntimeException("THERE IS NO SUCH BOOK!");
+                            runtimeView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
                         }
                         break;
 
