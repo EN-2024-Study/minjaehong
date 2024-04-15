@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LTT
 {
+    // 공통적으로 쓰이는 한 개의 VIEW를 구성하는 UI들
     static class CommonView
     {
-        // 강의조회 and 관심과목 검색에 쓰이는 view
-        // 공통적으로 쓰여서 여기에 놓음
+        // 강의검색 UI
         public static List<String> FindLectureForm()
         {
             Console.Clear();
@@ -26,8 +26,7 @@ namespace LTT
             return filterList;
         }
         
-        // view에 조회된 강의들을 보여줌
-        // view의 일부분을 구성해줌
+        // 조회된 강의들을 보여주는 UI
         public static void ShowLectureTable(List<LectureDTO> lectureList)
         {
             Console.Clear();
@@ -77,8 +76,7 @@ namespace LTT
             Console.ReadLine();
         }
 
-        // view에 인자로 들어온 강의들을 시간표로 보여줌
-        // view의 일부분을 구성해줌
+        // 강의 시간표 보여주는 UI
         public static void ShowTimeTable(List<LectureDTO> list)
         {
 

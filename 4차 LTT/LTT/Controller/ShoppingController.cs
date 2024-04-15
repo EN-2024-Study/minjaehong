@@ -11,9 +11,13 @@ namespace LTT
     {
         ShoppingView shoppingView;
 
+        LectureModel lectureModel;
+
         public ShoppingController()
         {
             shoppingView = new ShoppingView();
+
+            lectureModel = LectureModel.GetInstance();
         }
 
         public void Run()
@@ -29,21 +33,31 @@ namespace LTT
                 switch (mode)
                 {
                     case ShoppingMode.SHOPPING:
+                        // view에서 검색필터 받아옴
+                        List<String> filters = CommonView.FindLectureForm();
+                        // 이걸 model로 보내서 필터링된 강의들 ID 받아옴
+                        List<LectureDTO> filteredLectures = lectureModel.GetFilteredLectureResults(filters);
+                        // 다시 view로 보내서 강의 출력시키기
+                        CommonView.ShowLectureTable(filteredLectures);
                         break;
+
                     case ShoppingMode.SHOPPING_RESULT:
+                        //shoppingView.ShoppingResultForm();
                         break;
+
                     case ShoppingMode.SHOPPING_TABLE:
+                        //shoppingView.ShoppingTableForm();
                         break;
+
                     case ShoppingMode.SHOPPING_DELETE:
+                        //shoppingView.ShoppingDeleteForm();
                         break;
+
                     case ShoppingMode.GO_BACK:
                         isShoppingModeRunning = false;
                         break;
                 }
             }
-
-            Console.SetCursorPosition(0, 0);
-            Console.Write("go back from shopping");
         }
     }
 }

@@ -30,12 +30,16 @@ namespace LTT
                 {
                     case RegistrationMode.REGST:
                         break;
+
                     case RegistrationMode.REGST_RESULT:
                         break;
+
                     case RegistrationMode.REGST_TABLE:
                         break;
+
                     case RegistrationMode.REGST_DELETE:
                         break;
+
                     case RegistrationMode.GO_BACK:
                         isRegistrationModeRunning = false;
                         break;

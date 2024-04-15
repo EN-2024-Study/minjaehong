@@ -24,5 +24,8 @@ namespace LTT
         public static string[] shoppingMenuArr = { "1. 관심과목 검색", "2. 관심과목 내역", "3. 관심과목 시간표", "4. 관심과목 삭제" };
 
         public static string[] registrationMenuArr = { "1. 수강신청", "2. 수강신청 내역", "3. 수강신청 시간표", "4. 수강과목 삭제" };
+
+        public static string[] shoppingInputMessage = { "담을 과목 ID :" };
+        public static string[] deletionInputMessage = { "삭제할 과목 ID :" };
     }
 }

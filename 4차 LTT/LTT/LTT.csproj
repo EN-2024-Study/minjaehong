@@ -45,6 +45,7 @@
     <Compile Include="LTTApp.cs" />
     <Compile Include="Model\LectureDTO.cs" />
     <Compile Include="Model\LectureModel.cs" />
+    <Compile Include="Model\StudentModel.cs" />
     <Compile Include="Utility\CommonInput.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\CommonView.cs" />
