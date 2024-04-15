@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Runtime.InteropServices;
 
 namespace LTT
 {
@@ -67,6 +68,10 @@ namespace LTT
         {
             List<LectureDTO> retList = new List<LectureDTO>();
             
+            // List에서도 1번부터 시작하게 dummyDTO 넣고 시작
+            // 나중에 강의번호로 바로 참조할 수 있게
+            retList.Add(new LectureDTO());
+            
             for (int i = 1; i < 185; i++)
             {
                 LectureDTO dummyDTO = new LectureDTO();
@@ -92,6 +97,28 @@ namespace LTT
             return retList;
         }
 
+        //============= RELEASE DB CONNECTION ===========//
+        private void ReleaseExcelObject(object obj)
+        {
+            try
+            {
+                if (obj != null)
+                {
+                    Marshal.ReleaseComObject(obj);
+                    obj = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                obj = null;
+                throw ex;
+            }
+            finally
+            {
+                GC.Collect();
+            }
+        }
+
         //============== DB FUNCTIONS ==============//
 
         public List<LectureDTO> GetLectureDB()
@@ -99,5 +126,39 @@ namespace LTT
             return lectureDB;
         }
 
+        // LectureDTO들의 참조값 List 반환
+        // 이게 작동하려면 기존 LectureDTO가 계속 살아있어야함
+        // 기존 LectureDTO는 lectureDB에 있는 LectureDTO들
+        // 지금 계속 각 객체의 참조값을 넘기면서 작업하는거임
+        // 그럼 lectureDB에 있는 객체들이 계속 살아있다는 보장 ㄱㄴ??
+        public List<LectureDTO> GetFilteredLectureResults(List<string> filters)
+        {
+            string department = filters[0];
+            string courseType = filters[1];
+            string name = filters[2];
+            string professor = filters[3];
+            string year = filters[4];
+
+            List<LectureDTO> filteredLectures = new List<LectureDTO>();
+
+            // 항상 lectureDB는 1번부터 시작
+            // 0은 dummyDTO임
+            for(int i = 1; i < lectureDB.Count; i++)
+            {
+                LectureDTO curLecture = lectureDB[i];
+
+                // 빈칸 아니고 맞지않으면 패스. 한개라도 틀리면 볼필요가 없음
+                if (department != "" && !curLecture.GetDepartment().Contains(department)) continue;
+                if (courseType != "" && !curLecture.GetCourseType().Contains(courseType)) continue;
+                if (name != "" && !curLecture.GetName().Contains(name)) continue;
+                if (professor != "" && !curLecture.GetProfessor().Contains(professor)) continue;
+                if (year != "" && !curLecture.GetYear().Contains(year)) continue;
+
+                // 여기까지 왔으면 필터링 통과한거
+                filteredLectures.Add(curLecture);
+            }
+
+            return filteredLectures;
+        }
     }
 }

@@ -14,66 +14,11 @@ namespace LTT
         private const int WARNING_STARTX = 40;
         private const int WARNING_STARTY = 6;
 
-        // 사용자 입력을 ConsoleKey 한 개씩 받음
-        // ENTER 눌리면 한 개의 string return
-        // 그냥 ENTER만 누르면 진짜 아무것도 없음
-        // 그냥 ESC만 누르면 Escape 찍혀있음
-        // 내부적으로 backspace 처리 필요
-        // 커서 내가 처리해줘야함
-        // Exception처리는 밖에서 -> 일단 값을 받은 후에 하자
         public static string GetUserInput(int inputStartX, int inputStartY)
         {
-            Console.SetCursorPosition(inputStartX, inputStartY);
             Console.CursorVisible = true;
-
-            StringBuilder sb = new StringBuilder(10);
-
-            bool isEnterPressed = false;
-            bool isEscPressed = false;
-
-            while (!isEnterPressed && !isEscPressed)
-            {
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                    ConsoleKey key = keyInfo.Key;
-
-                    switch (key)
-                    {
-                        case ConsoleKey.Enter:
-                            isEnterPressed = true;
-                            break;
-                        case ConsoleKey.Backspace:
-                            if (sb.Length > 0)
-                            {
-                                // 일단 stringbuilder에서 지워주고
-                                sb.Remove(sb.Length - 1, 1);
-                                // 화면에서도 하나 지워주기
-                                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-                                Console.Write(" ");
-                                // 커서처리
-                                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-                            }
-                            break;
-                        case ConsoleKey.Spacebar:
-                            break;
-                        case ConsoleKey.Escape:
-                            // 다 지워주고 Escape만 보내기
-                            // 받는 놈이 Escape 확인하고 해당 Form 나가주면 된다
-                            isEscPressed = true;
-                            sb.Clear();
-                            sb.Append(key);
-                            break;
-                        default:
-                            Console.Write(key);
-                            sb.Append(key);
-                            break;
-                    }
-                }
-            }
-            
-            Console.CursorVisible = false;
-            return sb.ToString();
+            Console.SetCursorPosition(inputStartX, inputStartY);
+            return Console.ReadLine();
         }
 
         // 지우개 함수

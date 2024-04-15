@@ -9,26 +9,20 @@ namespace LTT
 {
     class LTTApp
     {
+        public static void InitializeDB()
+        {
+            LectureModel.GetInstance();
+        }
+
         public static void Main()
         {
-            LectureModel model = LectureModel.GetInstance();
 
-            List<LectureDTO> db = model.GetLectureDB();
+            InitializeDB();
 
-            for(int i = 0; i < db.Count; i++)
-            {
-                LectureDTO dummy = db[i];
-                Console.WriteLine(dummy.GetName());
-            }
-
-            Console.ReadLine();
-
-            /*
             Console.CursorVisible = false;
 
             MainController mainController = new MainController();
             mainController.Run();
-            */
         }
     }
 }

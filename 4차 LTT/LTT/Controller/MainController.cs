@@ -11,8 +11,11 @@ namespace LTT
     class MainController
     {
         MainView mainView;
+
         ShoppingController shoppingController;
         RegistrationController registrationController;
+
+        LectureModel lectureModel;
 
         public MainController()
         {
@@ -20,6 +23,8 @@ namespace LTT
 
             shoppingController = new ShoppingController();
             registrationController = new RegistrationController();
+
+            lectureModel = LectureModel.GetInstance();
         }
 
         public void Run()
@@ -34,7 +39,12 @@ namespace LTT
                 switch (mode)
                 {
                     case MainMode.SEARCH_MODE:
-                        CommonView.FindLectureForm();
+                        // view에서 검색필터 받아옴
+                        List<String> filters = CommonView.FindLectureForm();
+                        // 이걸 model로 보내서 필터링된 강의들 ID 받아옴
+                        List<LectureDTO> filteredLectures = lectureModel.GetFilteredLectureResults(filters);
+                        // 다시 view로 보내서 강의 출력시키기
+                        CommonView.ShowLectureTable(filteredLectures);
                         break;
 
                     case MainMode.SHOPPING_MODE:
