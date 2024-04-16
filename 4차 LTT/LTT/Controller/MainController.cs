@@ -12,7 +12,7 @@ namespace LTT
         ShoppingController shoppingController;
         RegistrationController registrationController;
 
-        LectureModel lectureModel;
+        LectureRepository lectureModel;
 
         string curUserID;
 
@@ -25,7 +25,7 @@ namespace LTT
             shoppingController = new ShoppingController(curUserID);
             registrationController = new RegistrationController(curUserID);
 
-            lectureModel = LectureModel.GetInstance();
+            lectureModel = LectureRepository.GetInstance();
         }
 
         public void Run()

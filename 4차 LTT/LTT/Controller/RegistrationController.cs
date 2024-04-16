@@ -11,7 +11,7 @@ namespace LTT
     {
         RegistrationView registrationView;
         
-        UserModel userModel;
+        MemberRepository userModel;
 
         string curUserID;
         List<LectureDTO> curUserShoppingList;
@@ -22,7 +22,7 @@ namespace LTT
             this.curUserID = curUserID;
             registrationView = new RegistrationView();
 
-            userModel = UserModel.GetInstance();
+            userModel = MemberRepository.GetInstance();
         }
 
         public void Run()

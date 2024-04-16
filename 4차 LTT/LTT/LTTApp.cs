@@ -11,7 +11,7 @@ namespace LTT
     {
         public static void InitializeDB()
         {
-            LectureModel.GetInstance();
+            LectureRepository.GetInstance();
         }
 
         public static void Main()

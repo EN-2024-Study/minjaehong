@@ -45,8 +45,9 @@
     <Compile Include="Enum.cs" />
     <Compile Include="LTTApp.cs" />
     <Compile Include="Model\LectureDTO.cs" />
-    <Compile Include="Model\LectureModel.cs" />
-    <Compile Include="Model\UserModel.cs" />
+    <Compile Include="Model\LectureRepository.cs" />
+    <Compile Include="Model\UserDTO.cs" />
+    <Compile Include="Model\MemberRepository.cs" />
     <Compile Include="Utility\CommonInput.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\CommonView.cs" />

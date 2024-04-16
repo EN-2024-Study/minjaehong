@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LTT
 {
     static class Constants
-    {
+    { 
         public const int HEADER_X = 45; // HEADER가 시작하는 X좌표
         public const int HEADER_Y = 4; // HEADER가 시작하는 Y좌표
 

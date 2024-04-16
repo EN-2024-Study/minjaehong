@@ -8,13 +8,13 @@ namespace LTT
 {
     // 2번 관담 눌리면 그때부터는 얘가 담당
     // MainController에서 curUserShoppingList 참조값 넘겨준거로 모두 작업
-    // 따로 UserModel에서 가져올 필요없게
+    // 따로 MemberRepository에서 가져올 필요없게
     class ShoppingController
     {
         ShoppingView shoppingView;
 
-        LectureModel lectureModel;
-        UserModel userModel;
+        LectureRepository lectureModel;
+        MemberRepository userModel;
 
         List<LectureDTO> curUserShoppingList;
 
@@ -29,8 +29,8 @@ namespace LTT
 
             shoppingView = new ShoppingView();
 
-            lectureModel = LectureModel.GetInstance();
-            userModel = UserModel.GetInstance();    
+            lectureModel = LectureRepository.GetInstance();
+            userModel = MemberRepository.GetInstance();    
         }
 
         public void Run()

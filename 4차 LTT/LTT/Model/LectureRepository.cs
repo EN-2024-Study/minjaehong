@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 
 namespace LTT
 {
-    class LectureModel
+    class LectureRepository
     {
-        private static LectureModel instance;
+        private static LectureRepository instance;
 
         private List<LectureDTO> lectureDB;
 
@@ -21,7 +21,7 @@ namespace LTT
 
         //=============== SINGLETON ===============//
 
-        private LectureModel()
+        private LectureRepository()
         {
             // 초기 DB 세팅
             workbook = GetConnection();
@@ -35,11 +35,11 @@ namespace LTT
             ReleaseExcelObject(application);
         }
 
-        public static LectureModel GetInstance()
+        public static LectureRepository GetInstance()
         {
             if (instance == null)
             {
-                instance = new LectureModel();
+                instance = new LectureRepository();
             }
             return instance;
         }
@@ -96,6 +96,7 @@ namespace LTT
                 else dummyDTO.SetClassroom(data.GetValue(i, 10).ToString()); // 강의실
                 dummyDTO.SetProfessor(data.GetValue(i, 11).ToString()); // 교수명
                 dummyDTO.SetLanguage(data.GetValue(i, 12).ToString()); // 언어
+                dummyDTO.SetLectureTimeNumbers();
 
                 retList.Add(dummyDTO);
             }

@@ -6,25 +6,52 @@ using System.Threading.Tasks;
 
 namespace LTT
 {
-    class UserDTO
+    class MemberDTO
     {
         private string id;
         private string pw;
 
-        private int availableCredit;
+        private int maximumCredit;
 
         private List<LectureDTO> shoppingBasket;
         private List<LectureDTO> registration;
 
-        public UserDTO(string id, string pw)
+        public MemberDTO(string id, string pw)
         {
             this.id = id;
             this.pw = pw;
 
-            availableCredit = 21;
+            maximumCredit = 21;
 
             shoppingBasket = new List<LectureDTO>();
             registration = new List<LectureDTO>();
         }
+
+        public string GetPW() { return pw; }
+        public int GetMaximumCredit() { return maximumCredit; }
+        public int GetAvailableShoppingCredit()
+        {
+            int total = 0;
+
+            for(int i = 0; i < shoppingBasket.Count; i++)
+            {
+                total += int.Parse(shoppingBasket[i].GetCredit());
+            }
+            return maximumCredit - total;
+        }
+
+        public int GetAvailableRegistrationCredit()
+        {
+            int total = 0;
+
+            for (int i = 0; i < registration.Count; i++)
+            {
+                total += int.Parse(registration[i].GetCredit());
+            }
+            return maximumCredit - total;
+        }
+
+        public List<LectureDTO> GetShoppingBasket() { return shoppingBasket; }
+        public List<LectureDTO> GetRegistration() { return registration; }
     }
 }
