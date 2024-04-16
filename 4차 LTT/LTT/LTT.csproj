@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controller\LoginController.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Controller\RegistrationController.cs" />
     <Compile Include="Controller\ShoppingController.cs" />
@@ -45,10 +46,11 @@
     <Compile Include="LTTApp.cs" />
     <Compile Include="Model\LectureDTO.cs" />
     <Compile Include="Model\LectureModel.cs" />
-    <Compile Include="Model\StudentModel.cs" />
+    <Compile Include="Model\UserModel.cs" />
     <Compile Include="Utility\CommonInput.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\CommonView.cs" />
+    <Compile Include="View\LoginView.cs" />
     <Compile Include="View\MainView.cs" />
     <Compile Include="View\RegistrationView.cs" />
     <Compile Include="View\ShoppingView.cs" />

@@ -21,8 +21,8 @@ namespace LTT
 
             Console.CursorVisible = false;
 
-            MainController mainController = new MainController();
-            mainController.Run();
+            LoginController loginController = new LoginController();
+            loginController.Run();
         }
     }
 }

@@ -14,7 +14,10 @@ namespace LTT
         private static LectureModel instance;
 
         private List<LectureDTO> lectureDB;
-        private Excel.Worksheet worksheet;
+
+        private Excel.Application application;
+        private Excel.Workbook workbook;
+
         private Array data;
 
         //============== SINGLETON ==============//
@@ -22,9 +25,15 @@ namespace LTT
         private LectureModel()
         {
             // 초기 DB 세팅
-            worksheet = GetConnection();
-            data = GetExcelSheetData(worksheet);
+            workbook = GetConnection();
+            data = GetExcelSheetData(workbook);
             lectureDB = ConvertDataToDTO(data);
+
+            // 데이터 받아오면 자원 닫고 모두 반환
+            workbook.Close();
+            application.Quit();
+            ReleaseExcelObject(workbook);
+            ReleaseExcelObject(application);
         }
 
         public static LectureModel GetInstance()
@@ -38,27 +47,25 @@ namespace LTT
 
         //============== INITIAL DB SETTING ==============//
 
-        private Excel.Worksheet GetConnection()
+        private Excel.Workbook GetConnection()
         {
-            Excel.Worksheet worksheet = null;
-
             try
             {
-                Excel.Application application = new Excel.Application();
-                Excel.Workbook workbook = application.Workbooks.Open(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\2023년도 1학기 강의시간표.xlsx");
-                Excel.Sheets sheets = workbook.Sheets;
-                worksheet = sheets["Sheet1"] as Excel.Worksheet;
+                application = new Excel.Application();
+                workbook = application.Workbooks.Open(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\2023년도 1학기 강의시간표.xlsx");
             }
             catch (SystemException e)
             {
                 Console.WriteLine(e.Message);
             }
 
-            return worksheet;
+            return workbook;
         }
 
-        private Array GetExcelSheetData(Excel.Worksheet worksheet)
+        private Array GetExcelSheetData(Excel.Workbook workbook)
         {
+            Excel.Sheets sheets = workbook.Sheets;
+            Excel.Worksheet worksheet = sheets["Sheet1"] as Excel.Worksheet;
             Excel.Range cellRange = worksheet.get_Range("A2", "L185") as Excel.Range;
             Array data = cellRange.Cells.Value2;
             return data;

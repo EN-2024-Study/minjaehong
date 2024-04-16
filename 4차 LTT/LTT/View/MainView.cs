@@ -11,11 +11,13 @@ namespace LTT
     {
         public MainView() { }
 
-        public MainMode MainModeSelectForm()
+        public MainMode MainModeSelectForm(string curUserID)
         {
             Console.Clear();
 
             MyConsole.PrintHeader("[SELECT MODE]");
+            MyConsole.PrintUserID(curUserID);
+            
             MyConsole.PrintAllMenu(Constants.modeSelectMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
 
             MainMode selectedMode = (MainMode)CommonInput.GetUserSelection(Constants.modeSelectMenuArr,Constants.MENU_STARTX, Constants.MENU_STARTY);

@@ -12,7 +12,7 @@ namespace LTT
         ShoppingView shoppingView;
 
         LectureModel lectureModel;
-
+        
         public ShoppingController()
         {
             shoppingView = new ShoppingView();

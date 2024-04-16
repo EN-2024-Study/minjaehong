@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LTT
 {
     // MainController에서 ShoppingController RegistrationController 호출하면서 분기
-    // 1번 강의조회는 간단한 작업이므로 그냥 너가 처리하자
+    // 1번 강의조회는 간단한 작업이므로 그냥 얘가 처리하게 함
     class MainController
     {
         MainView mainView;
@@ -16,6 +16,8 @@ namespace LTT
         RegistrationController registrationController;
 
         LectureModel lectureModel;
+
+        string curUserID;
 
         public MainController()
         {
@@ -27,14 +29,20 @@ namespace LTT
             lectureModel = LectureModel.GetInstance();
         }
 
+        // 로그인 하면 그때 한번만 호출됨
+        public void Initialize(string curUserID)
+        {
+            this.curUserID = curUserID;
+        }
+
         public void Run()
         {
-            bool isProgramRunning = true;
+            bool isUserLoggedIn = true;
             MainMode mode;
 
-            while (isProgramRunning)
+            while (isUserLoggedIn)
             {
-                mode = mainView.MainModeSelectForm();
+                mode = mainView.MainModeSelectForm(curUserID);
 
                 switch (mode)
                 {
@@ -64,6 +72,10 @@ namespace LTT
                         break;
 
                     case MainMode.REGST_RESULT_MODE:
+                        break;
+
+                    case MainMode.LOGOUT:
+                        isUserLoggedIn = false;
                         break;
                 }
             }

@@ -11,8 +11,11 @@ namespace LTT
         private const int HEADER_X = 45; // HEADER가 끝나야하는 X좌표
         private const int HEADER_Y = 4; // HEADER가 찍혀야하는 Y좌표
 
+        private const int USERID_X = 40;
+        private const int USERID_Y = 7;
+
         private const int INSTRUCTION_STARTX = 40;
-        private const int INSTRUCTION_STARTY = 5;
+        private const int INSTRUCTION_STARTY = 8;
 
         private const int MENU_STARTX = 40; // MENU가 끝나야하는 X좌표
         private const int MENU_STARTY = 6; // MENU가 찍혀야하는 Y좌표
@@ -30,7 +33,11 @@ namespace LTT
             Console.Write(header);
         }
 
-        // public static void PrintInstruction(string instruction) { }
+        public static void PrintUserID(string userID)
+        {
+            Console.SetCursorPosition(USERID_X, USERID_Y);
+            Console.WriteLine("HELLO "+userID+"!");
+        }
 
         //===================== MENU PRINT FUNCTION ==================//
 

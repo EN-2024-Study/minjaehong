@@ -17,6 +17,8 @@ namespace LTT
         public const int INPUT_STARTX = 60;
         public const int INPUT_STARTY = 6;
 
+        public static string[] loginMenuArr = { "STUDENT ID : ", "PASSWORD : " };
+
         public static string[] modeSelectMenuArr = { "1. 강의조회", "2. 관심과목 담기", "3. 수강신청", "4. 수강내역 조회" };
 
         public static string[] lectureFindMenuArr = { "1. 개설학과 전공", "2. 이수구분", "3. 교과목명", "4. 교수명", "5. 학년" };
