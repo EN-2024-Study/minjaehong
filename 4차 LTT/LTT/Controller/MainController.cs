@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LTT
 {
@@ -23,16 +20,10 @@ namespace LTT
 
         string curUserID;
 
-        // 로그인 하면 그때 한번만 호출됨
-        public void Initialize(string curUserID)
+        public MainController(string curUserID)
         {
             this.curUserID = curUserID;
-            //curUserShoppingList = userModel.GetUserShoppingList(curUserID);
-            //curUserRegistrationList = userModel.GetUserRegistrationList(curUserID);  
-        }
 
-        public MainController()
-        {
             mainView = new MainView();
 
             shoppingController = new ShoppingController(curUserID);

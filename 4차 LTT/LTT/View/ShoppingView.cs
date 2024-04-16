@@ -9,6 +9,8 @@ namespace LTT
     // ShoppingController가 호출하는 view모음
     class ShoppingView
     {
+        public string[] shoppingInputMessage = { "담을 과목 ID :" };
+
         public ShoppingMode ShoppingModeSelectForm()
         {
             Console.Clear();
@@ -19,7 +21,7 @@ namespace LTT
             return selectedMode;
         }
 
-        public void ShoppingForm(List<LectureDTO> filteredLectures)
+        public string ShoppingForm(List<LectureDTO> filteredLectures)
         {
             Console.Clear();
 
@@ -30,7 +32,9 @@ namespace LTT
             int menuStartX = Console.CursorLeft;
             int menuStartY = Console.CursorTop;
             
-            List<String> shoppedLecture = CommonInput.GetUserInputs(Constants.shoppingInputMessage, menuStartX, menuStartY);
+            List<String> shoppedLecture = CommonInput.GetUserInputs(shoppingInputMessage, menuStartX, menuStartY);
+
+            return shoppedLecture[0];
         }
 
         // controller에서 특정 학생의 관담목록 받아서 CommonView로 넘겨주기
@@ -60,7 +64,7 @@ namespace LTT
             int menuStartX = Console.CursorLeft;
             int menuStartY = Console.CursorTop;
 
-            List<string> input = CommonInput.GetUserInputs(Constants.deletionInputMessage, menuStartX, menuStartY);
+            // List<string> input = CommonInput.GetUserInputs(deletionInputMessage, menuStartX, menuStartY);
         }
     }
 }

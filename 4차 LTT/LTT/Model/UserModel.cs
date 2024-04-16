@@ -14,6 +14,8 @@ namespace LTT
 
         private static UserModel instance;
 
+        private LectureModel lectureModel;
+
         private UserModel()
         {
             // ID : PW
@@ -22,6 +24,8 @@ namespace LTT
             shoppingDB = new Dictionary<string, List<LectureDTO>>();
             // ID : REGISTERLIST
             registerDB = new Dictionary<string, List<LectureDTO>>();
+
+            lectureModel = LectureModel.GetInstance();
 
             userDB.Add("20011738", "12345");
             shoppingDB.Add("20011738", new List<LectureDTO>()); // 관심과목 담을 리스트 생성
@@ -49,7 +53,7 @@ namespace LTT
         }
 
         public List<LectureDTO> GetUserShoppingList(string userID)
-        {
+        { 
             // 해당 USER의 장바구니 목록 보내주기
             return shoppingDB[userID];
         }
@@ -58,6 +62,18 @@ namespace LTT
         {
             // 해당 USER의 수강신청 목록 보내주기
             return registerDB[userID];
+        }
+
+        public void AddToUserShoppingList(string userID, string lectureID)
+        {
+            LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
+            shoppingDB[userID].Add(lecture);
+        }
+
+        public void DeleteUserShoppingList(string userID, string lectureID)
+        {
+            LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
+            shoppingDB[userID].Remove(lecture);
         }
     }
 }

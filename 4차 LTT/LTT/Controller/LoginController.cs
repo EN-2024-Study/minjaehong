@@ -14,6 +14,8 @@ namespace LTT
 
         UserModel userModel; // ID PW 확인위해 필요
 
+        string curUserID;
+
         public LoginController()
         {
             loginView = new LoginView();
@@ -35,9 +37,8 @@ namespace LTT
                 // 그때서야 MainController 생성해서 Run 호출
                 if (userModel.CheckIfValidLogin(userInputInfo))
                 {
-                    string userID = userInputInfo[0];
-                    mainController = new MainController();
-                    mainController.Initialize(userID);
+                    curUserID = userInputInfo[0];
+                    mainController = new MainController(curUserID);
                     mainController.Run();
                 }
             }

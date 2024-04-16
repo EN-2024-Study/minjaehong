@@ -20,10 +20,15 @@ namespace LTT
 
         string curUserID;
 
+        public static string[] shoppingInputMessage = { "담을 과목 ID :" };
+        public static string[] deletionInputMessage = { "삭제할 과목 ID :" };
+
         // ShoppingController가 또 userModel을 참조해서 받아오지않고
         // MainController에서 넘겨준 curUserShoppingList를 사용
         public ShoppingController(string curUserID)
         {
+            this.curUserID = curUserID;
+
             shoppingView = new ShoppingView();
 
             lectureModel = LectureModel.GetInstance();
@@ -36,6 +41,7 @@ namespace LTT
 
             ShoppingMode mode;
 
+            
             while (isShoppingModeRunning)
             {
                 mode = shoppingView.ShoppingModeSelectForm();
@@ -43,18 +49,23 @@ namespace LTT
                 switch (mode)
                 {
                     case ShoppingMode.SHOPPING:
+
                         // view에서 검색필터 받아옴
                         List<String> filters = CommonView.FindLectureForm();
                         // 이걸 model로 보내서 필터링된 강의들 ID 받아옴
                         List<LectureDTO> filteredLectures = lectureModel.GetFilteredLectureResults(filters);
                         // 다시 view로 보내서 강의 출력시키기
                         CommonView.ShowLectureTable(filteredLectures);
-                        // view에서 담고싶은 과목 입력 받기
 
-                        // 이걸 다시 controller로 보내기
+                        int inputX = Console.CursorLeft;
+                        int inputY = Console.CursorTop;
+
+                        // view에서 담고싶은 과목 입력 받기
+                        List<String> inputs = CommonInput.GetUserInputs(shoppingInputMessage, inputX, inputY);
 
                         // 그걸 usermodel에 적용시키기
-
+                        string lectureID = inputs[0];
+                        userModel.AddToUserShoppingList(curUserID, lectureID);
                         break;
 
                     case ShoppingMode.SHOPPING_RESULT:
@@ -71,7 +82,17 @@ namespace LTT
 
                     case ShoppingMode.SHOPPING_DELETE:
                         curUserShoppingList = userModel.GetUserShoppingList(curUserID);
-                        shoppingView.ShoppingDeleteForm(curUserShoppingList);
+                        CommonView.ShowLectureTable(curUserShoppingList);
+
+                        inputX = Console.CursorLeft;
+                        inputY = Console.CursorTop;
+
+                        // view에서 담고싶은 과목 입력 받기
+                        List<String> deletinginputs = CommonInput.GetUserInputs(deletionInputMessage, inputX, inputY);
+
+                        // 그걸 usermodel에 적용시키기
+                        lectureID = deletinginputs[0];
+                        userModel.DeleteUserShoppingList(curUserID, lectureID);
                         break;
 
                     case ShoppingMode.GO_BACK:

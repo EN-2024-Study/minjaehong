@@ -17,6 +17,8 @@ namespace LTT
         // 각 메뉴에 대한 사용자 입력받을때 쓰이는 함수
         public static List<string> GetUserInputs(string[] menuArr, int menuStartX, int menuStartY)
         {
+            Console.CursorVisible = true;
+
             // 우선 메뉴 다 출력하기
             for (int i = 0; i < menuArr.Length; i++)
             {
@@ -33,6 +35,8 @@ namespace LTT
                 Console.SetCursorPosition(menuStartX + menuArr[i].Length * 2, menuStartY + i);
                 retList.Add(Console.ReadLine());
             }
+
+            Console.CursorVisible = false;
 
             return retList;
         }

@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace LTT
 {
+    
     // DB를 그냥 여기에 넣어놔라
     class LectureModel
     {
@@ -20,7 +21,7 @@ namespace LTT
 
         private Array data;
 
-        //============== SINGLETON ==============//
+        //=============== SINGLETON ===============//
 
         private LectureModel()
         {
@@ -128,10 +129,11 @@ namespace LTT
 
         //============== DB FUNCTIONS ==============//
 
-        public List<LectureDTO> GetLectureDB()
+        public LectureDTO GetCeratainLecture(string lectureID)
         {
-            return lectureDB;
-        }
+            int ID = int.Parse(lectureID);
+            return lectureDB[ID];
+        } 
 
         // LectureDTO들의 참조값 List 반환
         // 이게 작동하려면 기존 LectureDTO가 계속 살아있어야함
