@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library
-{
+namespace Library {
     // MODE AND MENU STATE
     public enum LibraryMode { USER_MODE = 0, MANAGER_MODE = 1 };
 

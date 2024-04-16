@@ -8,19 +8,36 @@ namespace LTT
 {
     class UserModel
     {
-        Dictionary<string, string> userDB;
-        Dictionary<string, List<LectureDTO>> shoppingDB;
+        Dictionary<string, string> userDB; // ID마다 PW 저장
+        Dictionary<string, List<LectureDTO>> shoppingDB; // ID마다 관심과목 저장
+        Dictionary<string, List<LectureDTO>> registerDB; // ID마다 수강신청과목 저장
 
-        public UserModel()
+        private static UserModel instance;
+
+        private UserModel()
         {
             // ID : PW
             userDB = new Dictionary<string, string>();
             // ID : SHOPPINGLIST
             shoppingDB = new Dictionary<string, List<LectureDTO>>();
+            // ID : REGISTERLIST
+            registerDB = new Dictionary<string, List<LectureDTO>>();
 
             userDB.Add("20011738", "12345");
-            shoppingDB.Add("20011738", new List<LectureDTO>());
+            shoppingDB.Add("20011738", new List<LectureDTO>()); // 관심과목 담을 리스트 생성
+            registerDB.Add("20011738", new List<LectureDTO>()); // 수강신청과목 담을 리스트 생성
         }
+
+        public static UserModel GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new UserModel();
+            }
+            return instance;
+        }
+
+        //============== SINGLETON ==============//
 
         public bool CheckIfValidLogin(List<string> loginInfo)
         {
@@ -35,6 +52,12 @@ namespace LTT
         {
             // 해당 USER의 장바구니 목록 보내주기
             return shoppingDB[userID];
+        }
+
+        public List<LectureDTO> GetUserRegistrationList(string userID)
+        {
+            // 해당 USER의 수강신청 목록 보내주기
+            return registerDB[userID];
         }
     }
 }

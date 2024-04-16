@@ -8,17 +8,16 @@ namespace LTT
 {
     class LoginController
     {
-        LoginView loginView;
+        LoginView loginView; // login할때 필요한 UI
 
-        MainController mainController;
+        MainController mainController; // login 후 MainController 호출하기 위해 필요
 
-        UserModel userModel;
+        UserModel userModel; // ID PW 확인위해 필요
 
         public LoginController()
         {
             loginView = new LoginView();
-            userModel = new UserModel();
-            mainController = new MainController();
+            userModel = UserModel.GetInstance(); 
         }
 
         public void Run()
@@ -37,6 +36,7 @@ namespace LTT
                 if (userModel.CheckIfValidLogin(userInputInfo))
                 {
                     string userID = userInputInfo[0];
+                    mainController = new MainController();
                     mainController.Initialize(userID);
                     mainController.Run();
                 }

@@ -41,18 +41,6 @@ namespace LTT
 
         //===================== MENU PRINT FUNCTION ==================//
 
-        // 인자 : 출력할 메뉴 모음 + 출력시작할 X좌표 + 출력시작할 Y좌표
-        public static void PrintAllMenu(string[] menuArr, int menuStartX, int menuStartY)
-        {
-            for (int i = 0; i < menuArr.Length; i++)
-            {
-                string menu = menuArr[i];
-                int menuLen = menu.Length;
-                Console.SetCursorPosition(menuStartX, menuStartY + i);
-                Console.Write(menu);
-            }
-        }
-
         // menuStartX, menuStartY에서 시작하는 메뉴 중
         // idx에 해당하는 한개의 메뉴만 출력해줌
         public static void PrintMenu(string menu, int idx, int menuStartX, int menuStartY)

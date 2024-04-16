@@ -11,16 +11,8 @@ namespace LTT
         public List<string> LoginForm()
         {
             Console.Clear();
-
-            List<string> userLoginInput = new List<string>();
-
-            // 화면 구성
-            MyConsole.PrintAllMenu(Constants.loginMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
-            // 입력받기
-            for (int i = 0; i < Constants.loginMenuArr.Length; i++)
-            {
-                userLoginInput.Add(CommonInput.GetUserInput(Constants.INPUT_STARTX, Constants.INPUT_STARTY + i));
-            }
+            
+            List<string> userLoginInput = CommonInput.GetUserInputs(Constants.loginMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
 
             return userLoginInput;
         }

@@ -14,30 +14,40 @@ namespace LTT
         private const int WARNING_STARTX = 40;
         private const int WARNING_STARTY = 6;
 
-        public static string GetUserInput(int inputStartX, int inputStartY)
+        // 각 메뉴에 대한 사용자 입력받을때 쓰이는 함수
+        public static List<string> GetUserInputs(string[] menuArr, int menuStartX, int menuStartY)
         {
-            Console.CursorVisible = true;
-            Console.SetCursorPosition(inputStartX, inputStartY);
-            return Console.ReadLine();
+            // 우선 메뉴 다 출력하기
+            for (int i = 0; i < menuArr.Length; i++)
+            {
+                string menu = menuArr[i];
+                Console.SetCursorPosition(menuStartX, menuStartY + i);
+                Console.Write(menu);
+            }
+
+            List<string> retList = new List<string>();
+
+            // 그리고 각 메뉴 옆에서 user input 받기
+            for (int i = 0; i < menuArr.Length; i++)
+            {
+                Console.SetCursorPosition(menuStartX + menuArr[i].Length * 2, menuStartY + i);
+                retList.Add(Console.ReadLine());
+            }
+
+            return retList;
         }
 
-        // 지우개 함수
-        // 지우고 CursorPosition 제자리로 돌려놓음
-        public static void Eraser(int eraseStartX, int eraseStartY)
-        {
-            Console.SetCursorPosition(eraseStartX, eraseStartY);
-            string eraser = "                                         ";
-            Console.WriteLine(eraser);
-            Console.SetCursorPosition(eraseStartX, eraseStartY);
-        }
-
-        // 메뉴 선택에 쓰임
-        // spacebar 누르면 user가 select한 menu의 idx번호 return
-        // 이거 모듈로 연산때문에 0부터 시작하는거임
-        // 그래서 enum들 모두 0부터 시작해야함
-        // 여기서는 int로 return하는데 controller에서는 enum으로 받기 때문에 enum 형변환해야함
+        // 각 메뉴에 대한 사용자 선택을 받을때 쓰이는 함수
         public static int GetUserSelection(string[] menuArr, int menuStartX, int menuStartY)
         {
+            for (int i = 0; i < menuArr.Length; i++)
+            {
+                string menu = menuArr[i];
+                int menuLen = menu.Length;
+                Console.SetCursorPosition(menuStartX, menuStartY + i);
+                Console.Write(menu);
+            }
+
             int beforeSel = 0;
             int curSel = 0;
 
@@ -80,5 +90,16 @@ namespace LTT
 
             return curSel;
         }
+
+        // 지우개 함수
+        // 지우고 CursorPosition 제자리로 돌려놓음
+        public static void Eraser(int eraseStartX, int eraseStartY)
+        {
+            Console.SetCursorPosition(eraseStartX, eraseStartY);
+            string eraser = "                                         ";
+            Console.WriteLine(eraser);
+            Console.SetCursorPosition(eraseStartX, eraseStartY);
+        }
+
     }
 }

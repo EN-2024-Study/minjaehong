@@ -14,15 +14,23 @@ namespace LTT
             Console.Clear();
 
             MyConsole.PrintHeader("[SELECT SHOPPING MODE]");
-            MyConsole.PrintAllMenu(Constants.shoppingMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
-
+            
             ShoppingMode selectedMode = (ShoppingMode)CommonInput.GetUserSelection(Constants.shoppingMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
             return selectedMode;
         }
 
-        public void ShoppingForm()
+        public void ShoppingForm(List<LectureDTO> filteredLectures)
         {
             Console.Clear();
+
+            // filetering 된 과목들을 controller부터 받아서 화면에 보여주고
+            CommonView.ShowLectureTable(filteredLectures);
+            // 담을 과목 입력 받기
+            // 바로 밑에 ShoppingInput 띄워줘야함
+            int menuStartX = Console.CursorLeft;
+            int menuStartY = Console.CursorTop;
+            
+            List<String> shoppedLecture = CommonInput.GetUserInputs(Constants.shoppingInputMessage, menuStartX, menuStartY);
         }
 
         // controller에서 특정 학생의 관담목록 받아서 CommonView로 넘겨주기
@@ -52,7 +60,7 @@ namespace LTT
             int menuStartX = Console.CursorLeft;
             int menuStartY = Console.CursorTop;
 
-            MyConsole.PrintAllMenu(Constants.deletionInputMessage, menuStartX, menuStartY);
+            List<string> input = CommonInput.GetUserInputs(Constants.deletionInputMessage, menuStartX, menuStartY);
         }
     }
 }

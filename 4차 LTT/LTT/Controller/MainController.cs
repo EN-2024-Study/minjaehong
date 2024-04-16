@@ -16,23 +16,29 @@ namespace LTT
         RegistrationController registrationController;
 
         LectureModel lectureModel;
+        UserModel userModel;
+
+        List<LectureDTO> curUserShoppingList;
+        List<LectureDTO> curUserRegistrationList;
 
         string curUserID;
-
-        public MainController()
-        {
-            mainView = new MainView();
-
-            shoppingController = new ShoppingController();
-            registrationController = new RegistrationController();
-
-            lectureModel = LectureModel.GetInstance();
-        }
 
         // 로그인 하면 그때 한번만 호출됨
         public void Initialize(string curUserID)
         {
             this.curUserID = curUserID;
+            //curUserShoppingList = userModel.GetUserShoppingList(curUserID);
+            //curUserRegistrationList = userModel.GetUserRegistrationList(curUserID);  
+        }
+
+        public MainController()
+        {
+            mainView = new MainView();
+
+            shoppingController = new ShoppingController(curUserID);
+            registrationController = new RegistrationController(curUserID);
+
+            lectureModel = LectureModel.GetInstance();
         }
 
         public void Run()
@@ -53,13 +59,6 @@ namespace LTT
                         List<LectureDTO> filteredLectures = lectureModel.GetFilteredLectureResults(filters);
                         // 다시 view로 보내서 강의 출력시키기
                         CommonView.ShowLectureTable(filteredLectures);
-                        // 바로 밑에 DeleteMenu 띄워줘야함
-                        int menuStartX = Console.CursorLeft;
-                        int menuStartY = Console.CursorTop;
-
-                        MyConsole.PrintAllMenu(Constants.deletionInputMessage, menuStartX, menuStartY);
-                        
-                        CommonInput.GetUserInput(Constants.INPUT_STARTX, menuStartY);
                         
                         break;
 

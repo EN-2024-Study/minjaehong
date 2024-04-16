@@ -16,7 +16,6 @@ namespace LTT
 
         public static void Main()
         {
-
             InitializeDB();
 
             Console.CursorVisible = false;

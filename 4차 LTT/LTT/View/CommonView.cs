@@ -15,13 +15,8 @@ namespace LTT
             Console.Clear();
 
             MyConsole.PrintHeader("[LETS FIND LECTURES]");
-            MyConsole.PrintAllMenu(Constants.lectureFindMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
-
-            List<String> filterList = new List<string>();
-            for (int i = 0; i < Constants.lectureFindMenuArr.Length; i++)
-            {
-                filterList.Add(CommonInput.GetUserInput(Constants.INPUT_STARTX, Constants.INPUT_STARTY+i));
-            }
+            
+            List<String> filterList = CommonInput.GetUserInputs(Constants.lectureFindMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
 
             return filterList;
         }
