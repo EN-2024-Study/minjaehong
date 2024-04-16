@@ -20,8 +20,6 @@ namespace LTT
 
         string curUserID;
 
-        public static string[] shoppingInputMessage = { "담을 과목 ID :" };
-        public static string[] deletionInputMessage = { "삭제할 과목 ID :" };
 
         // ShoppingController가 또 userModel을 참조해서 받아오지않고
         // MainController에서 넘겨준 curUserShoppingList를 사용
@@ -50,28 +48,20 @@ namespace LTT
                 {
                     case ShoppingMode.SHOPPING:
 
-                        // view에서 검색필터 받아옴
+                        // 1. view에서 검색필터 받아옴
                         List<String> filters = CommonView.FindLectureForm();
-                        // 이걸 model로 보내서 필터링된 강의들 ID 받아옴
+                        // 2. 이걸 model로 보내서 필터링된 강의들 받아오기
                         List<LectureDTO> filteredLectures = lectureModel.GetFilteredLectureResults(filters);
-                        // 다시 view로 보내서 강의 출력시키기
-                        CommonView.ShowLectureTable(filteredLectures);
-
-                        int inputX = Console.CursorLeft;
-                        int inputY = Console.CursorTop;
-
-                        // view에서 담고싶은 과목 입력 받기
-                        List<String> inputs = CommonInput.GetUserInputs(shoppingInputMessage, inputX, inputY);
-
-                        // 그걸 usermodel에 적용시키기
-                        string lectureID = inputs[0];
-                        userModel.AddToUserShoppingList(curUserID, lectureID);
+                        // 3. 필터링된 강의들을 view로 보내서 출력시키고 관담할 과목 받아오기
+                        string lectureID = shoppingView.ShoppingForm(filteredLectures);
+                        // 4. 관담할 과목을 진짜로 관담하기
+                        userModel.AddToUserShoppingBasket(curUserID, lectureID);
                         break;
 
                     case ShoppingMode.SHOPPING_RESULT:
-                        // model에서 user가 관담한거 가져오기
+                        // 1. model에서 user가 관담한거 가져오기
                         curUserShoppingList = userModel.GetUserShoppingList(curUserID);
-                        // shoppingView에서 보여주기
+                        // 2. view로 보내서 관담한거 출력하기
                         shoppingView.ShoppingResultForm(curUserShoppingList);
                         Console.ReadLine();
                         break;
@@ -81,18 +71,12 @@ namespace LTT
                         break;
 
                     case ShoppingMode.SHOPPING_DELETE:
+                        // 1. model에서 curUserID가 관담한거 가져오기
                         curUserShoppingList = userModel.GetUserShoppingList(curUserID);
-                        CommonView.ShowLectureTable(curUserShoppingList);
-
-                        inputX = Console.CursorLeft;
-                        inputY = Console.CursorTop;
-
-                        // view에서 담고싶은 과목 입력 받기
-                        List<String> deletinginputs = CommonInput.GetUserInputs(deletionInputMessage, inputX, inputY);
-
-                        // 그걸 usermodel에 적용시키기
-                        lectureID = deletinginputs[0];
-                        userModel.DeleteUserShoppingList(curUserID, lectureID);
+                        // 2. view로 보내서 출력하고 삭제할 lectureID 받아오기
+                        lectureID = shoppingView.ShoppingDeleteForm(curUserShoppingList);
+                        // 3. 관담목록에서 진짜로 삭제하기
+                        userModel.RemoveFromUserShoppingBasket(curUserID, lectureID);
                         break;
 
                     case ShoppingMode.GO_BACK:

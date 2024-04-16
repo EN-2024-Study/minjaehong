@@ -8,8 +8,6 @@ using System.Runtime.InteropServices;
 
 namespace LTT
 {
-    
-    // DB를 그냥 여기에 넣어놔라
     class LectureModel
     {
         private static LectureModel instance;
@@ -31,10 +29,10 @@ namespace LTT
             lectureDB = ConvertDataToDTO(data);
 
             // 데이터 받아오면 자원 닫고 모두 반환
-            //workbook.Close();
-            //application.Quit();
-            //ReleaseExcelObject(workbook);
-            //ReleaseExcelObject(application);
+            workbook.Close();
+            application.Quit();
+            ReleaseExcelObject(workbook);
+            ReleaseExcelObject(application);
         }
 
         public static LectureModel GetInstance()

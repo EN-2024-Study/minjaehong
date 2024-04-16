@@ -8,9 +8,7 @@ namespace LTT
 {
     class UserModel
     {
-        Dictionary<string, string> userDB; // ID마다 PW 저장
-        Dictionary<string, List<LectureDTO>> shoppingDB; // ID마다 관심과목 저장
-        Dictionary<string, List<LectureDTO>> registerDB; // ID마다 수강신청과목 저장
+        Dictionary<string, UserDTO> userDB; 
 
         private static UserModel instance;
 
@@ -21,15 +19,20 @@ namespace LTT
             // ID : PW
             userDB = new Dictionary<string, string>();
             // ID : SHOPPINGLIST
-            shoppingDB = new Dictionary<string, List<LectureDTO>>();
+            shoppingBasketDB = new Dictionary<string, List<LectureDTO>>();
             // ID : REGISTERLIST
-            registerDB = new Dictionary<string, List<LectureDTO>>();
+            registrationDB = new Dictionary<string, List<LectureDTO>>();
 
             lectureModel = LectureModel.GetInstance();
 
+            // dummydata
             userDB.Add("20011738", "12345");
-            shoppingDB.Add("20011738", new List<LectureDTO>()); // 관심과목 담을 리스트 생성
-            registerDB.Add("20011738", new List<LectureDTO>()); // 수강신청과목 담을 리스트 생성
+            shoppingBasketDB.Add("20011738", new List<LectureDTO>()); // 관심과목 담을 리스트 생성
+            registrationDB.Add("20011738", new List<LectureDTO>()); // 수강신청과목 담을 리스트 생성
+
+            userDB.Add("211929", "10000");
+            shoppingBasketDB.Add("211929", new List<LectureDTO>());
+            registrationDB.Add("211929", new List<LectureDTO>());
         }
 
         public static UserModel GetInstance()
@@ -52,28 +55,40 @@ namespace LTT
             else return false;
         }
 
-        public List<LectureDTO> GetUserShoppingList(string userID)
-        { 
-            // 해당 USER의 장바구니 목록 보내주기
-            return shoppingDB[userID];
+        // 해당 USER의 장바구니 목록 보내주기
+        public List<LectureDTO> GetUserShoppingList(string userID) { 
+            return shoppingBasketDB[userID];
         }
 
+        // 해당 USER의 수강신청 목록 보내주기
         public List<LectureDTO> GetUserRegistrationList(string userID)
         {
-            // 해당 USER의 수강신청 목록 보내주기
-            return registerDB[userID];
+            return registrationDB[userID];
         }
 
-        public void AddToUserShoppingList(string userID, string lectureID)
+        // 특정 USER의 
+        public void AddToUserShoppingBasket(string userID, string lectureID)
         {
             LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
-            shoppingDB[userID].Add(lecture);
+            shoppingBasketDB[userID].Add(lecture);
         }
 
-        public void DeleteUserShoppingList(string userID, string lectureID)
+        public void RemoveFromUserShoppingBasket(string userID, string lectureID)
         {
             LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
-            shoppingDB[userID].Remove(lecture);
+            shoppingBasketDB[userID].Remove(lecture);
+        }
+
+        public void AddToUserRegistration(string userID, string lectureID)
+        {
+            LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
+            registrationDB[userID].Add(lecture);
+        }
+
+        public void RemoveFromUserRegistration(string userID, string lectureID)
+        {
+            LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
+            registrationDB[userID].Remove(lecture);
         }
     }
 }

@@ -13,10 +13,6 @@ namespace LTT
         RegistrationController registrationController;
 
         LectureModel lectureModel;
-        UserModel userModel;
-
-        List<LectureDTO> curUserShoppingList;
-        List<LectureDTO> curUserRegistrationList;
 
         string curUserID;
 
@@ -44,11 +40,11 @@ namespace LTT
                 switch (mode)
                 {
                     case MainMode.SEARCH_MODE:
-                        // view에서 검색필터 받아옴
+                        // 1. view에서 검색필터 받아옴
                         List<String> filters = CommonView.FindLectureForm();
-                        // 이걸 model로 보내서 필터링된 강의들 ID 받아옴
+                        // 2. 검색필터를 model로 보내서 필터링된 강의들 받아오기
                         List<LectureDTO> filteredLectures = lectureModel.GetFilteredLectureResults(filters);
-                        // 다시 view로 보내서 강의 출력시키기
+                        // 3. view로 보내서 강의 출력하기
                         CommonView.ShowLectureTable(filteredLectures);
                         
                         break;

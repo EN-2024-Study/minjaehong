@@ -9,6 +9,8 @@ namespace LTT
     // MainController가 호출하는 View모음
     class MainView
     {
+        private string[] modeSelectMenuArr = { "1. 강의조회 : ", "2. 관심과목 담기 : ", "3. 수강신청 : ", "4. 수강내역 조회 : " };
+
         public MainView() { }
 
         public MainMode MainModeSelectForm(string curUserID)
@@ -18,10 +20,9 @@ namespace LTT
             MyConsole.PrintHeader("[SELECT MODE]");
             MyConsole.PrintUserID(curUserID);
             
-            MainMode selectedMode = (MainMode)CommonInput.GetUserSelection(Constants.modeSelectMenuArr,Constants.MENU_STARTX, Constants.MENU_STARTY);
+            MainMode selectedMode = (MainMode)CommonInput.GetUserSelection(modeSelectMenuArr,Constants.MENU_STARTX, Constants.MENU_STARTY);
             return selectedMode;
         }
-        
 
     }
 }
