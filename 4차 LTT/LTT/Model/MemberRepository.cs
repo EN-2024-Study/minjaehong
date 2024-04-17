@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LTT
 {
@@ -12,10 +9,12 @@ namespace LTT
         
         private static MemberRepository instance;
 
-        private LectureRepository lectureModel;
+        private LectureRepository lectureRepository;
 
         private MemberRepository()
         {
+            lectureRepository = LectureRepository.GetInstance();
+
             // ID : PW
             userDB = new Dictionary<string, MemberDTO>();
             userDB.Add("20011738", new MemberDTO("20011738","12345"));
@@ -43,7 +42,7 @@ namespace LTT
         }
 
         // 해당 USER의 장바구니 목록 보내주기
-        public List<LectureDTO> GetUserShoppingList(string curUserID) {
+        public List<LectureDTO> GetUserShoppingBasket(string curUserID) {
             return userDB[curUserID].GetShoppingBasket();
         }
 
@@ -54,28 +53,67 @@ namespace LTT
         }
 
         // 특정 USER의 장바구니에 추가하기
-        public void AddToUserShoppingBasket(string curUserID, string lectureID)
+        public bool AddToUserShoppingBasket(string curUserID, string lectureID)
         {
-            LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
-            userDB[curUserID].GetShoppingBasket().Add(lecture);
+            LectureDTO lecture = lectureRepository.GetCertainLecture(lectureID);
+            List<LectureDTO> curUserShoppingBasket = GetUserShoppingBasket(curUserID);
+
+            if (curUserShoppingBasket.Contains(lecture))
+            {
+                return false;
+            }
+            else
+            {
+                curUserShoppingBasket.Add(lecture);
+                return true;
+            }
         }
 
-        public void RemoveFromUserShoppingBasket(string curUserID, string lectureID)
+        // 특정 USER의 장바구니에서 제거하기
+        public bool RemoveFromUserShoppingBasket(string curUserID, string lectureID)
         {
-            LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
-            userDB[curUserID].GetShoppingBasket().Remove(lecture);
+            LectureDTO lecture = lectureRepository.GetCertainLecture(lectureID);
+            List<LectureDTO> curUserShoppingBasket = GetUserShoppingBasket(curUserID);
+
+            if (curUserShoppingBasket.Contains(lecture))
+            {
+                curUserShoppingBasket.Remove(lecture);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public void AddToUserRegistration(string curUserID, string lectureID)
+        // 특정 USER의 수강신청 내역에 추가하기
+        public bool AddToUserRegistration(string curUserID, string lectureID)
         {
-            LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
-            userDB[curUserID].GetRegistration().Add(lecture);
+            LectureDTO lecture = lectureRepository.GetCertainLecture(lectureID);
+            List<LectureDTO> curUserRegistration = GetUserRegistrationList(curUserID);
+
+            if (curUserRegistration.Contains(lecture)) return false;
+            else
+            {
+                curUserRegistration.Add(lecture);
+                return true;
+            }
         }
 
-        public void RemoveFromUserRegistration(string curUserID, string lectureID)
+        // 특정 USER의 수강신청 내역에서 삭제하기
+        public bool RemoveFromUserRegistration(string curUserID, string lectureID)
         {
-            LectureDTO lecture = lectureModel.GetCeratainLecture(lectureID);
-            userDB[curUserID].GetRegistration().Remove(lecture);
+            LectureDTO lecture = lectureRepository.GetCertainLecture(lectureID);
+            List<LectureDTO> curUserRegistration = GetUserRegistrationList(curUserID);
+            if (curUserRegistration.Contains(lecture))
+            {
+                curUserRegistration.Remove(lecture);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

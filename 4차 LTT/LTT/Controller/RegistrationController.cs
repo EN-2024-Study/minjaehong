@@ -11,10 +11,10 @@ namespace LTT
     {
         RegistrationView registrationView;
         
-        MemberRepository userModel;
+        MemberRepository memberRepository;
 
         string curUserID;
-        List<LectureDTO> curUserShoppingList;
+        List<LectureDTO> curUserShoppingBasket;
         List<LectureDTO> curUserRegistrationList;
 
         public RegistrationController(string curUserID)
@@ -22,7 +22,40 @@ namespace LTT
             this.curUserID = curUserID;
             registrationView = new RegistrationView();
 
-            userModel = MemberRepository.GetInstance();
+            memberRepository = MemberRepository.GetInstance();
+        }
+
+        private void Register()
+        {
+            // 1. model에서 curUserID가 관담한거 가져오기
+            curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
+            // 2. view로 보내서 출력하고 수강신청할 과목 받아오기
+            string lectureID = registrationView.RegistrationForm(curUserShoppingBasket);
+            // 3. 진짜 수강신청해주기
+            memberRepository.AddToUserRegistration(curUserID, lectureID);
+        }
+
+        private void GetResult()
+        {
+            // 1. model에서 curUserID가 진짜로 수강신청한거 가죠오기
+            curUserRegistrationList = memberRepository.GetUserRegistrationList(curUserID);
+            // 2. view로 보내서 출력해주기
+            CommonView.ShowLectureTable(curUserRegistrationList);
+        }
+
+        private void GetTimeTable()
+        {
+
+        }
+
+        private void Delete()
+        {
+            // 1. model에서 curUserID가 수강신청한거 가져오기
+            curUserRegistrationList = memberRepository.GetUserRegistrationList(curUserID);
+            // 2. view로 보내서 출력하고 삭제할 lectureID 받아오기
+            string lectureID = registrationView.RegistrationDeleteForm(curUserRegistrationList);
+            // 3. 수강신청 목록에서 진짜로 삭제하기
+            memberRepository.RemoveFromUserRegistration(curUserID, lectureID);
         }
 
         public void Run()
@@ -31,8 +64,6 @@ namespace LTT
 
             RegistrationMode mode;
 
-            string lectureID;
-
             while (isRegistrationModeRunning)
             {
                 mode = registrationView.RegistrationModeSelectForm();
@@ -40,31 +71,19 @@ namespace LTT
                 switch (mode)
                 {
                     case RegistrationMode.REGST:
-                        // 1. model에서 curUserID가 관담한거 가져오기
-                        curUserShoppingList = userModel.GetUserShoppingList(curUserID);
-                        // 2. view로 보내서 출력하고 수강신청할 과목 받아오기
-                        lectureID = registrationView.RegistrationForm(curUserShoppingList);
-                        // 3. 진짜 수강신청해주기
-                        userModel.AddToUserRegistration(curUserID, lectureID);
+                        Register();
                         break;
 
                     case RegistrationMode.REGST_RESULT:
-                        // 1. model에서 curUserID가 진짜로 수강신청한거 가죠오기
-                        curUserRegistrationList = userModel.GetUserRegistrationList(curUserID);
-                        // 2. view로 보내서 출력해주기
-                        CommonView.ShowLectureTable(curUserRegistrationList);
+                        GetResult();
                         break;
 
                     case RegistrationMode.REGST_TABLE:
+                        GetTimeTable();
                         break;
 
                     case RegistrationMode.REGST_DELETE:
-                        // 1. model에서 curUserID가 수강신청한거 가져오기
-                        curUserRegistrationList = userModel.GetUserRegistrationList(curUserID);
-                        // 2. view로 보내서 출력하고 삭제할 lectureID 받아오기
-                        lectureID = registrationView.RegistrationDeleteForm(curUserRegistrationList);
-                        // 3. 수강신청 목록에서 진짜로 삭제하기
-                        userModel.RemoveFromUserRegistration(curUserID, lectureID);
+                        Delete();
                         break;
 
                     case RegistrationMode.GO_BACK:

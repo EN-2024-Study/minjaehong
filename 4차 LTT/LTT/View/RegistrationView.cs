@@ -9,8 +9,8 @@ namespace LTT
     // RegistrationController가 호출하는 View모음
     class RegistrationView
     {
-        private string[] registrationInputMessage = { "수강신청할 과목 ID :" };
-        private string[] registrationDeleteMessage = { "수강신청 삭제할 과목 ID :" };
+        private string[] registrationInputMessage = { "COURSE ID YOU WANT TO REGISTER :" };
+        private string[] registrationDeleteMessage = {"COURSE ID YOU WANT TO DELETE :" };
         private string[] registrationMenuArr = { "1. 수강신청", "2. 수강신청 내역", "3. 수강신청 시간표", "4. 수강과목 삭제" };
         
         public RegistrationMode RegistrationModeSelectForm()
@@ -19,7 +19,7 @@ namespace LTT
 
             MyConsole.PrintHeader("[SELECT REGISTRATION MODE]");
           
-            RegistrationMode selectedMode = (RegistrationMode)CommonInput.GetUserSelection(registrationMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
+            RegistrationMode selectedMode = (RegistrationMode)MyConsole.GetUserSelection(registrationMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
             return selectedMode;
         }
 
@@ -30,11 +30,8 @@ namespace LTT
             // 관심과목들을 controller부터 받아서 화면에 보여주고
             CommonView.ShowLectureTable(shoppingList);
 
-            int inputX = Console.CursorLeft;
-            int inputY = Console.CursorTop;
-
             // 담고싶은 과목을 입력 받고 
-            List<String> inputs = CommonInput.GetUserInputs(registrationInputMessage, inputX, inputY);
+            List<String> inputs = MyConsole.GetUserInputs(registrationInputMessage, Console.CursorLeft, Console.CursorTop);
 
             // 다시 controller한테 보내주기
             return inputs[0];
@@ -62,7 +59,7 @@ namespace LTT
             int inputY = Console.CursorTop;
 
             // view에서 삭제하고 싶은 과목 입력 받기
-            List<String> deletinginputs = CommonInput.GetUserInputs(registrationDeleteMessage, inputX, inputY);
+            List<String> deletinginputs = MyConsole.GetUserInputs(registrationDeleteMessage, inputX, inputY);
             return deletinginputs[0];
         }
     }

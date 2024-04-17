@@ -48,7 +48,6 @@
     <Compile Include="Model\LectureRepository.cs" />
     <Compile Include="Model\UserDTO.cs" />
     <Compile Include="Model\MemberRepository.cs" />
-    <Compile Include="Utility\CommonInput.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\CommonView.cs" />
     <Compile Include="View\LoginView.cs" />

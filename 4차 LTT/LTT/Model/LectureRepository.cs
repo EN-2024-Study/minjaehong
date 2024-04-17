@@ -96,7 +96,7 @@ namespace LTT
                 else dummyDTO.SetClassroom(data.GetValue(i, 10).ToString()); // 강의실
                 dummyDTO.SetProfessor(data.GetValue(i, 11).ToString()); // 교수명
                 dummyDTO.SetLanguage(data.GetValue(i, 12).ToString()); // 언어
-                dummyDTO.SetLectureTimeNumbers();
+                //dummyDTO.SetLectureTimeNumbers();
 
                 retList.Add(dummyDTO);
             }
@@ -128,7 +128,7 @@ namespace LTT
 
         //============== DB FUNCTIONS ==============//
 
-        public LectureDTO GetCeratainLecture(string lectureID)
+        public LectureDTO GetCertainLecture(string lectureID)
         {
             int ID = int.Parse(lectureID);
             return lectureDB[ID];

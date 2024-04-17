@@ -12,14 +12,14 @@ namespace LTT
 
         MainController mainController; // login 후 MainController 호출하기 위해 필요
 
-        MemberRepository userModel; // ID PW 확인위해 필요
+        MemberRepository memberRepository; // ID PW 확인위해 필요
 
         string curUserID;
 
         public LoginController()
         {
             loginView = new LoginView();
-            userModel = MemberRepository.GetInstance(); 
+            memberRepository = MemberRepository.GetInstance(); 
         }
 
         public void Run()
@@ -35,7 +35,7 @@ namespace LTT
 
                 // 만약 ID PW가 맞으면
                 // 그때서야 MainController 생성해서 Run 호출
-                if (userModel.CheckIfValidLogin(userInputInfo))
+                if (memberRepository.CheckIfValidLogin(userInputInfo))
                 {
                     curUserID = userInputInfo[0];
                     mainController = new MainController(curUserID);

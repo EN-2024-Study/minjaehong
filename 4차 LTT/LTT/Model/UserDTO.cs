@@ -15,7 +15,7 @@ namespace LTT
 
         private List<LectureDTO> shoppingBasket;
         private List<LectureDTO> registration;
-
+         
         public MemberDTO(string id, string pw)
         {
             this.id = id;

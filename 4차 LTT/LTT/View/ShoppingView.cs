@@ -9,8 +9,8 @@ namespace LTT
     // ShoppingController가 호출하는 view모음
     class ShoppingView
     {
-        private string[] shoppingInputMessage = { "담을 과목 ID :" };
-        private string[] deletionInputMessage = { "삭제할 과목 ID :" };
+        private string[] shoppingInputMessage = { "COURSE ID YOU WANT TO PUT IT IN YOUR BASKET :" };
+        private string[] deletionInputMessage = { "COURSE ID YOU WANT TO DELETE FROM YOUR BASKET :" };
         private string[] shoppingMenuArr = { "1. 관심과목 검색", "2. 관심과목 내역", "3. 관심과목 시간표", "4. 관심과목 삭제" };
         
         public ShoppingMode ShoppingModeSelectForm()
@@ -19,7 +19,7 @@ namespace LTT
 
             MyConsole.PrintHeader("[SELECT SHOPPING MODE]");
             
-            ShoppingMode selectedMode = (ShoppingMode)CommonInput.GetUserSelection(shoppingMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
+            ShoppingMode selectedMode = (ShoppingMode)MyConsole.GetUserSelection(shoppingMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
             return selectedMode;
         }
 
@@ -27,14 +27,14 @@ namespace LTT
         {
             Console.Clear();
 
-            // filetering 된 과목들을 controller부터 받아서 화면에 보여주고
+            // filetering 된 과목들을 controller부터 받아서 화면에 보여주기
             CommonView.ShowLectureTable(filteredLectures);
 
             int inputX = Console.CursorLeft;
             int inputY = Console.CursorTop;
 
             // view에서 담고싶은 과목 입력 받기
-            List<String> inputs = CommonInput.GetUserInputs(shoppingInputMessage, inputX, inputY);
+            List<String> inputs = MyConsole.GetUserInputs(shoppingInputMessage, inputX, inputY);
 
             return inputs[0];
         }
@@ -43,7 +43,6 @@ namespace LTT
         public void ShoppingResultForm(List<LectureDTO> shoppingList)
         {
             Console.Clear();
-
             CommonView.ShowLectureTable(shoppingList);
         }
 
@@ -64,7 +63,7 @@ namespace LTT
             int inputY = Console.CursorTop;
 
             // view에서 삭제하고 싶은 과목 입력 받기
-            List<String> deletinginputs = CommonInput.GetUserInputs(deletionInputMessage, inputX, inputY);
+            List<String> deletinginputs = MyConsole.GetUserInputs(deletionInputMessage, inputX, inputY);
             return deletinginputs[0];
         }
     }
