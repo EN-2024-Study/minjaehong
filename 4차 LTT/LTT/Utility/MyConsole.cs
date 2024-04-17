@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LTT
 {
+    // CUSTOM INPUT OUTPUT 모두 담당
     class MyConsole
     {
         private const int HEADER_X = 45; // HEADER START X

@@ -84,7 +84,7 @@ namespace LTT
 
                 dummyDTO.SetLectureID(data.GetValue(i, 1).ToString()); // ID
                 dummyDTO.SetDepartment(data.GetValue(i, 2).ToString()); // 학과전공
-                dummyDTO.SetNumber(data.GetValue(i, 3).ToString()); // 학수번호
+                dummyDTO.SetCourseNumber(data.GetValue(i, 3).ToString()); // 학수번호
                 dummyDTO.SetSection(data.GetValue(i, 4).ToString()); // 분반
                 dummyDTO.SetName(data.GetValue(i, 5).ToString()); // 과목명
                 dummyDTO.SetCourseType(data.GetValue(i, 6).ToString()); // 이수구분

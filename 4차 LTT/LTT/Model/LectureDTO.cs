@@ -7,7 +7,7 @@ namespace LTT
     {
         private string LectureID; // NO
         private string department; // 개설학과전공
-        private string number; // 학수번호
+        private string courseNumber; // 학수번호
         private string section; // 분반
         private string name; // 교과목명
         private string courseType; // 이수구분
@@ -24,8 +24,8 @@ namespace LTT
         public string GetDepartment() { return department; }
         public void SetDepartment(string department) { this.department = department; }
 
-        public string GetNumber() { return number; }
-        public void SetNumber(string number) { this.number = number; }
+        public string GetCourseNumber() { return courseNumber; }
+        public void SetCourseNumber(string courseNumber) { this.courseNumber = courseNumber; }
 
         public string GetSection() { return section; }
         public void SetSection(string section) { this.section = section; }

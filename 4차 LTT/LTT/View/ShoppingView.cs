@@ -23,6 +23,7 @@ namespace LTT
             return selectedMode;
         }
 
+        // 1. 장바구니 화면
         public string ShoppingForm(List<LectureDTO> filteredLectures, MemberDTO curMember)
         {
             Console.Clear();
@@ -37,6 +38,7 @@ namespace LTT
             return inputs[0];
         }
 
+        // 2. 장바구니 결과 화면
         // controller에서 특정 학생의 관담목록 받아서 CommonView 사용해서 출력해주기
         public void ShoppingResultForm(List<LectureDTO> shoppingList, MemberDTO curMember)
         {
@@ -45,12 +47,14 @@ namespace LTT
             Console.Write("등록가능 학점 : " + curMember.GetMaximumCredit() + "  장바구니에 담은 학점 : " + (curMember.GetCurrentShoppingCredit()) + "  ");
         }
 
+        // 3. 장바구니 시간표 화면
         public void ShoppingTableForm(List<LectureDTO> shoppingList)
         {
             Console.Clear();
             CommonView.ShowTimeTable(shoppingList);
         }
 
+        // 4. 장바구니 삭제 화면
         // controller에서 특정 학생의 관담목록 받아서 CommonView로 넘겨주고
         // 삭제할 LectureID 받기
         public string ShoppingDeleteForm(List<LectureDTO> shoppingList, MemberDTO curMember)

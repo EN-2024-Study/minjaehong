@@ -44,12 +44,15 @@ namespace LTT
                 // 유효한 lectureID이고 + 아직 담지 않은 과목이면
                 if (ExceptionHandler.CheckIfValidLectureID(lectureID))
                 {
-                    memberRepository.AddToUserShoppingBasket(curUserID, lectureID);
-                    MyConsole.PrintMessage("관심과목 담기 완료!", Console.CursorLeft, Console.CursorTop);
-                }
-                else
-                {
-                    MyConsole.PrintMessage("관심과목 담기 실패!", Console.CursorLeft, Console.CursorTop);
+                    bool shoppingSuccess = memberRepository.AddToUserShoppingBasket(curUserID, lectureID);
+                    if (shoppingSuccess)
+                    {
+                        MyConsole.PrintMessage("관심과목 담기 성공", Console.CursorLeft, Console.CursorTop);
+                    }
+                    else
+                    {
+                        MyConsole.PrintMessage("관심과목 담기 실패", Console.CursorLeft, Console.CursorTop);
+                    }
                 }
             }
             else

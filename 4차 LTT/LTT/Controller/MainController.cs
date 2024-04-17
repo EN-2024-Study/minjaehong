@@ -64,6 +64,7 @@ namespace LTT
                         break;
 
                     case MainMode.REGISTER_RESULT_MODE:
+                        registrationController.GetResult();
                         break;
 
                     case MainMode.LOGOUT:

@@ -76,7 +76,7 @@ namespace LTT
                 Console.SetCursorPosition(startX+4, startY);
                 Console.Write(curLecture.GetDepartment());
                 Console.SetCursorPosition(startX+24, startY);
-                Console.Write(curLecture.GetNumber());
+                Console.Write(curLecture.GetCourseNumber());
                 Console.SetCursorPosition(startX+34, startY);
                 Console.Write(curLecture.GetSection());
                 Console.SetCursorPosition(startX+40, startY);

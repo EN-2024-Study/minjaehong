@@ -12,6 +12,7 @@ namespace LTT
         RegistrationView registrationView;
         
         MemberRepository memberRepository;
+        LectureRepository lectureRepository;
 
         string curUserID;
         List<LectureDTO> curUserShoppingBasket;
@@ -23,9 +24,10 @@ namespace LTT
             registrationView = new RegistrationView();
 
             memberRepository = MemberRepository.GetInstance();
+            lectureRepository = LectureRepository.GetInstance();
         }
 
-        private void Register()
+        private void ShoppingRegister()
         {
             // 1. model에서 curUserID가 관담한거 가져오기
             curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
@@ -34,17 +36,52 @@ namespace LTT
             // 3. 진짜 수강신청해주기
             if (ExceptionHandler.CheckIfValidLectureID(lectureID))
             {
-                memberRepository.AddToUserRegistration(curUserID, lectureID);
-                MyConsole.PrintMessage("수강신청 성공",Console.CursorLeft, Console.CursorTop);
+                bool registrationSuccess = memberRepository.AddToUserRegistration(curUserID, lectureID);
+                if (registrationSuccess)
+                {
+                    MyConsole.PrintMessage("수강신청 성공", Console.CursorLeft, Console.CursorTop);
+                }
+                else
+                {
+                    MyConsole.PrintMessage("수강신청 실패", Console.CursorLeft, Console.CursorTop);
+                }
             }
             else
             {
-                MyConsole.PrintMessage("해당 ID는 존재하지 않습니다",Console.CursorLeft, Console.CursorTop);
+                MyConsole.PrintMessage("해당 강의는 존재하지 않습니다",Console.CursorLeft, Console.CursorTop);
             }
             MyConsole.WaitForEnterKey();
         }
 
-        private void GetResult()
+        private void NormalRegister()
+        {
+            // 1. view에서 검색필터 받아옴
+            List<String> filters = CommonView.FindLectureForm();
+            // 2. 검색필터를 model로 보내서 필터링된 강의들 받아오기
+            List<LectureDTO> filteredLectures = lectureRepository.GetFilteredLectureResults(filters);
+            // 3. view로 보내서 강의 출력하고 수강신청할 과목 받아오기
+            string lectureID = registrationView.RegistrationForm2(filteredLectures, memberRepository.GetUserInfo(curUserID));
+            // 4. 진짜 수강신청해주기
+            if (ExceptionHandler.CheckIfValidLectureID(lectureID))
+            {
+                bool registrationSuccess = memberRepository.AddToUserRegistration(curUserID, lectureID);
+                if (registrationSuccess)
+                {
+                    MyConsole.PrintMessage("수강신청 성공", Console.CursorLeft, Console.CursorTop);
+                }
+                else
+                {
+                    MyConsole.PrintMessage("수강신청 실패", Console.CursorLeft, Console.CursorTop);
+                }
+            }
+            else
+            {
+                MyConsole.PrintMessage("해당 강의는 존재하지 않습니다", Console.CursorLeft, Console.CursorTop);
+            }
+            MyConsole.WaitForEnterKey();
+        }
+
+        public void GetResult()
         {
             // 1. model에서 curUserID가 진짜로 수강신청한거 가죠오기
             curUserRegistrationList = memberRepository.GetUserRegistrationList(curUserID);
@@ -68,11 +105,19 @@ namespace LTT
             // 3. 수강신청 목록에서 진짜로 삭제하기
             if (ExceptionHandler.CheckIfValidLectureID(lectureID))
             {
-                memberRepository.RemoveFromUserRegistration(curUserID, lectureID);
+                bool deleteRegistrationSuccess = memberRepository.RemoveFromUserRegistration(curUserID, lectureID);
+                if (deleteRegistrationSuccess)
+                {
+                    MyConsole.PrintMessage("수강신청 삭제 성공", Console.CursorLeft, Console.CursorTop);
+                }
+                else
+                {
+                    MyConsole.PrintMessage("수강신청 삭제 실패", Console.CursorLeft, Console.CursorTop);
+                }
             }
             else
             {
-                MyConsole.PrintMessage("THIS LECTURE DOESNT EXIST!", Console.CursorLeft, Console.CursorTop);
+                MyConsole.PrintMessage("해당 강의는 존재하지 않습니다", Console.CursorLeft, Console.CursorTop);
             }
             MyConsole.WaitForEnterKey();
         }
@@ -89,8 +134,11 @@ namespace LTT
 
                 switch (mode)
                 {
-                    case RegistrationMode.REGISTER:
-                        Register();
+                    case RegistrationMode.NORMAL_REGISTER:
+                        NormalRegister();
+                        break;
+                    case RegistrationMode.SHOPPING_REGISTER:
+                        ShoppingRegister();
                         break;
 
                     case RegistrationMode.REGISTER_RESULT:

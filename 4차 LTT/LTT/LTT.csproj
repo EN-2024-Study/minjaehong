@@ -52,7 +52,6 @@
     <Compile Include="View\CommonView.cs" />
     <Compile Include="View\LoginView.cs" />
     <Compile Include="View\MainView.cs" />
-    <Compile Include="View\RuntimeView.cs" />
     <Compile Include="View\RegistrationView.cs" />
     <Compile Include="View\ShoppingView.cs" />
   </ItemGroup>
