@@ -36,6 +36,8 @@ namespace LTT
             List<LectureDTO> filteredLectures = lectureRepository.GetFilteredLectureResults(filters);
             // 3. view로 보내서 강의 출력하기
             CommonView.ShowLectureTable(filteredLectures);
+  
+            MyConsole.WaitForEnterKey();
         }
 
         public void Run()
@@ -57,11 +59,11 @@ namespace LTT
                         shoppingController.Run();
                         break;
 
-                    case MainMode.REGST_MODE:
+                    case MainMode.REGISTER_MODE:
                         registrationController.Run();
                         break;
 
-                    case MainMode.REGST_RESULT_MODE:
+                    case MainMode.REGISTER_RESULT_MODE:
                         break;
 
                     case MainMode.LOGOUT:

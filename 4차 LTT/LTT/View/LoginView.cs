@@ -14,7 +14,7 @@ namespace LTT
         {
             Console.Clear();
             
-            List<string> userLoginInput = MyConsole.GetUserInputs(loginMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
+            List<string> userLoginInput = MyConsole.GetUserInputs(loginMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
 
             return userLoginInput;
         }

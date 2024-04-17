@@ -18,15 +18,23 @@ namespace LTT
 
             MyConsole.PrintHeader("[LETS FIND LECTURES]");
             
-            List<String> filterList = MyConsole.GetUserInputs(lectureFindMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
+            List<String> filterList = MyConsole.GetUserInputs(lectureFindMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
 
-            return filterList;
+            return filterList;    
         }
         
-        // 조회된 강의들을 보여주는 UI
+        // 검색결과가 없을때 보여주는 화면
+        public static void NoResultForm()
+        {
+            Console.Clear();
+            MyConsole.PrintHeader("THERE ARE NOTHING MATCHED");
+        }
+
+        // LectureDTO List를 인자로 주면 해당 강의들을 출력해줌
         public static void ShowLectureTable(List<LectureDTO> lectureList)
         {
             Console.Clear();
+
             Console.SetCursorPosition(0, 0);
             Console.Write("NO");
             Console.SetCursorPosition(4, 0);
@@ -91,7 +99,6 @@ namespace LTT
             }
 
             Console.WriteLine("========================================================================================================================================================================================");
-            Console.ReadLine();
         }
 
         // 강의 시간표 보여주는 UI

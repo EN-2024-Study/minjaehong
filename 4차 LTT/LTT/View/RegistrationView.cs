@@ -19,47 +19,50 @@ namespace LTT
 
             MyConsole.PrintHeader("[SELECT REGISTRATION MODE]");
           
-            RegistrationMode selectedMode = (RegistrationMode)MyConsole.GetUserSelection(registrationMenuArr, Constants.MENU_STARTX, Constants.MENU_STARTY);
+            RegistrationMode selectedMode = (RegistrationMode)MyConsole.GetUserSelection(registrationMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMode;
         }
 
-        public string RegistrationForm(List<LectureDTO> shoppingList)
+        public string RegistrationForm(List<LectureDTO> shoppingList, MemberDTO curMember)
         {
             Console.Clear();
 
             // 관심과목들을 controller부터 받아서 화면에 보여주고
             CommonView.ShowLectureTable(shoppingList);
 
-            // 담고싶은 과목을 입력 받고 
+            // 담고싶은 과목을 입력 받기 
+            Console.Write("등록가능 학점 : " + curMember.GetMaximumCredit() + "  담은 학점 : " + (curMember.GetCurrentRegistrationCredit()) + "  ");
             List<String> inputs = MyConsole.GetUserInputs(registrationInputMessage, Console.CursorLeft, Console.CursorTop);
 
-            // 다시 controller한테 보내주기
             return inputs[0];
         }
 
-        public void RegistrationResultForm(List<LectureDTO> registrationList)
+        // controller에서 특정 학생의 수강신청목록 받아서 CommonView 사용해서 출력해주기
+        public void RegistrationResultForm(List<LectureDTO> registrationList, MemberDTO curMember)
         {
             Console.Clear();
 
-            // controller에서 받은 현재 수강신청한 과목 보여주기
             CommonView.ShowLectureTable(registrationList);
+            Console.Write("등록가능 학점 : " + curMember.GetMaximumCredit() + "  담은 학점 : " + (curMember.GetCurrentRegistrationCredit()) + "  ");
         }
 
-        public void RegistrationTableForm()
+        public void RegistrationTableForm(List<LectureDTO> registrationList)
         {
-
+            Console.Clear();
+            CommonView.ShowTimeTable(registrationList);
         }
 
-        public string RegistrationDeleteForm(List<LectureDTO> registrationList)
+        // controller에서 특정 학생의 수강신청목록 받아서 CommonView로 넘겨주고
+        // 삭제할 LectureID 받기
+        public string RegistrationDeleteForm(List<LectureDTO> registrationList, MemberDTO curMember)
         {
             Console.Clear();
             CommonView.ShowLectureTable(registrationList);
-
-            int inputX = Console.CursorLeft;
-            int inputY = Console.CursorTop;
 
             // view에서 삭제하고 싶은 과목 입력 받기
-            List<String> deletinginputs = MyConsole.GetUserInputs(registrationDeleteMessage, inputX, inputY);
+            Console.Write("등록가능 학점 : " + curMember.GetMaximumCredit() + "  담은 학점 : " + (curMember.GetCurrentRegistrationCredit()) + "  ");
+            List<String> deletinginputs = MyConsole.GetUserInputs(registrationDeleteMessage, Console.CursorLeft, Console.CursorTop);
+            
             return deletinginputs[0];
         }
     }

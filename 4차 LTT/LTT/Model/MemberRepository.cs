@@ -32,6 +32,7 @@ namespace LTT
 
         //============== SINGLETON ==============//
 
+        // ID PW 맞는지 확인
         public bool CheckIfValidLogin(List<string> loginInfo)
         {
             string ID = loginInfo[0];
@@ -39,6 +40,12 @@ namespace LTT
 
             if(userDB.ContainsKey(ID) && userDB[ID].GetPW() == PW) return true;
             else return false;
+        }
+
+        // 해당 USER의 userDTO 보내주기
+        public MemberDTO GetUserInfo(string curUserID)
+        {
+            return userDB[curUserID];
         }
 
         // 해당 USER의 장바구니 목록 보내주기
@@ -58,7 +65,10 @@ namespace LTT
             LectureDTO lecture = lectureRepository.GetCertainLecture(lectureID);
             List<LectureDTO> curUserShoppingBasket = GetUserShoppingBasket(curUserID);
 
-            if (curUserShoppingBasket.Contains(lecture))
+            int calculatedCredit = userDB[curUserID].GetCurrentShoppingCredit() + int.Parse(lecture.GetCredit());
+
+            // 장바구니에 이미 담겨있거나 + 최대수강학점을 넘길때
+            if (curUserShoppingBasket.Contains(lecture) || calculatedCredit > userDB[curUserID].GetMaximumCredit())
             {
                 return false;
             }
@@ -75,6 +85,7 @@ namespace LTT
             LectureDTO lecture = lectureRepository.GetCertainLecture(lectureID);
             List<LectureDTO> curUserShoppingBasket = GetUserShoppingBasket(curUserID);
 
+            // 장바구니에 담겨있지 않을때 예외처리
             if (curUserShoppingBasket.Contains(lecture))
             {
                 curUserShoppingBasket.Remove(lecture);
@@ -92,10 +103,19 @@ namespace LTT
             LectureDTO lecture = lectureRepository.GetCertainLecture(lectureID);
             List<LectureDTO> curUserRegistration = GetUserRegistrationList(curUserID);
 
-            if (curUserRegistration.Contains(lecture)) return false;
+            int calculatedCredit = userDB[curUserID].GetCurrentRegistrationCredit() + int.Parse(lecture.GetCredit());
+
+            // 이미 수강신청되어있거나 + 최대수강학점을 넘으면
+            if (curUserRegistration.Contains(lecture) || calculatedCredit > userDB[curUserID].GetMaximumCredit())
+            {
+                return false;
+            }
             else
             {
+                // 수강신청으로 추가했으면
                 curUserRegistration.Add(lecture);
+                // 장바구니에서 빼주기
+                RemoveFromUserShoppingBasket(curUserID, lectureID);
                 return true;
             }
         }
@@ -105,6 +125,8 @@ namespace LTT
         {
             LectureDTO lecture = lectureRepository.GetCertainLecture(lectureID);
             List<LectureDTO> curUserRegistration = GetUserRegistrationList(curUserID);
+            
+            // 수강신청에 없을때 예외처리
             if (curUserRegistration.Contains(lecture))
             {
                 curUserRegistration.Remove(lecture);

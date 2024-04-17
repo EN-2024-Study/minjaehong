@@ -32,12 +32,32 @@ namespace LTT
         {
             // 1. view에서 검색필터 받아옴
             List<String> filters = CommonView.FindLectureForm();
+
             // 2. 이걸 model로 보내서 필터링된 강의들 받아오기
             List<LectureDTO> filteredLectures = lectureRepository.GetFilteredLectureResults(filters);
-            // 3. 필터링된 강의들을 view로 보내서 출력시키고 관담할 과목 받아오기
-            string lectureID = shoppingView.ShoppingForm(filteredLectures);
-            // 4. 관담할 과목을 진짜로 관담하기
-            memberRepository.AddToUserShoppingBasket(curUserID, lectureID);
+
+            if (filteredLectures.Count != 0)
+            {
+                // 3. 필터링된 강의들을 view로 보내서 출력시키고 관담할 과목 받아오기
+                string lectureID = shoppingView.ShoppingForm(filteredLectures, memberRepository.GetUserInfo(curUserID));
+                // 4. 관담할 과목을 진짜로 관담하기
+                // 유효한 lectureID이고 + 아직 담지 않은 과목이면
+                if (ExceptionHandler.CheckIfValidLectureID(lectureID))
+                {
+                    memberRepository.AddToUserShoppingBasket(curUserID, lectureID);
+                    MyConsole.PrintMessage("관심과목 담기 완료!", Console.CursorLeft, Console.CursorTop);
+                }
+                else
+                {
+                    MyConsole.PrintMessage("관심과목 담기 실패!", Console.CursorLeft, Console.CursorTop);
+                }
+            }
+            else
+            {
+                CommonView.NoResultForm();
+            }
+
+            MyConsole.WaitForEnterKey();
         }
 
         private void GetResult()
@@ -45,9 +65,10 @@ namespace LTT
             // 1. model에서 user가 관담한거 가져오기
             curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
             // 2. view로 보내서 관담한거 출력하기
-            shoppingView.ShoppingResultForm(curUserShoppingBasket);
+            shoppingView.ShoppingResultForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
+            MyConsole.WaitForEnterKey();
         }
-        
+
         private void GetTimeTable()
         {
             shoppingView.ShoppingTableForm(curUserShoppingBasket);
@@ -58,9 +79,12 @@ namespace LTT
             // 1. model에서 curUserID가 관담한거 가져오기
             curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
             // 2. view로 보내서 출력하고 삭제할 lectureID 받아오기
-            string lectureID = shoppingView.ShoppingDeleteForm(curUserShoppingBasket);
+            string lectureID = shoppingView.ShoppingDeleteForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
             // 3. 관담목록에서 진짜로 삭제하기
-            memberRepository.RemoveFromUserShoppingBasket(curUserID, lectureID);
+            if (ExceptionHandler.CheckIfValidLectureID(lectureID))
+            {
+                memberRepository.RemoveFromUserShoppingBasket(curUserID, lectureID);
+            }
         }
 
         public void Run()

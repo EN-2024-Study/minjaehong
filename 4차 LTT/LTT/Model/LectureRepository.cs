@@ -69,15 +69,15 @@ namespace LTT
             Array data = cellRange.Cells.Value2;
             return data;
         }
-        
+
         private List<LectureDTO> ConvertDataToDTO(Array data)
         {
             List<LectureDTO> retList = new List<LectureDTO>();
-            
+
             // List에서도 1번부터 시작하게 dummyDTO 넣고 시작
             // 나중에 강의번호로 바로 참조할 수 있게
             retList.Add(new LectureDTO());
-            
+
             for (int i = 1; i < 185; i++)
             {
                 LectureDTO dummyDTO = new LectureDTO();
@@ -92,11 +92,10 @@ namespace LTT
                 dummyDTO.SetCredit(data.GetValue(i, 8).ToString()); // 학점
                 if (data.GetValue(i, 9) == null) { dummyDTO.SetTime(""); }
                 else dummyDTO.SetTime(data.GetValue(i, 9).ToString()); // 요일
-                if(data.GetValue(i,10)==null) { dummyDTO.SetClassroom(""); }
+                if (data.GetValue(i, 10) == null) { dummyDTO.SetClassroom(""); }
                 else dummyDTO.SetClassroom(data.GetValue(i, 10).ToString()); // 강의실
                 dummyDTO.SetProfessor(data.GetValue(i, 11).ToString()); // 교수명
                 dummyDTO.SetLanguage(data.GetValue(i, 12).ToString()); // 언어
-                //dummyDTO.SetLectureTimeNumbers();
 
                 retList.Add(dummyDTO);
             }
@@ -132,13 +131,8 @@ namespace LTT
         {
             int ID = int.Parse(lectureID);
             return lectureDB[ID];
-        } 
+        }
 
-        // LectureDTO들의 참조값 List 반환
-        // 이게 작동하려면 기존 LectureDTO가 계속 살아있어야함
-        // 기존 LectureDTO는 lectureDB에 있는 LectureDTO들
-        // 지금 계속 각 객체의 참조값을 넘기면서 작업하는거임
-        // 그럼 lectureDB에 있는 객체들이 계속 살아있다는 보장 ㄱㄴ??
         public List<LectureDTO> GetFilteredLectureResults(List<string> filters)
         {
             string department = filters[0];
@@ -151,7 +145,7 @@ namespace LTT
 
             // 항상 lectureDB는 1번부터 시작
             // 0은 dummyDTO임
-            for(int i = 1; i < lectureDB.Count; i++)
+            for (int i = 1; i < lectureDB.Count; i++)
             {
                 LectureDTO curLecture = lectureDB[i];
 
@@ -170,3 +164,10 @@ namespace LTT
         }
     }
 }
+
+// LectureDTO들의 참조값 List 반환
+// 이게 작동하려면 기존 LectureDTO가 계속 살아있어야함
+// 기존 LectureDTO는 lectureDB에 있는 LectureDTO들
+// 지금 계속 각 객체의 참조값을 넘기면서 작업하는거임
+// 지금 lectureDB에 있는 객체들이 계속 살아있다는 보장이 되어있음
+// 그래서 참조값으로 계속 넘겨도 가능함

@@ -29,7 +29,7 @@ namespace LTT
 
         public string GetPW() { return pw; }
         public int GetMaximumCredit() { return maximumCredit; }
-        public int GetAvailableShoppingCredit()
+        public int GetCurrentShoppingCredit()
         {
             int total = 0;
 
@@ -37,10 +37,10 @@ namespace LTT
             {
                 total += int.Parse(shoppingBasket[i].GetCredit());
             }
-            return maximumCredit - total;
+            return total;
         }
 
-        public int GetAvailableRegistrationCredit()
+        public int GetCurrentRegistrationCredit()
         {
             int total = 0;
 
@@ -48,7 +48,7 @@ namespace LTT
             {
                 total += int.Parse(registration[i].GetCredit());
             }
-            return maximumCredit - total;
+            return total;
         }
 
         public List<LectureDTO> GetShoppingBasket() { return shoppingBasket; }

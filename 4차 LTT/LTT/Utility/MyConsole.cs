@@ -8,26 +8,38 @@ namespace LTT
 {
     class MyConsole
     {
-        private const int HEADER_X = 45; // HEADER가 끝나야하는 X좌표
-        private const int HEADER_Y = 4; // HEADER가 찍혀야하는 Y좌표
+        private const int HEADER_X = 45; // HEADER START X
+        private const int HEADER_Y = 4; // HEADER START Y
 
-        private const int USERID_X = 40;
-        private const int USERID_Y = 5;
+        public const int MENU_STARTX = 40; // MENU START X
+        public const int MENU_STARTY = 6; // MENU START Y
+                                          
+        private const int USERID_X = 40; // USERID START X
+        private const int USERID_Y = 5; // USERID START Y
+
 
         //===================== PRINT FUNCTIONS =====================//
 
-        // HEADER 출력 함수
-        // HEADER 위치는 고정되어 있음
+        public static void PrintMessage(string message, int messageStartX, int messageStartY)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+            //Console.WriteLine("뒤로가기 : ESC | 계속담기 : ENTER");
+        }
+
         public static void PrintHeader(string header)
         {
             Console.SetCursorPosition(HEADER_X, HEADER_Y);
-            Console.Write(header);
+            Console.WriteLine(header);
         }
 
         public static void PrintUserID(string userID)
         {
             Console.SetCursorPosition(USERID_X, USERID_Y);
-            Console.WriteLine("HELLO "+userID+"!");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("HELLO STUDENT "+userID+"!");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         // menuStartX, menuStartY에서 시작하는 메뉴 중
@@ -137,14 +149,26 @@ namespace LTT
             return curSel;
         }
 
-        // 지우개 함수
-        // 지우고 CursorPosition 제자리로 돌려놓음
-        public static void Eraser(int eraseStartX, int eraseStartY)
+        public static void WaitForEnterKey()
         {
-            Console.SetCursorPosition(eraseStartX, eraseStartY);
-            string eraser = "                                         ";
-            Console.WriteLine(eraser);
-            Console.SetCursorPosition(eraseStartX, eraseStartY);
+            MyConsole.PrintMessage("PRESS ENTER TO GO BACK", Console.CursorLeft, Console.CursorTop);
+
+            bool isEnterPressed = false;
+
+            // ENTER 누를때까지 대기
+            while (!isEnterPressed)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    ConsoleKey key = keyInfo.Key;
+
+                    if (key == ConsoleKey.Enter)
+                    {
+                        isEnterPressed = true;
+                    }
+                }
+            }
         }
     }
 }

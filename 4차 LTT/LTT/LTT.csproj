@@ -37,7 +37,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Controller\LoginController.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Controller\RegistrationController.cs" />
@@ -46,12 +45,14 @@
     <Compile Include="LTTApp.cs" />
     <Compile Include="Model\LectureDTO.cs" />
     <Compile Include="Model\LectureRepository.cs" />
-    <Compile Include="Model\UserDTO.cs" />
+    <Compile Include="Model\MemberDTO.cs" />
     <Compile Include="Model\MemberRepository.cs" />
+    <Compile Include="Utility\ExceptionHandler.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\CommonView.cs" />
     <Compile Include="View\LoginView.cs" />
     <Compile Include="View\MainView.cs" />
+    <Compile Include="View\RuntimeView.cs" />
     <Compile Include="View\RegistrationView.cs" />
     <Compile Include="View\ShoppingView.cs" />
   </ItemGroup>
@@ -60,6 +61,12 @@
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1001\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.RegularExpressions.4.3.1\lib\net463\System.Text.RegularExpressions.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
