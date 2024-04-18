@@ -5,9 +5,9 @@ namespace LTT
 {
     class MemberRepository
     {
-        Dictionary<string, MemberDTO> userDB; // ID마다 MemberDTO 저장
-        
         private static MemberRepository instance;
+
+        Dictionary<string, MemberDTO> userDB; // ID마다 MemberDTO 저장
 
         private LectureRepository lectureRepository;
 
@@ -17,7 +17,12 @@ namespace LTT
 
             // ID : PW
             userDB = new Dictionary<string, MemberDTO>();
-            userDB.Add("20011738", new MemberDTO("20011738","12345"));
+            PutDummyData();
+        }
+
+        private void PutDummyData()
+        {
+            userDB.Add("20011738", new MemberDTO("20011738", "12345"));
             userDB.Add("211929", new MemberDTO("211929", "10000"));
         }
 

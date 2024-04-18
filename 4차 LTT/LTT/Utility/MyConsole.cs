@@ -26,7 +26,6 @@ namespace LTT
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
-            //Console.WriteLine("뒤로가기 : ESC | 계속담기 : ENTER");
         }
 
         public static void PrintHeader(string header)
@@ -45,14 +44,14 @@ namespace LTT
 
         // menuStartX, menuStartY에서 시작하는 메뉴 중
         // idx에 해당하는 한개의 메뉴만 출력해줌
-        public static void PrintMenu(string menu, int idx, int menuStartX, int menuStartY)
+        private static void PrintMenu(string menu, int idx, int menuStartX, int menuStartY)
         {
             int menuLen = menu.Length;
             Console.SetCursorPosition(menuStartX, menuStartY + idx);
             Console.Write(menu);
         }
 
-        public static void RenderMenu(string[] menuArr, int beforeSel, int curSel, int menuStartX, int menuStartY)
+        private static void RenderMenu(string[] menuArr, int beforeSel, int curSel, int menuStartX, int menuStartY)
         {
             // 전꺼 흰색으로 출력
             Console.ForegroundColor = ConsoleColor.White;
@@ -152,7 +151,7 @@ namespace LTT
 
         public static void WaitForEnterKey()
         {
-            MyConsole.PrintMessage("PRESS ENTER TO GO BACK", Console.CursorLeft, Console.CursorTop);
+            MyConsole.PrintMessage("PRESS ENTER TO GO BACK...", Console.CursorLeft, Console.CursorTop);
 
             bool isEnterPressed = false;
 

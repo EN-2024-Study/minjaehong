@@ -27,7 +27,7 @@ namespace LTT
         public static void NoResultForm()
         {
             Console.Clear();
-            MyConsole.PrintHeader("THERE ARE NOTHING MATCHED");
+            MyConsole.PrintHeader("NOTHING MATCHED");
         }
 
         // LectureDTO List를 인자로 주면 해당 강의들을 출력해줌

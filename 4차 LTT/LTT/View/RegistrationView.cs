@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LTT
 {
     // RegistrationController가 호출하는 View모음
     class RegistrationView
     {
-        public string[] registrationInputMessage = { "COURSE ID YOU WANT TO REGISTER :" };
+        private string[] registrationInputMessage = { "COURSE ID YOU WANT TO REGISTER :" };
         private string[] registrationDeleteMessage = {"COURSE ID YOU WANT TO DELETE :" };
         private string[] registrationMenuArr = { "1. 수강신청(일반)", "2. 수강신청(관심과목)","3. 수강신청 내역", "4. 수강신청 시간표", "5. 수강과목 삭제" };
         

@@ -16,7 +16,6 @@ namespace LTT
 
         private Excel.Application application;
         private Excel.Workbook workbook;
-
         private Array data;
 
         //=============== SINGLETON ===============//

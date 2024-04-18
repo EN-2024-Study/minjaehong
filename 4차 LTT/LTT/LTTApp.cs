@@ -16,7 +16,8 @@ namespace LTT
 
         public static void Main()
         {
-
+            Console.SetWindowPosition(0,0);
+            Console.SetWindowSize(213, 62);
 
             InitializeDB();
 
