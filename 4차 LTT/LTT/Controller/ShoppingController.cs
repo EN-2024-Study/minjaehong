@@ -36,6 +36,7 @@ namespace LTT
             // 2. 이걸 model로 보내서 필터링된 강의들 받아오기
             List<LectureDTO> filteredLectures = lectureRepository.GetFilteredLectureResults(filters);
 
+            // 보여줄게 있을때만
             if (filteredLectures.Count != 0)
             {
                 // 3. 필터링된 강의들을 view로 보내서 출력시키고 관담할 과목 받아오기
@@ -67,8 +68,14 @@ namespace LTT
         {
             // 1. model에서 user가 관담한거 가져오기
             curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
-            // 2. view로 보내서 관담한거 출력하기
-            shoppingView.ShoppingResultForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
+
+            // 보여줄거 없을때 예외처리
+            if (curUserShoppingBasket.Count() == 0) CommonView.NoResultForm();
+            else
+            {
+                // 2. view로 보내서 관담한거 출력하기
+                shoppingView.ShoppingResultForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
+            }
             MyConsole.WaitForEnterKey();
         }
 
@@ -81,13 +88,21 @@ namespace LTT
         {
             // 1. model에서 curUserID가 관담한거 가져오기
             curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
-            // 2. view로 보내서 출력하고 삭제할 lectureID 받아오기
-            string lectureID = shoppingView.ShoppingDeleteForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
-            // 3. 관담목록에서 진짜로 삭제하기
-            if (ExceptionHandler.CheckIfValidLectureID(lectureID))
+
+            // 보여줄게 없을때 예외처리
+            if (curUserShoppingBasket.Count() == 0) CommonView.NoResultForm();
+            else
             {
-                memberRepository.RemoveFromUserShoppingBasket(curUserID, lectureID);
+                // 2. view로 보내서 출력하고 삭제할 lectureID 받아오기
+                string lectureID = shoppingView.ShoppingDeleteForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
+                // 3. 관담목록에서 진짜로 삭제하기
+                if (ExceptionHandler.CheckIfValidLectureID(lectureID))
+                {
+                    memberRepository.RemoveFromUserShoppingBasket(curUserID, lectureID);
+                }
             }
+
+            MyConsole.WaitForEnterKey();
         }
 
         public void Run()

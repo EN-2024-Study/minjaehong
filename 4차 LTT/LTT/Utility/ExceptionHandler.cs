@@ -3,6 +3,8 @@ using System.Text.RegularExpressions;
 
 namespace LTT
 {
+    // 정규식 같은 예외처리만 여기서 하고
+    // 서비스 예외처리는 controller 안에서 하면 된다
     static class ExceptionHandler
     {
         public static bool CheckIfValidLectureID(string lectureID)

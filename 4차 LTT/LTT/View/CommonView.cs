@@ -23,11 +23,11 @@ namespace LTT
             return filterList;    
         }
         
-        // 검색결과가 없을때 보여주는 화면
+        // 보여줄게 없을때 보여주는 화면
         public static void NoResultForm()
         {
             Console.Clear();
-            MyConsole.PrintHeader("NOTHING MATCHED");
+            MyConsole.PrintHeader("NO RESULT");
         }
 
         // LectureDTO List를 인자로 주면 해당 강의들을 출력해줌

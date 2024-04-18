@@ -27,29 +27,52 @@ namespace LTT
             lectureRepository = LectureRepository.GetInstance();
         }
 
+        // 진짜로 수강신청 처리해주는 함수
+        private void StartRegisterTransaction(string lectureID)
+        {
+            if (ExceptionHandler.CheckIfValidLectureID(lectureID))
+            {
+                bool registrationSuccess = memberRepository.AddToUserRegistration(curUserID, lectureID);
+
+                if (registrationSuccess) MyConsole.PrintMessage("수강신청 성공", Console.CursorLeft, Console.CursorTop); 
+                else MyConsole.PrintMessage("수강신청 실패", Console.CursorLeft, Console.CursorTop);
+            }
+            else
+            {
+                MyConsole.PrintMessage("해당 강의는 존재하지 않습니다", Console.CursorLeft, Console.CursorTop);
+            }
+        }
+
+        // 진짜로 수강신청 삭제해주는 함수
+        private void StartDeleteTransaction(string lectureID)
+        {
+            if (ExceptionHandler.CheckIfValidLectureID(lectureID))
+            {
+                bool deleteRegistrationSuccess = memberRepository.RemoveFromUserRegistration(curUserID, lectureID);
+                if (deleteRegistrationSuccess) MyConsole.PrintMessage("수강신청 삭제 성공", Console.CursorLeft, Console.CursorTop);
+                else MyConsole.PrintMessage("수강신청 삭제 실패", Console.CursorLeft, Console.CursorTop);
+            }
+            else
+            {
+                MyConsole.PrintMessage("해당 강의는 존재하지 않습니다", Console.CursorLeft, Console.CursorTop);
+            }
+        }
+
         private void ShoppingRegister()
         {
             // 1. model에서 curUserID가 관담한거 가져오기
             curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
-            // 2. view로 보내서 출력하고 수강신청할 과목 받아오기
-            string lectureID = registrationView.RegistrationForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
-            // 3. 진짜 수강신청해주기
-            if (ExceptionHandler.CheckIfValidLectureID(lectureID))
-            {
-                bool registrationSuccess = memberRepository.AddToUserRegistration(curUserID, lectureID);
-                if (registrationSuccess)
-                {
-                    MyConsole.PrintMessage("수강신청 성공", Console.CursorLeft, Console.CursorTop);
-                }
-                else
-                {
-                    MyConsole.PrintMessage("수강신청 실패", Console.CursorLeft, Console.CursorTop);
-                }
-            }
+
+            // 관담한거 없을때 예외처리 
+            if (curUserShoppingBasket.Count() == 0) { CommonView.NoResultForm(); }
             else
             {
-                MyConsole.PrintMessage("해당 강의는 존재하지 않습니다",Console.CursorLeft, Console.CursorTop);
+                // 2. view로 보내서 관담한거 출력하고 수강신청할 과목 받아오기
+                string lectureID = registrationView.RegistrationForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
+                // 3. 수강신청 함수 호출
+                StartRegisterTransaction(lectureID);
             }
+
             MyConsole.WaitForEnterKey();
         }
 
@@ -59,25 +82,17 @@ namespace LTT
             List<String> filters = CommonView.FindLectureForm();
             // 2. 검색필터를 model로 보내서 필터링된 강의들 받아오기
             List<LectureDTO> filteredLectures = lectureRepository.GetFilteredLectureResults(filters);
-            // 3. view로 보내서 강의 출력하고 수강신청할 과목 받아오기
-            string lectureID = registrationView.RegistrationForm2(filteredLectures, memberRepository.GetUserInfo(curUserID));
-            // 4. 진짜 수강신청해주기
-            if (ExceptionHandler.CheckIfValidLectureID(lectureID))
-            {
-                bool registrationSuccess = memberRepository.AddToUserRegistration(curUserID, lectureID);
-                if (registrationSuccess)
-                {
-                    MyConsole.PrintMessage("수강신청 성공", Console.CursorLeft, Console.CursorTop);
-                }
-                else
-                {
-                    MyConsole.PrintMessage("수강신청 실패", Console.CursorLeft, Console.CursorTop);
-                }
-            }
+
+            // 검색된거 없을때 예외처리
+            if (filteredLectures.Count() == 0) { CommonView.NoResultForm(); }
             else
             {
-                MyConsole.PrintMessage("해당 강의는 존재하지 않습니다", Console.CursorLeft, Console.CursorTop);
+                // 3. view로 보내서 강의 출력하고 수강신청할 과목 받아오기
+                string lectureID = registrationView.RegistrationForm2(filteredLectures, memberRepository.GetUserInfo(curUserID));
+                // 4. 수강신청 함수 호출
+                StartRegisterTransaction(lectureID);
             }
+
             MyConsole.WaitForEnterKey();
         }
 
@@ -100,25 +115,16 @@ namespace LTT
         {
             // 1. model에서 curUserID가 수강신청한거 가져오기
             curUserRegistrationList = memberRepository.GetUserRegistrationList(curUserID);
-            // 2. view로 보내서 진짜로 수강신청한거 출력하고 삭제할 lectureID 받아오기
-            string lectureID = registrationView.RegistrationDeleteForm(curUserRegistrationList, memberRepository.GetUserInfo(curUserID));
-            // 3. 수강신청 목록에서 진짜로 삭제하기
-            if (ExceptionHandler.CheckIfValidLectureID(lectureID))
-            {
-                bool deleteRegistrationSuccess = memberRepository.RemoveFromUserRegistration(curUserID, lectureID);
-                if (deleteRegistrationSuccess)
-                {
-                    MyConsole.PrintMessage("수강신청 삭제 성공", Console.CursorLeft, Console.CursorTop);
-                }
-                else
-                {
-                    MyConsole.PrintMessage("수강신청 삭제 실패", Console.CursorLeft, Console.CursorTop);
-                }
-            }
+
+            if (curUserRegistrationList.Count() == 0) { CommonView.NoResultForm(); }
             else
             {
-                MyConsole.PrintMessage("해당 강의는 존재하지 않습니다", Console.CursorLeft, Console.CursorTop);
+                // 2. view로 보내서 진짜로 수강신청한거 출력하고 삭제할 lectureID 받아오기
+                string lectureID = registrationView.RegistrationDeleteForm(curUserRegistrationList, memberRepository.GetUserInfo(curUserID));
+                // 3. 수강신청 삭제 함수 호출
+                StartDeleteTransaction(lectureID);
             }
+            
             MyConsole.WaitForEnterKey();
         }
 
