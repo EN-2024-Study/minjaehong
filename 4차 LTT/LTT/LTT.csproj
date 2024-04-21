@@ -43,10 +43,12 @@
     <Compile Include="Controller\ShoppingController.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="LTTApp.cs" />
-    <Compile Include="Model\LectureDTO.cs" />
-    <Compile Include="Model\LectureRepository.cs" />
-    <Compile Include="Model\MemberDTO.cs" />
-    <Compile Include="Model\MemberRepository.cs" />
+    <Compile Include="Repository\LectureDTO.cs" />
+    <Compile Include="Repository\LectureRepository.cs" />
+    <Compile Include="Repository\MemberDTO.cs" />
+    <Compile Include="Repository\MemberRepository.cs" />
+    <Compile Include="Service\LectureService.cs" />
+    <Compile Include="Service\MemberService.cs" />
     <Compile Include="Utility\ExceptionHandler.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\CommonView.cs" />

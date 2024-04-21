@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace LTT
 {
+    // 
     class LectureDTO
     {
         private string LectureID; // NO

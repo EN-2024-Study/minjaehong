@@ -11,28 +11,30 @@ namespace LTT
     {
         RegistrationView registrationView;
         
-        MemberRepository memberRepository;
-        LectureRepository lectureRepository;
+        MemberService memberService;
+        LectureService lectureService;
 
         string curUserID;
+
         List<LectureDTO> curUserShoppingBasket;
         List<LectureDTO> curUserRegistrationList;
 
         public RegistrationController(string curUserID)
         {
             this.curUserID = curUserID;
+
             registrationView = new RegistrationView();
 
-            memberRepository = MemberRepository.GetInstance();
-            lectureRepository = LectureRepository.GetInstance();
+            memberService = MemberService.GetInstance();
+            lectureService = LectureService.GetInstance();
         }
 
         // 진짜로 수강신청 처리해주는 함수
         private void StartRegisterTransaction(string lectureID)
         {
             if (ExceptionHandler.CheckIfValidLectureID(lectureID))
-            {
-                bool registrationSuccess = memberRepository.AddToUserRegistration(curUserID, lectureID);
+            { 
+                bool registrationSuccess = memberService.AddToUserRegistration(curUserID, lectureID);
 
                 if (registrationSuccess) MyConsole.PrintMessage("수강신청 성공", Console.CursorLeft, Console.CursorTop); 
                 else MyConsole.PrintMessage("수강신청 실패", Console.CursorLeft, Console.CursorTop);
@@ -48,7 +50,7 @@ namespace LTT
         {
             if (ExceptionHandler.CheckIfValidLectureID(lectureID))
             {
-                bool deleteRegistrationSuccess = memberRepository.RemoveFromUserRegistration(curUserID, lectureID);
+                bool deleteRegistrationSuccess = memberService.RemoveFromUserRegistration(curUserID, lectureID);
                 if (deleteRegistrationSuccess) MyConsole.PrintMessage("수강신청 삭제 성공", Console.CursorLeft, Console.CursorTop);
                 else MyConsole.PrintMessage("수강신청 삭제 실패", Console.CursorLeft, Console.CursorTop);
             }
@@ -60,15 +62,17 @@ namespace LTT
 
         private void ShoppingRegister()
         {
+            MemberDTO curUser = memberService.GetCurUserInfo(curUserID);
+
             // 1. model에서 curUserID가 관담한거 가져오기
-            curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
+            curUserShoppingBasket = memberService.GetUserShoppingBasket(curUserID);
 
             // 관담한거 없을때 예외처리 
             if (curUserShoppingBasket.Count() == 0) { CommonView.NoResultForm(); }
             else
             {
                 // 2. view로 보내서 관담한거 출력하고 수강신청할 과목 받아오기
-                string lectureID = registrationView.RegistrationForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
+                string lectureID = registrationView.RegistrationForm(curUserShoppingBasket, memberService.GetCurUserInfo(curUserID));
                 // 3. 수강신청 함수 호출
                 StartRegisterTransaction(lectureID);
             }
@@ -81,14 +85,14 @@ namespace LTT
             // 1. view에서 검색필터 받아옴
             List<String> filters = CommonView.FindLectureForm();
             // 2. 검색필터를 model로 보내서 필터링된 강의들 받아오기
-            List<LectureDTO> filteredLectures = lectureRepository.GetFilteredLectureResults(filters);
+            List<LectureDTO> filteredLectures = lectureService.GetFilteredLectureResults(filters);
 
             // 검색된거 없을때 예외처리
             if (filteredLectures.Count() == 0) { CommonView.NoResultForm(); }
             else
             {
                 // 3. view로 보내서 강의 출력하고 수강신청할 과목 받아오기
-                string lectureID = registrationView.RegistrationForm2(filteredLectures, memberRepository.GetUserInfo(curUserID));
+                string lectureID = registrationView.RegistrationForm2(filteredLectures, memberService.GetCurUserInfo(curUserID));
                 // 4. 수강신청 함수 호출
                 StartRegisterTransaction(lectureID);
             }
@@ -99,9 +103,9 @@ namespace LTT
         public void GetResult()
         {
             // 1. model에서 curUserID가 진짜로 수강신청한거 가죠오기
-            curUserRegistrationList = memberRepository.GetUserRegistrationList(curUserID);
+            curUserRegistrationList = memberService.GetUserRegistrationList(curUserID);
             // 2. view로 보내서 출력해주기
-            registrationView.RegistrationResultForm(curUserRegistrationList, memberRepository.GetUserInfo(curUserID));
+            registrationView.RegistrationResultForm(curUserRegistrationList, memberService.GetCurUserInfo(curUserID));
             
             MyConsole.WaitForEnterKey();
         }
@@ -114,13 +118,13 @@ namespace LTT
         private void Delete()
         {
             // 1. model에서 curUserID가 수강신청한거 가져오기
-            curUserRegistrationList = memberRepository.GetUserRegistrationList(curUserID);
+            curUserRegistrationList = memberService.GetUserRegistrationList(curUserID);
 
             if (curUserRegistrationList.Count() == 0) { CommonView.NoResultForm(); }
             else
             {
                 // 2. view로 보내서 진짜로 수강신청한거 출력하고 삭제할 lectureID 받아오기
-                string lectureID = registrationView.RegistrationDeleteForm(curUserRegistrationList, memberRepository.GetUserInfo(curUserID));
+                string lectureID = registrationView.RegistrationDeleteForm(curUserRegistrationList, memberService.GetCurUserInfo(curUserID));
                 // 3. 수강신청 삭제 함수 호출
                 StartDeleteTransaction(lectureID);
             }
@@ -143,6 +147,7 @@ namespace LTT
                     case RegistrationMode.NORMAL_REGISTER:
                         NormalRegister();
                         break;
+
                     case RegistrationMode.SHOPPING_REGISTER:
                         ShoppingRegister();
                         break;

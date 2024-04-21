@@ -11,8 +11,8 @@ namespace LTT
     {
         ShoppingView shoppingView;
 
-        LectureRepository lectureRepository;
-        MemberRepository memberRepository;
+        LectureService lectureService;
+        MemberService memberService;
 
         List<LectureDTO> curUserShoppingBasket;
 
@@ -24,8 +24,8 @@ namespace LTT
 
             shoppingView = new ShoppingView();
 
-            lectureRepository = LectureRepository.GetInstance();
-            memberRepository = MemberRepository.GetInstance();
+            lectureService = LectureService.GetInstance();
+            memberService = MemberService.GetInstance();
         }
 
         private void Shop()
@@ -34,18 +34,18 @@ namespace LTT
             List<String> filters = CommonView.FindLectureForm();
 
             // 2. 이걸 model로 보내서 필터링된 강의들 받아오기
-            List<LectureDTO> filteredLectures = lectureRepository.GetFilteredLectureResults(filters);
+            List<LectureDTO> filteredLectures = lectureService.GetFilteredLectureResults(filters);
 
             // 보여줄게 있을때만
             if (filteredLectures.Count != 0)
             {
                 // 3. 필터링된 강의들을 view로 보내서 출력시키고 관담할 과목 받아오기
-                string lectureID = shoppingView.ShoppingForm(filteredLectures, memberRepository.GetUserInfo(curUserID));
+                string lectureID = shoppingView.ShoppingForm(filteredLectures, memberService.GetCurUserInfo(curUserID));
                 // 4. 관담할 과목을 진짜로 관담하기
                 // 유효한 lectureID이고 + 아직 담지 않은 과목이면
                 if (ExceptionHandler.CheckIfValidLectureID(lectureID))
                 {
-                    bool shoppingSuccess = memberRepository.AddToUserShoppingBasket(curUserID, lectureID);
+                    bool shoppingSuccess = memberService.AddToUserShoppingBasket(curUserID, lectureID);
                     if (shoppingSuccess)
                     {
                         MyConsole.PrintMessage("관심과목 담기 성공", Console.CursorLeft, Console.CursorTop);
@@ -67,14 +67,14 @@ namespace LTT
         private void GetResult()
         {
             // 1. model에서 user가 관담한거 가져오기
-            curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
+            curUserShoppingBasket = memberService.GetUserShoppingBasket(curUserID);
 
             // 보여줄거 없을때 예외처리
             if (curUserShoppingBasket.Count() == 0) CommonView.NoResultForm();
             else
             {
                 // 2. view로 보내서 관담한거 출력하기
-                shoppingView.ShoppingResultForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
+                shoppingView.ShoppingResultForm(curUserShoppingBasket, memberService.GetCurUserInfo(curUserID));
             }
             MyConsole.WaitForEnterKey();
         }
@@ -87,18 +87,18 @@ namespace LTT
         private void Delete()
         {
             // 1. model에서 curUserID가 관담한거 가져오기
-            curUserShoppingBasket = memberRepository.GetUserShoppingBasket(curUserID);
+            curUserShoppingBasket = memberService.GetUserShoppingBasket(curUserID);
 
             // 보여줄게 없을때 예외처리
             if (curUserShoppingBasket.Count() == 0) CommonView.NoResultForm();
             else
             {
                 // 2. view로 보내서 출력하고 삭제할 lectureID 받아오기
-                string lectureID = shoppingView.ShoppingDeleteForm(curUserShoppingBasket, memberRepository.GetUserInfo(curUserID));
+                string lectureID = shoppingView.ShoppingDeleteForm(curUserShoppingBasket, memberService.GetCurUserInfo(curUserID));
                 // 3. 관담목록에서 진짜로 삭제하기
                 if (ExceptionHandler.CheckIfValidLectureID(lectureID))
                 {
-                    memberRepository.RemoveFromUserShoppingBasket(curUserID, lectureID);
+                    memberService.RemoveFromUserShoppingBasket(curUserID, lectureID);
                 }
             }
 

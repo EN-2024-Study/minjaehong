@@ -8,8 +8,8 @@ namespace LTT
 {
     class MemberDTO
     {
-        private string id;
-        private string pw;
+        private readonly string id;
+        private readonly string pw;
 
         private int maximumCredit;
 

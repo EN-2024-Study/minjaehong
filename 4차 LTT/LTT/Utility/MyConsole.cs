@@ -149,6 +149,7 @@ namespace LTT
             return curSel;
         }
 
+        // ENTER키 기다리는 함수
         public static void WaitForEnterKey()
         {
             MyConsole.PrintMessage("PRESS ENTER TO GO BACK...", Console.CursorLeft, Console.CursorTop);

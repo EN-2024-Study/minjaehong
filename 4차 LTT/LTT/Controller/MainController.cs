@@ -12,7 +12,7 @@ namespace LTT
         ShoppingController shoppingController;
         RegistrationController registrationController;
 
-        LectureRepository lectureRepository;
+        LectureService lectureService;
 
         string curUserID;
 
@@ -25,7 +25,7 @@ namespace LTT
             shoppingController = new ShoppingController(curUserID);
             registrationController = new RegistrationController(curUserID);
 
-            lectureRepository = LectureRepository.GetInstance();
+            lectureService = LectureService.GetInstance();
         }
 
         private void FindLecture()
@@ -33,7 +33,7 @@ namespace LTT
             // 1. view에서 검색필터 받아옴
             List<String> filters = CommonView.FindLectureForm();
             // 2. 검색필터를 model로 보내서 필터링된 강의들 받아오기
-            List<LectureDTO> filteredLectures = lectureRepository.GetFilteredLectureResults(filters);
+            List<LectureDTO> filteredLectures = lectureService.GetFilteredLectureResults(filters);
             // 3. view로 보내서 강의 출력하기
             CommonView.ShowLectureTable(filteredLectures);
   

@@ -8,11 +8,14 @@ using System.Runtime.InteropServices;
 
 namespace LTT
 {
+    // Lecture를 추가하는 경우는 없으므로
+    // 그냥 Lectuer를 꺼내다 주는 것만 하면 됨
     class LectureRepository
     {
         private static LectureRepository instance;
 
-        private List<LectureDTO> lectureDB;
+        private List<LectureDTO> lectureDB; 
+        private int lectureCnt;
 
         private Excel.Application application;
         private Excel.Workbook workbook;
@@ -22,6 +25,8 @@ namespace LTT
 
         private LectureRepository()
         {
+            lectureCnt = 0;
+
             // 초기 DB 세팅
             workbook = GetConnection();
             data = GetExcelSheetData(workbook);
@@ -69,6 +74,7 @@ namespace LTT
             return data;
         }
 
+        // 이걸 DTO에 넣어서 DTO에서 setter로 처리하지 않게 하기
         private List<LectureDTO> ConvertDataToDTO(Array data)
         {
             List<LectureDTO> retList = new List<LectureDTO>();
@@ -97,6 +103,7 @@ namespace LTT
                 dummyDTO.SetLanguage(data.GetValue(i, 12).ToString()); // 언어
 
                 retList.Add(dummyDTO);
+                lectureCnt++;
             }
 
             return retList;
@@ -124,42 +131,19 @@ namespace LTT
             }
         }
 
-        //============== DB FUNCTIONS ==============//
+        //============== REPOSITORY FUNCTIONS ==============//
 
-        public LectureDTO GetCertainLecture(string lectureID)
+        // Service한테 특정 Lecture return
+        public LectureDTO GetLectureByID(string lectureID)
         {
             int ID = int.Parse(lectureID);
             return lectureDB[ID];
         }
 
-        public List<LectureDTO> GetFilteredLectureResults(List<string> filters)
+        // Service한테 DB에 저장된 Lecture 개수 return
+        public int GetLectureCnt()
         {
-            string department = filters[0];
-            string courseType = filters[1];
-            string name = filters[2];
-            string professor = filters[3];
-            string year = filters[4];
-
-            List<LectureDTO> filteredLectures = new List<LectureDTO>();
-
-            // 항상 lectureDB는 1번부터 시작
-            // 0은 dummyDTO임
-            for (int i = 1; i < lectureDB.Count; i++)
-            {
-                LectureDTO curLecture = lectureDB[i];
-
-                // 빈칸 아니고 맞지않으면 패스. 한개라도 틀리면 볼필요가 없음
-                if (department != "" && !curLecture.GetDepartment().Contains(department)) continue;
-                if (courseType != "" && !curLecture.GetCourseType().Contains(courseType)) continue;
-                if (name != "" && !curLecture.GetName().Contains(name)) continue;
-                if (professor != "" && !curLecture.GetProfessor().Contains(professor)) continue;
-                if (year != "" && !curLecture.GetYear().Contains(year)) continue;
-
-                // 여기까지 왔으면 필터링 통과한거
-                filteredLectures.Add(curLecture);
-            }
-
-            return filteredLectures;
+            return lectureCnt;
         }
     }
 }
