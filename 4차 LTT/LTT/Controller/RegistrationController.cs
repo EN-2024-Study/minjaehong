@@ -65,7 +65,7 @@ namespace LTT
             MemberDTO curUser = memberService.GetCurUserInfo(curUserID);
 
             // 1. model에서 curUserID가 관담한거 가져오기
-            curUserShoppingBasket = memberService.GetUserShoppingBasket(curUserID);
+            curUserShoppingBasket = memberService.GetCurUserShoppingBasket(curUserID);
 
             // 관담한거 없을때 예외처리 
             if (curUserShoppingBasket.Count() == 0) { CommonView.NoResultForm(); }
@@ -103,7 +103,7 @@ namespace LTT
         public void GetResult()
         {
             // 1. model에서 curUserID가 진짜로 수강신청한거 가죠오기
-            curUserRegistrationList = memberService.GetUserRegistrationList(curUserID);
+            curUserRegistrationList = memberService.GetCurUserRegistrationList(curUserID);
             // 2. view로 보내서 출력해주기
             registrationView.RegistrationResultForm(curUserRegistrationList, memberService.GetCurUserInfo(curUserID));
             
@@ -118,7 +118,7 @@ namespace LTT
         private void Delete()
         {
             // 1. model에서 curUserID가 수강신청한거 가져오기
-            curUserRegistrationList = memberService.GetUserRegistrationList(curUserID);
+            curUserRegistrationList = memberService.GetCurUserRegistrationList(curUserID);
 
             if (curUserRegistrationList.Count() == 0) { CommonView.NoResultForm(); }
             else
@@ -140,7 +140,7 @@ namespace LTT
 
             while (isRegistrationModeRunning)
             {
-                mode = registrationView.RegistrationModeSelectForm();
+                mode = registrationView.RegistrationModeSelectForm(curUserID);
 
                 switch (mode)
                 {

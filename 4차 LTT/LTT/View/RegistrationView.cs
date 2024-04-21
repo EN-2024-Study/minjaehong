@@ -10,11 +10,12 @@ namespace LTT
         private string[] registrationDeleteMessage = {"COURSE ID YOU WANT TO DELETE :" };
         private string[] registrationMenuArr = { "1. 수강신청(일반)", "2. 수강신청(관심과목)","3. 수강신청 내역", "4. 수강신청 시간표", "5. 수강과목 삭제" };
         
-        public RegistrationMode RegistrationModeSelectForm()
+        public RegistrationMode RegistrationModeSelectForm(string curUserID)
         {
             Console.Clear();
 
             MyConsole.PrintHeader("[SELECT REGISTRATION MODE]");
+            MyConsole.PrintUserID(curUserID);
 
             RegistrationMode selectedMode = (RegistrationMode)MyConsole.GetUserSelection(registrationMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMode;

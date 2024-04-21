@@ -10,7 +10,7 @@ namespace LTT
     class MyConsole
     {
         private const int HEADER_X = 45; // HEADER START X
-        private const int HEADER_Y = 4; // HEADER START Y
+        private const int HEADER_Y = 3; // HEADER START Y
 
         public const int MENU_STARTX = 40; // MENU START X
         public const int MENU_STARTY = 6; // MENU START Y
@@ -31,8 +31,10 @@ namespace LTT
 
         public static void PrintHeader(string header)
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.SetCursorPosition(HEADER_X, HEADER_Y);
             Console.WriteLine(header);
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         // 각 메뉴에 맞게 다다음줄부터 INSTRUCTION이 출력됨

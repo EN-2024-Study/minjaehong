@@ -67,7 +67,7 @@ namespace LTT
         private void GetResult()
         {
             // 1. model에서 user가 관담한거 가져오기
-            curUserShoppingBasket = memberService.GetUserShoppingBasket(curUserID);
+            curUserShoppingBasket = memberService.GetCurUserShoppingBasket(curUserID);
 
             // 보여줄거 없을때 예외처리
             if (curUserShoppingBasket.Count() == 0) CommonView.NoResultForm();
@@ -87,7 +87,7 @@ namespace LTT
         private void Delete()
         {
             // 1. model에서 curUserID가 관담한거 가져오기
-            curUserShoppingBasket = memberService.GetUserShoppingBasket(curUserID);
+            curUserShoppingBasket = memberService.GetCurUserShoppingBasket(curUserID);
 
             // 보여줄게 없을때 예외처리
             if (curUserShoppingBasket.Count() == 0) CommonView.NoResultForm();
@@ -113,7 +113,7 @@ namespace LTT
 
             while (isShoppingModeRunning)
             {
-                mode = shoppingView.ShoppingModeSelectForm();
+                mode = shoppingView.ShoppingModeSelectForm(curUserID);
 
                 switch (mode)
                 {

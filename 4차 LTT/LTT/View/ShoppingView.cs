@@ -13,11 +13,12 @@ namespace LTT
         private string[] deletionInputMessage = { "COURSE ID YOU WANT TO DELETE FROM YOUR BASKET :" };
         private string[] shoppingMenuArr = { "1. 관심과목 검색", "2. 관심과목 내역", "3. 관심과목 시간표", "4. 관심과목 삭제" };
         
-        public ShoppingMode ShoppingModeSelectForm()
+        public ShoppingMode ShoppingModeSelectForm(string curUserID)
         {
             Console.Clear();
 
             MyConsole.PrintHeader("[SELECT SHOPPING MODE]");
+            MyConsole.PrintUserID(curUserID);
 
             ShoppingMode selectedMode = (ShoppingMode)MyConsole.GetUserSelection(shoppingMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMode;

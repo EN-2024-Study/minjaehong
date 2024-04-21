@@ -31,6 +31,8 @@ namespace LTT
 
         //========================= SINGLETON =========================//
 
+        // 얘도 비즈니스로직이 필요없고 그냥 GET하는 함수임
+        // 그냥 바로 repository에서 해도 되는걸 service에서 하는게 맞음??
         public LectureDTO GetLectureByID(string id)
         {
             return lectureRepository.GetLectureByID(id);

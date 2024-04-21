@@ -32,13 +32,35 @@ namespace LTT
 
         //========================= SINGLETON =========================//
 
+        //========== JUST GET FUNCTIONS WITH NO BUISNESS LOGICS =======//
+        // 그냥 GET 하는 함수들은 비즈니스로직이 없는데 이런 것도 service에 있어야함?
+        // repository 참조해서 바로 하면 되는걸 service 단 거쳐서 가야함?
+        public MemberDTO GetCurUserInfo(string curUserID)
+        {
+            return memberRepository.GetUserInfo(curUserID);
+        }
+
+        // 해당 USER의 장바구니 목록 보내주기
+        public List<LectureDTO> GetCurUserShoppingBasket(string curUserID)
+        {
+            return memberRepository.GetUserShoppingBasket(curUserID);
+        }
+
+        // 해당 USER의 수강신청 목록 보내주기
+        public List<LectureDTO> GetCurUserRegistrationList(string curUserID)
+        {
+            return memberRepository.GetUserRegistrationList(curUserID);
+        }
+
+        //======================= BUISNESS LOGIC ======================//
+
         // ID PW 맞는지 확인해줌
         public bool CheckIfValidLogin(List<string> loginInfo)
         {
             string ID = loginInfo[0];
             string PW = loginInfo[1];
 
-            if (memberRepository.CheckIDandPW(ID,PW)) return true;
+            if (memberRepository.CheckIDandPW(ID, PW)) return true;
             else return false;
         }
 
@@ -53,23 +75,6 @@ namespace LTT
                 }
             }
             return false;
-        }
-
-        public MemberDTO GetCurUserInfo(string curUserID)
-        {
-            return memberRepository.GetUserInfo(curUserID);
-        }
-
-        // 해당 USER의 장바구니 목록 보내주기
-        public List<LectureDTO> GetUserShoppingBasket(string curUserID)
-        {
-            return memberRepository.GetUserShoppingBasket(curUserID);
-        }
-
-        // 해당 USER의 수강신청 목록 보내주기
-        public List<LectureDTO> GetUserRegistrationList(string curUserID)
-        {
-            return memberRepository.GetUserRegistrationList(curUserID);
         }
 
         // 특정 USER의 장바구니에 추가하기
