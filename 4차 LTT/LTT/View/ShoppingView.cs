@@ -18,7 +18,7 @@ namespace LTT
             Console.Clear();
 
             MyConsole.PrintHeader("[SELECT SHOPPING MODE]");
-            
+
             ShoppingMode selectedMode = (ShoppingMode)MyConsole.GetUserSelection(shoppingMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMode;
         }

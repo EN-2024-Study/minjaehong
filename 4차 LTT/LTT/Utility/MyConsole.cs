@@ -18,6 +18,7 @@ namespace LTT
         private const int USERID_X = 40; // USERID START X
         private const int USERID_Y = 5; // USERID START Y
 
+        private const int INSTRUCTION_X = 40; // INSTRUCTION START X
 
         //===================== PRINT FUNCTIONS =====================//
 
@@ -32,6 +33,17 @@ namespace LTT
         {
             Console.SetCursorPosition(HEADER_X, HEADER_Y);
             Console.WriteLine(header);
+        }
+
+        // 각 메뉴에 맞게 다다음줄부터 INSTRUCTION이 출력됨
+        public static void PrintInstructions(int starty)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(INSTRUCTION_X, starty+2);
+            Console.WriteLine("PRESS SPACE TO SELECT MODE");
+            Console.SetCursorPosition(INSTRUCTION_X, starty+3);
+            Console.WriteLine("PRESS BACKSPACE TO GO BACK");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static void PrintUserID(string userID)
@@ -80,6 +92,8 @@ namespace LTT
                 Console.Write(menu);
             }
 
+            PrintInstructions(Console.CursorTop);
+
             List<string> retList = new List<string>();
 
             // 그리고 각 메뉴 옆에서 user input 받기
@@ -105,6 +119,8 @@ namespace LTT
                 Console.SetCursorPosition(menuStartX, menuStartY + i);
                 Console.Write(menu);
             }
+
+            PrintInstructions(Console.CursorTop);
 
             int beforeSel = 0;
             int curSel = 0;

@@ -15,7 +15,7 @@ namespace LTT
             Console.Clear();
 
             MyConsole.PrintHeader("[SELECT REGISTRATION MODE]");
-          
+
             RegistrationMode selectedMode = (RegistrationMode)MyConsole.GetUserSelection(registrationMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMode;
         }

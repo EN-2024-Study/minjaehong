@@ -19,7 +19,7 @@ namespace LTT
 
             MyConsole.PrintHeader("[SELECT MODE]");
             MyConsole.PrintUserID(curUserID);
-            
+
             MainMode selectedMode = (MainMode)MyConsole.GetUserSelection(modeSelectMenuArr,MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMode;
         }

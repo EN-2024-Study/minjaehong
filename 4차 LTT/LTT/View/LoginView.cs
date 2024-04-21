@@ -10,7 +10,7 @@ namespace LTT
         public List<string> LoginForm()
         {
             Console.Clear();
-            
+
             List<string> userLoginInput = MyConsole.GetUserInputs(loginMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
 
             return userLoginInput;
