@@ -8,16 +8,19 @@ namespace Library
 {
     class LibraryApp
     {
+        public static string managerID = "manager";
+        public static string managerPW = "manager123";
+
         static void PutDummyData()
         {
             BookModel bookModel = BookModel.GetInstance();
             MemberModel memberModel = MemberModel.GetInstance();
 
-            List<string> dummyArr1 = new List<string> { "book1", "kim", "companyA", "1000", "10","990317","111-11-1111" };
-            List<string> dummyArr2= new List<string> { "book2", "kim", "companyB", "2500", "5", "030811","222-22-2222" };
+            List<string> dummyArr1 = new List<string> { "book1", "kim", "companyA", "1000", "10", "990317", "111-11-1111" };
+            List<string> dummyArr2 = new List<string> { "book2", "kim", "companyB", "2500", "5", "030811", "222-22-2222" };
             List<string> dummyArr3 = new List<string> { "book3", "min", "companyC", "3000", "3", "011103", "333-33-3333" };
             List<string> dummyArr4 = new List<string> { "book4", "min", "companyB", "500", "7", "971227", "444-44-4444" };
-            List<string> dummyArr5 = new List<string> { "book5", "park", "companyB", "4000", "8", "150710","555-55-5555" };
+            List<string> dummyArr5 = new List<string> { "book5", "park", "companyB", "4000", "8", "150710", "555-55-5555" };
             List<string> dummyArr6 = new List<string> { "book6", "lee", "companyC", "1500", "2", "230208", "666-66-6666" };
             bookModel.AddNewBook(new BookDTO(dummyArr1));
             bookModel.AddNewBook(new BookDTO(dummyArr2));
@@ -33,11 +36,11 @@ namespace Library
             memberModel.AddNewMember(new MemberDTO(dummyArr8));
             memberModel.AddNewMember(new MemberDTO(dummyArr9));
         }
-        
+
         public static void Main()
         {
             PutDummyData();
-            
+
             Console.CursorVisible = false;
 
             // MainController.GetInstance() 호출하면 singleton 생성자들 다 호출되면서

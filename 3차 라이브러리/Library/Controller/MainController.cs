@@ -53,9 +53,9 @@ namespace Library
                         string inputPW = loginInfo[1];
 
                         // ID PW 이 둘 다 맞으면
-                        if (Constants.managerID == inputID)
+                        if (LibraryApp.managerID == inputID)
                         {
-                            if (Constants.managerPW == inputPW)
+                            if (LibraryApp.managerPW == inputPW)
                             {
                                 managerController.Run();
                             }

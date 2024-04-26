@@ -9,18 +9,10 @@ namespace LTT
 {
     class LTTApp
     {
-        public static void InitializeDB()
-        {
-            LectureRepository.GetInstance();
-        }
-
         public static void Main()
         {
             Console.SetWindowPosition(0,0);
             Console.SetWindowSize(213, 62);
-
-            InitializeDB();
-
             Console.CursorVisible = false;
 
             LoginController loginController = new LoginController();

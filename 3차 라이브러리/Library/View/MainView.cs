@@ -10,16 +10,17 @@ namespace Library
     {
         public MainView() { }
 
+        private string[] modeSelectMenuArr = { "1. USER MODE", "2. MANAGER MODE" };
+        private string[] managerLoginArr = { "ID :", "PW :" };
+
         // USER MODE 인지 MANAGER MODE인지 입력받고 return
         public LibraryMode MainModeSelectForm()
         {
             Console.Clear();
 
             MyConsole.PrintHeader("[SELECT MODE]");
-            MyConsole.PrintAllMenu(Constants.modeSelectMenuArr);
-
-            LibraryMode selectedMode = (LibraryMode)InputHandler.GetUserSelection(Constants.modeSelectMenuArr);
-
+  
+            LibraryMode selectedMode = (LibraryMode)MyConsole.GetUserSelection(modeSelectMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMode;
         }
 
@@ -29,9 +30,9 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[MANAGER LOGIN]");
-            MyConsole.PrintAllMenu(Constants.managerLoginArr);
-
-            return InputHandler.GetUserInputs(Constants.managerLoginArr.Length, ExceptionHandler.managerLoginExceptionArr);
+            
+            //InputHandler.GetUserInputs(Constants.managerLoginArr.Length, ExceptionHandler.managerLoginExceptionArr)
+            return MyConsole.GetUserInputs(managerLoginArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
         }
     }
 }

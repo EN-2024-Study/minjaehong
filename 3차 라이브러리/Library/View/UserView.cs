@@ -10,17 +10,27 @@ namespace Library
     {
         public UserView() { }
 
+        private string[] userMenuArr = { "전체 도서", "도서 찾기", "도서 대여", "대여 확인", "도서 반납", "반납 확인", "정보 수정", "계정 삭제", "네이버 검색", "요청 도서 내역" };
+
+        private string[] findBookArr = { "FIND BY NAME :", "FIND BY AUTHOR :" };
+
+        private string[] borrowBookArr = { "BOOK ID :" };
+
+        private string[] returnBookArr = { "BOOK ID :" };
+
+        private string[] updateUserArr = { "1. PW :", "2. NAME :", "3. AGE :", "4. PHONENUM(010~) :" };
+
+       
         // menu 보여주고 user가 select 한 걸 controller 한테 반환
         public UserMenuState UserMenuForm(string curUserName)
         {
             Console.Clear();
 
+            // 화면 구성
             MyConsole.PrintHeader("[USER MENU]");
-            MyConsole.PrintAllMenu(Constants.userMenuArr);
+            MyConsole.PrintUserID(curUserName);
 
-            MyConsole.PrintUserName(curUserName);
-
-            return (UserMenuState)InputHandler.GetUserSelection(Constants.userMenuArr);
+            return (UserMenuState)MyConsole.GetUserSelection(userMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
         }
 
         // 1. 도서 찾기
@@ -32,9 +42,9 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[FIND BOOK]");
-            MyConsole.PrintAllMenu(Constants.findBookArr);
 
-            return InputHandler.GetUserInputs(Constants.findBookArr.Length, ExceptionHandler.findBookExceptionArr);
+            //InputHandler.GetUserInputs(Constants.findBookArr.Length, ExceptionHandler.findBookExceptionArr);
+            return MyConsole.GetUserInputs(findBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
         }
 
         // 2. 도서 대여
@@ -43,10 +53,10 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[LETS BORROW A BOOK]");
-            MyConsole.PrintAllMenu(Constants.borrowBookArr);
-            
+
             // ID NUM 입력받아 controller한테 전달
-            return InputHandler.GetUserInputs(Constants.borrowBookArr.Length, ExceptionHandler.borrowBookExceptionArr);
+            // InputHandler.GetUserInputs(Constants.borrowBookArr.Length, ExceptionHandler.borrowBookExceptionArr);
+            return MyConsole.GetUserInputs(borrowBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
         }
 
         // 3. 도서 대여 확인
@@ -64,10 +74,10 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[LETS RETURN BOOK]");
-            MyConsole.PrintAllMenu(Constants.returnBookArr);
-
+            
             // ID NUM 입력받아 controller한테 전달
-            return InputHandler.GetUserInputs(Constants.returnBookArr.Length, ExceptionHandler.returnBookExceptionArr);
+            // InputHandler.GetUserInputs(Constants.returnBookArr.Length, ExceptionHandler.returnBookExceptionArr);
+            return MyConsole.GetUserInputs(returnBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
         }
 
         // 5. 도서 반납 확인
@@ -86,11 +96,11 @@ namespace Library
 
             // 화면 구성
             MyConsole.PrintHeader("[UPDATE USER]");
-            MyConsole.PrintAllMenu(Constants.updateUserArr);
-
+            
             // 업데이트할 PW NAME AGE PHONENUM 입력받기
-            List<string> updatedUserInfo = InputHandler.GetUserInputs(Constants.updateUserArr.Length, ExceptionHandler.updateUserExceptionArr);
+            //List<string> updatedUserInfo = InputHandler.GetUserInputs(Constants.updateUserArr.Length, ExceptionHandler.updateUserExceptionArr);
 
+            List<string> updatedUserInfo = MyConsole.GetUserInputs(updateUserArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             // ID는 입력받는게 아니므로 그냥 0번에 추가해서 ID PW NAME AGE PHONENUM 받은 것처럼 만들기
             updatedUserInfo.Insert(0, "");
             return updatedUserInfo;

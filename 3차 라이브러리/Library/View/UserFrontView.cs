@@ -8,6 +8,12 @@ namespace Library
 {
     class UserFrontView
     {
+        private string[] createAccountArr = { "ID :", "PW :", "NAME :", "AGE :", "PHONENUM(010~) :" };
+
+        private string[] userLoginArr = { "ID :", "PW :" };
+
+        private string[] userFrontMenuArr = { "LOGIN", "CREATE ACCOUNT" };
+
         public UserFrontView() { }
 
         public UserFrontMode UserFrontForm()
@@ -15,9 +21,8 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[USER MODE]");
-            MyConsole.PrintAllMenu(Constants.userFrontMenuArr);
-
-            return (UserFrontMode)InputHandler.GetUserSelection(Constants.userFrontMenuArr);
+            
+            return (UserFrontMode)MyConsole.GetUserSelection(userFrontMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
         }
 
         // 1. LOGIN
@@ -26,9 +31,9 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[USER LOGIN]");
-            MyConsole.PrintAllMenu(Constants.userLoginArr);
-
-            List<string> loginInfo = InputHandler.GetUserInputs(Constants.userLoginArr.Length, ExceptionHandler.userLoginExceptionArr);
+           
+            //List<string> loginInfo = InputHandler.GetUserInputs(Constants.userLoginArr.Length, ExceptionHandler.userLoginExceptionArr);
+            List<string> loginInfo = MyConsole.GetUserInputs(userLoginArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             
             return loginInfo;
         }
@@ -41,8 +46,9 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[USER CREATE ACCOUNT]");
-            MyConsole.PrintAllMenu(Constants.createAccountArr);
-            List<string> newMemberInfo = InputHandler.GetUserInputs(Constants.createAccountArr.Length, ExceptionHandler.userCreateAccountExceptionArr);
+
+            //List<string> newMemberInfo = InputHandler.GetUserInputs(Constants.createAccountArr.Length, ExceptionHandler.userCreateAccountExceptionArr);
+            List<string> newMemberInfo = MyConsole.GetUserInputs(createAccountArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
 
             return newMemberInfo;
         }
