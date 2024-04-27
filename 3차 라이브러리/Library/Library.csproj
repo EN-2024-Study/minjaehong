@@ -37,7 +37,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Controller\UserFrontController.cs" />
     <Compile Include="Model\BookDTO.cs" />
     <Compile Include="Controller\MainController.cs" />
@@ -45,10 +44,12 @@
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="LibraryApp.cs" />
-    <Compile Include="Repository\BookModel.cs" />
+    <Compile Include="Repository\BookRepository.cs" />
     <Compile Include="Model\MemberDTO.cs" />
-    <Compile Include="Repository\MemberModel.cs" />
+    <Compile Include="Repository\MemberRepository.cs" />
     <Compile Include="Model\MiniDTO.cs" />
+    <Compile Include="Service\BookService.cs" />
+    <Compile Include="Service\MemberService.cs" />
     <Compile Include="Utility\ExceptionHandler.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\MainView.cs" />

@@ -153,7 +153,7 @@ namespace Library
         private static int FindColonPosition(string menu) { return menu.IndexOf(':'); }
 
         // 각 메뉴에 대한 사용자 입력받을때 쓰이는 함수
-        public static List<string> GetUserInputs(string[] menuArr, int menuStartX, int menuStartY)
+        public static List<string> GetUserInputs(string[] menuArr, int menuStartX, int menuStartY, ExceptionState[] exceptionArr)
         {
             Console.CursorVisible = true;
 
@@ -168,6 +168,7 @@ namespace Library
             PrintInstructions(Console.CursorTop);
 
             List<string> retList = new List<string>();
+            ExceptionState exceptionState;
 
             // 그리고 각 메뉴 옆에서 user input 받기
             // 콜론 : 위치 찾아서 그 옆에서 입력받게 하기

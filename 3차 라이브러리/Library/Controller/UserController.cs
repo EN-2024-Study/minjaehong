@@ -13,13 +13,13 @@ namespace Library
         UserView userView;
         RuntimeView runtimeView;
 
-        MemberModel memberModel;
-        BookModel bookModel;
+        MemberService memberService;
+        BookService bookService;
 
         public UserController()
         {
-            memberModel = MemberModel.GetInstance();
-            bookModel = BookModel.GetInstance();
+            memberService = MemberService.GetInstance();
+            bookService = BookService.GetInstance();
 
             userView = new UserView();
             runtimeView = new RuntimeView();
@@ -32,19 +32,128 @@ namespace Library
             this.curUserID = curUserID;
         }
 
+        void PrintAllBook()
+        {
+            List<BookDTO> retList = bookService.GetAllBooks();
+            userView.PrintAllBooksForm(retList);
+        }
+
+        void Find()
+        {
+            // 찾을 책에 대한 정보를 userView에서 받아오기
+            List<string> dataFromView = userView.FindBookForm();
+            // bookService로 전달해서 매칭된 List<BookDTO> 받아오기
+            List<BookDTO> retList = bookService.FindBook(dataFromView);
+            // 다시 userView에 전달해서 매칭된 책들 모두 출력해서 보여주기
+            userView.PrintSelectedBooksForm(retList);
+        }
+
+        void Borrow()
+        {
+            // BORROW할 책에 대한 정보를 userView에서 받아오기
+            List<string> dataFromView = userView.BorrowBookForm();
+            // 책 정보를 MiniDTO에 담아주기
+            MiniDTO miniDTO = new MiniDTO(dataFromView);
+
+            // 해당 책이 존재하면 bookService에 누가 빌린거 적용해주기
+            int bookID = int.Parse(miniDTO.GetBookID());
+            if (bookService.CheckIfBookExists(bookID))
+            {
+                bookService.UpdateBorrowed(miniDTO);
+                memberService.UpdateBorrowed(curUserID, miniDTO);
+                runtimeView.RuntimeMessageForm("BORROW SUCCESSFUL!");
+            }
+            else
+            {
+                runtimeView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
+            }
+        }
+
+        void CheckBorrow()
+        {
+            List<int> curUserBorrowedBookIDs = memberService.GetMemberBorrowedBooks(curUserID);
+            List<BookDTO> curUserBorrowedBooks = new List<BookDTO>();
+
+            for (int i = 0; i < curUserBorrowedBookIDs.Count; i++)
+            {
+                int curId = curUserBorrowedBookIDs[i];
+                curUserBorrowedBooks.Add(bookService.GetBookByID(curId));
+            }
+            userView.CheckBorrowedForm(curUserBorrowedBooks);
+        }
+
+        void Return()
+        {
+            // RETURN할 책에 대한 정보를 userView에서 받아오기
+            List<string> dataFromView = userView.ReturnBookForm();
+            // 책 정보를 MiniDTO에 담아주기
+            MiniDTO miniDTO = new MiniDTO(dataFromView);
+
+            // 만약 진짜로 빌린거면
+            if (memberService.CheckIfUserBorrowed(curUserID, miniDTO))
+            {
+                // bookService에 누가 반납한거 적용해주기
+                bookService.UpdateReturned(miniDTO);
+                // 성공하면 memberService로 가서 저장해주기
+                memberService.UpdateReturned(curUserID, miniDTO);
+                runtimeView.RuntimeMessageForm("BOOK RETURN SUCCESSFUL!");
+            }
+            else
+            {
+                runtimeView.RuntimeMessageForm("YOU DIDNT BORROW ID#" + miniDTO.GetBookID() + " BOOK!");
+            }
+        }
+
+        void CheckReturn()
+        {
+            List<int> curUserReturnedBookIDs = memberService.GetMemberReturnedBooks(curUserID);
+            List<BookDTO> curUserReturnedBooks = new List<BookDTO>();
+
+            for (int i = 0; i < curUserReturnedBookIDs.Count; i++)
+            {
+                int curId = curUserReturnedBookIDs[i];
+                curUserReturnedBooks.Add(bookService.GetBookByID(curId));
+            }
+            userView.CheckReturnedForm(curUserReturnedBooks);
+        }
+
+        void UpdateInfo()
+        {
+            // PW NAME AGE PHONENUM 입력받은거 가져오기
+            List<string> updatedUserInfo = userView.UpdateMyInfoForm();
+
+            MemberDTO updatedMember = new MemberDTO(updatedUserInfo);
+            // ID는 controller에서 따로 세팅
+            updatedMember.SetId(curUserID);
+            memberService.UpdateMember(curUserID, updatedMember);
+            runtimeView.RuntimeMessageForm("USER INFO UPDATE SUCCESSFUL!");
+        }
+
+        void DeleteMySelf()
+        {
+            if (memberService.GetMemberBorrowedBooks(curUserID).Count() == 0)
+            {
+                memberService.DeleteMember(curUserID);
+                runtimeView.RuntimeMessageForm("PERMANANT DELETE SUCCESSFUL!");
+                // usercontroller 자체를 빠져나가기
+                return;
+            }
+            else
+            {
+                runtimeView.RuntimeMessageForm("PLEASE RETURN ALL YOUR BOOKS FIRST");
+
+            }
+        }
+
         public void Run()
         {
             UserMenuState selectedMenu;
-
-            List<string> dataFromView;
-            List<BookDTO> retList;
-            MiniDTO miniDTO;
 
             bool isUserModeRunning = true;
 
             while (isUserModeRunning)
             {
-                selectedMenu = userView.UserMenuForm(memberModel.GetMember(curUserID).GetName());
+                selectedMenu = userView.UserMenuForm(memberService.GetMemberByID(curUserID).GetName());
 
                 switch (selectedMenu)
                 {
@@ -53,117 +162,35 @@ namespace Library
                         break;
 
                     case UserMenuState.PRINTALLBOOK:
-
-                        retList = bookModel.GetAllBooks();
-                        userView.PrintAllBooksForm(retList);
+                        PrintAllBook();
                         break;
 
                     case UserMenuState.FIND:
-                       
-                        // 찾을 책에 대한 정보를 userView에서 받아오기
-                        dataFromView = userView.FindBookForm();
-                        // bookModel로 전달해서 매칭된 List<BookDTO> 받아오기
-                        retList = bookModel.FindBook(dataFromView);
-                        // 다시 userView에 전달해서 매칭된 책들 모두 출력해서 보여주기
-                        userView.PrintSelectedBooksForm(retList);
+                        Find();
                         break;
 
                     case UserMenuState.BORROW:
-                        
-                        // BORROW할 책에 대한 정보를 userView에서 받아오기
-                        dataFromView = userView.BorrowBookForm();
-                        // 책 정보를 MiniDTO에 담아주기
-                        miniDTO = new MiniDTO(dataFromView);
-
-                        // 해당 책이 존재하면 bookModel에 누가 빌린거 적용해주기
-                        int bookID = int.Parse(miniDTO.GetBookID());
-                        if (bookModel.FindBookById(bookID))
-                        {
-                            bookModel.UpdateBorrowed(miniDTO);
-                            memberModel.UpdateBorrowed(curUserID, miniDTO);
-                            runtimeView.RuntimeMessageForm("BORROW SUCCESSFUL!");
-                        }
-                        else
-                        {
-                            runtimeView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
-                        }
-
+                        Borrow();
                         break;
 
                     case UserMenuState.CHECKBORROW:
-
-                        List<int> curUserBorrowedBookIDs = memberModel.GetMemberBorrowedBooks(curUserID);
-                        List<BookDTO> curUserBorrowedBooks = new List<BookDTO>();
-
-                        for(int i = 0; i < curUserBorrowedBookIDs.Count; i++)
-                        {
-                            int curId = curUserBorrowedBookIDs[i];
-                            curUserBorrowedBooks.Add(bookModel.GetBookDTO(curId));
-                        }
-                        userView.CheckBorrowedForm(curUserBorrowedBooks);
+                        CheckBorrow();
                         break;
                         
                     case UserMenuState.RETURN:
-
-                        // RETURN할 책에 대한 정보를 userView에서 받아오기
-                        dataFromView = userView.ReturnBookForm();
-                        // 책 정보를 MiniDTO에 담아주기
-                        miniDTO = new MiniDTO(dataFromView);
-
-                        // 만약 진짜로 빌린거면
-                        if (memberModel.CheckIfUserBorrowed(curUserID, miniDTO))
-                        {
-                            // bookModel에 누가 반납한거 적용해주기
-                            bookModel.UpdateReturned(miniDTO);
-                            // 성공하면 memberModel로 가서 저장해주기
-                            memberModel.UpdateReturned(curUserID, miniDTO);
-                            runtimeView.RuntimeMessageForm("BOOK RETURN SUCCESSFUL!");
-                        }
-                        else
-                        {
-                            runtimeView.RuntimeMessageForm("YOU DIDNT BORROW ID#" +miniDTO.GetBookID()+" BOOK!");
-                        }
+                        Return();
                         break;
                     
                     case UserMenuState.CHECKRETURN:
-
-                        List<int> curUserReturnedBookIDs = memberModel.GetMemberReturnedBooks(curUserID);
-                        List<BookDTO> curUserReturnedBooks = new List<BookDTO>();
-
-                        for (int i = 0; i < curUserReturnedBookIDs.Count; i++)
-                        {
-                            int curId = curUserReturnedBookIDs[i];
-                            curUserReturnedBooks.Add(bookModel.GetBookDTO(curId));
-                        }
-                        userView.CheckReturnedForm(curUserReturnedBooks);
+                        CheckReturn();
                         break;
                     
                     case UserMenuState.UPDATEINFO:
-
-                        // PW NAME AGE PHONENUM 입력받은거 가져오기
-                        List<string> updatedUserInfo = userView.UpdateMyInfoForm();
-                        
-                        MemberDTO updatedMember = new MemberDTO(updatedUserInfo);
-                        // ID는 controller에서 따로 세팅
-                        updatedMember.SetId(curUserID);
-                        memberModel.UpdateMember(updatedMember);
-                        runtimeView.RuntimeMessageForm("USER INFO UPDATE SUCCESSFUL!");
+                        UpdateInfo();
                         break;
                     
                     case UserMenuState.DELETEMYSELF:
-
-                        if (memberModel.GetMemberBorrowedBooks(curUserID).Count() == 0)
-                        {
-                            memberModel.DeleteMember(curUserID);
-                            runtimeView.RuntimeMessageForm("PERMANANT DELETE SUCCESSFUL!");
-                            // usercontroller 자체를 빠져나가기
-                            return;
-                        }
-                        else
-                        {
-                            runtimeView.RuntimeMessageForm("PLEASE RETURN ALL YOUR BOOKS FIRST");
-
-                        }
+                        DeleteMySelf();
                         break;
                     
                     case UserMenuState.NAVERSEARCH:

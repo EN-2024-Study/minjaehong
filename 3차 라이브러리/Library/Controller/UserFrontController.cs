@@ -13,16 +13,53 @@ namespace Library
         UserFrontView userFrontView; // FrontController에서 view 쓰려고 필요함
         RuntimeView runtimeView;
 
-        MemberModel memberModel; // LOGIN 확인 작업에 쓰임
+        MemberService memberService; // LOGIN 확인 작업에 쓰임
 
         public UserFrontController()
         {
-            memberModel = MemberModel.GetInstance();
+            memberService = MemberService.GetInstance();
 
             userController = new UserController();
 
             userFrontView = new UserFrontView();
             runtimeView = new RuntimeView();
+        }
+
+        void UserLogin()
+        {
+            List<string> loginInfo = userFrontView.UserLoginForm();
+            string curUserID = loginInfo[0];
+
+            // ID가 존재를 하고 && ID PW 이 둘 다 맞으면
+            if (memberService.CheckIfMemberExists(curUserID) && memberService.CheckIfValidLogin(loginInfo))
+            {
+                // userController에게 userID 전달해서 세팅하고 실행
+                userController.InitializeUserController(curUserID);
+                userController.Run();
+            }
+            else
+            {
+                runtimeView.RuntimeMessageForm("CHECK YOUR ID AND PASSWORD!");
+            }
+        }
+
+        void UserCreateAccount()
+        {
+            bool isCreateAccountSuccessful = false;
+
+            List<string> dataFromView = userFrontView.UserCreateAccountForm();
+
+            MemberDTO newMember = new MemberDTO(dataFromView);
+            isCreateAccountSuccessful = memberService.AddNewMember(newMember);
+
+            if (isCreateAccountSuccessful)
+            {
+                runtimeView.RuntimeMessageForm("NEW ACCOUNT IS CREATED!");
+            }
+            else
+            {
+                runtimeView.RuntimeMessageForm("THIS ID ALREADY EXISTS!");
+            }
         }
 
         public void Run()
@@ -42,42 +79,11 @@ namespace Library
                         break;
 
                     case UserFrontMode.USER_LOGIN:
-
-                        List<string> loginInfo = userFrontView.UserLoginForm();
-
-                        // ID가 존재를 하고 && ID PW 이 둘 다 맞으면
-                        if (memberModel.CheckIfIdExists(loginInfo) && memberModel.CheckIfValidLogin(loginInfo))
-                        {
-                            // login 성공한 userID 추출해서
-                            string curUserID = loginInfo[0];
-                            // userController에게 userID 전달해서 세팅하고 실행
-                            userController.InitializeUserController(curUserID); 
-                            userController.Run();
-                        }
-                        else
-                        {
-                            runtimeView.RuntimeMessageForm("CHECK YOUR ID AND PASSWORD!");
-                        }
-
+                        UserLogin();
                         break;
 
                     case UserFrontMode.USER_CREATE_ACCOUNT:
-
-                        bool isCreateAccountSuccessful = false;
-
-                        List<string> dataFromView = userFrontView.UserCreateAccountForm();
-                        
-                        MemberDTO newMember = new MemberDTO(dataFromView);
-                        isCreateAccountSuccessful = memberModel.AddNewMember(newMember);
-
-                        if (isCreateAccountSuccessful)
-                        {
-                            runtimeView.RuntimeMessageForm("NEW ACCOUNT IS CREATED!");
-                        }
-                        else
-                        {
-                            runtimeView.RuntimeMessageForm("THIS ID ALREADY EXISTS!");
-                        }
+                        UserCreateAccount();
                         break;
                 };
             }

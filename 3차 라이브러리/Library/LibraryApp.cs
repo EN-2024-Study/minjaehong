@@ -13,8 +13,8 @@ namespace Library
 
         static void PutDummyData()
         {
-            BookModel bookModel = BookModel.GetInstance();
-            MemberModel memberModel = MemberModel.GetInstance();
+            BookService bookService = BookService.GetInstance();
+            MemberService memberService = MemberService.GetInstance();
 
             List<string> dummyArr1 = new List<string> { "book1", "kim", "companyA", "1000", "10", "990317", "111-11-1111" };
             List<string> dummyArr2 = new List<string> { "book2", "kim", "companyB", "2500", "5", "030811", "222-22-2222" };
@@ -22,19 +22,19 @@ namespace Library
             List<string> dummyArr4 = new List<string> { "book4", "min", "companyB", "500", "7", "971227", "444-44-4444" };
             List<string> dummyArr5 = new List<string> { "book5", "park", "companyB", "4000", "8", "150710", "555-55-5555" };
             List<string> dummyArr6 = new List<string> { "book6", "lee", "companyC", "1500", "2", "230208", "666-66-6666" };
-            bookModel.AddNewBook(new BookDTO(dummyArr1));
-            bookModel.AddNewBook(new BookDTO(dummyArr2));
-            bookModel.AddNewBook(new BookDTO(dummyArr3));
-            bookModel.AddNewBook(new BookDTO(dummyArr4));
-            bookModel.AddNewBook(new BookDTO(dummyArr5));
-            bookModel.AddNewBook(new BookDTO(dummyArr6));
+            bookService.AddNewBook(new BookDTO(dummyArr1));
+            bookService.AddNewBook(new BookDTO(dummyArr2));
+            bookService.AddNewBook(new BookDTO(dummyArr3));
+            bookService.AddNewBook(new BookDTO(dummyArr4));
+            bookService.AddNewBook(new BookDTO(dummyArr5));
+            bookService.AddNewBook(new BookDTO(dummyArr6));
 
             List<string> dummyArr7 = new List<string> { "dog", "dog123", "DOG", "5", "010-1234-5678" };
             List<string> dummyArr8 = new List<string> { "cat", "cat123", "CAT", "4", "010-5647-8497" };
             List<string> dummyArr9 = new List<string> { "dolphin", "dolphin123", "DOLPHIN", "7", "010-3781-3649" };
-            memberModel.AddNewMember(new MemberDTO(dummyArr7));
-            memberModel.AddNewMember(new MemberDTO(dummyArr8));
-            memberModel.AddNewMember(new MemberDTO(dummyArr9));
+            memberService.AddNewMember(new MemberDTO(dummyArr7));
+            memberService.AddNewMember(new MemberDTO(dummyArr8));
+            memberService.AddNewMember(new MemberDTO(dummyArr9));
         }
 
         public static void Main()

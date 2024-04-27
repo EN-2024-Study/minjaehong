@@ -24,6 +24,33 @@ namespace Library
             mainView = new MainView();
         }
 
+        void StartManagerMode()
+        {
+            // MANAGERMODE이면 별로 할게 없기 때문에
+            // ID PW 확인만 하고 managercontroller를 여기서 바로 Run해줘도 됨
+            List<string> loginInfo = mainView.ManagerLoginForm();
+
+            string inputID = loginInfo[0];
+            string inputPW = loginInfo[1];
+
+            // ID PW 이 둘 다 맞으면
+            if (LibraryApp.managerID == inputID)
+            {
+                if (LibraryApp.managerPW == inputPW)
+                {
+                    managerController.Run();
+                }
+                else
+                {
+                    runtimeView.RuntimeMessageForm("MANAGER PASSWORD IS INCORRECT!");
+                }
+            }
+            else
+            {
+                runtimeView.RuntimeMessageForm("MANAGER ID IS INCORRECT!");
+            }
+        }
+
         public void Run()
         {
             LibraryMode mode;
@@ -38,36 +65,11 @@ namespace Library
                 switch (mode)
                 {
                     case LibraryMode.USER_MODE:
-                        
-                        // USERFRONTCONTROLLER 단으로 들어감
                         userFrontController.Run();
                         break;
 
                     case LibraryMode.MANAGER_MODE:
-
-                        // MANAGERMODE이면 별로 할게 없기 때문에
-                        // ID PW 확인만 하고 managercontroller를 여기서 바로 Run해줘도 됨
-                        List<string> loginInfo = mainView.ManagerLoginForm();
-
-                        string inputID = loginInfo[0];
-                        string inputPW = loginInfo[1];
-
-                        // ID PW 이 둘 다 맞으면
-                        if (LibraryApp.managerID == inputID)
-                        {
-                            if (LibraryApp.managerPW == inputPW)
-                            {
-                                managerController.Run();
-                            }
-                            else
-                            {
-                                runtimeView.RuntimeMessageForm("MANAGER PASSWORD IS INCORRECT!");
-                            }
-                        }
-                        else
-                        {
-                            runtimeView.RuntimeMessageForm("MANAGER ID IS INCORRECT!");
-                        }
+                        StartManagerMode();
                         break;
                 }
             }

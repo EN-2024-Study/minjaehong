@@ -35,7 +35,7 @@ namespace Library
 
         // 1. 도서 찾기
         // 찾을 도서 이름과 작가를 controller에게 전달
-        // controller는 BookModel에 가서 해당 매칭 결과를 List<string> 으로 받음
+        // controller는 BookRepository에 가서 해당 매칭 결과를 List<string> 으로 받음
         // controller는 PrintSelectedBooks로 출력
         public List<string> FindBookForm()
         {
@@ -60,7 +60,7 @@ namespace Library
         }
 
         // 3. 도서 대여 확인
-        // controller가 BookModel에서 로그인한 USER가 BORROW한 책들을 List<BOOKDTO>로 보내줌
+        // controller가 BookRepository에서 로그인한 USER가 BORROW한 책들을 List<BOOKDTO>로 보내줌
         // 여기서는 PrintSelectedBooks 이용해서 출력
         public void CheckBorrowedForm(List<BookDTO> curUserBorrowedBooks)
         {
@@ -81,7 +81,7 @@ namespace Library
         }
 
         // 5. 도서 반납 확인
-        // controller가 BookModel에서 로그인한 USER가 RETURN한 책들을 List<BOOKDTO>로 보내줌
+        // controller가 BookRepository에서 로그인한 USER가 RETURN한 책들을 List<BOOKDTO>로 보내줌
         // 여기서는 PrintSelectedBooks 이용해서 출력
         public void CheckReturnedForm(List<BookDTO> curUserReturnedBooks)
         {
