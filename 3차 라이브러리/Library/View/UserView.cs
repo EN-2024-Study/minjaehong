@@ -44,7 +44,7 @@ namespace Library
             MyConsole.PrintHeader("[FIND BOOK]");
 
             //InputHandler.GetUserInputs(Constants.findBookArr.Length, ExceptionHandler.findBookExceptionArr);
-            return MyConsole.GetUserInputs(findBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            return MyConsole.GetUserInputs(findBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.findBookExceptionArr);
         }
 
         // 2. 도서 대여
@@ -56,7 +56,7 @@ namespace Library
 
             // ID NUM 입력받아 controller한테 전달
             // InputHandler.GetUserInputs(Constants.borrowBookArr.Length, ExceptionHandler.borrowBookExceptionArr);
-            return MyConsole.GetUserInputs(borrowBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            return MyConsole.GetUserInputs(borrowBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.borrowBookExceptionArr);
         }
 
         // 3. 도서 대여 확인
@@ -77,7 +77,7 @@ namespace Library
             
             // ID NUM 입력받아 controller한테 전달
             // InputHandler.GetUserInputs(Constants.returnBookArr.Length, ExceptionHandler.returnBookExceptionArr);
-            return MyConsole.GetUserInputs(returnBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            return MyConsole.GetUserInputs(returnBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.returnBookExceptionArr);
         }
 
         // 5. 도서 반납 확인
@@ -100,7 +100,7 @@ namespace Library
             // 업데이트할 PW NAME AGE PHONENUM 입력받기
             //List<string> updatedUserInfo = InputHandler.GetUserInputs(Constants.updateUserArr.Length, ExceptionHandler.updateUserExceptionArr);
 
-            List<string> updatedUserInfo = MyConsole.GetUserInputs(updateUserArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            List<string> updatedUserInfo = MyConsole.GetUserInputs(updateUserArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.updateUserExceptionArr);
             // ID는 입력받는게 아니므로 그냥 0번에 추가해서 ID PW NAME AGE PHONENUM 받은 것처럼 만들기
             updatedUserInfo.Insert(0, "");
             return updatedUserInfo;
@@ -131,9 +131,7 @@ namespace Library
                 MyConsole.PrintBooks(selectedBooks);
             }
 
-            // 뭐 누르면 화면 바뀜
-            Console.ReadLine();
+            MyConsole.WaitForBackSpace();
         }
-
     }
 }

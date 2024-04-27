@@ -25,6 +25,9 @@ namespace Library
 
         private const int INSTRUCTION_X = 40; // INSTRUCTION START X
 
+        private const int WARNING_STARTX = 40;
+        private const int WARNING_STARTY = 6;
+
         //===================== HEADER PRINT FUNCTION ==================//
 
         // HEADER 출력 함수
@@ -40,14 +43,7 @@ namespace Library
         {
             Console.SetCursorPosition(USERID_X, USERID_Y);
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("HELLO STUDENT " + userID + "!");
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-
-        public static void PrintMessage(string message, int messageStartX, int messageStartY)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(message);
+            Console.WriteLine("HELLO USER " + userID + "!");
             Console.ForegroundColor = ConsoleColor.White;
         }
 
@@ -165,21 +161,65 @@ namespace Library
                 Console.Write(menu);
             }
 
-            PrintInstructions(Console.CursorTop);
+            //PrintInstructions(Console.CursorTop);
 
             List<string> retList = new List<string>();
             ExceptionState exceptionState;
+            string input = "";
+            string exceptionEraseInput = "                                       ";
 
             // 그리고 각 메뉴 옆에서 user input 받기
             // 콜론 : 위치 찾아서 그 옆에서 입력받게 하기
             for (int i = 0; i < menuArr.Length; i++)
             {
-                Console.SetCursorPosition(menuStartX + FindColonPosition(menuArr[i]) + 2, menuStartY + i);
-                retList.Add(Console.ReadLine());
+                bool isCorrectInput = false;
+                exceptionState = exceptionArr[i];
+
+                while (!isCorrectInput)
+                {
+                    Console.SetCursorPosition(menuStartX + FindColonPosition(menuArr[i]) + 2, menuStartY + i);
+                    Eraser(input, menuStartX + FindColonPosition(menuArr[i]) + 2, menuStartY + i);
+                    input = Console.ReadLine();
+                    Eraser(exceptionEraseInput, WARNING_STARTX, WARNING_STARTY);
+
+                    switch (exceptionState)
+                    {
+                        case ExceptionState.INT_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfIntOnlyInput(input);
+                            break;
+
+                        case ExceptionState.ENGLISH_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfEnglishOnlyInput(input);
+                            break;
+
+                        case ExceptionState.ENGLISH_INT_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfEnglistAndIntOnlyInput(input);
+                            break;
+
+                        case ExceptionState.PHONENUM_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfPhoneNumInput(input);
+                            break;
+
+                        case ExceptionState.ISBN_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfISBNInput(input);
+                            break;
+
+                        case ExceptionState.DATE_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfDateInput(input);
+                            break;
+                    }
+
+                    // 만약 USER가 제대로 입력안했으면
+                    if (!isCorrectInput)
+                    {
+                        PrintException(exceptionState);
+                    }
+                }
+
+                retList.Add(input);
             }
 
             Console.CursorVisible = false;
-
             return retList;
         }
 
@@ -239,27 +279,85 @@ namespace Library
             return curSel;
         }
 
-        // ENTER키 기다리는 함수
-        public static void WaitForEnterKey()
+        // 제대로 입력안했을때 뜸
+        public static void PrintException(ExceptionState exceptionState)
         {
-            MyConsole.PrintMessage("PRESS ENTER TO GO BACK...", Console.CursorLeft, Console.CursorTop);
+            Console.SetCursorPosition(WARNING_STARTX, WARNING_STARTY);
+            Console.ForegroundColor = ConsoleColor.Red;
 
-            bool isEnterPressed = false;
+            switch (exceptionState)
+            {
+                // FORMAT EXCEPTION
+                case ExceptionState.INT_ONLY:
+                    Console.Write("ONLY INT AVAILABLE");
+                    break;
+                case ExceptionState.ENGLISH_ONLY:
+                    Console.Write("ONLY ENGLISH AVAILABLE");
+                    break;
+                case ExceptionState.ENGLISH_INT_ONLY:
+                    Console.Write("ONLY ENGLISH AND INT AVAILABLE");
+                    break;
+                case ExceptionState.PHONENUM_ONLY:
+                    Console.Write("ONLY PHONENUM AVAILABLE");
+                    break;
+                case ExceptionState.DATE_ONLY:
+                    Console.Write("ONLY DATE AVAILABLE");
+                    break;
+                case ExceptionState.ISBN_ONLY:
+                    Console.Write("ONLY ISBN AVAILABLE");
+                    break;
+
+                // RUNTIME EXCEPTION
+                case ExceptionState.EXISTING_ID:
+                    Console.Write("ID ALREADY EXISTS");
+                    break;
+
+                case ExceptionState.NONEXISTING_ID:
+                    Console.Write("NON-EXISTING ID");
+                    break;
+
+                case ExceptionState.DONT_HAVE_CERTAIN_BOOK:
+                    Console.Write("NON-BORROWED BOOK");
+                    break;
+
+                case ExceptionState.NOT_ENOUGH_QUANTITY:
+                    Console.Write("NOT ENOUGH QUANTITY");
+                    break;
+            }
+
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        // BackSpace키 기다리는 함수
+        public static void WaitForBackSpace()
+        {
+            PrintInstructions(Console.CursorTop);
+            
+            bool isBackSpacePressed = false;
 
             // ENTER 누를때까지 대기
-            while (!isEnterPressed)
+            while (!isBackSpacePressed)
             {
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                     ConsoleKey key = keyInfo.Key;
 
-                    if (key == ConsoleKey.Enter)
+                    if (key == ConsoleKey.Backspace)
                     {
-                        isEnterPressed = true;
+                        isBackSpacePressed = true;
                     }
                 }
             }
+        }
+
+        public static void Eraser(string input, int eraseStartX, int eraseStartY)
+        {
+            Console.SetCursorPosition(eraseStartX, eraseStartY);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < input.Length; i++) sb.Append(" ");
+            Console.WriteLine(sb);
+            Console.SetCursorPosition(eraseStartX, eraseStartY);
         }
     }
 }

@@ -13,30 +13,19 @@ namespace Library
 
         public RuntimeView() { }
 
-        // 사용자의 행동에 따른 동적으로 나타나는 VIEW
+        // 사용자의 행동에 따른 동적으로 나타나는 VIEW 
         public void RuntimeMessageForm(string message)
         {
             Console.Clear();
+            Console.SetWindowSize(110, 20);
+
             Console.SetCursorPosition(RUNTIME_MESSAGE_X, RUNTIME_MESSAGE_Y);
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.SetCursorPosition(RUNTIME_MESSAGE_X, RUNTIME_MESSAGE_Y + 2);
-            Console.WriteLine("PRESS ENTER TO GO BACK...");
-
-            bool pressedEnter = false;
-
-            while (!pressedEnter)
-            {
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                    ConsoleKey key = keyInfo.Key;
-
-                    if (key == ConsoleKey.Enter) pressedEnter = true;
-                }
-            }
+            MyConsole.WaitForBackSpace();
+            Console.SetWindowSize(110, 50);
         }
     }
 }

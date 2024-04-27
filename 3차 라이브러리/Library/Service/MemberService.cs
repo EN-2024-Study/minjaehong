@@ -17,6 +17,12 @@ namespace Library
         public MemberService()
         {
             this.memberRepository = MemberRepository.GetInstance();
+            List<string> defaultUser1 = new List<string> { "dog", "dog123", "DOG", "5", "010-1234-5678" };
+            List<string> defaultUser2 = new List<string> { "cat", "cat123", "CAT", "4", "010-5647-8497" };
+            List<string> defaultUser3 = new List<string> { "dolphin", "dolphin123", "DOLPHIN", "7", "010-3781-3649" };
+            AddNewMember(new MemberDTO(defaultUser1));
+            AddNewMember(new MemberDTO(defaultUser2));
+            AddNewMember(new MemberDTO(defaultUser3));
         }
 
         public static MemberService GetInstance()

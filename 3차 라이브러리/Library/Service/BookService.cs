@@ -17,6 +17,17 @@ namespace Library
         private BookService()
         {
             this.bookRepository = BookRepository.GetInstance();
+
+            List<string> defaultBook1 = new List<string> { "book1", "kim", "companyA", "1000", "10", "990317", "111-11-1111" };
+            List<string> defaultBook2 = new List<string> { "book2", "kim", "companyB", "2500", "5", "030811", "222-22-2222" };
+            List<string> defaultBook3 = new List<string> { "book3", "min", "companyC", "3000", "3", "011103", "333-33-3333" };
+            List<string> defaultBook4 = new List<string> { "book4", "min", "companyB", "500", "7", "971227", "444-44-4444" };
+            List<string> defaultBook5 = new List<string> { "book5", "park", "companyB", "4000", "8", "150710", "555-55-5555" };
+            AddNewBook(new BookDTO(defaultBook1));
+            AddNewBook(new BookDTO(defaultBook2));
+            AddNewBook(new BookDTO(defaultBook3));
+            AddNewBook(new BookDTO(defaultBook4));
+            AddNewBook(new BookDTO(defaultBook5));
         }
 
         public static BookService GetInstance()
@@ -54,36 +65,16 @@ namespace Library
 
             List<BookDTO> retList = new List<BookDTO>();
 
-            // resultMatched는 검색결과에 맞는 것인지 확인해주는 변수
-            // 2가 되면 매칭하는 책이라는 뜻임
-            int resultMatched = 0;
-
             // bookRepository에서 bookDB 가져오기
             Dictionary<int, BookDTO> bookDB = bookRepository.GetBookDB();
 
             foreach (int curKey in bookDB.Keys)
             {
-                resultMatched = 0;
-
-                // 아무것도 입력없었으면 검색결과 일치 처리
-                if (bookName == "") resultMatched++;
-                else
-                {
-                    if (bookDB[curKey].GetName() == bookName) resultMatched++;
-                }
-
-                // 아무것도 입력없었으면 검색결과 일치 처리
-                if (author == "") resultMatched++;
-                else
-                {
-                    if (bookDB[curKey].GetAuthor() == author) resultMatched++;
-                }
-
-                // bookName author 둘 다 매칭되었으면 List에 추가
-                if (resultMatched == 2)
-                {
-                    retList.Add(bookDB[curKey]);
-                }
+                // 입력이 있었는데 맞지 않으면 continue
+                if (bookName != "" && !bookDB[curKey].GetName().Contains(bookName)) continue;
+                if (author != "" && !bookDB[curKey].GetAuthor().Contains(author)) continue;
+                
+                retList.Add(bookDB[curKey]);
             }
 
             return retList;
