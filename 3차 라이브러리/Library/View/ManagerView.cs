@@ -49,7 +49,6 @@ namespace Library
             
             MyConsole.PrintHeader("[FIND BOOK]");
             
-            //return InputHandler.GetUserInputs(Constants.findBookArr.Length, ExceptionHandler.findBookExceptionArr);
             return MyConsole.GetUserInputs(findBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.findBookExceptionArr);
         }
 
@@ -81,9 +80,8 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[ADD BOOK]");
-            
-            //List<string> bookInfo = InputHandler.GetUserInputs(Constants.addBookArr.Length, ExceptionHandler.addBookExceptionArr);
             List<string> bookInfo = MyConsole.GetUserInputs(addBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.addBookExceptionArr);
+            
             return bookInfo;
         }
 
@@ -96,10 +94,7 @@ namespace Library
 
             // 화면 구성
             MyConsole.PrintHeader("[DELETE BOOK]");
-            
             // user 입력 받기
-            //List<string> userInput = InputHandler.GetUserInputs(Constants.deleteBookArr.Length, ExceptionHandler.deleteBookExceptionArr);
-
             List<string> userInput = MyConsole.GetUserInputs(deleteBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.deleteBookExceptionArr);
             int deletingBookID = int.Parse(userInput[0]);
 
@@ -117,8 +112,6 @@ namespace Library
             MyConsole.PrintHeader("[UPDATE BOOK]");
             
             // USER 입력 받기            
-            //List<string> userInput = InputHandler.GetUserInputs(Constants.updateBookSelectArr.Length, ExceptionHandler.updateBookSelectExceptionArr);
-
             List<string> userInput = MyConsole.GetUserInputs(updateBookSelectArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.updateBookSelectExceptionArr);
             int updatingBookID = int.Parse(userInput[0]);
             
@@ -136,7 +129,6 @@ namespace Library
             MyConsole.PrintHeader("[UPDATE BOOK FORM]");
             
             // USER 입력받기
-            //List<string> updatedBookInfo = InputHandler.GetUserInputs(Constants.updateBookArr.Length, ExceptionHandler.updateBookExceptionArr);
             List<string> updatedBookInfo = MyConsole.GetUserInputs(updateBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.updateBookExceptionArr);
             return updatedBookInfo;
         }
@@ -158,7 +150,6 @@ namespace Library
                 MyConsole.PrintAllMembers(allMembers);
             }
 
-            // 뭐 누르면 화면 바뀜
             MyConsole.WaitForBackSpace();
         }
     }

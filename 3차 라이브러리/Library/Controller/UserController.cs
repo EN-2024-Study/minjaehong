@@ -57,6 +57,7 @@ namespace Library
 
             // 해당 책이 존재하면 bookService에 누가 빌린거 적용해주기
             int bookID = int.Parse(miniDTO.GetBookID());
+
             if (bookService.CheckIfBookExists(bookID))
             {
                 bookService.UpdateBorrowed(miniDTO);

@@ -42,7 +42,7 @@
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Controller\ManagerController.cs" />
     <Compile Include="Controller\UserController.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="Constants\Enums.cs" />
     <Compile Include="LibraryApp.cs" />
     <Compile Include="Repository\BookRepository.cs" />
     <Compile Include="Model\MemberDTO.cs" />

@@ -148,6 +148,23 @@ namespace Library
         // 여기도 service부터 하고 시작
         public bool AddReturnHistory(string curUserID, string bookID)
         {
+            // 한명이 한 책을 빌리고 반납하는걸 반복했을때 중복튜플이 생기는걸 방지하기 위한 추가 코드
+            if (CheckIfReturnHistoryAlreadyExists(curUserID, bookID))
+            {
+                string deleteQuery = "DELETE FROM historyDB WHERE borrower_id = @borrowerID AND book_id = @bookID AND returned = FALSE";
+                connection.Open();
+                command.Parameters.Clear();
+
+                command.CommandText = deleteQuery;
+                command.Parameters.AddWithValue("@borrowerID", curUserID);
+                command.Parameters.AddWithValue("@bookID", bookID);
+                command.ExecuteNonQuery();
+
+                connection.Close();
+
+                return true;
+            }
+
             string updateQuery = "UPDATE historyDB SET returned = TRUE WHERE borrower_id = @borrowerID AND book_id = @bookID";
 
             connection.Open();
@@ -161,6 +178,24 @@ namespace Library
             connection.Close();
 
             return true;
+        }
+       
+        private bool CheckIfReturnHistoryAlreadyExists(string curUserID, string bookID)
+        {
+            string checkIfReturnHistoryAlreadyExistsQuery = "SELECT EXISTS (SELECT TRUE FROM historyDB WHERE borrower_id=@borrowerID AND book_id=@bookID AND returned = TRUE)";
+
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = checkIfReturnHistoryAlreadyExistsQuery;
+            command.Parameters.AddWithValue("@borrowerID", curUserID);
+            command.Parameters.AddWithValue("@bookID", bookID);
+
+            bool exists = Convert.ToBoolean(command.ExecuteScalar());
+
+            connection.Close();
+
+            return exists;
         }
     }
 }

@@ -86,7 +86,7 @@ namespace Library
         {
             bookDB.Clear();
 
-            string getAllBookQuery = string.Format("SELECT * FROM bookDB");
+            string getAllBookQuery = "SELECT * FROM bookDB";
             
             connection.Open();
 
