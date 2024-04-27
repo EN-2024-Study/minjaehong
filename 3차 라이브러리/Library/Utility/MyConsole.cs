@@ -28,7 +28,7 @@ namespace Library
         private const int WARNING_STARTX = 40;
         private const int WARNING_STARTY = 6;
 
-        //===================== HEADER PRINT FUNCTION ==================//
+        //===================== PRINT FUNCTIONS ==================//
 
         // HEADER 출력 함수
         public static void PrintHeader(string header)
@@ -57,9 +57,6 @@ namespace Library
             Console.WriteLine("PRESS BACKSPACE TO GO BACK");
             Console.ForegroundColor = ConsoleColor.White;
         }
-
-        //===================== MENU PRINT FUNCTION ==================//
-
 
         // menuStartX, menuStartY에서 시작하는 메뉴 중
         // idx에 해당하는 한개의 메뉴만 출력해줌

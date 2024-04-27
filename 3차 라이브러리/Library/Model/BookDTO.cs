@@ -18,11 +18,6 @@ namespace Library
         private string date; // dataFromView[5]
         private string isbn; // dataFromView[6]
 
-        public BookDTO()
-        {
-           
-        }
-
         public BookDTO(string name, string author, string publisher, string price, string inStock, string date, string isbn)
         {
             this.name = name;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace Library
 {
@@ -16,6 +17,8 @@ namespace Library
 
         private int keyID;
 
+        string connectionString;
+
         //===================== SINGELTON ========================//
 
         private static BookRepository instance;
@@ -24,6 +27,7 @@ namespace Library
         {
             keyID = 1;
             bookDB = new Dictionary<int, BookDTO>();
+            connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
         }
 
         public static BookRepository GetInstance()
@@ -45,9 +49,13 @@ namespace Library
         //==================== CRUD ===================//
         public void Add(BookDTO book)
         {
+            /*
             book.SetId(keyID);
             bookDB.Add(keyID, book);
             keyID++;
+            */
+
+            
         }
 
         public void Delete(int bookID)

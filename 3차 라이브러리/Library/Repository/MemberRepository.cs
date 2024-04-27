@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace Library
 {
@@ -13,13 +14,20 @@ namespace Library
     {
         // ID가 고유키
         Dictionary<string, MemberDTO> memberDB;
+        
+        String connectionString;
+        MySqlConnection connection;
 
         //================== SINGLETON ===============//
 
         private static MemberRepository instance;
 
-        private MemberRepository() {
+        private MemberRepository()
+        {
             memberDB = new Dictionary<string, MemberDTO>();
+
+            connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
+            connection = new MySqlConnection(connectionString);
         }
 
         public static MemberRepository GetInstance()
@@ -37,12 +45,56 @@ namespace Library
         // 내 정보 수정할때 띄우려고
         public MemberDTO GetMember(string requestedMemberID)
         {
-            return memberDB[requestedMemberID];
+            MemberDTO member = new MemberDTO();
+
+            string getMemberQuery = string.Format("SELECT * FROM memberDB WHERE id = '{0}'", requestedMemberID);
+
+            connection.Open();
+            Console.WriteLine("connection successful!");
+            MySqlCommand command = new MySqlCommand(getMemberQuery, connection);
+            MySqlDataReader reader = command.ExecuteReader();
+
+            // 한 개만 왔으므로 read 한번만 호출
+            reader.Read();
+
+            member.SetId(requestedMemberID);
+            member.SetPw(reader["pw"].ToString());
+            member.SetAge(reader["age"].ToString());
+            member.SetName(reader["name"].ToString());
+            member.SetPhoneNum(reader["phonenum"].ToString());
+
+            connection.Close();
+
+            return member;
         }
 
         public List<MemberDTO> GetAllMember()
         {
-            return memberDB.Values.ToList();
+            List<MemberDTO> memberList = new List<MemberDTO>();
+
+            MemberDTO member = new MemberDTO();
+
+            string getAllMemberQuery = string.Format("SELECT * FROM memberDB");
+
+            connection.Open();
+            Console.WriteLine("connection successful!");
+            MySqlCommand command = new MySqlCommand(getAllMemberQuery, connection);
+            MySqlDataReader reader = command.ExecuteReader();
+
+            // 한 개만 왔으므로 read 한번만 호출
+            while (reader.Read())
+            {
+                member.SetId(reader["id"].ToString());
+                member.SetPw(reader["pw"].ToString());
+                member.SetAge(reader["age"].ToString());
+                member.SetName(reader["name"].ToString());
+                member.SetPhoneNum(reader["phonenum"].ToString());
+
+                memberList.Add(member);
+            }
+            connection.Close();
+
+            return memberList;
         }
 
         // 로그인한 USER가 BORROW한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
@@ -60,11 +112,16 @@ namespace Library
         // 특정 ID 존재유무 파악
         public bool CheckIfMemberExists(string userID)
         {
-            foreach (string curKey in memberDB.Keys)
-            {
-                if (curKey == userID) return true;
-            }
-            return false;
+            // subquery 이용 true false 반환
+            string checkQuery = string.Format("SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = '{0}')", userID);
+
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(checkQuery, connection);
+            bool exists = Convert.ToBoolean(command.ExecuteScalar());
+            connection.Close();
+
+            if (exists) return true;
+            else return false;
         }
 
         // ID PW 유효성 검사
@@ -73,13 +130,16 @@ namespace Library
             string userID = loginInfo[0];
             string userPW = loginInfo[1];
 
-            foreach (string curKey in memberDB.Keys)
-            {
-                // ID PW 모두 DB에 있는거랑 동일하면 true return
-                if (userID == curKey && userPW == memberDB[curKey].GetPw()) return true;
-            }
-            return false;
+            // subquery 이용 true false 반환
+            string checkQuery = string.Format("SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = '{0}' AND pw = '{1}')", userID, userPW);
 
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(checkQuery, connection);
+            bool exists = Convert.ToBoolean(command.ExecuteScalar());
+            connection.Close();
+
+            if (exists) return true;
+            else return false;
         }
 
         // USER가 진짜 빌린 책인지 확인
@@ -108,14 +168,27 @@ namespace Library
 
         public bool Add(MemberDTO newMember)
         {
-            memberDB.Add(newMember.GetId(), newMember);
+            string insertQuery = string.Format("INSERT INTO memberdb (id, pw, name, age, phonenum) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')",
+                                                newMember.GetId(), newMember.GetPw(), newMember.GetName(), newMember.GetAge(), newMember.GetPhoneNum());
+
+            connection.Open();
+            Console.WriteLine("connection successful!");
+            MySqlCommand command = new MySqlCommand(insertQuery, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+
             return true;
         }
 
         // controller에서 ID넘기면 삭제해줌
         public bool Delete(string deletingMemberID)
         {
-            memberDB.Remove(deletingMemberID);
+            string deleteQuery = string.Format("DELETE FROM memberDB WHERE id = '{0}'", deletingMemberID);
+
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(deleteQuery, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
             return true;
         }
 

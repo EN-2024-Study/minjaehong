@@ -20,6 +20,11 @@ namespace Library
 
         //=================== CONSTRUCTOR =================//
 
+        public MemberDTO()
+        {
+
+        }
+
         // view에서 넘겨준 List<string> 가지고
         // MemberDTO 만들 수 있어야함
         // borrowed랑 returned는 생성만 해주기
