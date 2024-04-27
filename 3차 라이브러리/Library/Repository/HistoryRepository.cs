@@ -11,6 +11,7 @@ namespace Library
     {
         string connectionString;
         MySqlConnection connection;
+        MySqlCommand command;
 
         private static HistoryRepository instance;
 
@@ -18,6 +19,8 @@ namespace Library
         {
             connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
             connection = new MySqlConnection(connectionString);
+            // 해당 DB에 사용할 command 객체 생성
+            command = connection.CreateCommand();
         }
 
         public static HistoryRepository GetInstance()
@@ -36,13 +39,15 @@ namespace Library
         {
             List<int> curUserBorrowedBookList = new List<int>();
 
-            string getAllBorrowedBooksQuery = string.Format("SELECT * FROM historyDB");
+            string getAllBorrowedBooksQuery = "SELECT * FROM historyDB";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(getAllBorrowedBooksQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = getAllBorrowedBooksQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
-            Boolean isBorrowed = false;
+            bool isBorrowed = false;
 
             while (reader.Read())
             {
@@ -55,6 +60,8 @@ namespace Library
                     break;
                 }
             }
+
+            reader.Close();
             connection.Close();
 
             return isBorrowed;
@@ -65,10 +72,11 @@ namespace Library
         {
             List<int> curUserBorrowedBookList = new List<int>();
 
-            string getAllBorrowedBooksQuery = string.Format("SELECT * FROM historyDB");
+            string getAllBorrowedBooksQuery = "SELECT * FROM historyDB";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(getAllBorrowedBooksQuery, connection);
+
+            command.CommandText = getAllBorrowedBooksQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -79,6 +87,7 @@ namespace Library
                     curUserBorrowedBookList.Add(int.Parse(reader["book_id"].ToString()));
                 }
             }
+
             connection.Close();
 
             return curUserBorrowedBookList;
@@ -89,10 +98,11 @@ namespace Library
         {
             List<int> curUserReturnedBookList = new List<int>();
 
-            string getAllReturnedBooksQuery = string.Format("SELECT * FROM historyDB");
+            string getAllReturnedBooksQuery = "SELECT * FROM historyDB";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(getAllReturnedBooksQuery, connection);
+            
+            command.CommandText = getAllReturnedBooksQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -103,6 +113,8 @@ namespace Library
                     curUserReturnedBookList.Add(int.Parse(reader["book_id"].ToString()));
                 }
             }
+
+            reader.Close();
             connection.Close();
 
             return curUserReturnedBookList;
@@ -116,11 +128,17 @@ namespace Library
         public bool AddBorrowHistory(string curUserID, string bookID)
         {
             // returned 는 default로 false니까 그냥 안넣어줘도 됨
-            string insertQuery = string.Format("INSERT INTO historyDB (borrower_id, book_id, returned) VALUES('{0}', '{1}', FALSE) ON DUPLICATE KEY UPDATE returned = FALSE;", curUserID, bookID);
+            string insertQuery = "INSERT INTO historyDB (borrower_id, book_id, returned) " +
+                "VALUES(@borrower_id, @book_id, FALSE) ON DUPLICATE KEY UPDATE returned = FALSE;";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(insertQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = insertQuery;
+            command.Parameters.AddWithValue("@borrower_id", curUserID);
+            command.Parameters.AddWithValue("@book_id", bookID);
             command.ExecuteNonQuery();
+            
             connection.Close();
 
             return true;
@@ -130,11 +148,16 @@ namespace Library
         // 여기도 service부터 하고 시작
         public bool AddReturnHistory(string curUserID, string bookID)
         {
-            string updateQuery = string.Format("UPDATE historyDB SET returned = TRUE WHERE borrower_id = '{0}' AND book_id = '{1}'", curUserID, bookID);
+            string updateQuery = "UPDATE historyDB SET returned = TRUE WHERE borrower_id = @borrowerID AND book_id = @bookID";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(updateQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = updateQuery;
+            command.Parameters.AddWithValue("@borrowerID", curUserID);
+            command.Parameters.AddWithValue("@bookID", bookID);
             command.ExecuteNonQuery();
+
             connection.Close();
 
             return true;

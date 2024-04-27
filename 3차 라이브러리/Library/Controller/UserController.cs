@@ -141,11 +141,10 @@ namespace Library
             else
             {
                 runtimeView.RuntimeMessageForm("PLEASE RETURN ALL YOUR BOOKS FIRST");
-
             }
         }
 
-        public void Run()
+        public void RunUserMode()
         {
             UserMenuState selectedMenu;
 
@@ -191,6 +190,7 @@ namespace Library
                     
                     case UserMenuState.DELETEMYSELF:
                         DeleteMySelf();
+                        isUserModeRunning = false;
                         break;
                     
                     case UserMenuState.NAVERSEARCH:

@@ -35,7 +35,7 @@ namespace Library
             {
                 // userController에게 userID 전달해서 세팅하고 실행
                 userController.InitializeUserController(curUserID);
-                userController.Run();
+                userController.RunUserMode();
             }
             else
             {
@@ -62,7 +62,7 @@ namespace Library
             }
         }
 
-        public void Run()
+        public void RunUserFrontMode()
         {
             UserFrontMode userMode;
             bool isUserFrontRunning = true;

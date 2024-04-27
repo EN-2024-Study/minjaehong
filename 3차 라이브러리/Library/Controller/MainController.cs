@@ -24,7 +24,7 @@ namespace Library
             mainView = new MainView();
         }
 
-        void StartManagerMode()
+        void RunManagerMode()
         {
             // MANAGERMODE이면 별로 할게 없기 때문에
             // ID PW 확인만 하고 managercontroller를 여기서 바로 Run해줘도 됨
@@ -38,7 +38,7 @@ namespace Library
             {
                 if (LibraryApp.managerPW == inputPW)
                 {
-                    managerController.Run();
+                    managerController.RunManagerMode();
                 }
                 else
                 {
@@ -51,7 +51,7 @@ namespace Library
             }
         }
 
-        public void Run()
+        public void StartApp()
         {
             LibraryMode mode;
 
@@ -65,11 +65,11 @@ namespace Library
                 switch (mode)
                 {
                     case LibraryMode.USER_MODE:
-                        userFrontController.Run();
+                        userFrontController.RunUserFrontMode();
                         break;
 
                     case LibraryMode.MANAGER_MODE:
-                        StartManagerMode();
+                        RunManagerMode();
                         break;
                 }
             }

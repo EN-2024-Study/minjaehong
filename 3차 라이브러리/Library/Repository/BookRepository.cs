@@ -15,10 +15,9 @@ namespace Library
     {
         Dictionary<int, BookDTO> bookDB;
 
-        private int keyID;
-
         string connectionString;
         MySqlConnection connection;
+        MySqlCommand command;
 
         //===================== SINGELTON ========================//
 
@@ -26,10 +25,14 @@ namespace Library
 
         private BookRepository()
         {
-            keyID = 1;
             bookDB = new Dictionary<int, BookDTO>();
+
             connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
             connection = new MySqlConnection(connectionString);
+            // 해당 DB에 사용할 command 객체 생성
+            command = connection.CreateCommand();
+
+            InitializeBookDB();
         }
 
         public static BookRepository GetInstance()
@@ -43,33 +46,56 @@ namespace Library
 
         //===================== SIMPLE FUNCTIONS ========================//
 
-        public bool CheckIfBookExists(int bookID) { 
-
-            // subquery 이용 true false 반환
-            string checkQuery = string.Format("SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = '{0}')", bookID);
+        // 매번 실행결과 확인 위해 지우고 다시 시작
+        // 빼도 상관없음
+        private void InitializeBookDB()
+        {
+            string deleteQuery = "DELETE FROM bookDB";
+            string autoIncrementInitializeQuery = "ALTER TABLE bookDB AUTO_INCREMENT = 1";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(checkQuery, connection);
+
+            command.CommandText = deleteQuery;
+            command.ExecuteNonQuery();
+            command.CommandText = autoIncrementInitializeQuery;
+            command.ExecuteNonQuery();
+            
+            connection.Close();
+        }
+
+        public bool CheckIfBookExists(int bookID)
+        {
+            // subquery 이용 true false 반환
+            string checkQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID)";
+
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = checkQuery;
+            command.Parameters.AddWithValue("@BookID", bookID);
+            // 어차피 값이 하나밖에 안날라옴
             bool exists = Convert.ToBoolean(command.ExecuteScalar());
+            
             connection.Close();
 
             if (exists) return true;
             else return false;
         }
 
-        public Dictionary<int, BookDTO> GetBookDB() {
-
+        public Dictionary<int, BookDTO> GetBookDB()
+        {
             bookDB.Clear();
-            
-            string getAllBookQuery = string.Format("SELECT * FROM bookDB");
 
+            string getAllBookQuery = string.Format("SELECT * FROM bookDB");
+            
             connection.Open();
-            MySqlCommand command = new MySqlCommand(getAllBookQuery, connection);
+
+            command.CommandText = getAllBookQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
             // 한 개만 왔으므로 read 한번만 호출
             while (reader.Read())
-            { 
+            {
                 BookDTO book = new BookDTO();
                 book.SetId(int.Parse(reader["id"].ToString()));
                 book.SetName(reader["name"].ToString());
@@ -83,64 +109,97 @@ namespace Library
                 bookDB.Add(book.GetId(), book);
             }
 
+            reader.Close();
             connection.Close();
 
             return bookDB;
         }
 
-        public BookDTO GetBookByID(int bookID) {
+        public BookDTO GetBookByID(int bookID)
+        {
             bookDB.Clear();
             bookDB = GetBookDB();
-            return bookDB[bookID]; 
+            return bookDB[bookID];
         }
 
 
         //==================== CRUD ===================//
         public bool Add(BookDTO book)
         {
-            string insertQuery = string.Format("INSERT INTO bookDB (name, author, publisher, price, instock, date, isbn) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')",
-                book.GetName(), book.GetAuthor(), book.GetPublisher(), book.GetPrice(), book.GetInStock(), book.GetDate(), book.GetIsbn());
+            string insertQuery = "INSERT INTO bookDB (name, author, publisher, price, instock, date, isbn) " +
+                "VALUES (@name, @author, @publisher, @price, @inStock, @date, @isbn)";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(insertQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = insertQuery;
+            command.Parameters.AddWithValue("@name", book.GetName());
+            command.Parameters.AddWithValue("@author", book.GetAuthor());
+            command.Parameters.AddWithValue("@publisher", book.GetPublisher());
+            command.Parameters.AddWithValue("@price", book.GetPrice());
+            command.Parameters.AddWithValue("@inStock", book.GetInStock());
+            command.Parameters.AddWithValue("@date", book.GetDate());
+            command.Parameters.AddWithValue("@isbn", book.GetIsbn());
             command.ExecuteNonQuery();
+
             connection.Close();
 
             return true;
         }
 
+
         public bool Delete(int deletingBookID)
         {
-            string deleteQuery = string.Format("DELETE FROM bookDB WHERE id = '{0}'", deletingBookID);
+            string deleteQuery = "DELETE FROM bookDB WHERE id = @deletingBookID";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(deleteQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = deleteQuery;
+            command.Parameters.AddWithValue("@deletingBookID", deletingBookID);
             command.ExecuteNonQuery();
+
             connection.Close();
-            
+
             return true;
         }
 
         public void Update(int updatingBookID, BookDTO book)
         {
             // 기존꺼 삭제하고 업데이트된 책을 추가
-            
-            string updateQuery = string.Format("UPDATE bookDB SET name = '{0}', author = '{1}', publisher = '{2}', price = '{3}', instock = '{4}', date = '{5}', isbn = '{6}' WHERE id = '{7}'",
-                book.GetName(), book.GetAuthor(), book.GetPublisher(), book.GetPrice(), book.GetInStock(), book.GetDate(), book.GetIsbn(), book.GetId());
+
+            string updateBookQuery = "UPDATE bookDB SET name = @name, author = @author, publisher = @publisher, " +
+                "price = @price, instock = @inStock, date = @date, isbn = @isbn WHERE id = @id";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(updateQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = updateBookQuery;
+            command.Parameters.AddWithValue("@name", book.GetName());
+            command.Parameters.AddWithValue("@author", book.GetAuthor());
+            command.Parameters.AddWithValue("@publisher", book.GetPublisher());
+            command.Parameters.AddWithValue("@price", book.GetPrice());
+            command.Parameters.AddWithValue("@inStock", book.GetInStock());
+            command.Parameters.AddWithValue("@date", book.GetDate());
+            command.Parameters.AddWithValue("@isbn", book.GetIsbn());
+            command.Parameters.AddWithValue("@id", updatingBookID);
             command.ExecuteNonQuery();
+
             connection.Close();
         }
 
         public void UpdateStock(int bookID, string updatedStock)
         {
-            string updateQuery = string.Format("UPDATE bookDB SET instock = '{0}' WHERE id = '{1}'", updatedStock, bookID);
+            string updateStockQuery = "UPDATE bookDB SET instock = @updatedStock WHERE id = @bookID";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(updateQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = updateStockQuery;
+            command.Parameters.AddWithValue("@updatedStock", updatedStock);
+            command.Parameters.AddWithValue("@bookID", bookID);
             command.ExecuteNonQuery();
+
             connection.Close();
         }
     }

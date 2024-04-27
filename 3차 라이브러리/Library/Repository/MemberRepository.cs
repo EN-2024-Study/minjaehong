@@ -17,6 +17,7 @@ namespace Library
         
         String connectionString;
         MySqlConnection connection;
+        MySqlCommand command;
 
         //================== SINGLETON ===============//
 
@@ -28,6 +29,7 @@ namespace Library
 
             connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
             connection = new MySqlConnection(connectionString);
+            command = connection.CreateCommand();
         }
 
         public static MemberRepository GetInstance()
@@ -42,19 +44,22 @@ namespace Library
         //============== SIMPLE GET CHECK FUNCTIONS ====================//
 
         // 무조건 존재하는 member에 대한 ID 값만 들어옴
-        // 내 정보 수정할때 띄우려고
+        // 이미 service에서 존재성 판단함
         public MemberDTO GetMember(string requestedMemberID)
         {
             MemberDTO member = new MemberDTO();
 
-            string getMemberQuery = string.Format("SELECT * FROM memberDB WHERE id = '{0}'", requestedMemberID);
+            string getMemberQuery = "SELECT * FROM memberDB WHERE id = @requestedMemberID";
 
             connection.Open();
-            Console.WriteLine("connection successful!");
-            MySqlCommand command = new MySqlCommand(getMemberQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = getMemberQuery;
+            command.Parameters.AddWithValue("@requestedMemberID", requestedMemberID);
+
             MySqlDataReader reader = command.ExecuteReader();
 
-            // 한 개만 왔으므로 read 한번만 호출
+            // 한 개만 왔을거니까 read 한번만 호출
             reader.Read();
 
             member.SetId(requestedMemberID);
@@ -63,6 +68,7 @@ namespace Library
             member.SetName(reader["name"].ToString());
             member.SetPhoneNum(reader["phonenum"].ToString());
 
+            reader.Close();
             connection.Close();
 
             return member;
@@ -72,13 +78,13 @@ namespace Library
         {
             List<MemberDTO> memberList = new List<MemberDTO>();
 
-            string getAllMemberQuery = string.Format("SELECT * FROM memberDB");
+            string getAllMemberQuery = "SELECT * FROM memberDB";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(getAllMemberQuery, connection);
+            command.CommandText = getAllMemberQuery;
+
             MySqlDataReader reader = command.ExecuteReader();
 
-            // 한 개만 왔으므로 read 한번만 호출
             while (reader.Read())
             {
                 MemberDTO member = new MemberDTO();
@@ -90,6 +96,8 @@ namespace Library
 
                 memberList.Add(member);
             }
+
+            reader.Close();
             connection.Close();
 
             return memberList;
@@ -99,11 +107,16 @@ namespace Library
         public bool CheckIfMemberExists(string userID)
         {
             // subquery 이용 true false 반환
-            string checkQuery = string.Format("SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = '{0}')", userID);
+            string checkQuery = "SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = @userID)";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(checkQuery, connection);
+            command.Parameters.Clear();
+            
+            command.CommandText = checkQuery;
+            command.Parameters.AddWithValue("@userID", userID);
+            // 어차피 한개밖에 안넘어옴
             bool exists = Convert.ToBoolean(command.ExecuteScalar());
+            
             connection.Close();
 
             if (exists) return true;
@@ -117,11 +130,17 @@ namespace Library
             string userPW = loginInfo[1];
 
             // subquery 이용 true false 반환
-            string checkQuery = string.Format("SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = '{0}' AND pw = '{1}')", userID, userPW);
+            string checkQuery = "SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = @userID AND pw = @userPW)";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(checkQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = checkQuery;
+            command.Parameters.AddWithValue("@userID", userID);
+            command.Parameters.AddWithValue("@userPW", userPW);
+            // 어차피 한개밖에 안넘어옴
             bool exists = Convert.ToBoolean(command.ExecuteScalar());
+            
             connection.Close();
 
             if (exists) return true;
@@ -132,12 +151,19 @@ namespace Library
 
         public bool Add(MemberDTO newMember)
         {
-            string insertQuery = string.Format("INSERT INTO memberdb (id, pw, name, age, phonenum) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')",
-                                                newMember.GetId(), newMember.GetPw(), newMember.GetName(), newMember.GetAge(), newMember.GetPhoneNum());
-
+            string insertQuery = "INSERT INTO memberdb (id, pw, name, age, phonenum) VALUES (@id, @pw, @name, @age, @phonenum)";
+            
             connection.Open();
-            MySqlCommand command = new MySqlCommand(insertQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = insertQuery;
+            command.Parameters.AddWithValue("@id", newMember.GetId());
+            command.Parameters.AddWithValue("@pw", newMember.GetPw());
+            command.Parameters.AddWithValue("@name", newMember.GetName());
+            command.Parameters.AddWithValue("@age", newMember.GetAge());
+            command.Parameters.AddWithValue("@phonenum", newMember.GetPhoneNum());
             command.ExecuteNonQuery();
+
             connection.Close();
 
             return true;
@@ -146,11 +172,15 @@ namespace Library
         // controller에서 ID넘기면 삭제해줌
         public bool Delete(string deletingMemberID)
         {
-            string deleteQuery = string.Format("DELETE FROM memberDB WHERE id = '{0}'", deletingMemberID);
+            string deleteQuery = "DELETE FROM memberDB WHERE id = @deletingMemberID";
 
             connection.Open();
-            MySqlCommand command = new MySqlCommand(deleteQuery, connection);
+            command.Parameters.Clear();
+
+            command.CommandText = deleteQuery;
+            command.Parameters.AddWithValue("@deletingMemberID", deletingMemberID);
             command.ExecuteNonQuery();
+
             connection.Close();
             return true;
         }

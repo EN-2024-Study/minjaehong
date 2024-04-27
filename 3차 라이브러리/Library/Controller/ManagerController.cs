@@ -85,7 +85,7 @@ namespace Library
             managerView.PrintAllMembersForm(allMembers);
         }
 
-        public void Run()
+        public void RunManagerMode()
         {
             ManagerMenuState selectedMenu;
             bool isManagerModeRunning = true;
