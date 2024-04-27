@@ -39,7 +39,7 @@ namespace Library
             return instance;
         }
 
-        //===================== SIMPLE FUNCTIONS ========================//
+        //============== SIMPLE GET CHECK FUNCTIONS ====================//
 
         // 무조건 존재하는 member에 대한 ID 값만 들어옴
         // 내 정보 수정할때 띄우려고
@@ -75,7 +75,6 @@ namespace Library
             string getAllMemberQuery = string.Format("SELECT * FROM memberDB");
 
             connection.Open();
-            Console.WriteLine("connection successful!");
             MySqlCommand command = new MySqlCommand(getAllMemberQuery, connection);
             MySqlDataReader reader = command.ExecuteReader();
 
@@ -94,18 +93,6 @@ namespace Library
             connection.Close();
 
             return memberList;
-        }
-
-        // 로그인한 USER가 BORROW한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
-        public List<int> GetMemberBorrowedBooks(string curUserID)
-        {
-            return memberDB[curUserID].GetBorrowedBooks().Keys.ToList();
-        }
-
-        // 로그인한 USER가 RETURN한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
-        public List<int> GetMemberReturnedBooks(string curUserID)
-        {
-            return memberDB[curUserID].GetReturnedBooks().Keys.ToList();
         }
 
         // 특정 ID 존재유무 파악
@@ -141,29 +128,7 @@ namespace Library
             else return false;
         }
 
-        // USER가 진짜 빌린 책인지 확인
-        // 이거 service 꺼인지 repository꺼인지 모르겠음
-        public bool CheckIfUserBorrowed(string curUserID, MiniDTO miniDTO)
-        {
-            int tryReturningBookID = int.Parse(miniDTO.GetBookID());
-            int tryReturningQuantity = int.Parse(miniDTO.GetQuantity());
-
-            MemberDTO curUserDTO = memberDB[curUserID];
-            // 해당 책을 진짜로 빌렸고
-            if (curUserDTO.GetBorrowedBooks().ContainsKey(tryReturningBookID))
-            {
-                // 반납 개수가 빌린 개수보다 작으면
-                if (tryReturningQuantity <= curUserDTO.GetBorrowedBooks()[tryReturningBookID])
-                {
-                    // 그럼 진짜로 반납할 수 있는거임
-                    return true;
-                }
-            }
-            // 아니면 반납 못함
-            return false;
-        }
-
-        //===================== CRUD ========================//
+        //===================== MEMBER CRUD ========================//
 
         public bool Add(MemberDTO newMember)
         {

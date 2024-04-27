@@ -13,10 +13,13 @@ namespace Library
         private static MemberService instance;
 
         private MemberRepository memberRepository;
+        private HistoryRepository historyRepository;
 
-        public MemberService()
+        private MemberService()
         {
             this.memberRepository = MemberRepository.GetInstance();
+            this.historyRepository = HistoryRepository.GetInstance();
+
             List<string> defaultUser1 = new List<string> { "dog", "dog123", "DOG", "5", "010-1234-5678" };
             List<string> defaultUser2 = new List<string> { "cat", "cat123", "CAT", "4", "010-5647-8497" };
             List<string> defaultUser3 = new List<string> { "dolphin", "dolphin123", "DOLPHIN", "7", "010-3781-3649" };
@@ -49,18 +52,9 @@ namespace Library
         // USER가 진짜 빌린 책인지 확인
         public bool CheckIfUserBorrowed(string curUserID, MiniDTO miniDTO)
         {
-            int tryReturningBookID = int.Parse(miniDTO.GetBookID());
-            int tryReturningQuantity = int.Parse(miniDTO.GetQuantity());
-
-            // 해당 책을 진짜로 빌렸고 + 반납 개수가 빌린 개수보다 작으면
-            if (GetMemberBorrowedBooks(curUserID).Contains(tryReturningBookID) &&
-                (tryReturningQuantity <= GetMemberByID(curUserID).GetBorrowedBooks()[tryReturningBookID]))
-            {
-                // 그럼 진짜로 반납할 수 있는거임
-                return true;
-            }
-            // 아니면 반납 못함
-            return false;
+            string bookID = miniDTO.GetBookID();
+            if (historyRepository.CheckIfUserBorrowed(curUserID, bookID)) return true;
+            else return false;
         }
 
         //============= GET FUNCTIONS ==============//
@@ -78,13 +72,13 @@ namespace Library
         // 로그인한 USER가 BORROW한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
         public List<int> GetMemberBorrowedBooks(string curUserID)
         {
-            return GetMemberByID(curUserID).GetBorrowedBooks().Keys.ToList();
+            return historyRepository.GetMemberBorrowedBooks(curUserID);
         }
 
         // 로그인한 USER가 RETURN한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
         public List<int> GetMemberReturnedBooks(string curUserID)
         {
-            return GetMemberByID(curUserID).GetReturnedBooks().Keys.ToList();
+            return historyRepository.GetMemberReturnedBooks(curUserID);
         }
 
         //============== REPOSITORY CRUD FUNCTIONS ==============//
@@ -128,42 +122,44 @@ namespace Library
             return false;
         }
 
-        public void UpdateBorrowed(string curUserID, MiniDTO miniDTO)
+        // memberRepository가 아닌 HistoryRepository에서 처리해주면 됨
+        // memberRepository는 할게 없음. 그냥 HisoryRepository 함수들 호출해주면 됨
+        // historyDB에 (borrwer_id, book_id, returned) 로 저장만 해주면 그게 borrow 한 상황 그 자체임
+        // 여기서 MemberRepository 호출 절대 하지말기
+        // 그래도 Service니까 조건은 따지고 호출해줘야함
+        // 그니까 조건만 따지고 memberRepository는 절대 호출하지말고 historyRepository로 모든 상황 해결하기
+        public bool UpdateBorrow(string curUserID, MiniDTO miniDTO)
         {
-            int bookID = int.Parse(miniDTO.GetBookID());
-            int borrowNum = int.Parse(miniDTO.GetQuantity()); // 항상 borrowNum = 1임
+            string bookID = miniDTO.GetBookID();
+            
+            bool isBorrowed = historyRepository.CheckIfUserBorrowed(curUserID, bookID);
 
-            Dictionary<int, int> curUserBorrowedBooks = GetMemberByID(curUserID).GetBorrowedBooks();
-
-            // 이미 빌린 책이면 개수만 추가
-            if (curUserBorrowedBooks.ContainsKey(bookID)) curUserBorrowedBooks[bookID] += borrowNum;
-            // 아니면 새로 추가
-            else curUserBorrowedBooks.Add(bookID, borrowNum);
+            // 이미 빌린 책이면 대여불가
+            if (isBorrowed) return false;
+            
+            // 아니면 진짜로 대여해주기
+            historyRepository.AddBorrowHistory(curUserID, bookID);
+            return true;
         }
 
+        // memberRepository가 아닌 HistoryRepository에서 처리해주면 됨
+        // memberRepository는 할게 없음. 그냥 HisoryRepository 함수들 호출해주면 됨
+        // historyDB에 (borrwer_id, book_id, returned) 로 저장만 해주면 그게 borrow 한 상황 그 자체임
+        // 여기서 MemberRepository 호출 절대 하지말기
+        // 그래도 Service니까 조건은 따지고 호출해줘야함
+        // 그니까 조건만 따지고 memberRepository는 절대 호출하지말고 historyRepository로 모든 상황 해결하기
         public bool UpdateReturned(string curUserID, MiniDTO miniDTO)
         {
-            int bookID = int.Parse(miniDTO.GetBookID());
-            int borrowNum = int.Parse(miniDTO.GetQuantity()); // 항상 borrowNum = 1임
+            string bookID = miniDTO.GetBookID();
+            
+            bool isBorrowed = historyRepository.CheckIfUserBorrowed(curUserID, bookID);
 
-            Dictionary<int, int> curUserBorrowedBooks = GetMemberByID(curUserID).GetBorrowedBooks();
-            Dictionary<int, int> curUserReturnedBooks = GetMemberByID(curUserID).GetReturnedBooks();
+            // 빌린 책이 아니면 반납 불가
+            if (!isBorrowed) return false;
 
-            // 만약 반납할 수 있으면
-            if (curUserBorrowedBooks.ContainsKey(bookID))
-            {
-                // 반납 list 에 이미 해당 책이 있으면
-                if (curUserReturnedBooks.ContainsKey(bookID)) curUserReturnedBooks[bookID] += borrowNum;
-                else curUserReturnedBooks.Add(bookID, borrowNum);
-
-                // 기존꺼에서 빼주기
-                curUserBorrowedBooks[bookID] -= borrowNum;
-
-                // 만약 해당 책이 이제 0개면 대여 내역에서 영구 삭제
-                if (curUserBorrowedBooks[bookID] == 0) curUserBorrowedBooks.Remove(bookID);
-                return true;
-            }
-            return false;
+            // 아니면 진짜로 반납해주기
+            historyRepository.AddReturnHistory(curUserID, bookID);
+            return true;
         }
     }
 }

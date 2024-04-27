@@ -46,6 +46,7 @@
     <Compile Include="LibraryApp.cs" />
     <Compile Include="Repository\BookRepository.cs" />
     <Compile Include="Model\MemberDTO.cs" />
+    <Compile Include="Repository\HistoryRepository.cs" />
     <Compile Include="Repository\MemberRepository.cs" />
     <Compile Include="Model\MiniDTO.cs" />
     <Compile Include="Service\BookService.cs" />

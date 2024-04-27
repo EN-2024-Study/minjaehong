@@ -32,13 +32,13 @@ namespace Library
             this.curUserID = curUserID;
         }
 
-        void PrintAllBook()
+        private void PrintAllBook()
         {
             List<BookDTO> retList = bookService.GetAllBooks();
             userView.PrintAllBooksForm(retList);
         }
 
-        void Find()
+        private void Find()
         {
             // 찾을 책에 대한 정보를 userView에서 받아오기
             List<string> dataFromView = userView.FindBookForm();
@@ -48,7 +48,7 @@ namespace Library
             userView.PrintSelectedBooksForm(retList);
         }
 
-        void Borrow()
+        private void Borrow()
         {
             // BORROW할 책에 대한 정보를 userView에서 받아오기
             List<string> dataFromView = userView.BorrowBookForm();
@@ -60,7 +60,7 @@ namespace Library
             if (bookService.CheckIfBookExists(bookID))
             {
                 bookService.UpdateBorrowed(miniDTO);
-                memberService.UpdateBorrowed(curUserID, miniDTO);
+                memberService.UpdateBorrow(curUserID, miniDTO);
                 runtimeView.RuntimeMessageForm("BORROW SUCCESSFUL!");
             }
             else
@@ -69,7 +69,7 @@ namespace Library
             }
         }
 
-        void CheckBorrow()
+        private void CheckBorrow()
         {
             List<int> curUserBorrowedBookIDs = memberService.GetMemberBorrowedBooks(curUserID);
             List<BookDTO> curUserBorrowedBooks = new List<BookDTO>();
@@ -82,7 +82,7 @@ namespace Library
             userView.CheckBorrowedForm(curUserBorrowedBooks);
         }
 
-        void Return()
+        private void Return()
         {
             // RETURN할 책에 대한 정보를 userView에서 받아오기
             List<string> dataFromView = userView.ReturnBookForm();
@@ -104,7 +104,7 @@ namespace Library
             }
         }
 
-        void CheckReturn()
+        private void CheckReturn()
         {
             List<int> curUserReturnedBookIDs = memberService.GetMemberReturnedBooks(curUserID);
             List<BookDTO> curUserReturnedBooks = new List<BookDTO>();
@@ -117,7 +117,7 @@ namespace Library
             userView.CheckReturnedForm(curUserReturnedBooks);
         }
 
-        void UpdateInfo()
+        private void UpdateInfo()
         {
             // PW NAME AGE PHONENUM 입력받은거 가져오기
             List<string> updatedUserInfo = userView.UpdateMyInfoForm();
