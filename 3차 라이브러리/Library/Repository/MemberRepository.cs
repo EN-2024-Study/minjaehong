@@ -72,8 +72,6 @@ namespace Library
         {
             List<MemberDTO> memberList = new List<MemberDTO>();
 
-            MemberDTO member = new MemberDTO();
-
             string getAllMemberQuery = string.Format("SELECT * FROM memberDB");
 
             connection.Open();
@@ -84,6 +82,7 @@ namespace Library
             // 한 개만 왔으므로 read 한번만 호출
             while (reader.Read())
             {
+                MemberDTO member = new MemberDTO();
                 member.SetId(reader["id"].ToString());
                 member.SetPw(reader["pw"].ToString());
                 member.SetAge(reader["age"].ToString());
@@ -172,7 +171,6 @@ namespace Library
                                                 newMember.GetId(), newMember.GetPw(), newMember.GetName(), newMember.GetAge(), newMember.GetPhoneNum());
 
             connection.Open();
-            Console.WriteLine("connection successful!");
             MySqlCommand command = new MySqlCommand(insertQuery, connection);
             command.ExecuteNonQuery();
             connection.Close();
