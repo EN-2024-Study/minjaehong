@@ -46,6 +46,11 @@ namespace Library
             return bookRepository.CheckIfBookExists(bookID);
         }
 
+        public bool CheckIfBookAvailable(int bookID)
+        {
+            return bookRepository.CheckIfBookAvailable(bookID);
+        }
+
         public BookDTO GetBookByID(int bookID)
         {
             return bookRepository.GetBookByID(bookID);

@@ -56,15 +56,25 @@ namespace Library
             // 해당 책이 존재하면 bookService에 누가 빌린거 적용해주기
             int bookID = int.Parse(miniDTO.GetBookID());
 
-            if (bookService.CheckIfBookExists(bookID))
+            // 이미 빌린거면 대여불가
+            if(memberService.CheckIfUserBorrowed(curUserID, miniDTO))
+            {
+                CommonView.RuntimeMessageForm("YOU ALREADY BORROWED THIS BOOK!");
+                return;
+            }
+
+            // 수량이 부족하거나 존재하지 않으면
+            if (!bookService.CheckIfBookAvailable(bookID))
+            {
+                CommonView.RuntimeMessageForm("THIS BOOK IS NOT AVAILABLE!");
+            }
+
+            // 대여가능하면 그제서야 진짜로 대여 저굥
+            if (bookService.CheckIfBookAvailable(bookID))
             {
                 bookService.UpdateBorrowed(miniDTO);
                 memberService.UpdateBorrow(curUserID, miniDTO);
                 CommonView.RuntimeMessageForm("BORROW SUCCESSFUL!");
-            }
-            else
-            {
-                CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
             }
         }
 
@@ -99,7 +109,7 @@ namespace Library
             }
             else
             {
-                CommonView.RuntimeMessageForm("YOU DIDNT BORROW ID#" + miniDTO.GetBookID() + " BOOK!");
+                CommonView.RuntimeMessageForm("YOU DIDNT BORROW ID " + miniDTO.GetBookID() + " BOOK!");
             }
         }
 

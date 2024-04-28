@@ -55,6 +55,7 @@ namespace Library
 
             command.CommandText = Querys.bookDBInitializeQuery;
             command.ExecuteNonQuery();
+
             command.CommandText = Querys.autoIncrementInitializeQuery;
             command.ExecuteNonQuery();
             
@@ -73,8 +74,21 @@ namespace Library
             
             connection.Close();
 
-            if (exists) return true;
-            else return false;
+            return exists;
+        }
+
+        public bool CheckIfBookAvailable(int bookID)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.checkIfBookAvailableQuery;
+            command.Parameters.AddWithValue("@BookID", bookID);
+            bool exists = Convert.ToBoolean(command.ExecuteScalar());
+
+            connection.Close();
+
+            return exists;
         }
 
         public Dictionary<int, BookDTO> GetBookDB()
@@ -152,8 +166,6 @@ namespace Library
             return true;
         }
 
-
-        // 기존꺼 삭제하고 업데이트된 책을 추가
         public void Update(int updatingBookID, BookDTO book)
         {
             connection.Open();
@@ -175,7 +187,6 @@ namespace Library
 
         public void UpdateStock(int bookID, string updatedStock)
         {
-
             connection.Open();
             command.Parameters.Clear();
 

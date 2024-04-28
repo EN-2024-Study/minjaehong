@@ -12,10 +12,11 @@ namespace Library
 
         public const string bookDBInitializeQuery = "DELETE FROM bookDB";
         public const string autoIncrementInitializeQuery = "ALTER TABLE bookDB AUTO_INCREMENT = 1";
-        
+
         // subquery 이용 true false 반환
-        public const string checkIfBookExistsQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID)";
         public const string getAllBooksQuery = "SELECT * FROM bookDB";
+        public const string checkIfBookExistsQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID)";
+        public const string checkIfBookAvailableQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND instock > 0)";
         
         // CRUDs
         public const string addNewBookQuery = "INSERT INTO bookDB (name, author, publisher, price, instock, date, isbn) " +
