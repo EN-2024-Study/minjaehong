@@ -41,7 +41,6 @@ CREATE TABLE `bookdb` (
 
 LOCK TABLES `bookdb` WRITE;
 /*!40000 ALTER TABLE `bookdb` DISABLE KEYS */;
-INSERT INTO `bookdb` VALUES (1,'book1','kim','companyA','1000','9','990317','111-11-1111'),(2,'book2','kim','companyB','2500','5','030811','222-22-2222'),(3,'book3','min','companyC','3000','2','011103','333-33-3333'),(4,'book4','min','companyB','500','7','971227','444-44-4444'),(5,'book5','park','companyB','4000','8','150710','555-55-5555');
 /*!40000 ALTER TABLE `bookdb` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-28  6:22:12
+-- Dump completed on 2024-04-28 18:30:14
