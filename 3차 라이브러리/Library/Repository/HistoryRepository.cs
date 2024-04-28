@@ -42,27 +42,14 @@ namespace Library
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = Querys.getAllHistoryQuery;
-            MySqlDataReader reader = command.ExecuteReader();
+            command.CommandText = Querys.checkIfUserBorrowedQuery;
+            command.Parameters.AddWithValue("@borrowerID", curUserID);
+            command.Parameters.AddWithValue("@bookID", returningBookID);
+            bool exists = Convert.ToBoolean(command.ExecuteScalar());
 
-            bool isBorrowed = false;
-
-            while (reader.Read())
-            {
-                // 1. 현재 USER의 기록이고
-                // 2. 현재 확인하려는 책이고
-                // 3. 아직 반납안했으면
-                if (reader["borrower_id"].ToString() == curUserID && reader["book_id"].ToString()==returningBookID && !reader.GetBoolean("returned"))
-                {
-                    isBorrowed = true;
-                    break;
-                }
-            }
-
-            reader.Close();
             connection.Close();
 
-            return isBorrowed;
+            return exists;
         }
 
         // 현재 USER가 BORROW한 BOOK들의 ID에 대한 정보 반환 -> BOOKID LIST로
@@ -71,19 +58,19 @@ namespace Library
             List<int> curUserBorrowedBookList = new List<int>();
 
             connection.Open();
+            command.Parameters.Clear();
 
-            command.CommandText = Querys.getAllHistoryQuery;
+            command.CommandText = Querys.getCertainMemberBorrowHistory;
+            command.Parameters.AddWithValue("@borrowerID", curUserID);
+
             MySqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
             {
-                // 현재 USER의 기록이고 아직 반납안했으면
-                if (reader["borrower_id"].ToString() == curUserID && !reader.GetBoolean("returned"))
-                {
-                    curUserBorrowedBookList.Add(int.Parse(reader["book_id"].ToString()));
-                }
+                curUserBorrowedBookList.Add(int.Parse(reader["book_id"].ToString()));
             }
 
+            reader.Close();
             connection.Close();
 
             return curUserBorrowedBookList;
@@ -95,17 +82,16 @@ namespace Library
             List<int> curUserReturnedBookList = new List<int>();
 
             connection.Open();
-            
-            command.CommandText = Querys.getAllHistoryQuery;
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.getCertainMemberReturnHistory;
+            command.Parameters.AddWithValue("@borrowerID", curUserID);
+
             MySqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
             {
-                // 현재 USER의 기록이고 반납했으면
-                if (reader["borrower_id"].ToString() == curUserID && reader.GetBoolean("returned"))
-                {
-                    curUserReturnedBookList.Add(int.Parse(reader["book_id"].ToString()));
-                }
+                curUserReturnedBookList.Add(int.Parse(reader["book_id"].ToString()));
             }
 
             reader.Close();
@@ -125,8 +111,8 @@ namespace Library
             command.Parameters.Clear();
 
             command.CommandText = Querys.addBorrowHistoryQuery;
-            command.Parameters.AddWithValue("@borrower_id", curUserID);
-            command.Parameters.AddWithValue("@book_id", bookID);
+            command.Parameters.AddWithValue("@borrowerID", curUserID);
+            command.Parameters.AddWithValue("@bookID", bookID);
             command.ExecuteNonQuery();
             
             connection.Close();

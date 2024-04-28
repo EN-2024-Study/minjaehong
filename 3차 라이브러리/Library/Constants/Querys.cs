@@ -30,24 +30,28 @@ namespace Library
         //============= HISTORY REPOSITORY QUERYS =============//
 
         public const string getAllHistoryQuery = "SELECT * FROM historyDB";
+        public const string getCertainMemberBorrowHistory = "SELECT book_id FROM historyDB WHERE borrower_id = @borrowerID AND returned = FALSE";
+        public const string getCertainMemberReturnHistory = "SELECT book_id FROM historyDB WHERE borrower_id = @borrowerID AND returned = TRUE";
+
+        public const string checkIfUserBorrowedQuery = "SELECT EXISTS (SELECT TRUE FROM historyDB WHERE borrower_id = @borrowerID AND book_id = @bookID AND returned = FALSE)";
         public const string checkIfReturnHistoryAlreadyExistsQuery = "SELECT EXISTS (SELECT TRUE FROM historyDB WHERE borrower_id=@borrowerID AND book_id=@bookID AND returned = TRUE)";
 
         // CRUDs
         public const string addBorrowHistoryQuery = "INSERT INTO historyDB (borrower_id, book_id, returned) " +
-                "VALUES(@borrower_id, @book_id, FALSE) ON DUPLICATE KEY UPDATE returned = FALSE;";
+                "VALUES(@borrowerID, @bookID, FALSE) ON DUPLICATE KEY UPDATE returned = FALSE;";
 
         public const string deleteBorrowHistoryQuery = "DELETE FROM historyDB WHERE borrower_id = @borrowerID AND book_id = @bookID AND returned = FALSE";
         public const string updateToReturnHistoryQuery = "UPDATE historyDB SET returned = TRUE WHERE borrower_id = @borrowerID AND book_id = @bookID";
-        
+
         //============= MEMBER REPOSITORY QUERYS =============//
-        
-        public const string getMemberByIDQuery = "SELECT * FROM memberDB WHERE id = @requestedMemberID";
+
+        public const string getMemberByIDQuery = "SELECT * FROM memberDB WHERE BINARY(id) = BINARY @requestedMemberID";
         public const string getAllMembersQuery = "SELECT * FROM memberDB";
-        public const string checkIfMemberExistsQuery = "SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = @userID)";
-        public const string checkIfValidLoginQuery = "SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = @userID AND pw = @userPW)";
+        public const string checkIfMemberExistsQuery = "SELECT EXISTS (SELECT TRUE FROM memberDB WHERE BINARY(id) = @userID)";
+        public const string checkIfValidLoginQuery = "SELECT EXISTS (SELECT TRUE FROM memberDB WHERE BINARY(id) = @userID AND BINARY(pw) = @userPW)";
 
         // CRUDs
         public const string addNewMemberQuery = "INSERT INTO memberdb (id, pw, name, age, phonenum) VALUES (@id, @pw, @name, @age, @phonenum)";
-        public const string deleteQuery = "DELETE FROM memberDB WHERE id = @deletingMemberID";
+        public const string deleteQuery = "DELETE FROM memberDB WHERE BINARY(id) = BINARY @deletingMemberID";
     }
 }

@@ -36,6 +36,7 @@ namespace Library
             List<string> newBookInfo = managerView.AddBookForm();
             BookDTO newBook = new BookDTO(newBookInfo);
             bookService.AddNewBook(newBook);
+
             CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY ADDED!");
         }
 
@@ -44,14 +45,8 @@ namespace Library
             int deletingBookID = managerView.DeleteBookForm();
             bool executionSuccess = bookService.DeleteBook(deletingBookID);
 
-            if (executionSuccess)
-            {
-                CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
-            }
-            else
-            {
-                CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
-            }
+            if (executionSuccess) CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
+            else CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
         }
 
         void UpdateBook()
@@ -67,10 +62,8 @@ namespace Library
                 bookService.UpdateBook(updatingBookID, updatedBook);
                 CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY UPDATED!");
             }
-            else
-            {
-                CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
-            }
+
+            else CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
         }
 
         void MemberManagement()
