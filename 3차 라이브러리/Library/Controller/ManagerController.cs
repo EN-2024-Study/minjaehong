@@ -10,7 +10,6 @@ namespace Library
     { 
         // ManagerController와 연결되어야하는 애들
         ManagerView managerView;
-        RuntimeView runtimeView;
 
         BookService bookService;
         MemberService memberService;
@@ -21,7 +20,6 @@ namespace Library
             memberService = MemberService.GetInstance();
 
             managerView = new ManagerView();
-            runtimeView = new RuntimeView();
         }
 
         void PrintAllBook()
@@ -42,7 +40,7 @@ namespace Library
             List<string> newBookInfo = managerView.AddBookForm();
             BookDTO newBook = new BookDTO(newBookInfo);
             bookService.AddNewBook(newBook);
-            runtimeView.RuntimeMessageForm("BOOK IS SUCCESSFULLY ADDED!");
+            CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY ADDED!");
         }
 
         void DeleteBook()
@@ -52,11 +50,11 @@ namespace Library
 
             if (executionSuccess)
             {
-                runtimeView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
+                CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
             }
             else
             {
-                runtimeView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
+                CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
             }
         }
 
@@ -71,11 +69,11 @@ namespace Library
                 BookDTO updatedBook = new BookDTO(updatedBookInfo);
                 updatedBook.SetId(updatingBookID);
                 bookService.UpdateBook(updatingBookID, updatedBook);
-                runtimeView.RuntimeMessageForm("BOOK IS SUCCESSFULLY UPDATED!");
+                CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY UPDATED!");
             }
             else
             {
-                runtimeView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
+                CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
             }
         }
 

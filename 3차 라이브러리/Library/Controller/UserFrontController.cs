@@ -11,8 +11,7 @@ namespace Library
         UserController userController; // 추후에 호출해야되서 필요함
 
         UserFrontView userFrontView; // FrontController에서 view 쓰려고 필요함
-        RuntimeView runtimeView;
-
+        
         MemberService memberService; // LOGIN 확인 작업에 쓰임
 
         public UserFrontController()
@@ -22,7 +21,6 @@ namespace Library
             userController = new UserController();
 
             userFrontView = new UserFrontView();
-            runtimeView = new RuntimeView();
         }
 
         void UserLogin()
@@ -39,7 +37,7 @@ namespace Library
             }
             else
             {
-                runtimeView.RuntimeMessageForm("CHECK YOUR ID AND PASSWORD!");
+                CommonView.RuntimeMessageForm("CHECK YOUR ID AND PASSWORD!");
             }
         }
 
@@ -54,11 +52,11 @@ namespace Library
 
             if (isCreateAccountSuccessful)
             {
-                runtimeView.RuntimeMessageForm("NEW ACCOUNT IS CREATED!");
+                CommonView.RuntimeMessageForm("NEW ACCOUNT IS CREATED!");
             }
             else
             {
-                runtimeView.RuntimeMessageForm("THIS ID ALREADY EXISTS!");
+                CommonView.RuntimeMessageForm("THIS ID ALREADY EXISTS!");
             }
         }
 

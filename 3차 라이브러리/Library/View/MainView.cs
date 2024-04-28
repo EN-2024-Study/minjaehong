@@ -31,7 +31,6 @@ namespace Library
 
             MyConsole.PrintHeader("[MANAGER LOGIN]");
             
-            //InputHandler.GetUserInputs(Constants.managerLoginArr.Length, ExceptionHandler.managerLoginExceptionArr)
             return MyConsole.GetUserInputs(managerLoginArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.managerLoginExceptionArr);
         }
     }

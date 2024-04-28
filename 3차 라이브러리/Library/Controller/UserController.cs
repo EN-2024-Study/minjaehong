@@ -11,7 +11,6 @@ namespace Library
         private string curUserID;
 
         UserView userView;
-        RuntimeView runtimeView;
 
         MemberService memberService;
         BookService bookService;
@@ -22,7 +21,6 @@ namespace Library
             bookService = BookService.GetInstance();
 
             userView = new UserView();
-            runtimeView = new RuntimeView();
         }
 
         // UserFrontController에서 LOGIN 후 UserController.run이 실행되기 전에
@@ -50,8 +48,10 @@ namespace Library
 
         private void Borrow()
         {
+            List<BookDTO> bookList = bookService.GetAllBooks();
+
             // BORROW할 책에 대한 정보를 userView에서 받아오기
-            List<string> dataFromView = userView.BorrowBookForm();
+            List<string> dataFromView = userView.BorrowBookForm(bookList);
             // 책 정보를 MiniDTO에 담아주기
             MiniDTO miniDTO = new MiniDTO(dataFromView);
 
@@ -62,11 +62,11 @@ namespace Library
             {
                 bookService.UpdateBorrowed(miniDTO);
                 memberService.UpdateBorrow(curUserID, miniDTO);
-                runtimeView.RuntimeMessageForm("BORROW SUCCESSFUL!");
+                CommonView.RuntimeMessageForm("BORROW SUCCESSFUL!");
             }
             else
             {
-                runtimeView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
+                CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
             }
         }
 
@@ -97,11 +97,11 @@ namespace Library
                 bookService.UpdateReturned(miniDTO);
                 // 성공하면 memberService로 가서 저장해주기
                 memberService.UpdateReturned(curUserID, miniDTO);
-                runtimeView.RuntimeMessageForm("BOOK RETURN SUCCESSFUL!");
+                CommonView.RuntimeMessageForm("BOOK RETURN SUCCESSFUL!");
             }
             else
             {
-                runtimeView.RuntimeMessageForm("YOU DIDNT BORROW ID#" + miniDTO.GetBookID() + " BOOK!");
+                CommonView.RuntimeMessageForm("YOU DIDNT BORROW ID#" + miniDTO.GetBookID() + " BOOK!");
             }
         }
 
@@ -127,7 +127,7 @@ namespace Library
             // ID는 controller에서 따로 세팅
             updatedMember.SetId(curUserID);
             memberService.UpdateMember(curUserID, updatedMember);
-            runtimeView.RuntimeMessageForm("USER INFO UPDATE SUCCESSFUL!");
+            CommonView.RuntimeMessageForm("USER INFO UPDATE SUCCESSFUL!");
         }
 
         void DeleteMySelf()
@@ -135,13 +135,13 @@ namespace Library
             if (memberService.GetMemberBorrowedBooks(curUserID).Count() == 0)
             {
                 memberService.DeleteMember(curUserID);
-                runtimeView.RuntimeMessageForm("PERMANANT DELETE SUCCESSFUL!");
+                CommonView.RuntimeMessageForm("PERMANANT DELETE SUCCESSFUL!");
                 // usercontroller 자체를 빠져나가기
                 return;
             }
             else
             {
-                runtimeView.RuntimeMessageForm("PLEASE RETURN ALL YOUR BOOKS FIRST");
+                CommonView.RuntimeMessageForm("PLEASE RETURN ALL YOUR BOOKS FIRST");
             }
         }
 

@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library
 {
-    // static class
-    // static class이면 member들도 모두 자동으로 static으로 박힘
-    // const member는 static으로 쳐져서 static 명시 안해도 됨
-    class MyConsole
+    static class MyConsole
     {
         private const int HEADER_X = 45; // HEADER가 끝나야하는 X좌표
         private const int HEADER_Y = 4; // HEADER가 찍혀야하는 Y좌표
@@ -28,7 +25,7 @@ namespace Library
         private const int WARNING_STARTX = 40;
         private const int WARNING_STARTY = 6;
 
-        //===================== PRINT FUNCTIONS ==================//
+        //=================== PRINT FUNCTIONS =================//
 
         // HEADER 출력 함수
         public static void PrintHeader(string header)
@@ -79,73 +76,61 @@ namespace Library
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        //===================== BOOK PRINT FUNCTION ==================//
-
-        public static void PrintBooks(List<BookDTO> selectedBooks)
+        // 제대로 입력안했을때 뜸
+        public static void PrintException(ExceptionState exceptionState)
         {
-            Console.SetCursorPosition(BOOK_STARTX, BOOK_STARTY);
+            Console.SetCursorPosition(WARNING_STARTX, WARNING_STARTY);
+            Console.ForegroundColor = ConsoleColor.Red;
 
-            for (int i = 0; i < selectedBooks.Count; i++)
+            switch (exceptionState)
             {
-                Console.WriteLine("");
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("==============================");
-                Console.WriteLine("");
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("ID         : " + selectedBooks[i].GetId());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("NAME       : " + selectedBooks[i].GetName());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("AUTHOR     : " + selectedBooks[i].GetAuthor());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("PUBLISHER  : " + selectedBooks[i].GetPublisher());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("PRICE      : " + selectedBooks[i].GetPrice());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("IN STOCK   : " + selectedBooks[i].GetInStock());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("DATE       : " + selectedBooks[i].GetDate());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("ISBN       : " + selectedBooks[i].GetIsbn());
+                // FORMAT EXCEPTION
+                case ExceptionState.INT_ONLY:
+                    Console.Write("ONLY INT AVAILABLE");
+                    break;
+                case ExceptionState.ENGLISH_ONLY:
+                    Console.Write("ONLY ENGLISH AVAILABLE");
+                    break;
+                case ExceptionState.ENGLISH_INT_ONLY:
+                    Console.Write("ONLY ENGLISH AND INT AVAILABLE");
+                    break;
+                case ExceptionState.PHONENUM_ONLY:
+                    Console.Write("ONLY PHONENUM AVAILABLE");
+                    break;
+                case ExceptionState.DATE_ONLY:
+                    Console.Write("ONLY DATE AVAILABLE");
+                    break;
+                case ExceptionState.ISBN_ONLY:
+                    Console.Write("ONLY ISBN AVAILABLE");
+                    break;
+
+                // RUNTIME EXCEPTION
+                case ExceptionState.EXISTING_ID:
+                    Console.Write("ID ALREADY EXISTS");
+                    break;
+
+                case ExceptionState.NONEXISTING_ID:
+                    Console.Write("NON-EXISTING ID");
+                    break;
+
+                case ExceptionState.DONT_HAVE_CERTAIN_BOOK:
+                    Console.Write("NON-BORROWED BOOK");
+                    break;
+
+                case ExceptionState.NOT_ENOUGH_QUANTITY:
+                    Console.Write("NOT ENOUGH QUANTITY");
+                    break;
             }
-            Console.WriteLine("");
-            Console.CursorLeft = BOOK_STARTX;
-            Console.WriteLine("==============================");
+
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
-        //===================== MEMBER PRINT FUNCTION ==================//
-
-        public static void PrintAllMembers(List<MemberDTO> allMembers)
-        {
-            Console.SetCursorPosition(BOOK_STARTX, BOOK_STARTY);
-
-            for (int i = 0; i < allMembers.Count; i++)
-            {
-                Console.WriteLine("");
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("==============================");
-                Console.WriteLine("");
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("ID       : " + allMembers[i].GetId());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("PW       : " + allMembers[i].GetPw());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("NAME     : " + allMembers[i].GetName());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("AGE      : " + allMembers[i].GetAge());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("PHONENUM : " + allMembers[i].GetPhoneNum());
-            }
-            Console.WriteLine("");
-            Console.CursorLeft = BOOK_STARTX;
-            Console.WriteLine("==============================");
-        }
-
-        //============= USER INPUT FUNCTIONS ==============//
+        //=================== INPUT FUNCTIONS =================//
 
         private static int FindColonPosition(string menu) { return menu.IndexOf(':'); }
 
         // 각 메뉴에 대한 사용자 입력받을때 쓰이는 함수
+        // 동적출력 - menusStartX menuStartY 부터 메뉴 출력함
         public static List<string> GetUserInputs(string[] menuArr, int menuStartX, int menuStartY, ExceptionState[] exceptionArr)
         {
             Console.CursorVisible = true;
@@ -157,8 +142,6 @@ namespace Library
                 Console.SetCursorPosition(menuStartX, menuStartY + i);
                 Console.Write(menu);
             }
-
-            //PrintInstructions(Console.CursorTop);
 
             List<string> retList = new List<string>();
             ExceptionState exceptionState;
@@ -274,55 +257,6 @@ namespace Library
             }
 
             return curSel;
-        }
-
-        // 제대로 입력안했을때 뜸
-        public static void PrintException(ExceptionState exceptionState)
-        {
-            Console.SetCursorPosition(WARNING_STARTX, WARNING_STARTY);
-            Console.ForegroundColor = ConsoleColor.Red;
-
-            switch (exceptionState)
-            {
-                // FORMAT EXCEPTION
-                case ExceptionState.INT_ONLY:
-                    Console.Write("ONLY INT AVAILABLE");
-                    break;
-                case ExceptionState.ENGLISH_ONLY:
-                    Console.Write("ONLY ENGLISH AVAILABLE");
-                    break;
-                case ExceptionState.ENGLISH_INT_ONLY:
-                    Console.Write("ONLY ENGLISH AND INT AVAILABLE");
-                    break;
-                case ExceptionState.PHONENUM_ONLY:
-                    Console.Write("ONLY PHONENUM AVAILABLE");
-                    break;
-                case ExceptionState.DATE_ONLY:
-                    Console.Write("ONLY DATE AVAILABLE");
-                    break;
-                case ExceptionState.ISBN_ONLY:
-                    Console.Write("ONLY ISBN AVAILABLE");
-                    break;
-
-                // RUNTIME EXCEPTION
-                case ExceptionState.EXISTING_ID:
-                    Console.Write("ID ALREADY EXISTS");
-                    break;
-
-                case ExceptionState.NONEXISTING_ID:
-                    Console.Write("NON-EXISTING ID");
-                    break;
-
-                case ExceptionState.DONT_HAVE_CERTAIN_BOOK:
-                    Console.Write("NON-BORROWED BOOK");
-                    break;
-
-                case ExceptionState.NOT_ENOUGH_QUANTITY:
-                    Console.Write("NOT ENOUGH QUANTITY");
-                    break;
-            }
-
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
         // BackSpace키 기다리는 함수

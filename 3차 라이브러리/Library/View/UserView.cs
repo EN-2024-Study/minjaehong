@@ -8,7 +8,8 @@ namespace Library
 {
     class UserView
     {
-        public UserView() { }
+        public UserView() {
+        }
 
         private string[] userMenuArr = { "전체 도서", "도서 찾기", "도서 대여", "대여 확인", "도서 반납", "반납 확인", "정보 수정", "계정 삭제", "네이버 검색", "요청 도서 내역" };
 
@@ -26,11 +27,11 @@ namespace Library
         {
             Console.Clear();
 
-            // 화면 구성
             MyConsole.PrintHeader("[USER MENU]");
             MyConsole.PrintUserID(curUserName);
-
-            return (UserMenuState)MyConsole.GetUserSelection(userMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            UserMenuState selectedMode = (UserMenuState)MyConsole.GetUserSelection(userMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            
+            return selectedMode;
         }
 
         // 1. 도서 찾기
@@ -42,19 +43,22 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[FIND BOOK]");
+            List<string> filters = MyConsole.GetUserInputs(findBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.findBookExceptionArr);
 
-            return MyConsole.GetUserInputs(findBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.findBookExceptionArr);
+            return filters;
         }
 
         // 2. 도서 대여
-        public List<string> BorrowBookForm()
+        public List<string> BorrowBookForm(List<BookDTO> bookList)
         {
             Console.Clear();
 
             MyConsole.PrintHeader("[LETS BORROW A BOOK]");
-
+            CommonView.PrintAllBooks(bookList);
             // ID NUM 입력받아 controller한테 전달
-            return MyConsole.GetUserInputs(borrowBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.borrowBookExceptionArr);
+            List<string> borrowInfo = MyConsole.GetUserInputs(borrowBookArr, MyConsole.MENU_STARTX, Console.CursorTop+2, ExceptionHandler.borrowBookExceptionArr);
+            
+            return borrowInfo;
         }
 
         // 3. 도서 대여 확인
@@ -124,7 +128,7 @@ namespace Library
             else
             {
                 MyConsole.PrintHeader("[YOUR RESULTS]");
-                MyConsole.PrintBooks(selectedBooks);
+                CommonView.PrintAllBooks(selectedBooks);
             }
 
             MyConsole.WaitForBackSpace();

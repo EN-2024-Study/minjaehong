@@ -13,14 +13,12 @@ namespace Library
         ManagerController managerController;
         
         MainView mainView;
-        RuntimeView runtimeView;
 
         public MainController()
         {
             userFrontController = new UserFrontController();
             managerController = new ManagerController();
 
-            runtimeView = new RuntimeView();
             mainView = new MainView();
         }
 
@@ -42,12 +40,12 @@ namespace Library
                 }
                 else
                 {
-                    runtimeView.RuntimeMessageForm("MANAGER PASSWORD IS INCORRECT!");
+                    CommonView.RuntimeMessageForm("MANAGER PASSWORD IS INCORRECT!");
                 }
             }
             else
             {
-                runtimeView.RuntimeMessageForm("MANAGER ID IS INCORRECT!");
+                CommonView.RuntimeMessageForm("MANAGER ID IS INCORRECT!");
             }
         }
 

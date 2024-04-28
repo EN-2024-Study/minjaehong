@@ -21,8 +21,9 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[USER MODE]");
+            UserFrontMode selectedMode = (UserFrontMode)MyConsole.GetUserSelection(userFrontMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             
-            return (UserFrontMode)MyConsole.GetUserSelection(userFrontMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            return selectedMode;
         }
 
         // 1. LOGIN

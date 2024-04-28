@@ -20,7 +20,9 @@ namespace Library
 
         private string[] updateBookArr = { "1. NAME :", "2. AUTHOR :", "3. PUBLISHER :", "4. PRICE :", "5. IN STOCK :", "6. DATE(XXXXXX) :", "7. ISBN(3-2-4) :" };
 
-        public ManagerView() { }
+        public ManagerView() { 
+                
+        }
 
         // MANAGER MODE의 초기화면
         public ManagerMenuState ManagerMenuForm()
@@ -37,7 +39,12 @@ namespace Library
         // 1. 전체도서 출력
         public void PrintAllBooksForm(List<BookDTO> allBooks)
         {
-            PrintSelectedBooksForm(allBooks);
+            Console.Clear();
+
+            MyConsole.PrintHeader("[ALL BOOKS]");
+            CommonView.PrintAllBooks(allBooks);
+
+            MyConsole.WaitForBackSpace();
         }
 
         // 2. 도서 찾기
@@ -48,26 +55,18 @@ namespace Library
             Console.Clear();
             
             MyConsole.PrintHeader("[FIND BOOK]");
+            List<string> filters = MyConsole.GetUserInputs(findBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.findBookExceptionArr);
             
-            return MyConsole.GetUserInputs(findBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.findBookExceptionArr);
+            return filters;
         }
 
         public void PrintSelectedBooksForm(List<BookDTO> selectedBooks)
         {
             Console.Clear();
 
-            if (selectedBooks.Count == 0)
-            {
-                MyConsole.PrintHeader("[NO RESULT]");
-            }
-            else
-            {
-                MyConsole.PrintHeader("[YOUR RESULTS]");
+            MyConsole.PrintHeader("[RESULTS]");
+            CommonView.PrintAllBooks(selectedBooks);
 
-                MyConsole.PrintBooks(selectedBooks);
-            }
-
-            // 뭐 누르면 화면 바뀜
             MyConsole.WaitForBackSpace();
         }
 
@@ -92,9 +91,7 @@ namespace Library
         {
             Console.Clear();
 
-            // 화면 구성
             MyConsole.PrintHeader("[DELETE BOOK]");
-            // user 입력 받기
             List<string> userInput = MyConsole.GetUserInputs(deleteBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.deleteBookExceptionArr);
             int deletingBookID = int.Parse(userInput[0]);
 
@@ -108,10 +105,7 @@ namespace Library
         {
             Console.Clear();
 
-            // 화면 구성
-            MyConsole.PrintHeader("[UPDATE BOOK]");
-            
-            // USER 입력 받기            
+            MyConsole.PrintHeader("[UPDATE BOOK]");          
             List<string> userInput = MyConsole.GetUserInputs(updateBookSelectArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.updateBookSelectExceptionArr);
             int updatingBookID = int.Parse(userInput[0]);
             
@@ -125,30 +119,21 @@ namespace Library
         {
             Console.Clear();
 
-            // 화면 구성
             MyConsole.PrintHeader("[UPDATE BOOK FORM]");
-            
-            // USER 입력받기
             List<string> updatedBookInfo = MyConsole.GetUserInputs(updateBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.updateBookExceptionArr);
+            
             return updatedBookInfo;
         }
 
         // 6. 전체 멤버 출력
         // controller가 model에서 MemberDTO List로 받아옴
         // 그걸 얘한테 넘겨주면 알아서 출력해줌
-        public void PrintAllMembersForm(List<MemberDTO> allMembers)
+        public void PrintAllMembersForm(List<MemberDTO> memberList)
         {
             Console.Clear();
 
-            if (allMembers.Count == 0)
-            {
-                MyConsole.PrintHeader("[NO RESULT]");
-            }
-            else
-            {
-                MyConsole.PrintHeader("[YOUR RESULTS]");
-                MyConsole.PrintAllMembers(allMembers);
-            }
+            MyConsole.PrintHeader("[MEMBER INFO]");
+            CommonView.PrintAllMembers(memberList);
 
             MyConsole.WaitForBackSpace();
         }
