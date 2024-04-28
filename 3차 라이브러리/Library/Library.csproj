@@ -37,6 +37,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Querys.cs" />
     <Compile Include="Controller\UserFrontController.cs" />
     <Compile Include="Model\BookDTO.cs" />
     <Compile Include="Controller\MainController.cs" />

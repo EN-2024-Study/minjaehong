@@ -49,12 +49,10 @@ namespace Library
         {
             MemberDTO member = new MemberDTO();
 
-            string getMemberQuery = "SELECT * FROM memberDB WHERE id = @requestedMemberID";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = getMemberQuery;
+            command.CommandText = Querys.getMemberByIDQuery;
             command.Parameters.AddWithValue("@requestedMemberID", requestedMemberID);
 
             MySqlDataReader reader = command.ExecuteReader();
@@ -78,10 +76,9 @@ namespace Library
         {
             List<MemberDTO> memberList = new List<MemberDTO>();
 
-            string getAllMemberQuery = "SELECT * FROM memberDB";
-
             connection.Open();
-            command.CommandText = getAllMemberQuery;
+
+            command.CommandText = Querys.getAllMembersQuery;
 
             MySqlDataReader reader = command.ExecuteReader();
 
@@ -106,13 +103,11 @@ namespace Library
         // 특정 ID 존재유무 파악
         public bool CheckIfMemberExists(string userID)
         {
-            // subquery 이용 true false 반환
-            string checkQuery = "SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = @userID)";
-
             connection.Open();
             command.Parameters.Clear();
             
-            command.CommandText = checkQuery;
+            command.CommandText = Querys.checkIfMemberExistsQuery;
+
             command.Parameters.AddWithValue("@userID", userID);
             // 어차피 한개밖에 안넘어옴
             bool exists = Convert.ToBoolean(command.ExecuteScalar());
@@ -129,13 +124,10 @@ namespace Library
             string userID = loginInfo[0];
             string userPW = loginInfo[1];
 
-            // subquery 이용 true false 반환
-            string checkQuery = "SELECT EXISTS (SELECT TRUE FROM memberDB WHERE id = @userID AND pw = @userPW)";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = checkQuery;
+            command.CommandText = Querys.checkIfValidLoginQuery;
             command.Parameters.AddWithValue("@userID", userID);
             command.Parameters.AddWithValue("@userPW", userPW);
             // 어차피 한개밖에 안넘어옴
@@ -151,12 +143,10 @@ namespace Library
 
         public bool Add(MemberDTO newMember)
         {
-            string insertQuery = "INSERT INTO memberdb (id, pw, name, age, phonenum) VALUES (@id, @pw, @name, @age, @phonenum)";
-            
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = insertQuery;
+            command.CommandText = Querys.addNewMemberQuery;
             command.Parameters.AddWithValue("@id", newMember.GetId());
             command.Parameters.AddWithValue("@pw", newMember.GetPw());
             command.Parameters.AddWithValue("@name", newMember.GetName());
@@ -172,12 +162,10 @@ namespace Library
         // controller에서 ID넘기면 삭제해줌
         public bool Delete(string deletingMemberID)
         {
-            string deleteQuery = "DELETE FROM memberDB WHERE id = @deletingMemberID";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = deleteQuery;
+            command.CommandText = Querys.deleteQuery;
             command.Parameters.AddWithValue("@deletingMemberID", deletingMemberID);
             command.ExecuteNonQuery();
 

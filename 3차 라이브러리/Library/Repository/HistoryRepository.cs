@@ -39,12 +39,10 @@ namespace Library
         {
             List<int> curUserBorrowedBookList = new List<int>();
 
-            string getAllBorrowedBooksQuery = "SELECT * FROM historyDB";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = getAllBorrowedBooksQuery;
+            command.CommandText = Querys.getAllHistoryQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
             bool isBorrowed = false;
@@ -72,11 +70,9 @@ namespace Library
         {
             List<int> curUserBorrowedBookList = new List<int>();
 
-            string getAllBorrowedBooksQuery = "SELECT * FROM historyDB";
-
             connection.Open();
 
-            command.CommandText = getAllBorrowedBooksQuery;
+            command.CommandText = Querys.getAllHistoryQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -98,11 +94,9 @@ namespace Library
         {
             List<int> curUserReturnedBookList = new List<int>();
 
-            string getAllReturnedBooksQuery = "SELECT * FROM historyDB";
-
             connection.Open();
             
-            command.CommandText = getAllReturnedBooksQuery;
+            command.CommandText = Querys.getAllHistoryQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -127,14 +121,10 @@ namespace Library
         // 일단 memberService부터 손보고 시작하자
         public bool AddBorrowHistory(string curUserID, string bookID)
         {
-            // returned 는 default로 false니까 그냥 안넣어줘도 됨
-            string insertQuery = "INSERT INTO historyDB (borrower_id, book_id, returned) " +
-                "VALUES(@borrower_id, @book_id, FALSE) ON DUPLICATE KEY UPDATE returned = FALSE;";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = insertQuery;
+            command.CommandText = Querys.addBorrowHistoryQuery;
             command.Parameters.AddWithValue("@borrower_id", curUserID);
             command.Parameters.AddWithValue("@book_id", bookID);
             command.ExecuteNonQuery();
@@ -151,11 +141,10 @@ namespace Library
             // 한명이 한 책을 빌리고 반납하는걸 반복했을때 중복튜플이 생기는걸 방지하기 위한 추가 코드
             if (CheckIfReturnHistoryAlreadyExists(curUserID, bookID))
             {
-                string deleteQuery = "DELETE FROM historyDB WHERE borrower_id = @borrowerID AND book_id = @bookID AND returned = FALSE";
                 connection.Open();
                 command.Parameters.Clear();
 
-                command.CommandText = deleteQuery;
+                command.CommandText = Querys.deleteBorrowHistoryQuery;
                 command.Parameters.AddWithValue("@borrowerID", curUserID);
                 command.Parameters.AddWithValue("@bookID", bookID);
                 command.ExecuteNonQuery();
@@ -165,12 +154,10 @@ namespace Library
                 return true;
             }
 
-            string updateQuery = "UPDATE historyDB SET returned = TRUE WHERE borrower_id = @borrowerID AND book_id = @bookID";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = updateQuery;
+            command.CommandText = Querys.updateToReturnHistoryQuery;
             command.Parameters.AddWithValue("@borrowerID", curUserID);
             command.Parameters.AddWithValue("@bookID", bookID);
             command.ExecuteNonQuery();
@@ -182,12 +169,10 @@ namespace Library
        
         private bool CheckIfReturnHistoryAlreadyExists(string curUserID, string bookID)
         {
-            string checkIfReturnHistoryAlreadyExistsQuery = "SELECT EXISTS (SELECT TRUE FROM historyDB WHERE borrower_id=@borrowerID AND book_id=@bookID AND returned = TRUE)";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = checkIfReturnHistoryAlreadyExistsQuery;
+            command.CommandText = Querys.checkIfReturnHistoryAlreadyExistsQuery;
             command.Parameters.AddWithValue("@borrowerID", curUserID);
             command.Parameters.AddWithValue("@bookID", bookID);
 

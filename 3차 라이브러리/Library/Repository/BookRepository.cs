@@ -13,6 +13,7 @@ namespace Library
     // 여기에 조건이 있으면 안됨
     class BookRepository
     {
+        // CRUD해서 받을 것들을 Dictionary로 저장
         Dictionary<int, BookDTO> bookDB;
 
         string connectionString;
@@ -50,14 +51,11 @@ namespace Library
         // 빼도 상관없음
         private void InitializeBookDB()
         {
-            string deleteQuery = "DELETE FROM bookDB";
-            string autoIncrementInitializeQuery = "ALTER TABLE bookDB AUTO_INCREMENT = 1";
-
             connection.Open();
 
-            command.CommandText = deleteQuery;
+            command.CommandText = Querys.bookDBInitializeQuery;
             command.ExecuteNonQuery();
-            command.CommandText = autoIncrementInitializeQuery;
+            command.CommandText = Querys.autoIncrementInitializeQuery;
             command.ExecuteNonQuery();
             
             connection.Close();
@@ -65,13 +63,10 @@ namespace Library
 
         public bool CheckIfBookExists(int bookID)
         {
-            // subquery 이용 true false 반환
-            string checkQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID)";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = checkQuery;
+            command.CommandText = Querys.checkIfBookExistsQuery;
             command.Parameters.AddWithValue("@BookID", bookID);
             // 어차피 값이 하나밖에 안날라옴
             bool exists = Convert.ToBoolean(command.ExecuteScalar());
@@ -86,11 +81,9 @@ namespace Library
         {
             bookDB.Clear();
 
-            string getAllBookQuery = "SELECT * FROM bookDB";
-            
             connection.Open();
 
-            command.CommandText = getAllBookQuery;
+            command.CommandText = Querys.getAllBooksQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
             // 한 개만 왔으므로 read 한번만 호출
@@ -126,13 +119,10 @@ namespace Library
         //==================== CRUD ===================//
         public bool Add(BookDTO book)
         {
-            string insertQuery = "INSERT INTO bookDB (name, author, publisher, price, instock, date, isbn) " +
-                "VALUES (@name, @author, @publisher, @price, @inStock, @date, @isbn)";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = insertQuery;
+            command.CommandText = Querys.addNewBookQuery;
             command.Parameters.AddWithValue("@name", book.GetName());
             command.Parameters.AddWithValue("@author", book.GetAuthor());
             command.Parameters.AddWithValue("@publisher", book.GetPublisher());
@@ -150,12 +140,10 @@ namespace Library
 
         public bool Delete(int deletingBookID)
         {
-            string deleteQuery = "DELETE FROM bookDB WHERE id = @deletingBookID";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = deleteQuery;
+            command.CommandText = Querys.deleteBookQuery;
             command.Parameters.AddWithValue("@deletingBookID", deletingBookID);
             command.ExecuteNonQuery();
 
@@ -164,17 +152,14 @@ namespace Library
             return true;
         }
 
+
+        // 기존꺼 삭제하고 업데이트된 책을 추가
         public void Update(int updatingBookID, BookDTO book)
         {
-            // 기존꺼 삭제하고 업데이트된 책을 추가
-
-            string updateBookQuery = "UPDATE bookDB SET name = @name, author = @author, publisher = @publisher, " +
-                "price = @price, instock = @inStock, date = @date, isbn = @isbn WHERE id = @id";
-
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = updateBookQuery;
+            command.CommandText = Querys.updateBookQuery;
             command.Parameters.AddWithValue("@name", book.GetName());
             command.Parameters.AddWithValue("@author", book.GetAuthor());
             command.Parameters.AddWithValue("@publisher", book.GetPublisher());
@@ -190,12 +175,11 @@ namespace Library
 
         public void UpdateStock(int bookID, string updatedStock)
         {
-            string updateStockQuery = "UPDATE bookDB SET instock = @updatedStock WHERE id = @bookID";
 
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = updateStockQuery;
+            command.CommandText = Querys.updateBookStockQuery;
             command.Parameters.AddWithValue("@updatedStock", updatedStock);
             command.Parameters.AddWithValue("@bookID", bookID);
             command.ExecuteNonQuery();
