@@ -45,7 +45,7 @@ namespace Library
                 {
                     Console.WriteLine("");
                     Console.CursorLeft = BOOK_STARTX;
-                    Console.WriteLine("────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────");
                     Console.WriteLine("");
                     Console.CursorLeft = BOOK_STARTX;
                     Console.WriteLine("ID         : " + bookList[i].GetId());
@@ -66,7 +66,7 @@ namespace Library
                 }
                 Console.WriteLine("");
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("────────────────────────────────────");
+                Console.WriteLine("────────────────────────────────");
             }
         }
 
@@ -83,7 +83,7 @@ namespace Library
             {
                 Console.WriteLine("");
                 Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("────────────────────────────────────");
+                Console.WriteLine("────────────────────────────────");
                 Console.WriteLine("");
                 Console.CursorLeft = BOOK_STARTX;
                 Console.WriteLine("ID       : " + memberList[i].GetId());
@@ -98,7 +98,7 @@ namespace Library
             }
             Console.WriteLine("");
             Console.CursorLeft = BOOK_STARTX;
-            Console.WriteLine("────────────────────────────────────");
+            Console.WriteLine("────────────────────────────────");
         }
     }
 }

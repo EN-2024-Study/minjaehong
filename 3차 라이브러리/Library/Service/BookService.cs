@@ -57,6 +57,13 @@ namespace Library
             return bookRepository.GetAllBooks().Values.ToList();
         }
 
+        // PrintAllBook
+        // Find에서 이함수로 책 가져오게
+        public List<BookDTO> GetAvailableBooks()
+        {
+            return bookRepository.GetAvailableBooks().Values.ToList();
+        }
+
         // BookDTO 조회 - view에서 제목 작가 넘어온거
         // retList controller로 보내주면 다시 view로 넘겨서 print 해줘야함
         public List<BookDTO> FindBook(List<string> dataFromView)
@@ -67,7 +74,7 @@ namespace Library
             List<BookDTO> retList = new List<BookDTO>();
 
             // bookRepository에서 bookDB 가져오기
-            Dictionary<int, BookDTO> bookDB = bookRepository.GetAllBooks();
+            Dictionary<int, BookDTO> bookDB = bookRepository.GetAvailableBooks();
 
             foreach (int curKey in bookDB.Keys)
             {

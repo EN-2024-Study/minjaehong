@@ -123,6 +123,38 @@ namespace Library
             return bookDB;
         }
 
+        public Dictionary<int, BookDTO> GetAvailableBooks()
+        {
+            bookDB.Clear();
+
+            connection.Open();
+
+            command.CommandText = Querys.getAvailableBooksQuery;
+            MySqlDataReader reader = command.ExecuteReader();
+
+            // 한 개만 왔으므로 read 한번만 호출
+            while (reader.Read())
+            {
+                BookDTO book = new BookDTO();
+                book.SetId(int.Parse(reader["id"].ToString()));
+                book.SetName(reader["name"].ToString());
+                book.SetAuthor(reader["author"].ToString());
+                book.SetPublisher(reader["publisher"].ToString());
+                book.SetPrice(reader["price"].ToString());
+                book.SetInStock(reader["instock"].ToString());
+                book.SetDate(reader["date"].ToString());
+                book.SetIsbn(reader["isbn"].ToString());
+                book.SetDeleted(reader.GetBoolean("deleted"));
+
+                bookDB.Add(book.GetId(), book);
+            }
+
+            reader.Close();
+            connection.Close();
+
+            return bookDB;
+        }
+
         // 특정 책만 가져옴
         public BookDTO GetBookByID(int bookID)
         {

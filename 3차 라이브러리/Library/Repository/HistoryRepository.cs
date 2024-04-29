@@ -18,6 +18,8 @@ namespace Library
             connection = new MySqlConnection(connectionString);
             // 해당 DB에 사용할 command 객체 생성
             command = connection.CreateCommand();
+
+            InitializeHistoryDB();
         }
 
         public static HistoryRepository GetInstance()
@@ -27,6 +29,16 @@ namespace Library
                 instance = new HistoryRepository();
             }
             return instance;
+        }
+
+        private void InitializeHistoryDB()
+        {
+            connection.Open();
+
+            command.CommandText = Querys.historyDBInitializeQuery;
+            command.ExecuteNonQuery();
+
+            connection.Close();
         }
 
         //================= SIMPLE GET CHECK FUNCTIONS ==================//

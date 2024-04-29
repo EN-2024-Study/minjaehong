@@ -30,8 +30,8 @@ namespace Library
 
         private void PrintAllBook()
         {
-            List<BookDTO> retList = bookService.GetAllBooks();
-            userView.PrintAllBooksForm(retList);
+            List<BookDTO> availableBooks = bookService.GetAvailableBooks();
+            userView.PrintAllBooksForm(availableBooks);
         }
 
         private void Find()
@@ -46,7 +46,7 @@ namespace Library
 
         private void Borrow()
         {
-            List<BookDTO> bookList = bookService.GetAllBooks();
+            List<BookDTO> bookList = bookService.GetAvailableBooks();
 
             // BORROW할 책에 대한 정보를 userView에서 받아오기
             List<string> dataFromView = userView.BorrowBookForm(bookList);

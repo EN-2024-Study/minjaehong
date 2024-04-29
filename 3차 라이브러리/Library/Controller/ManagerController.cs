@@ -20,8 +20,8 @@ namespace Library
 
         void PrintAllBook()
         {
-            List<BookDTO> allBooks = bookService.GetAllBooks();
-            managerView.PrintAllBooksForm(allBooks);
+            List<BookDTO> availableBooks = bookService.GetAvailableBooks();
+            managerView.PrintAllBooksForm(availableBooks);
         }
         
         void FindBook()

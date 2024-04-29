@@ -9,8 +9,7 @@
 
         // subquery 이용 true false 반환
         public const string getAllBooksQuery = "SELECT * FROM bookDB";
-        //public const string getAllBooksForReturnedHistoryQuery = "SELECT * FROM bookDB";
-        //public const string getCertainBookQuery = "SELECT * FROM bookDB WHERE id = @BookID";
+        public const string getAvailableBooksQuery = "SELECT * FROM bookDB WHERE deleted = FALSE";
 
         public const string checkIfBookExistsQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND deleted = FALSE)";
         public const string checkIfBookAvailableQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND instock > 0 AND deleted = FALSE)";
@@ -26,6 +25,7 @@
         public const string  updateBookStockQuery = "UPDATE bookDB SET instock = @updatedStock WHERE id = @bookID";
 
         //============= HISTORY REPOSITORY QUERYS =============//
+        public const string historyDBInitializeQuery = "DELETE FROM historyDB";
 
         public const string getAllHistoryQuery = "SELECT * FROM historyDB";
         public const string getCertainMemberBorrowHistory = "SELECT book_id FROM historyDB WHERE borrower_id = @borrowerID AND returned = FALSE";
