@@ -13,11 +13,15 @@ namespace Library
         private MemberService memberService;
         private BookService bookService;
 
+        private LogRepository logRepository;
+        
         public UserController(BookService bookService, MemberService memberService)
         {
             this.bookService = bookService;
             this.memberService = memberService;
 
+            this.logRepository = LogRepository.GetInstance();
+            
             userView = new UserView();
         }
 
@@ -32,6 +36,12 @@ namespace Library
         {
             List<BookDTO> availableBooks = bookService.GetAvailableBooks();
             userView.PrintAllBooksForm(availableBooks);
+
+            LogDTO logDTO = new LogDTO();
+            logDTO.SetAction("PRINTALLBOOK");
+            logDTO.SetTime(DateTime.Now);
+            logDTO.SetMode(false);
+            logRepository.Add(logDTO);
         }
 
         private void Find()
@@ -75,6 +85,7 @@ namespace Library
                 bookService.UpdateBorrowed(miniDTO);
                 memberService.UpdateBorrow(curUserID, miniDTO);
                 CommonView.RuntimeMessageForm("BORROW SUCCESSFUL!");
+
             }
         }
 

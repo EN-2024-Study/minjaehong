@@ -10,11 +10,17 @@
         GOBACK = -1, PRINTALLBOOK = 0, FINDBOOK = 1, ADDBOOK = 2, DELETEBOOK = 3, UPDATEBOOK = 4,
         MEMBERMANAGEMENT = 5, BORROWLIST = 6, NAVERSEARCH = 7, LOGMANAGEMENT = 8, REQUESTEDBOOK = 9
     };
+
     public enum UserMenuState
     {
         GOBACK = -1, PRINTALLBOOK = 0, FIND = 1, BORROW = 2, CHECKBORROW = 3, RETURN = 4, CHECKRETURN = 5, UPDATEINFO = 6,
         DELETEMYSELF = 7, NAVERSEARCH = 8, REQUESTED = 9
     };
+
+    public enum LoggerMenuState
+    {
+        GOBACK = -1, DELETE_LOG, SAVE_LOG, DELETE_LOGFILE, RESET_LOG
+    }
 
     public enum ExceptionState
     {

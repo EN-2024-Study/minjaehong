@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Querys.cs" />
+    <Compile Include="Controller\LogController.cs" />
     <Compile Include="Controller\UserFrontController.cs" />
     <Compile Include="Model\BookDTO.cs" />
     <Compile Include="Controller\MainController.cs" />
@@ -45,15 +46,18 @@
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Constants\Enums.cs" />
     <Compile Include="LibraryApp.cs" />
+    <Compile Include="Model\LogDTO.cs" />
     <Compile Include="Repository\BookRepository.cs" />
     <Compile Include="Model\MemberDTO.cs" />
     <Compile Include="Repository\HistoryRepository.cs" />
+    <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Repository\MemberRepository.cs" />
     <Compile Include="Model\MiniDTO.cs" />
     <Compile Include="Service\BookService.cs" />
     <Compile Include="Service\MemberService.cs" />
     <Compile Include="Utility\ExceptionHandler.cs" />
     <Compile Include="Utility\MyConsole.cs" />
+    <Compile Include="View\LogView.cs" />
     <Compile Include="View\MainView.cs" />
     <Compile Include="View\ManagerView.cs" />
     <Compile Include="View\CommonView.cs" />

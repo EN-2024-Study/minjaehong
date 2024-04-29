@@ -3,8 +3,10 @@
 namespace Library
 {
     class ManagerController
-    { 
+    {
         // ManagerController와 연결되어야하는 애들
+        private LogController logManager;
+
         private ManagerView managerView;
 
         private BookService bookService;
@@ -16,22 +18,24 @@ namespace Library
             this.memberService = memberService;
 
             managerView = new ManagerView();
+
+            logManager = new LogController();
         }
 
-        void PrintAllBook()
+        private void PrintAllBook()
         {
             List<BookDTO> availableBooks = bookService.GetAvailableBooks();
             managerView.PrintAllBooksForm(availableBooks);
         }
         
-        void FindBook()
+        private void FindBook()
         {
             List<string> dataFromView = managerView.FindBookForm();
             List<BookDTO> retList = bookService.FindBook(dataFromView);
             managerView.PrintSelectedBooksForm(retList);
         }
 
-        void AddBook()
+        private void AddBook()
         {
             List<string> newBookInfo = managerView.AddBookForm();
             BookDTO newBook = new BookDTO(newBookInfo);
@@ -40,7 +44,7 @@ namespace Library
             CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY ADDED!");
         }
 
-        void DeleteBook()
+        private void DeleteBook()
         {
             int deletingBookID = managerView.DeleteBookForm();
             bool executionSuccess = bookService.DeleteBook(deletingBookID);
@@ -49,7 +53,7 @@ namespace Library
             else CommonView.RuntimeMessageForm("DELETE FAILED : CHECK ID OR BORROWED MEMBERS");
         }
 
-        void UpdateBook()
+        private void UpdateBook()
         {
             int updatingBookID = managerView.UpdateBookSelectForm();
 
@@ -66,10 +70,15 @@ namespace Library
             else CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
         }
 
-        void MemberManagement()
+        private void MemberManagement()
         {
             List<MemberDTO> allMembers = memberService.GetAllMember();
             managerView.PrintAllMembersForm(allMembers);
+        }
+
+        private void LogManagement()
+        {
+            logManager.RunLogController();
         }
 
         public void RunManagerMode()
@@ -118,6 +127,7 @@ namespace Library
                         break;
                     
                     case ManagerMenuState.LOGMANAGEMENT:
+                        LogManagement();
                         break;
                     
                     case ManagerMenuState.REQUESTEDBOOK:

@@ -54,5 +54,15 @@
         public const string updateToReturnHistoryQuery = "UPDATE historyDB SET returned = TRUE WHERE borrower_id = @borrowerID AND book_id = @bookID";
 
         public const string deleteMemberHistoryQuery = "DELETE FROM historyDB WHERE borrower_id = @deletingMemberID";
+
+        //================== LOG QUERYS ==================//
+
+        public const string checkIfLogExistsQuery="SELECT EXISTS (SELECT TRUE FROM logDB WHERE id = @logID)";
+        public const string getAllLogsQuery = "SELECT * FROM logDB";
+
+        // CRUDs
+        public const string addNewLogQuery = "INSERT INTO logDB (timestamp, mode, action) VALUES (@timeStamp, @mode, @action)";
+        public const string deleteLogQuery = "DELETE FROM logDB WHERE id = @deletingLogID";
+        public const string deleteAllLogsQuery = "DELETE FROM logDB";
     }
 }

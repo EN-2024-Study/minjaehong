@@ -9,9 +9,6 @@ namespace Library
     // 여기에 조건이 있으면 안됨
     class MemberRepository
     {
-        // ID가 고유키
-        private Dictionary<string, MemberDTO> memberDB;
-        
         private String connectionString;
         private MySqlConnection connection;
         private MySqlCommand command;
@@ -22,8 +19,6 @@ namespace Library
 
         private MemberRepository()
         {
-            memberDB = new Dictionary<string, MemberDTO>();
-
             connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
             connection = new MySqlConnection(connectionString);
             command = connection.CreateCommand();

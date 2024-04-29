@@ -26,7 +26,9 @@ namespace Library
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
 
+            // 여기서 자동으로 backSpace 기다려줌
             MyConsole.WaitForBackSpace();
+
             Console.SetWindowSize(110, 50);
         }
 
