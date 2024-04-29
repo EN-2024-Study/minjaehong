@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Library
+﻿namespace Library
 {
     static class Querys
     {
@@ -15,14 +9,18 @@ namespace Library
 
         // subquery 이용 true false 반환
         public const string getAllBooksQuery = "SELECT * FROM bookDB";
-        public const string checkIfBookExistsQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID)";
-        public const string checkIfBookAvailableQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND instock > 0)";
-        
+        //public const string getAllBooksForReturnedHistoryQuery = "SELECT * FROM bookDB";
+        //public const string getCertainBookQuery = "SELECT * FROM bookDB WHERE id = @BookID";
+
+        public const string checkIfBookExistsQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND deleted = FALSE)";
+        public const string checkIfBookAvailableQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND instock > 0 AND deleted = FALSE)";
+
         // CRUDs
         public const string addNewBookQuery = "INSERT INTO bookDB (name, author, publisher, price, instock, date, isbn) " +
                 "VALUES (@name, @author, @publisher, @price, @inStock, @date, @isbn)";
-        public const string deleteBookQuery = "DELETE FROM bookDB WHERE id = @deletingBookID";
         
+        public const string deleteBookQuery = "UPDATE bookDB SET deleted = TRUE WHERE id = @deletingBookID";
+
         public const string updateBookQuery = "UPDATE bookDB SET name = @name, author = @author, publisher = @publisher, " +
                 "price = @price, instock = @inStock, date = @date, isbn = @isbn WHERE id = @id";
         public const string  updateBookStockQuery = "UPDATE bookDB SET instock = @updatedStock WHERE id = @bookID";
@@ -34,11 +32,11 @@ namespace Library
         public const string getCertainMemberReturnHistory = "SELECT book_id FROM historyDB WHERE borrower_id = @borrowerID AND returned = TRUE";
 
         public const string checkIfUserBorrowedQuery = "SELECT EXISTS (SELECT TRUE FROM historyDB WHERE borrower_id = @borrowerID AND book_id = @bookID AND returned = FALSE)";
-        public const string checkIfReturnHistoryAlreadyExistsQuery = "SELECT EXISTS (SELECT TRUE FROM historyDB WHERE borrower_id=@borrowerID AND book_id=@bookID AND returned = TRUE)";
+        public const string checkIfBookIsBorrowedQuery = "SELECT EXISTS (SELECT TRUE FROM historyDB WHERE book_id = @bookID AND returned = FALSE)";
+        public const string checkIfReturnHistoryAlreadyExistsQuery = "SELECT EXISTS (SELECT TRUE FROM historyDB WHERE borrower_id = @borrowerID AND book_id = @bookID AND returned = TRUE)";
 
         // CRUDs
-        public const string addBorrowHistoryQuery = "INSERT INTO historyDB (borrower_id, book_id, returned) " +
-                "VALUES(@borrowerID, @bookID, FALSE) ON DUPLICATE KEY UPDATE returned = FALSE;";
+        public const string addBorrowHistoryQuery = "INSERT INTO historyDB (borrower_id, book_id, returned) VALUES(@borrowerID, @bookID, FALSE)";
 
         public const string deleteBorrowHistoryQuery = "DELETE FROM historyDB WHERE borrower_id = @borrowerID AND book_id = @bookID AND returned = FALSE";
         public const string updateToReturnHistoryQuery = "UPDATE historyDB SET returned = TRUE WHERE borrower_id = @borrowerID AND book_id = @bookID";
@@ -52,6 +50,7 @@ namespace Library
 
         // CRUDs
         public const string addNewMemberQuery = "INSERT INTO memberdb (id, pw, name, age, phonenum) VALUES (@id, @pw, @name, @age, @phonenum)";
-        public const string deleteQuery = "DELETE FROM memberDB WHERE BINARY(id) = BINARY @deletingMemberID";
+        public const string deleteMemberQuery = "DELETE FROM memberDB WHERE BINARY(id) = @deletingMemberID";
+        public const string updateMemberQuery = "UPDATE memberDB SET pw = @pw, name = @name, age = @age, phonenum = @phonenum WHERE BINARY(id) = @updatingMemberID";
     }
 }

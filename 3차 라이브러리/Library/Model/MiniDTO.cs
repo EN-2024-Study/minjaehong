@@ -29,6 +29,5 @@ namespace Library
 
         public string GetBookID() { return bookID; }
         public string GetQuantity() { return quantity; }
-
     }
 }

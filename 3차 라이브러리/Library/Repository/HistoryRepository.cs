@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
 namespace Library
 {
     class HistoryRepository
     {
-        string connectionString;
-        MySqlConnection connection;
-        MySqlCommand command;
+        private string connectionString;
+        private MySqlConnection connection;
+        private MySqlCommand command;
 
         private static HistoryRepository instance;
 
@@ -45,6 +42,22 @@ namespace Library
             command.CommandText = Querys.checkIfUserBorrowedQuery;
             command.Parameters.AddWithValue("@borrowerID", curUserID);
             command.Parameters.AddWithValue("@bookID", returningBookID);
+            bool exists = Convert.ToBoolean(command.ExecuteScalar());
+
+            connection.Close();
+
+            return exists;
+        }
+
+        // 해당 책을 빌린 사람이 있는지 확인
+        // BookService에서 DELETE BOOK 할때 조건문으로 쓰임
+        public bool CheckIfBookIsBorrowed(int bookID)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.checkIfBookIsBorrowedQuery;
+            command.Parameters.AddWithValue("@bookID", bookID);
             bool exists = Convert.ToBoolean(command.ExecuteScalar());
 
             connection.Close();
@@ -124,7 +137,7 @@ namespace Library
         // 여기도 service부터 하고 시작
         public bool AddReturnHistory(string curUserID, string bookID)
         {
-            // 한명이 한 책을 빌리고 반납하는걸 반복했을때 중복튜플이 생기는걸 방지하기 위한 추가 코드
+            // 특정 member가 특정 book을 빌리고 반납하는걸 반복했을때 중복튜플이 생기는걸 방지하기 위한 추가 코드
             if (CheckIfReturnHistoryAlreadyExists(curUserID, bookID))
             {
                 connection.Open();

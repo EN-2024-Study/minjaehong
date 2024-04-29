@@ -8,18 +8,19 @@ namespace Library
 {
     class UserFrontController
     {
-        UserController userController; // 추후에 호출해야되서 필요함
+        private UserController userController; // 추후에 호출해야되서 필요함
 
-        UserFrontView userFrontView; // FrontController에서 view 쓰려고 필요함
-        
-        MemberService memberService; // LOGIN 확인 작업에 쓰임
+        private UserFrontView userFrontView; // FrontController에서 view 쓰려고 필요함
+   
+        private MemberService memberService; // LOGIN 확인 작업에 쓰임
+        private BookService bookService; // UserController한테 넘겨줄때 필요함
 
-        public UserFrontController()
+        public UserFrontController(BookService bookService, MemberService memberService)
         {
-            memberService = MemberService.GetInstance();
+            this.bookService = bookService;
+            this.memberService = memberService;
 
-            userController = new UserController();
-
+            userController = new UserController(bookService, memberService);
             userFrontView = new UserFrontView();
         }
 

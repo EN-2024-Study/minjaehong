@@ -10,13 +10,13 @@ namespace Library
     // 조건 확인 후 repository 호출해서 CRUD 작업 실행
     class BookService
     {
-        private static BookService instance;
-
         private BookRepository bookRepository;
+        private HistoryRepository historyRepository;
 
-        private BookService()
+        public BookService()
         {
             this.bookRepository = BookRepository.GetInstance();
+            this.historyRepository = HistoryRepository.GetInstance();
 
             List<string> defaultBook1 = new List<string> { "book1", "kim", "companyA", "1000", "10", "990317", "111-11-1111" };
             List<string> defaultBook2 = new List<string> { "book2", "kim", "companyB", "2500", "5", "030811", "222-22-2222" };
@@ -28,15 +28,6 @@ namespace Library
             AddNewBook(new BookDTO(defaultBook3));
             AddNewBook(new BookDTO(defaultBook4));
             AddNewBook(new BookDTO(defaultBook5));
-        }
-
-        public static BookService GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new BookService();
-            }
-            return instance;
         }
 
         //============= GET AND CHECK FUNCTIONS ==============//
@@ -51,6 +42,11 @@ namespace Library
             return bookRepository.CheckIfBookAvailable(bookID);
         }
 
+        public bool CheckIfBookIsBorrowed(int bookID)
+        {
+            return historyRepository.CheckIfBookIsBorrowed(bookID);
+        }
+
         public BookDTO GetBookByID(int bookID)
         {
             return bookRepository.GetBookByID(bookID);
@@ -58,7 +54,7 @@ namespace Library
 
         public List<BookDTO> GetAllBooks()
         {
-            return bookRepository.GetBookDB().Values.ToList();
+            return bookRepository.GetAllBooks().Values.ToList();
         }
 
         // BookDTO 조회 - view에서 제목 작가 넘어온거
@@ -71,10 +67,13 @@ namespace Library
             List<BookDTO> retList = new List<BookDTO>();
 
             // bookRepository에서 bookDB 가져오기
-            Dictionary<int, BookDTO> bookDB = bookRepository.GetBookDB();
+            Dictionary<int, BookDTO> bookDB = bookRepository.GetAllBooks();
 
             foreach (int curKey in bookDB.Keys)
             {
+                // 삭제된 책이면 continue
+                if (bookDB[curKey].GetDeleted()) continue;
+
                 // 입력이 있었는데 맞지 않으면 continue
                 if (bookName != "" && !bookDB[curKey].GetName().Contains(bookName)) continue;
                 if (author != "" && !bookDB[curKey].GetAuthor().Contains(author)) continue;
@@ -94,8 +93,8 @@ namespace Library
 
         public bool DeleteBook(int deletingBookID)
         {
-            // BOOK 존재 확인 후 진행
-            if (CheckIfBookExists(deletingBookID))
+            // BOOK 존재 확인(bookDB) + BOOK 빌린 사람 없는지 확인(historyDB) 후 진행
+            if (CheckIfBookExists(deletingBookID) && !CheckIfBookIsBorrowed(deletingBookID))
             {
                 bookRepository.Delete(deletingBookID);
                 return true;
@@ -111,6 +110,8 @@ namespace Library
             if (CheckIfBookExists(updatingBookID))
             {
                 BookDTO originalBook = GetBookByID(updatingBookID);
+
+                if (originalBook.GetDeleted()) return false;
 
                 if (updatingBook.GetName() == "") updatingBook.SetName(originalBook.GetName());
                 if (updatingBook.GetAuthor() == "") updatingBook.SetAuthor(originalBook.GetAuthor());

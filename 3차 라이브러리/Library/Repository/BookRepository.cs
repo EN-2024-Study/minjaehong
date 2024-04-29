@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
 namespace Library
@@ -14,11 +10,11 @@ namespace Library
     class BookRepository
     {
         // CRUD해서 받을 것들을 Dictionary로 저장
-        Dictionary<int, BookDTO> bookDB;
+        private Dictionary<int, BookDTO> bookDB;
 
-        string connectionString;
-        MySqlConnection connection;
-        MySqlCommand command;
+        private string connectionString;
+        private MySqlConnection connection;
+        private MySqlCommand command;
 
         //===================== SINGELTON ========================//
 
@@ -91,7 +87,11 @@ namespace Library
             return exists;
         }
 
-        public Dictionary<int, BookDTO> GetBookDB()
+        // 전체 책(삭제된거 포함)을 다 끌고옴
+        // 이건 returnedBooks 에서만 필요함
+        // returned에서는 삭제된 것들도 다 보여줘야하기 때문임
+        // "SELECT * FROM bookDB WHERE deleted = FALSE";
+        public Dictionary<int, BookDTO> GetAllBooks()
         {
             bookDB.Clear();
 
@@ -112,6 +112,7 @@ namespace Library
                 book.SetInStock(reader["instock"].ToString());
                 book.SetDate(reader["date"].ToString());
                 book.SetIsbn(reader["isbn"].ToString());
+                book.SetDeleted(reader.GetBoolean("deleted"));
 
                 bookDB.Add(book.GetId(), book);
             }
@@ -122,10 +123,11 @@ namespace Library
             return bookDB;
         }
 
+        // 특정 책만 가져옴
         public BookDTO GetBookByID(int bookID)
         {
             bookDB.Clear();
-            bookDB = GetBookDB();
+            bookDB = GetAllBooks();
             return bookDB[bookID];
         }
 
@@ -152,6 +154,8 @@ namespace Library
         }
 
 
+        // 실제로 delete 하는게 아니라 deleted 값만 TRUE로 바꿔줌
+        // 실제로 delete하면 반납내역에서 못띄우는거 방지하기 위해
         public bool Delete(int deletingBookID)
         {
             connection.Open();

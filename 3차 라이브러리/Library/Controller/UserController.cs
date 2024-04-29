@@ -8,15 +8,15 @@ namespace Library
     {
         private string curUserID;
 
-        UserView userView;
+        private UserView userView;
 
-        MemberService memberService;
-        BookService bookService;
+        private MemberService memberService;
+        private BookService bookService;
 
-        public UserController()
+        public UserController(BookService bookService, MemberService memberService)
         {
-            memberService = MemberService.GetInstance();
-            bookService = BookService.GetInstance();
+            this.bookService = bookService;
+            this.memberService = memberService;
 
             userView = new UserView();
         }

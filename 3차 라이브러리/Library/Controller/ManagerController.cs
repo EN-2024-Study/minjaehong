@@ -5,15 +5,15 @@ namespace Library
     class ManagerController
     { 
         // ManagerController와 연결되어야하는 애들
-        ManagerView managerView;
+        private ManagerView managerView;
 
-        BookService bookService;
-        MemberService memberService;
+        private BookService bookService;
+        private MemberService memberService;
         
         // 생성자로 필요한 MVC 연결
-        public ManagerController() {
-            bookService = BookService.GetInstance();
-            memberService = MemberService.GetInstance();
+        public ManagerController(BookService bookService, MemberService memberService) {
+            this.bookService = bookService; 
+            this.memberService = memberService;
 
             managerView = new ManagerView();
         }
@@ -46,7 +46,7 @@ namespace Library
             bool executionSuccess = bookService.DeleteBook(deletingBookID);
 
             if (executionSuccess) CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
-            else CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
+            else CommonView.RuntimeMessageForm("DELETE FAILED : CHECK ID OR BORROWED MEMBERS");
         }
 
         void UpdateBook()

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
 namespace Library
@@ -13,11 +10,11 @@ namespace Library
     class MemberRepository
     {
         // ID가 고유키
-        Dictionary<string, MemberDTO> memberDB;
+        private Dictionary<string, MemberDTO> memberDB;
         
-        String connectionString;
-        MySqlConnection connection;
-        MySqlCommand command;
+        private String connectionString;
+        private MySqlConnection connection;
+        private MySqlCommand command;
 
         //================== SINGLETON ===============//
 
@@ -109,9 +106,8 @@ namespace Library
             command.CommandText = Querys.checkIfMemberExistsQuery;
 
             command.Parameters.AddWithValue("@userID", userID);
-            // 어차피 한개밖에 안넘어옴
-            bool exists = Convert.ToBoolean(command.ExecuteScalar());
-            
+            bool exists = Convert.ToBoolean(command.ExecuteScalar()); // 어차피 한개밖에 안넘어옴
+
             connection.Close();
 
             if (exists) return true;
@@ -130,9 +126,8 @@ namespace Library
             command.CommandText = Querys.checkIfValidLoginQuery;
             command.Parameters.AddWithValue("@userID", userID);
             command.Parameters.AddWithValue("@userPW", userPW);
-            // 어차피 한개밖에 안넘어옴
-            bool exists = Convert.ToBoolean(command.ExecuteScalar());
-            
+            bool exists = Convert.ToBoolean(command.ExecuteScalar()); // 어차피 한개밖에 안넘어옴
+
             connection.Close();
 
             if (exists) return true;
@@ -140,6 +135,7 @@ namespace Library
         }
 
         //===================== MEMBER CRUD ========================//
+        // service에서 넘겨주면 CRUD 진행
 
         public bool Add(MemberDTO newMember)
         {
@@ -159,13 +155,12 @@ namespace Library
             return true;
         }
 
-        // controller에서 ID넘기면 삭제해줌
         public bool Delete(string deletingMemberID)
         {
             connection.Open();
             command.Parameters.Clear();
 
-            command.CommandText = Querys.deleteQuery;
+            command.CommandText = Querys.deleteMemberQuery;
             command.Parameters.AddWithValue("@deletingMemberID", deletingMemberID);
             command.ExecuteNonQuery();
 
@@ -173,11 +168,20 @@ namespace Library
             return true;
         }
 
-        // 기존 member 삭제 후 추가
         public bool Update(string updatingMemberID, MemberDTO updatingMember)
         {
-            Delete(updatingMemberID);
-            Add(updatingMember);
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.updateMemberQuery;
+            command.Parameters.AddWithValue("@updatingMemberID", updatingMember.GetId());
+            command.Parameters.AddWithValue("@pw", updatingMember.GetPw());
+            command.Parameters.AddWithValue("@name", updatingMember.GetName());
+            command.Parameters.AddWithValue("@age", updatingMember.GetAge());
+            command.Parameters.AddWithValue("@phonenum", updatingMember.GetPhoneNum());
+            command.ExecuteNonQuery();
+
+            connection.Close();
             return true;
         }
     }

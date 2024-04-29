@@ -14,19 +14,9 @@ namespace Library
         private string age;
         private string phoneNum;
 
-        // <bookID,quantity>
-        //private Dictionary<int,int> borrowed; // 빌린 책들 담기
-        //private Dictionary<int,int> returned; // 반납한 책들 담기
-
-        private string borrowedBooks;
-        private string returnedBooks;
-
         //=================== CONSTRUCTOR =================//
 
-        public MemberDTO()
-        {
-
-        }
+        public MemberDTO() { }
 
         // view에서 넘겨준 List<string> 가지고
         // MemberDTO 만들 수 있어야함
@@ -38,12 +28,6 @@ namespace Library
             this.name = dataFromView[2];
             this.age = dataFromView[3];
             this.phoneNum = dataFromView[4];
-
-            //borrowed = new Dictionary<int,int>();
-            //returned = new Dictionary<int,int>();
-
-            this.borrowedBooks = "";
-            this.returnedBooks = "";
         }
 
         //=================== GETTER =====================//
@@ -53,11 +37,6 @@ namespace Library
         public string GetName() { return name; }
         public string GetAge() { return age; }
         public string GetPhoneNum() { return phoneNum; }
-
-        // Member가 borrow 한 Book들에 대한 Dictionary 참조 return
-        public string GetBorrowedBooks() { return borrowedBooks; }
-        // Member가 return한 Book들에 대한 Dictionary 참조 return
-        public string GetReturnedBooks() { return returnedBooks; }
 
         //=================== SETTER =====================//
 

@@ -10,12 +10,10 @@ namespace Library
     // 조건 확인 후 repository 호출해서 CRUD 작업 실행
     class MemberService
     {
-        private static MemberService instance;
-
         private MemberRepository memberRepository;
         private HistoryRepository historyRepository;
 
-        private MemberService()
+        public MemberService()
         {
             this.memberRepository = MemberRepository.GetInstance();
             this.historyRepository = HistoryRepository.GetInstance();
@@ -26,15 +24,6 @@ namespace Library
             AddNewMember(new MemberDTO(defaultUser1));
             AddNewMember(new MemberDTO(defaultUser2));
             AddNewMember(new MemberDTO(defaultUser3));
-        }
-
-        public static MemberService GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new MemberService();
-            }
-            return instance;
         }
 
         //============= CHECK FUNCTIONS ==============//

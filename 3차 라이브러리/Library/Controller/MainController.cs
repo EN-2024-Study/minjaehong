@@ -9,15 +9,21 @@ namespace Library
     class MainController
     { 
         // MainController와 연결되어야하는 애들
-        UserFrontController userFrontController;
-        ManagerController managerController;
-        
-        MainView mainView;
+        private UserFrontController userFrontController;
+        private ManagerController managerController;
+
+        private BookService bookService;
+        private MemberService memberService;
+
+        private MainView mainView;
 
         public MainController()
         {
-            userFrontController = new UserFrontController();
-            managerController = new ManagerController();
+            bookService = new BookService();
+            memberService = new MemberService();
+
+            userFrontController = new UserFrontController(bookService, memberService);
+            managerController = new ManagerController(bookService, memberService);
 
             mainView = new MainView();
         }

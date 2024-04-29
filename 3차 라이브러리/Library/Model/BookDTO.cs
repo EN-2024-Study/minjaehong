@@ -15,12 +15,15 @@ namespace Library
         private string publisher; // dataFromView[2]
         private string price; // dataFromView[3]
         private string inStock; // dataFromView[4]
+        
         private string date; // dataFromView[5]
         private string isbn; // dataFromView[6]
 
+        private bool deleted;
+
         public BookDTO() { }
 
-        public BookDTO(string name, string author, string publisher, string price, string inStock, string date, string isbn)
+        public BookDTO(string name, string author, string publisher, string price, string inStock, string date, string isbn, bool deleted)
         {
             this.name = name;
             this.author = author;
@@ -29,6 +32,7 @@ namespace Library
             this.inStock = inStock;
             this.date = date;
             this.isbn = isbn;
+            this.deleted = deleted;
         }
 
         // view에서 List<string> 으로 책정보가 넘어왔을때
@@ -52,6 +56,7 @@ namespace Library
         public void SetInStock(string inStock) { this.inStock = inStock; }
         public void SetDate(string date) { this.date = date; }
         public void SetIsbn(string isbn) { this.isbn = isbn; }
+        public void SetDeleted(bool deleted) { this.deleted = deleted; }
 
         public int GetId() { return id; }
         public string GetName() { return name; }
@@ -61,5 +66,6 @@ namespace Library
         public string GetInStock() { return inStock; }
         public string GetDate() { return date; }
         public string GetIsbn() { return isbn; }
+        public bool GetDeleted() { return deleted; }
     }
 }
