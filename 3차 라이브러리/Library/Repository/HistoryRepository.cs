@@ -177,7 +177,21 @@ namespace Library
 
             return true;
         }
-       
+      
+        public bool DeleteMemberHistory(string curUserID)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.deleteMemberHistoryQuery;
+            command.Parameters.AddWithValue("@deletingMemberID", curUserID);
+            command.ExecuteNonQuery();
+
+            connection.Close();
+
+            return true;
+        }
+
         private bool CheckIfReturnHistoryAlreadyExists(string curUserID, string bookID)
         {
             connection.Open();

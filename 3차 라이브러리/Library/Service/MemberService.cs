@@ -88,7 +88,11 @@ namespace Library
             // 존재하지 않는 ID이면 취소
             if (!CheckIfMemberExists(deletingMemberID)) return false;
 
+            // 1. memberDB에서 삭제하고
             memberRepository.Delete(deletingMemberID);
+            // 2. 해당 member의 historyDB 내역도 모두 삭제
+            historyRepository.DeleteMemberHistory(deletingMemberID);
+
             return true;
         }
 

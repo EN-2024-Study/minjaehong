@@ -75,6 +75,10 @@ namespace Library
                     case LibraryMode.MANAGER_MODE:
                         RunManagerMode();
                         break;
+
+                    case LibraryMode.PROGRAM_EXIT:
+                        isProgramRunning = false;
+                        break;
                 }
             }
         }

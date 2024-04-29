@@ -10,7 +10,7 @@ namespace Library
     {
         public MainView() { }
 
-        private string[] modeSelectMenuArr = { "1. USER MODE", "2. MANAGER MODE" };
+        private string[] modeSelectMenuArr = { "1. USER MODE", "2. MANAGER MODE", "3. PROGRAM EXIT" };
         private string[] managerLoginArr = { "ID :", "PW :" };
 
         // USER MODE 인지 MANAGER MODE인지 입력받고 return

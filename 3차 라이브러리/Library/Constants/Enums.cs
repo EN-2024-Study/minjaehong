@@ -1,7 +1,7 @@
 ﻿namespace Library
 {
     // MODE AND MENU STATE
-    public enum LibraryMode { USER_MODE = 0, MANAGER_MODE = 1 };
+    public enum LibraryMode { USER_MODE = 0, MANAGER_MODE = 1, PROGRAM_EXIT = 2 };
 
     public enum UserFrontMode { GOBACK = -1, USER_LOGIN = 0, USER_CREATE_ACCOUNT = 1 };
 
