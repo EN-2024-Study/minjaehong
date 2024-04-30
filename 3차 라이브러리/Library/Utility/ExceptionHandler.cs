@@ -10,15 +10,18 @@ namespace Library
         public static ExceptionState[] managerLoginExceptionArr = { ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_INT_ONLY };
         
         // MANAGER VIEW
-        public static ExceptionState[] findBookExceptionArr = { ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_ONLY };
 
-        public static ExceptionState[] addBookExceptionArr = { ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.DATE_ONLY, ExceptionState.ISBN_ONLY };
+        // 1.TITLE 2.AUTHOR
+        public static ExceptionState[] findBookExceptionArr = { ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.KOREAN_ENGLISH_INT_ONLY };
+
+        // 1.TITLE 2.AUTHOR
+        public static ExceptionState[] addBookExceptionArr = { ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.DATE_ONLY, ExceptionState.ISBN_ONLY };
 
         public static ExceptionState[] deleteBookExceptionArr = { ExceptionState.INT_ONLY };
 
         public static ExceptionState[] updateBookSelectExceptionArr = { ExceptionState.INT_ONLY };
 
-        public static ExceptionState[] updateBookExceptionArr = { ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.DATE_ONLY, ExceptionState.ISBN_ONLY };
+        public static ExceptionState[] updateBookExceptionArr = { ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.DATE_ONLY, ExceptionState.ISBN_ONLY };
 
         // USER FRONT VIEW
         public static ExceptionState[] userCreateAccountExceptionArr = { ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.INT_ONLY, ExceptionState.PHONENUM_ONLY };
@@ -35,6 +38,11 @@ namespace Library
         // LOG VIEW
         public static ExceptionState[] logDeleteExceptionArr = { ExceptionState.INT_ONLY };
 
+        // NAVER API
+        public static ExceptionState[] searchByNaverAPIExceptionArr = { ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.INT_ONLY };
+
+        public static ExceptionState[] requestByNaverAPIExceptionArr = { ExceptionState.KOREAN_ENGLISH_INT_ONLY };
+
         public static bool CheckIfIntOnlyInput(string input)
         {
             string intOnlyPattern = @"^\d+$";
@@ -44,7 +52,7 @@ namespace Library
             
             return match.Success;
         }
-
+        
         public static bool CheckIfEnglishOnlyInput(string input)
         {
             string englishOnlyPattern = @"^[a-zA-Z]+$";
@@ -93,6 +101,17 @@ namespace Library
             string isbnPattern = @"^\d{3}-\d{2}-\d{4}$";
 
             Regex regex = new Regex(isbnPattern);
+            Match match = regex.Match(input);
+
+            return match.Success;
+        }
+
+        // KOREAN ENGLISH INT + SPACE ONLY AVAILABLE
+        public static bool CheckIfKoreanEnglishIntOnlyInput(string input)
+        {
+            string bookTitlePattern = @"^[a-zA-Zㄱ-ㅎ가-힣0-9\s]+$";
+
+            Regex regex = new Regex(bookTitlePattern);
             Match match = regex.Match(input);
 
             return match.Success;

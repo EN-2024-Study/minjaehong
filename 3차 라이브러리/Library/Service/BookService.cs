@@ -10,13 +10,13 @@ namespace Library
     // 조건 확인 후 repository 호출해서 CRUD 작업 실행
     class BookService
     {
-        private BookRepository bookRepository;
-        private HistoryRepository historyRepository;
+        private BookDAO bookDAO;
+        private HistoryDAO historyDAO;
 
         public BookService()
         {
-            this.bookRepository = BookRepository.GetInstance();
-            this.historyRepository = HistoryRepository.GetInstance();
+            this.bookDAO = BookDAO.GetInstance();
+            this.historyDAO = HistoryDAO.GetInstance();
 
             List<string> defaultBook1 = new List<string> { "book1", "kim", "companyA", "1000", "10", "990317", "111-11-1111" };
             List<string> defaultBook2 = new List<string> { "book2", "kim", "companyB", "2500", "5", "030811", "222-22-2222" };
@@ -34,34 +34,34 @@ namespace Library
 
         public bool CheckIfBookExists(int bookID)
         {
-            return bookRepository.CheckIfBookExists(bookID);
+            return bookDAO.CheckIfBookExists(bookID);
         }
 
         public bool CheckIfBookAvailable(int bookID)
         {
-            return bookRepository.CheckIfBookAvailable(bookID);
+            return bookDAO.CheckIfBookAvailable(bookID);
         }
 
         public bool CheckIfBookIsBorrowed(int bookID)
         {
-            return historyRepository.CheckIfBookIsBorrowed(bookID);
+            return historyDAO.CheckIfBookIsBorrowed(bookID);
         }
 
         public BookDTO GetBookByID(int bookID)
         {
-            return bookRepository.GetBookByID(bookID);
+            return bookDAO.GetBookByID(bookID);
         }
 
         public List<BookDTO> GetAllBooks()
         {
-            return bookRepository.GetAllBooks().Values.ToList();
+            return bookDAO.GetAllBooks().Values.ToList();
         }
 
         // PrintAllBook
         // Find에서 이함수로 책 가져오게
         public List<BookDTO> GetAvailableBooks()
         {
-            return bookRepository.GetAvailableBooks().Values.ToList();
+            return bookDAO.GetAvailableBooks().Values.ToList();
         }
 
         // BookDTO 조회 - view에서 제목 작가 넘어온거
@@ -73,8 +73,8 @@ namespace Library
 
             List<BookDTO> retList = new List<BookDTO>();
 
-            // bookRepository에서 bookDB 가져오기
-            Dictionary<int, BookDTO> bookDB = bookRepository.GetAvailableBooks();
+            // bookDAO에서 bookDB 가져오기
+            Dictionary<int, BookDTO> bookDB = bookDAO.GetAvailableBooks();
 
             foreach (int curKey in bookDB.Keys)
             {
@@ -95,7 +95,7 @@ namespace Library
 
         public void AddNewBook(BookDTO newBook)
         {
-            bookRepository.Add(newBook);
+            bookDAO.Add(newBook);
         }
 
         public bool DeleteBook(int deletingBookID)
@@ -103,7 +103,7 @@ namespace Library
             // BOOK 존재 확인(bookDB) + BOOK 빌린 사람 없는지 확인(historyDB) 후 진행
             if (CheckIfBookExists(deletingBookID) && !CheckIfBookIsBorrowed(deletingBookID))
             {
-                bookRepository.Delete(deletingBookID);
+                bookDAO.Delete(deletingBookID);
                 return true;
             }
             return false;
@@ -127,7 +127,7 @@ namespace Library
                 if (updatingBook.GetInStock() == "") updatingBook.SetInStock(originalBook.GetInStock());
 
                 // 조건확인 후 CRUD
-                bookRepository.Update(updatingBookID, updatingBook);
+                bookDAO.Update(updatingBookID, updatingBook);
                 return true;
             }
             return false;
@@ -145,7 +145,7 @@ namespace Library
                 int curNum = int.Parse(GetBookByID(bookID).GetInStock());
                 int updatedStock = curNum - borrowNum;
 
-                bookRepository.UpdateStock(bookID, updatedStock.ToString());
+                bookDAO.UpdateStock(bookID, updatedStock.ToString());
 
                 return true;
             }
@@ -165,7 +165,7 @@ namespace Library
                 int curNum = int.Parse(GetBookByID(bookID).GetInStock());
                 int updatedStock = curNum + returnedNum;
 
-                bookRepository.UpdateStock(bookID, updatedStock.ToString());
+                bookDAO.UpdateStock(bookID, updatedStock.ToString());
                 return true;
             }
             return false;

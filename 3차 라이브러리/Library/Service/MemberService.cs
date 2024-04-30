@@ -10,13 +10,13 @@ namespace Library
     // 조건 확인 후 repository 호출해서 CRUD 작업 실행
     class MemberService
     {
-        private MemberRepository memberRepository;
-        private HistoryRepository historyRepository;
+        private MemberDAO memberDAO;
+        private HistoryDAO historyDAO;
 
         public MemberService()
         {
-            this.memberRepository = MemberRepository.GetInstance();
-            this.historyRepository = HistoryRepository.GetInstance();
+            this.memberDAO = MemberDAO.GetInstance();
+            this.historyDAO = HistoryDAO.GetInstance();
 
             List<string> defaultUser1 = new List<string> { "dog", "dog123", "DOG", "5", "010-1234-5678" };
             List<string> defaultUser2 = new List<string> { "cat", "cat123", "CAT", "4", "010-5647-8497" };
@@ -30,19 +30,19 @@ namespace Library
 
         public bool CheckIfMemberExists(string userID)
         {
-            return memberRepository.CheckIfMemberExists(userID);
+            return memberDAO.CheckIfMemberExists(userID);
         }
 
         public bool CheckIfValidLogin(List<string> loginInfo)
         {
-            return memberRepository.CheckIfValidLogin(loginInfo);
+            return memberDAO.CheckIfValidLogin(loginInfo);
         }
 
         // USER가 진짜 빌린 책인지 확인
         public bool CheckIfUserBorrowed(string curUserID, MiniDTO miniDTO)
         {
             string bookID = miniDTO.GetBookID();
-            if (historyRepository.CheckIfUserBorrowed(curUserID, bookID)) return true;
+            if (historyDAO.CheckIfUserBorrowed(curUserID, bookID)) return true;
             else return false;
         }
 
@@ -50,24 +50,24 @@ namespace Library
 
         public MemberDTO GetMemberByID(string memberID)
         {
-            return memberRepository.GetMember(memberID);
+            return memberDAO.GetMember(memberID);
         }
 
         public List<MemberDTO> GetAllMember()
         {
-            return memberRepository.GetAllMember();
+            return memberDAO.GetAllMember();
         }
 
         // 로그인한 USER가 BORROW한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
         public List<int> GetMemberBorrowedBooks(string curUserID)
         {
-            return historyRepository.GetMemberBorrowedBooks(curUserID);
+            return historyDAO.GetMemberBorrowedBooks(curUserID);
         }
 
         // 로그인한 USER가 RETURN한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
         public List<int> GetMemberReturnedBooks(string curUserID)
         {
-            return historyRepository.GetMemberReturnedBooks(curUserID);
+            return historyDAO.GetMemberReturnedBooks(curUserID);
         }
 
         //============== REPOSITORY CRUD FUNCTIONS ==============//
@@ -79,7 +79,7 @@ namespace Library
             // 이미 존재하면 취소
             if (CheckIfMemberExists(newMemberID)) return false;
 
-            memberRepository.Add(newMember);
+            memberDAO.Add(newMember);
             return true;
         }
 
@@ -89,9 +89,9 @@ namespace Library
             if (!CheckIfMemberExists(deletingMemberID)) return false;
 
             // 1. memberDB에서 삭제하고
-            memberRepository.Delete(deletingMemberID);
+            memberDAO.Delete(deletingMemberID);
             // 2. 해당 member의 historyDB 내역도 모두 삭제
-            historyRepository.DeleteMemberHistory(deletingMemberID);
+            historyDAO.DeleteMemberHistory(deletingMemberID);
 
             return true;
         }
@@ -109,49 +109,49 @@ namespace Library
                 if (updatingMember.GetPhoneNum() == "") updatingMember.SetPhoneNum(originalMember.GetPhoneNum());
 
                 // 조건확인 후 CRUD
-                memberRepository.Update(updatingMemberID, updatingMember);
+                memberDAO.Update(updatingMemberID, updatingMember);
                 return true;
             }
             return false;
         }
 
-        // memberRepository가 아닌 HistoryRepository에서 처리해주면 됨
-        // memberRepository는 할게 없음. 그냥 HisoryRepository 함수들 호출해주면 됨
+        // memberDAO가 아닌 HistoryDAO에서 처리해주면 됨
+        // memberDAO는 할게 없음. 그냥 HisoryRepository 함수들 호출해주면 됨
         // historyDB에 (borrwer_id, book_id, returned) 로 저장만 해주면 그게 borrow 한 상황 그 자체임
-        // 여기서 MemberRepository 호출 절대 하지말기
+        // 여기서 MemberDAO 호출 절대 하지말기
         // 그래도 Service니까 조건은 따지고 호출해줘야함
-        // 그니까 조건만 따지고 memberRepository는 절대 호출하지말고 historyRepository로 모든 상황 해결하기
+        // 그니까 조건만 따지고 memberDAO는 절대 호출하지말고 historyDAO로 모든 상황 해결하기
         public bool UpdateBorrow(string curUserID, MiniDTO miniDTO)
         {
             string bookID = miniDTO.GetBookID();
             
-            bool isBorrowed = historyRepository.CheckIfUserBorrowed(curUserID, bookID);
+            bool isBorrowed = historyDAO.CheckIfUserBorrowed(curUserID, bookID);
 
             // 이미 빌린 책이면 대여불가
             if (isBorrowed) return false;
             
             // 아니면 진짜로 대여해주기
-            historyRepository.AddBorrowHistory(curUserID, bookID);
+            historyDAO.AddBorrowHistory(curUserID, bookID);
             return true;
         }
 
-        // memberRepository가 아닌 HistoryRepository에서 처리해주면 됨
-        // memberRepository는 할게 없음. 그냥 HisoryRepository 함수들 호출해주면 됨
+        // memberDAO가 아닌 HistoryDAO에서 처리해주면 됨
+        // memberDAO는 할게 없음. 그냥 HisoryRepository 함수들 호출해주면 됨
         // historyDB에 (borrwer_id, book_id, returned) 로 저장만 해주면 그게 borrow 한 상황 그 자체임
-        // 여기서 MemberRepository 호출 절대 하지말기
+        // 여기서 MemberDAO 호출 절대 하지말기
         // 그래도 Service니까 조건은 따지고 호출해줘야함
-        // 그니까 조건만 따지고 memberRepository는 절대 호출하지말고 historyRepository로 모든 상황 해결하기
+        // 그니까 조건만 따지고 memberDAO는 절대 호출하지말고 historyDAO로 모든 상황 해결하기
         public bool UpdateReturned(string curUserID, MiniDTO miniDTO)
         {
             string bookID = miniDTO.GetBookID();
             
-            bool isBorrowed = historyRepository.CheckIfUserBorrowed(curUserID, bookID);
+            bool isBorrowed = historyDAO.CheckIfUserBorrowed(curUserID, bookID);
 
             // 빌린 책이 아니면 반납 불가
             if (!isBorrowed) return false;
 
             // 아니면 진짜로 반납해주기
-            historyRepository.AddReturnHistory(curUserID, bookID);
+            historyDAO.AddReturnHistory(curUserID, bookID);
             return true;
         }
     }

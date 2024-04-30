@@ -13,15 +13,19 @@ namespace Library
         private MemberService memberService;
         private BookService bookService;
 
-        private LogRepository logRepository;
-        
+        private LogDAO logDAO;
+
+        private NaverController naverController;
+
         public UserController(BookService bookService, MemberService memberService)
         {
             this.bookService = bookService;
             this.memberService = memberService;
 
-            this.logRepository = LogRepository.GetInstance();
+            this.logDAO = LogDAO.GetInstance();
             
+            this.naverController = new NaverController();
+
             userView = new UserView();
         }
 
@@ -35,7 +39,7 @@ namespace Library
         private void PrintAllBook()
         {
             List<BookDTO> availableBooks = bookService.GetAvailableBooks();
-            logRepository.Add(DateTime.Now, curUserID, "PRINTALLBOOK", "");
+            logDAO.Add(DateTime.Now, curUserID, "PRINTALLBOOK", "");
 
             userView.PrintAllBooksForm(availableBooks);
         }
@@ -46,7 +50,7 @@ namespace Library
             List<string> dataFromView = userView.FindBookForm();
             // bookService로 전달해서 매칭된 List<BookDTO> 받아오기
             List<BookDTO> retList = bookService.FindBook(dataFromView);
-            logRepository.Add(DateTime.Now, curUserID, "FIND_BOOK", "");
+            logDAO.Add(DateTime.Now, curUserID, "FIND_BOOK", "");
 
             // 다시 userView에 전달해서 매칭된 책들 모두 출력해서 보여주기
             userView.PrintSelectedBooksForm(retList);
@@ -67,7 +71,7 @@ namespace Library
             // 이미 빌린거면 대여불가
             if(memberService.CheckIfUserBorrowed(curUserID, miniDTO))
             {
-                logRepository.Add(DateTime.Now, curUserID, bookID + " BORROW FAIL", "ALREADY BORROWED");
+                logDAO.Add(DateTime.Now, curUserID, bookID + " BORROW FAIL", "ALREADY BORROWED");
                 CommonView.RuntimeMessageForm("YOU ALREADY BORROWED THIS BOOK!");
                 return;
             }
@@ -77,14 +81,14 @@ namespace Library
             {
                 bookService.UpdateBorrowed(miniDTO);
                 memberService.UpdateBorrow(curUserID, miniDTO);
-                logRepository.Add(DateTime.Now, curUserID, bookID + " BORROW SUCCESS", "");
+                logDAO.Add(DateTime.Now, curUserID, bookID + " BORROW SUCCESS", "");
 
                 CommonView.RuntimeMessageForm("BORROW SUCCESSFUL!");
             }
             // 수량부족하거나 존재하지 않으면 대여불가
             else
             {
-                logRepository.Add(DateTime.Now, curUserID, "#" + bookID + " BORROW FAIL", "DOESNT EXIST");
+                logDAO.Add(DateTime.Now, curUserID, "#" + bookID + " BORROW FAIL", "DOESNT EXIST");
 
                 CommonView.RuntimeMessageForm("THIS BOOK IS NOT AVAILABLE!");
             }
@@ -102,7 +106,7 @@ namespace Library
                 curUserBorrowedBooks.Add(bookService.GetBookByID(curId));
             }
 
-            logRepository.Add(DateTime.Now, curUserID, "CHECKED BORROW LIST", "");
+            logDAO.Add(DateTime.Now, curUserID, "CHECKED BORROW LIST", "");
             
             userView.CheckBorrowedForm(curUserBorrowedBooks);
         }
@@ -121,12 +125,12 @@ namespace Library
                 bookService.UpdateReturned(miniDTO);
                 // 성공하면 memberService로 가서 저장해주기
                 memberService.UpdateReturned(curUserID, miniDTO);
-                logRepository.Add(DateTime.Now, curUserID, "RETURN SUCCESS", "");
+                logDAO.Add(DateTime.Now, curUserID, "RETURN SUCCESS", "");
                 CommonView.RuntimeMessageForm("BOOK RETURN SUCCESSFUL!");
             }
             else
             {
-                logRepository.Add(DateTime.Now, curUserID, "RETURN FAIL", "DIDNT BORROW");
+                logDAO.Add(DateTime.Now, curUserID, "RETURN FAIL", "DIDNT BORROW");
 
                 CommonView.RuntimeMessageForm("YOU DIDNT BORROW ID " + miniDTO.GetBookID() + " BOOK!");
             }
@@ -143,7 +147,7 @@ namespace Library
                 curUserReturnedBooks.Add(bookService.GetBookByID(curId));
             }
 
-            logRepository.Add(DateTime.Now, curUserID, "CHECKED RETURN LIST", "");
+            logDAO.Add(DateTime.Now, curUserID, "CHECKED RETURN LIST", "");
 
             userView.CheckReturnedForm(curUserReturnedBooks);
         }
@@ -158,17 +162,17 @@ namespace Library
             updatedMember.SetId(curUserID);
             memberService.UpdateMember(curUserID, updatedMember);
 
-            logRepository.Add(DateTime.Now, curUserID, "UPDATED INFO", "");
+            logDAO.Add(DateTime.Now, curUserID, "UPDATED INFO", "");
 
             CommonView.RuntimeMessageForm("USER INFO UPDATE SUCCESSFUL!");
         }
 
-        void DeleteMySelf()
+        private void DeleteMySelf()
         {
             if (memberService.GetMemberBorrowedBooks(curUserID).Count() == 0)
             {
                 memberService.DeleteMember(curUserID);
-                logRepository.Add(DateTime.Now, curUserID, "DELETE ACCOUNT SUCCESS", "");
+                logDAO.Add(DateTime.Now, curUserID, "DELETE ACCOUNT SUCCESS", "");
 
                 CommonView.RuntimeMessageForm("PERMANANT DELETE SUCCESSFUL!");
                 // usercontroller 자체를 빠져나가기
@@ -176,9 +180,15 @@ namespace Library
             }
             else
             {
-                logRepository.Add(DateTime.Now, curUserID, "DELETE ACCOUNT FAIL", "DIDNT RETURN ALL BOOKS");
+                logDAO.Add(DateTime.Now, curUserID, "DELETE ACCOUNT FAIL", "DIDNT RETURN ALL BOOKS");
                 CommonView.RuntimeMessageForm("PLEASE RETURN ALL YOUR BOOKS FIRST");
             }
+        }
+
+        private void RequestBookByNaverAPI()
+        {
+            // NaverAPI 사용해서 처리하는 작업 자체를 NaverController 한테 위임
+            naverController.RequestBookByNaverAPI();
         }
 
         public void RunUserMode()
@@ -231,6 +241,7 @@ namespace Library
                         break;
                     
                     case UserMenuState.NAVERSEARCH:
+                        RequestBookByNaverAPI();
                         break;
                     
                     case UserMenuState.REQUESTED:

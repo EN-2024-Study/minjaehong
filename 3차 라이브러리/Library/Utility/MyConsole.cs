@@ -103,6 +103,9 @@ namespace Library
                 case ExceptionState.ISBN_ONLY:
                     Console.Write("ONLY ISBN AVAILABLE");
                     break;
+                case ExceptionState.KOREAN_ENGLISH_INT_ONLY:
+                    Console.Write("ONLY BOOK TITLE AVAILABLE");
+                    break;
 
                 // RUNTIME EXCEPTION
                 case ExceptionState.EXISTING_ID:
@@ -186,6 +189,10 @@ namespace Library
 
                         case ExceptionState.DATE_ONLY:
                             isCorrectInput = ExceptionHandler.CheckIfDateInput(input);
+                            break;
+
+                        case ExceptionState.KOREAN_ENGLISH_INT_ONLY:
+                            isCorrectInput = ExceptionHandler.CheckIfKoreanEnglishIntOnlyInput(input);
                             break;
                     }
 

@@ -33,7 +33,7 @@ namespace Library
 
     // 2. LOG 생성은 작업 결과가 다 끝나고 해야함
     // 그래서 작업결과를 모르는 service나 repository model 쪽이 아닌 controller에서 호출해야하는데
-    // controller에서 만약 logRepository에 직접 접근하는 repository나 dao를 호출하면
+    // controller에서 만약 logDAO에 직접 접근하는 repository나 dao를 호출하면
     // 이건 또 안되는거 같음
     // 그래서 log repository나 dao를 한번 감싼 놈을 호출해야하는데
     // 이걸 어떻게 구현할까
@@ -41,18 +41,18 @@ namespace Library
     class LogController
     {
         private LogView logView;
-        private LogRepository logRepository;
+        private LogDAO logDAO;
 
         public LogController()
         {
             logView = new LogView();
-            logRepository = LogRepository.GetInstance();
+            logDAO = LogDAO.GetInstance();
         }
 
         private void DeleteCertainLog()
         {
             // 모든 로그 받아오기
-            List<LogDTO> logList = logRepository.GetAllLogs();
+            List<LogDTO> logList = logDAO.GetAllLogs();
 
             // 로그 내역 없으면 그냥 return
             if (logList.Count() == 0)
@@ -66,9 +66,9 @@ namespace Library
 
             int deletingLogID = int.Parse(retList[0]);
 
-            if (logRepository.CheckIfLogExists(deletingLogID))
+            if (logDAO.CheckIfLogExists(deletingLogID))
             {
-                logRepository.Delete(deletingLogID);
+                logDAO.Delete(deletingLogID);
                 CommonView.RuntimeMessageForm("DELETED CERTAIN LOG!");
             }
             else
@@ -80,7 +80,7 @@ namespace Library
         private void SaveLogFile()
         {
             // 로그파일 저장
-            List<LogDTO> logList = logRepository.GetAllLogs();
+            List<LogDTO> logList = logDAO.GetAllLogs();
 
             StringBuilder logFileBuilder = new StringBuilder();
 
@@ -138,7 +138,7 @@ namespace Library
         private void ResetLog()
         {
             // 로그파일 초기화
-            logRepository.DeleteAll();
+            logDAO.DeleteAll();
 
             CommonView.RuntimeMessageForm("LOG RESET COMPLETE!");
         }

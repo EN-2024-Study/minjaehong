@@ -21,7 +21,6 @@ namespace Library
 
         private string[] updateUserArr = { "1. PW :", "2. NAME :", "3. AGE :", "4. PHONENUM(010~) :" };
 
-       
         // menu 보여주고 user가 select 한 걸 controller 한테 반환
         public UserMenuState UserMenuForm(string curUserName)
         {
@@ -36,7 +35,7 @@ namespace Library
 
         // 1. 도서 찾기
         // 찾을 도서 이름과 작가를 controller에게 전달
-        // controller는 BookRepository에 가서 해당 매칭 결과를 List<string> 으로 받음
+        // controller는 BookDAO에 가서 해당 매칭 결과를 List<string> 으로 받음
         // controller는 PrintSelectedBooks로 출력
         public List<string> FindBookForm()
         {
@@ -62,7 +61,7 @@ namespace Library
         }
 
         // 3. 도서 대여 확인
-        // controller가 BookRepository에서 로그인한 USER가 BORROW한 책들을 List<BOOKDTO>로 보내줌
+        // controller가 BookDAO에서 로그인한 USER가 BORROW한 책들을 List<BOOKDTO>로 보내줌
         // 여기서는 PrintSelectedBooks 이용해서 출력
         public void CheckBorrowedForm(List<BookDTO> curUserBorrowedBooks)
         {
@@ -82,7 +81,7 @@ namespace Library
         }
 
         // 5. 도서 반납 확인
-        // controller가 BookRepository에서 로그인한 USER가 RETURN한 책들을 List<BOOKDTO>로 보내줌
+        // controller가 BookDAO에서 로그인한 USER가 RETURN한 책들을 List<BOOKDTO>로 보내줌
         // 여기서는 PrintSelectedBooks 이용해서 출력
         public void CheckReturnedForm(List<BookDTO> curUserReturnedBooks)
         {
@@ -104,12 +103,6 @@ namespace Library
             // ID는 입력받는게 아니므로 그냥 0번에 추가해서 ID PW NAME AGE PHONENUM 받은 것처럼 만들기
             updatedUserInfo.Insert(0, "");
             return updatedUserInfo;
-        }
-
-        // 7. 계정 삭제
-        public void DeleteMyselfForm()
-        {
-
         }
 
         public void PrintAllBooksForm(List<BookDTO> allBooks)
