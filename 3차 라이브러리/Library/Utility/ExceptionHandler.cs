@@ -32,6 +32,9 @@ namespace Library
 
         public static ExceptionState[] updateUserExceptionArr = { ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.INT_ONLY, ExceptionState.PHONENUM_ONLY };
 
+        // LOG VIEW
+        public static ExceptionState[] logDeleteExceptionArr = { ExceptionState.INT_ONLY };
+
         public static bool CheckIfIntOnlyInput(string input)
         {
             string intOnlyPattern = @"^\d+$";

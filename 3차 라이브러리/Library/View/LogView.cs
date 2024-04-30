@@ -13,26 +13,67 @@ namespace Library
     // DELETE LOG 빼고는 그냥 모두 RuntimeView로 해결
     class LogView
     {
-        private string[] loggerMenuArr = { "DELETE LOG", "SAVE LOG", "DELETE LOG FILE", "RESET LOG"};
+        private string[] logManagerMenuArr = { "DELETE LOG", "SAVE LOG", "DELETE LOG FILE", "RESET LOG"};
+        private string[] logDeleteArr = {"LOG ID :"};
 
+        private int LOG_STARTX = 40;
+        private int LOG_STARTY = 8;
         public LoggerMenuState LoggerMenuForm()
         {
             Console.Clear();
 
-            MyConsole.PrintHeader("[Logger MENU]");
+            MyConsole.PrintHeader("[LOG MANAGER MENU]");
             MyConsole.PrintUserID("manager");
 
-            LoggerMenuState selectedMenu = (LoggerMenuState)MyConsole.GetUserSelection(loggerMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            LoggerMenuState selectedMenu = (LoggerMenuState)MyConsole.GetUserSelection(logManagerMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMenu;
         }
 
-        public int DeleteLogForm(List<LogDTO> logList)
+        public List<string> DeleteLogForm(List<LogDTO> logList)
         {
             Console.Clear();
 
-            int deletingLogID = 0;
+            MyConsole.PrintHeader("[DELETE LOG]");
 
-            return deletingLogID;
+            PrintAllLogs(logList);
+
+            List<string> retList= MyConsole.GetUserInputs(logDeleteArr, MyConsole.MENU_STARTX, Console.CursorTop + 2, ExceptionHandler.logDeleteExceptionArr);
+            
+            return retList;
+        }
+
+        public void PrintAllLogs(List<LogDTO> logList)
+        {
+            Console.SetCursorPosition(LOG_STARTX, LOG_STARTY);
+
+            if (logList.Count == 0)
+            {
+                MyConsole.PrintHeader("[NO RESULT]");
+            }
+            for (int i = 0; i < logList.Count; i++)
+            {
+                Console.WriteLine("");
+                Console.CursorLeft = LOG_STARTX;
+                Console.WriteLine("────────────────────────────────");
+                Console.WriteLine("");
+                Console.CursorLeft = LOG_STARTX;
+                Console.WriteLine("LOG ID : " + logList[i].GetID());
+                Console.CursorLeft = LOG_STARTX;
+                Console.WriteLine("TIME   : " + logList[i].GetTime());
+                Console.CursorLeft = LOG_STARTX;
+                Console.WriteLine("USER   : " + logList[i].GetUser());
+                Console.CursorLeft = LOG_STARTX;
+                Console.WriteLine("ACTION : " + logList[i].GetAction());
+
+                if (logList[i].GetNote() != "")
+                {
+                    Console.CursorLeft = LOG_STARTX;
+                    Console.WriteLine("NOTE   : " + logList[i].GetNote());
+                }
+            }
+            Console.WriteLine("");
+            Console.CursorLeft = LOG_STARTX;
+            Console.WriteLine("────────────────────────────────");
         }
     }
 }

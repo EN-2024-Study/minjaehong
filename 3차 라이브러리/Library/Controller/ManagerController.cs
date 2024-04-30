@@ -6,6 +6,7 @@ namespace Library
     {
         // ManagerController와 연결되어야하는 애들
         private LogController logManager;
+        private LogRepository logRepository;
 
         private ManagerView managerView;
 

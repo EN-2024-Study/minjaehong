@@ -61,7 +61,7 @@
         public const string getAllLogsQuery = "SELECT * FROM logDB";
 
         // CRUDs
-        public const string addNewLogQuery = "INSERT INTO logDB (timestamp, mode, action) VALUES (@timeStamp, @mode, @action)";
+        public const string addNewLogQuery = "INSERT INTO logDB (logTime, user, action, note) VALUES (@logTime, @user, @action, @note)";
         public const string deleteLogQuery = "DELETE FROM logDB WHERE id = @deletingLogID";
         public const string deleteAllLogsQuery = "DELETE FROM logDB";
     }

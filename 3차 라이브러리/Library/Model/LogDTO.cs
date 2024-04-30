@@ -6,31 +6,31 @@ using System.Threading.Tasks;
 
 namespace Library
 {
+    //DateTime value = reader.GetDateTime("timestamp");
+    //string timeStamp = value.ToString("yyyy-MM-dd HH:mm:ss");
+    //logDTO.SetTime(timeStamp);
     class LogDTO
     {
-        private int id;
+        private string id; // autoincrement by DB
 
-        private DateTime timeStamp;
-        private bool mode;
+        private string logTime;
+        private string user;
         private string action;
+        private string note;
 
-        public LogDTO() { }
-
-        public LogDTO(DateTime timeStamp, bool mode, string action)
+        public LogDTO(string id, string logTime, string user, string action, string note)
         {
-            this.timeStamp = timeStamp;
-            this.mode = mode;
+            this.id = id;
+            this.logTime = logTime;
+            this.user = user;
             this.action = action;
+            this.note = note;
         }
 
-        public int GetID() { return id; }
-        public DateTime GetTime() { return timeStamp; }
-        public bool GetMode() { return mode; }
+        public string GetID() { return id; }
+        public string GetTime() { return logTime; }
+        public string GetUser() { return user; }
         public string GetAction() { return action; }
-
-        public void SetID(int id) { this.id = id; }
-        public void SetTime(DateTime timeStamp) { this.timeStamp = timeStamp; }
-        public void SetMode(bool mode) { this.mode = mode; }
-        public void SetAction(string action) { this.action = action; }
+        public string GetNote() { return note; }
     }
 }
