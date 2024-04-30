@@ -90,6 +90,24 @@ namespace Library
             logManager.RunLogController();
         }
 
+        private void ApplyRequestedBook()
+        {
+            // MEMBER들이 요청한 책들 일단 가져오기
+            List<BookDTO> requestedBooks = bookService.GetRequestedBooks();
+            // MEMBER들이 요청한 책 보여주기
+            managerView.PrintAllBooksForm(requestedBooks);
+
+            // 승인할 책 입력받기
+            int applyingBookID = managerView.ApplyRequestedBookSelectForm();
+
+            // 승인 함 시도해보기
+            bool executionSuccess = bookService.ApplyRequested(applyingBookID);
+
+            // 승인 시도 결과 확인
+            if (executionSuccess) CommonView.RuntimeMessageForm("REQUESTED BOOK IS SUCCESSFULLY APPLIED!");
+            else CommonView.RuntimeMessageForm("APPLY FAIL : CHECK REQUESTED BOOK ID");
+        }
+
         public void RunManagerMode()
         {
             ManagerMenuState selectedMenu;
@@ -140,7 +158,8 @@ namespace Library
                         LogManagement();
                         break;
                     
-                    case ManagerMenuState.REQUESTEDBOOK:
+                    case ManagerMenuState.APPLYREQUESTEDBOOK:
+                        ApplyRequestedBook();
                         break;
                     
                     default:

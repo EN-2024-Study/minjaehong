@@ -87,6 +87,20 @@ namespace Library
             return exists;
         }
 
+        public bool CheckIfBookRequested(int bookID)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.checkIfBookRequestedQuery;
+            command.Parameters.AddWithValue("@BookID", bookID);
+            bool exists = Convert.ToBoolean(command.ExecuteScalar());
+
+            connection.Close();
+
+            return exists;
+        }
+
         // 전체 책(삭제된거 포함)을 다 끌고옴
         // 이건 returnedBooks 에서만 필요함
         // returned에서는 삭제된 것들도 다 보여줘야하기 때문임
@@ -130,6 +144,38 @@ namespace Library
             connection.Open();
 
             command.CommandText = Querys.getAvailableBooksQuery;
+            MySqlDataReader reader = command.ExecuteReader();
+
+            // 한 개만 왔으므로 read 한번만 호출
+            while (reader.Read())
+            {
+                BookDTO book = new BookDTO();
+                book.SetId(int.Parse(reader["id"].ToString()));
+                book.SetName(reader["name"].ToString());
+                book.SetAuthor(reader["author"].ToString());
+                book.SetPublisher(reader["publisher"].ToString());
+                book.SetPrice(reader["price"].ToString());
+                book.SetInStock(reader["instock"].ToString());
+                book.SetDate(reader["date"].ToString());
+                book.SetIsbn(reader["isbn"].ToString());
+                book.SetDeleted(reader.GetBoolean("deleted"));
+
+                bookDB.Add(book.GetId(), book);
+            }
+
+            reader.Close();
+            connection.Close();
+
+            return bookDB;
+        }
+
+        public Dictionary<int,BookDTO> GetRequestedBooks()
+        {
+            bookDB.Clear();
+
+            connection.Open();
+
+            command.CommandText = Querys.getRequestedBooksQuery;
             MySqlDataReader reader = command.ExecuteReader();
 
             // 한 개만 왔으므로 read 한번만 호출
@@ -229,6 +275,18 @@ namespace Library
 
             command.CommandText = Querys.updateBookStockQuery;
             command.Parameters.AddWithValue("@updatedStock", updatedStock);
+            command.Parameters.AddWithValue("@bookID", bookID);
+            command.ExecuteNonQuery();
+
+            connection.Close();
+        }
+
+        public void ApplyRequested(int bookID)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.applyRequestedBookQuery;
             command.Parameters.AddWithValue("@bookID", bookID);
             command.ExecuteNonQuery();
 

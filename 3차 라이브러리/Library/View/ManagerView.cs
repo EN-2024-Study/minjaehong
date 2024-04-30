@@ -17,6 +17,8 @@ namespace Library
 
         private string[] updateBookArr = { "1. NAME :", "2. AUTHOR :", "3. PUBLISHER :", "4. PRICE :", "5. IN STOCK :", "6. DATE(XXXXXX) :", "7. ISBN(3-2-4) :" };
 
+        private string[] applyRequestedBookArr = { "APPLYING BOOK ID :" };
+
         public ManagerView() { 
                 
         }
@@ -133,6 +135,16 @@ namespace Library
             CommonView.PrintAllMembers(memberList);
 
             MyConsole.WaitForBackSpace();
+        }
+
+        // 7. 요청 도서 승인
+        // 승인해줄 요청도서 입력받고 controller한테 주기
+        public int ApplyRequestedBookSelectForm()
+        {
+            List<string> userInput = MyConsole.GetUserInputs(applyRequestedBookArr, MyConsole.MENU_STARTX, Console.CursorTop+2, ExceptionHandler.applyRequestedBookExceptionArr);
+            int updatingBookID = int.Parse(userInput[0]);
+
+            return updatingBookID;
         }
     }
 }

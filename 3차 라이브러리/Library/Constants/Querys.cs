@@ -10,11 +10,13 @@
 
         //============= BOOK REPOSITORY QUERYS =============//
 
-        public const string getAllBooksQuery = "SELECT * FROM bookDB";
-        public const string getAvailableBooksQuery = "SELECT * FROM bookDB WHERE deleted = FALSE";
+        public const string getAllBooksQuery = "SELECT * FROM bookDB WHERE requested = FALSE";
+        public const string getAvailableBooksQuery = "SELECT * FROM bookDB WHERE deleted = FALSE AND requested = FALSE";
+        public const string getRequestedBooksQuery = "SELECT * FROM bookDB WHERE requested = TRUE";
 
-        public const string checkIfBookExistsQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND deleted = FALSE)";
-        public const string checkIfBookAvailableQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND instock > 0 AND deleted = FALSE)";
+        public const string checkIfBookExistsQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND deleted = FALSE AND requested = FALSE)";
+        public const string checkIfBookAvailableQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND instock > 0 AND deleted = FALSE AND requested = FALSE)";
+        public const string checkIfBookRequestedQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND requested = TRUE)";
 
         // CRUDs
         public const string addNewBookQuery = "INSERT INTO bookDB (name, author, publisher, price, instock, date, isbn, requested) " +
@@ -25,6 +27,8 @@
         public const string updateBookQuery = "UPDATE bookDB SET name = @name, author = @author, publisher = @publisher, " +
                 "price = @price, instock = @inStock, date = @date, isbn = @isbn WHERE id = @id";
         public const string  updateBookStockQuery = "UPDATE bookDB SET instock = @updatedStock WHERE id = @bookID";
+
+        public const string applyRequestedBookQuery = "UPDATE bookDB SET requested = FALSE WHERE id = @bookID";
 
         //============ MEMBER REPOSITORY QUERYS ============//
 

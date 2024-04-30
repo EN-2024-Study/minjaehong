@@ -31,7 +31,7 @@ namespace Library
             AddNewBook(new BookDTO(defaultBook5));
         }
 
-        //============= GET AND CHECK FUNCTIONS ==============//
+        //========================== CHECK FUNCTIONS BEFORE CRUDs ===========================//
 
         public bool CheckIfBookExists(int bookID)
         {
@@ -43,10 +43,17 @@ namespace Library
             return bookDAO.CheckIfBookAvailable(bookID);
         }
 
+        public bool CheckIfBookRequested(int bookID)
+        {
+            return bookDAO.CheckIfBookRequested(bookID);
+        }
+
         public bool CheckIfBookIsBorrowed(int bookID)
         {
             return historyDAO.CheckIfBookIsBorrowed(bookID);
         }
+
+        //============================= SIMPLE GET FUNCTIONS =============================//
 
         public BookDTO GetBookByID(int bookID)
         {
@@ -63,6 +70,11 @@ namespace Library
         public List<BookDTO> GetAvailableBooks()
         {
             return bookDAO.GetAvailableBooks().Values.ToList();
+        }
+
+        public List<BookDTO> GetRequestedBooks()
+        {
+            return bookDAO.GetRequestedBooks().Values.ToList();
         }
 
         // BookDTO 조회 - view에서 제목 작가 넘어온거
@@ -92,7 +104,7 @@ namespace Library
             return retList;
         }
 
-        //=============== REPOSITORY CRUD FUNCTIONS ================//
+        //===================================== CRUDs ====================================//
 
         public void AddNewBook(BookDTO newBook)
         {
@@ -167,6 +179,16 @@ namespace Library
                 int updatedStock = curNum + returnedNum;
 
                 bookDAO.UpdateStock(bookID, updatedStock.ToString());
+                return true;
+            }
+            return false;
+        }
+
+        public bool ApplyRequested(int applyingBookID)
+        {
+            if (CheckIfBookRequested(applyingBookID))
+            {
+                bookDAO.ApplyRequested(applyingBookID);
                 return true;
             }
             return false;

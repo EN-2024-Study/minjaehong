@@ -23,6 +23,8 @@ namespace Library
 
         public static ExceptionState[] updateBookExceptionArr = { ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.KOREAN_ENGLISH_INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.INT_ONLY, ExceptionState.DATE_ONLY, ExceptionState.ISBN_ONLY };
 
+        public static ExceptionState[] applyRequestedBookExceptionArr = { ExceptionState.INT_ONLY };
+
         // USER FRONT VIEW
         public static ExceptionState[] userCreateAccountExceptionArr = { ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_INT_ONLY, ExceptionState.ENGLISH_ONLY, ExceptionState.INT_ONLY, ExceptionState.PHONENUM_ONLY };
 
