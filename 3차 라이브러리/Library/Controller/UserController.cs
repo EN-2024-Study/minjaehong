@@ -15,7 +15,7 @@ namespace Library
 
         private LogDAO logDAO;
 
-        private NaverController naverController;
+        private RequestController naverController;
 
         public UserController(BookService bookService, MemberService memberService)
         {
@@ -24,7 +24,7 @@ namespace Library
 
             this.logDAO = LogDAO.GetInstance();
             
-            this.naverController = new NaverController();
+            this.naverController = new RequestController();
 
             userView = new UserView();
         }
@@ -187,7 +187,7 @@ namespace Library
 
         private void RequestBookByNaverAPI()
         {
-            // NaverAPI 사용해서 처리하는 작업 자체를 NaverController 한테 위임
+            // NaverAPI 사용해서 처리하는 작업 자체를 RequestController 한테 위임
             naverController.RequestBookByNaverAPI();
         }
 

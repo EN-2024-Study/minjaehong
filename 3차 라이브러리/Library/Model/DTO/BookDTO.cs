@@ -49,6 +49,8 @@ namespace Library
             this.inStock = dataFromView[4];
             this.date = dataFromView[5];
             this.isbn = dataFromView[6];
+            this.deleted = false;
+            this.requested = false;
         }
 
         public void SetId(int keyId) { this.id = keyId; } // DB에서 알아서 넣어줌

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace Library
 {
     // controller에서 호출하면
-    // 조건 확인 후 repository 호출해서 CRUD 작업 실행
+    // 조건 확인 후 DAO 호출해서 CRUD 작업 실행
+    // 예외처리와 조건처리가 주된 작업
     class BookService
     {
         private BookDAO bookDAO;

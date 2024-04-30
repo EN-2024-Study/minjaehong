@@ -39,7 +39,7 @@
   <ItemGroup>
     <Compile Include="Constants\Querys.cs" />
     <Compile Include="Controller\LogController.cs" />
-    <Compile Include="Controller\NaverController.cs" />
+    <Compile Include="Controller\RequestController.cs" />
     <Compile Include="Controller\UserFrontController.cs" />
     <Compile Include="Model\DTO\BookDTO.cs" />
     <Compile Include="Controller\MainController.cs" />
@@ -56,14 +56,14 @@
     <Compile Include="Model\DTO\MiniDTO.cs" />
     <Compile Include="Service\BookService.cs" />
     <Compile Include="Service\MemberService.cs" />
-    <Compile Include="Service\NaverService.cs" />
+    <Compile Include="Service\NaverAPIService.cs" />
     <Compile Include="Utility\ExceptionHandler.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\LogView.cs" />
     <Compile Include="View\MainView.cs" />
     <Compile Include="View\ManagerView.cs" />
     <Compile Include="View\CommonView.cs" />
-    <Compile Include="View\NaverView.cs" />
+    <Compile Include="View\RequestView.cs" />
     <Compile Include="View\UserFrontView.cs" />
     <Compile Include="View\UserView.cs" />
   </ItemGroup>

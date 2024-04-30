@@ -17,8 +17,8 @@
         public const string checkIfBookAvailableQuery = "SELECT EXISTS (SELECT TRUE FROM bookDB WHERE id = @BookID AND instock > 0 AND deleted = FALSE)";
 
         // CRUDs
-        public const string addNewBookQuery = "INSERT INTO bookDB (name, author, publisher, price, instock, date, isbn) " +
-                "VALUES (@name, @author, @publisher, @price, @inStock, @date, @isbn)";
+        public const string addNewBookQuery = "INSERT INTO bookDB (name, author, publisher, price, instock, date, isbn, requested) " +
+                "VALUES (@name, @author, @publisher, @price, @inStock, @date, @isbn, @requested)";
         
         public const string deleteBookQuery = "UPDATE bookDB SET deleted = TRUE WHERE id = @deletingBookID";
 

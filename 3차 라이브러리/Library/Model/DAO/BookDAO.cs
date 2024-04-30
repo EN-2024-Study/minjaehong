@@ -178,6 +178,7 @@ namespace Library
             command.Parameters.AddWithValue("@inStock", book.GetInStock());
             command.Parameters.AddWithValue("@date", book.GetDate());
             command.Parameters.AddWithValue("@isbn", book.GetIsbn());
+            command.Parameters.AddWithValue("@requested", book.GetRequested());
             command.ExecuteNonQuery();
 
             connection.Close();

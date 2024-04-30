@@ -6,7 +6,7 @@ namespace Library
     {
         // ManagerController와 연결되어야하는 애들
         private LogController logManager;
-        private NaverController naverController;
+        private RequestController requestController;
 
         private ManagerView managerView;
 
@@ -21,7 +21,7 @@ namespace Library
             managerView = new ManagerView();
 
             logManager = new LogController();
-            naverController = new NaverController();
+            requestController = new RequestController();
         }
 
         private void PrintAllBook()
@@ -78,10 +78,10 @@ namespace Library
             managerView.PrintAllMembersForm(allMembers);
         }
 
-        private void RequestBookByNaverAPI()
+        private void NaverSearch()
         {
-            // NaverAPI 사용해서 처리하는 작업 자체를 NaverController 한테 위임
-            naverController.RequestBookByNaverAPI();
+            // NaverAPI 사용해서 처리하는 작업 자체를 RequestController 한테 위임
+            requestController.SearchBookByNaverAPI();
         }
 
         // LogManager 시작
@@ -133,7 +133,7 @@ namespace Library
                         break;
                     
                     case ManagerMenuState.NAVERSEARCH:
-                        RequestBookByNaverAPI();
+                        NaverSearch();
                         break;
                     
                     case ManagerMenuState.LOGMANAGEMENT:

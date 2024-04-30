@@ -4,6 +4,9 @@ using MySql.Data.MySqlClient;
 
 namespace Library
 {
+    // 여기서 조건 따지지말기
+    // 조건은 모두 Service에서 따지고 온다
+    // 여기에 조건이 있으면 안됨
     class HistoryDAO
     {
         private string connectionString;
