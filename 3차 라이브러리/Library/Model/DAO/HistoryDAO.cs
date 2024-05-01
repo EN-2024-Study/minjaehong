@@ -44,9 +44,9 @@ namespace Library
             connection.Close();
         }
 
-        //================= SIMPLE GET CHECK FUNCTIONS ==================//
+        //================================ CHECK QUERYS ==================================//
 
-        // historyDB 참조해서 user가 진짜 빌린 책인지 확인
+        // historyDB 참조해서 USER가 진짜 BORROW 한 책인지 확인
         public bool CheckIfUserBorrowed(string curUserID, string returningBookID)
         {
             List<int> curUserBorrowedBookList = new List<int>();
@@ -65,7 +65,7 @@ namespace Library
         }
 
         // 해당 책을 빌린 사람이 있는지 확인
-        // BookService에서 DELETE BOOK 할때 조건문으로 쓰임
+        // SERVICE에서 DELETE BOOK 할때 예외처리 용도로 쓰임
         public bool CheckIfBookIsBorrowed(int bookID)
         {
             connection.Open();
@@ -79,6 +79,24 @@ namespace Library
 
             return exists;
         }
+
+        private bool CheckIfReturnHistoryAlreadyExists(string curUserID, string bookID)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.checkIfReturnHistoryAlreadyExistsQuery;
+            command.Parameters.AddWithValue("@borrowerID", curUserID);
+            command.Parameters.AddWithValue("@bookID", bookID);
+
+            bool exists = Convert.ToBoolean(command.ExecuteScalar());
+
+            connection.Close();
+
+            return exists;
+        }
+
+        //================================== GET QUERY ===================================//
 
         // 현재 USER가 BORROW한 BOOK들의 ID에 대한 정보 반환 -> BOOKID LIST로
         public List<int> GetMemberBorrowedBooks(string curUserID)
@@ -128,8 +146,7 @@ namespace Library
             return curUserReturnedBookList;
         }
 
-
-        //================ BORROW && RETURN CRUD =================//
+        //================================= CRUD QUERY ==================================//
 
         // 여기서 직접 historyDB에 접근하는 쿼리문 적어주기
         // 일단 memberService부터 손보고 시작하자
@@ -193,22 +210,6 @@ namespace Library
             connection.Close();
 
             return true;
-        }
-
-        private bool CheckIfReturnHistoryAlreadyExists(string curUserID, string bookID)
-        {
-            connection.Open();
-            command.Parameters.Clear();
-
-            command.CommandText = Querys.checkIfReturnHistoryAlreadyExistsQuery;
-            command.Parameters.AddWithValue("@borrowerID", curUserID);
-            command.Parameters.AddWithValue("@bookID", bookID);
-
-            bool exists = Convert.ToBoolean(command.ExecuteScalar());
-
-            connection.Close();
-
-            return exists;
         }
     }
 }

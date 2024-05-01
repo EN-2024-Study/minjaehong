@@ -7,47 +7,33 @@ using System.IO;
 
 namespace Library
 {
-    // 일단 Controller라는거 자체가
-    // view로부터 입력 받은 것을 처리해주고
-    // model이랑 DTO 전달하면서 view와 model을 매개해주는건데
-    // Logging 자체가 서비스를 제공하고 사용자 입력을 받는 부분은 아니라서
-    // controller라고 보기에는 애매함
-    // 그래서 utility로 보는게 어떨까
-    // logger?? logHandler ?? LogManager???
-
-    // 1. 특정 action에 대한 Log 정보를 logDB에 저장할때
-    // 그리고 이 log 정보 logDTO?? 를 다시 controller한테 넘기는건 또 아닌거 같음
-    // 그냥 바로 해당 action을 한 곳에서 logDAO로 바로 접근해서 저장하는게 맞는거 같음
-    // 넘기지 않고 static 함수로 logDAO에 넘겨서 저장하는 방식으로 -> ????
-
-    // 그럼 그 log에 대한 클래스는 어떻게 설계해야할까
-
-    // 근데 또 이걸 singleton으로 올리는건 진짜 아닌거 같음
-
-    // loggerController를 만드는거 자체가 log 라는 기능에 비해 굉장히 큰 작업인거 같음
-    // log 라는 작업이 사실 controller 상 밑으로 매개변수로 전달해서 처리하는 것보다는
-    // 전체 프로그램을 아우르는 관점인 utility성 작업이라고 생각해서
-    // 그렇다고 이걸 또 인스턴스변수로 매개변수로 전달하는 것은 진짜 아닌거 같음
-
-    // 그리고 그냥 timeStamp 자체를 string으로 바로 저장?
-
-    // 2. LOG 생성은 작업 결과가 다 끝나고 해야함
-    // 그래서 작업결과를 모르는 service나 repository model 쪽이 아닌 controller에서 호출해야하는데
-    // controller에서 만약 logDAO에 직접 접근하는 repository나 dao를 호출하면
-    // 이건 또 안되는거 같음
-    // 그래서 log repository나 dao를 한번 감싼 놈을 호출해야하는데
-    // 이걸 어떻게 구현할까
-
-    class LogController
+    // [Logger 개요]
+    // 1. Add 함수는 프로그램 아무데서나 호출가능 -> Add로 logDAO 통해서 logDB에 log저장
+    // 2. Logger는 ManagerController에서만 직접 참조가능 
+    class Logger
     {
         private LogView logView;
         private LogDAO logDAO;
 
-        public LogController()
+        public Logger()
         {
             logView = new LogView();
             logDAO = LogDAO.GetInstance();
         }
+
+        //================================= RECORD LOG ====================================//
+
+        public static void recordLog(DateTime timeStamp, string user, string action, string note)
+        {
+            LogDAO.GetInstance().Add(timeStamp, user, action, note);
+        }
+
+        public static void recordLog(DateTime timeStamp, string user, string action)
+        {
+            LogDAO.GetInstance().Add(timeStamp, user, action,"");
+        }
+
+        //============================ MANAGEMENT FUNCTIONS ==============================//
 
         private void DeleteCertainLog()
         {
@@ -90,27 +76,29 @@ namespace Library
             {
                 logFileBuilder.Append("LOG ID: ");
                 logFileBuilder.Append(logList[i].GetID());
-                logFileBuilder.Append(" // ");
+                logFileBuilder.Append(" | ");
 
                 logFileBuilder.Append("TIME: ");
                 logFileBuilder.Append(logList[i].GetTime());
-                logFileBuilder.Append(" // ");
+                logFileBuilder.Append(" | ");
 
                 logFileBuilder.Append("USER: ");
                 logFileBuilder.Append(logList[i].GetUser());
-                logFileBuilder.Append(" // ");
+                logFileBuilder.Append(" | ");
 
                 logFileBuilder.Append("ACTION: ");
                 logFileBuilder.Append(logList[i].GetAction());
                
                 if (logList[i].GetNote() != "")
                 {
-                    logFileBuilder.Append(" // ");
+                    logFileBuilder.Append(" | ");
                     logFileBuilder.Append("NOTE: ");
                     logFileBuilder.Append(logList[i].GetNote());
                 }
                 logFileBuilder.Append("\n");
             }
+
+            recordLog(DateTime.Now, "manager", "LOG FILE SAVE");
 
             // 이미 있으면 덮어써줌. 그래서 이미 존재하면 삭제할 필요가 없다
             File.WriteAllText(filePath, logFileBuilder.ToString());
@@ -127,10 +115,15 @@ namespace Library
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
+
+                recordLog(DateTime.Now, "manager", "DELETE LOG FILE SUCCESS");
+
                 CommonView.RuntimeMessageForm("LOG FILE DELETED!");
             }
             else
             {
+                recordLog(DateTime.Now, "manager", "DELETE LOG FILE FAIL", "LOG FILE DOES NOT EXISTS");
+
                 CommonView.RuntimeMessageForm("LOG FILE DOES NOT EXIST!");
             }
         }
@@ -140,10 +133,12 @@ namespace Library
             // 로그파일 초기화
             logDAO.DeleteAll();
 
+            recordLog(DateTime.Now, "manager", "RESET LOG");
+
             CommonView.RuntimeMessageForm("LOG RESET COMPLETE!");
         }
 
-        public void RunLogController()
+        public void StartLogManagement()
         {
             LoggerMenuState mode;
 

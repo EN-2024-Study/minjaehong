@@ -13,11 +13,12 @@ namespace Library
     // DELETE LOG 빼고는 그냥 모두 RuntimeView로 해결
     class LogView
     {
-        private string[] logManagerMenuArr = { "DELETE LOG", "SAVE LOG", "DELETE LOG FILE", "RESET LOG"};
+        private string[] loggerMenuArr = { "DELETE LOG", "SAVE LOG", "DELETE LOG FILE", "RESET LOG"};
         private string[] logDeleteArr = {"LOG ID :"};
 
         private int LOG_STARTX = 40;
         private int LOG_STARTY = 8;
+
         public LoggerMenuState LoggerMenuForm()
         {
             Console.Clear();
@@ -25,7 +26,7 @@ namespace Library
             MyConsole.PrintHeader("[LOG MANAGER MENU]");
             MyConsole.PrintUserID("manager");
 
-            LoggerMenuState selectedMenu = (LoggerMenuState)MyConsole.GetUserSelection(logManagerMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
+            LoggerMenuState selectedMenu = (LoggerMenuState)MyConsole.GetUserSelection(loggerMenuArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY);
             return selectedMenu;
         }
 

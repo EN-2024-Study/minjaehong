@@ -27,7 +27,7 @@ namespace Library
             AddNewMember(new MemberDTO(defaultUser3));
         }
 
-        //============= CHECK FUNCTIONS ==============//
+        //======================== CHECK FUNCTIONS BEFORE CRUDs ==========================//
 
         public bool CheckIfMemberExists(string userID)
         {
@@ -47,7 +47,7 @@ namespace Library
             else return false;
         }
 
-        //============= GET FUNCTIONS ==============//
+        //============================= SIMPLE GET FUNCTIONS =============================//
 
         public MemberDTO GetMemberByID(string memberID)
         {
@@ -71,7 +71,7 @@ namespace Library
             return historyDAO.GetMemberReturnedBooks(curUserID);
         }
 
-        //============== REPOSITORY CRUD FUNCTIONS ==============//
+        //==================================== CRUDs =====================================//
 
         public bool AddNewMember(MemberDTO newMember)
         {

@@ -1,32 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Library
 {
     class ManagerController
     {
         // ManagerController와 연결되어야하는 애들
-        private LogController logManager;
         private RequestController requestController;
 
         private ManagerView managerView;
 
         private BookService bookService;
         private MemberService memberService;
-        
+
+        private Logger logger;
+
         // 생성자로 필요한 MVC 연결
         public ManagerController(BookService bookService, MemberService memberService) {
+            this.requestController = new RequestController();
+
+            this.managerView = new ManagerView();
+
             this.bookService = bookService; 
             this.memberService = memberService;
 
-            managerView = new ManagerView();
-
-            logManager = new LogController();
-            requestController = new RequestController();
+            this.logger = new Logger();
         }
 
-        private void PrintAllBook()
+        private void PrintAllBooks()
         {
             List<BookDTO> availableBooks = bookService.GetAvailableBooks();
+
+            Logger.recordLog(DateTime.Now, "manager", "PRINT ALL BOOKS");
+
             managerView.PrintAllBooksForm(availableBooks);
         }
         
@@ -34,6 +41,9 @@ namespace Library
         {
             List<string> dataFromView = managerView.FindBookForm();
             List<BookDTO> retList = bookService.FindBook(dataFromView);
+
+            Logger.recordLog(DateTime.Now, "manager", "FIND BOOK");
+
             managerView.PrintSelectedBooksForm(retList);
         }
 
@@ -43,6 +53,8 @@ namespace Library
             BookDTO newBook = new BookDTO(newBookInfo);
             bookService.AddNewBook(newBook);
 
+            Logger.recordLog(DateTime.Now, "manager", "ADD BOOK SUCCESS", newBook.GetName());
+
             CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY ADDED!");
         }
 
@@ -51,8 +63,18 @@ namespace Library
             int deletingBookID = managerView.DeleteBookForm();
             bool executionSuccess = bookService.DeleteBook(deletingBookID);
 
-            if (executionSuccess) CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
-            else CommonView.RuntimeMessageForm("DELETE FAILED : CHECK ID OR BORROWED MEMBERS");
+            if (executionSuccess)
+            {
+                Logger.recordLog(DateTime.Now, "manager", "DELETE BOOK SUCCESS", deletingBookID.ToString());
+                
+                CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
+            }
+            else
+            {
+                Logger.recordLog(DateTime.Now, "manager", "DELETE BOOK FAIL", "INVALID ID OR BEING BORROWED");
+                
+                CommonView.RuntimeMessageForm("DELETE FAILED : CHECK ID OR BORROWED MEMBERS");
+            }
         }
 
         private void UpdateBook()
@@ -63,18 +85,30 @@ namespace Library
             if (bookService.CheckIfBookExists(updatingBookID))
             {
                 List<string> updatedBookInfo = managerView.UpdateBookForm();
+
                 BookDTO updatedBook = new BookDTO(updatedBookInfo);
                 updatedBook.SetId(updatingBookID);
+
                 bookService.UpdateBook(updatingBookID, updatedBook);
+
+                Logger.recordLog(DateTime.Now, "manager", "UPDATE BOOK SUCCESS", updatingBookID.ToString());
+
                 CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY UPDATED!");
             }
+            else
+            {
+                Logger.recordLog(DateTime.Now, "manager", "UPDATE BOOK FAIL", "INVALID ID");
 
-            else CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
+                CommonView.RuntimeMessageForm("THERE IS NO SUCH BOOK!");
+            }
         }
 
-        private void MemberManagement()
+        private void PrintAllMembers()
         {
             List<MemberDTO> allMembers = memberService.GetAllMember();
+
+            Logger.recordLog(DateTime.Now, "manager", "MEMBER MANAGEMENT");
+
             managerView.PrintAllMembersForm(allMembers);
         }
 
@@ -84,10 +118,11 @@ namespace Library
             requestController.SearchBookByNaverAPI();
         }
 
-        // LogManager 시작
-        private void LogManagement()
+        private void StartLogManagement()
         {
-            logManager.RunLogController();
+            Logger.recordLog(DateTime.Now, "manager", "LOG MANAGEMENT");
+
+            logger.StartLogManagement();
         }
 
         private void ApplyRequestedBook()
@@ -97,6 +132,8 @@ namespace Library
             // MEMBER들이 요청한 책 보여주기
             managerView.PrintAllBooksForm(requestedBooks);
 
+            if (requestedBooks.Count() == 0) return;
+
             // 승인할 책 입력받기
             int applyingBookID = managerView.ApplyRequestedBookSelectForm();
 
@@ -104,8 +141,18 @@ namespace Library
             bool executionSuccess = bookService.ApplyRequested(applyingBookID);
 
             // 승인 시도 결과 확인
-            if (executionSuccess) CommonView.RuntimeMessageForm("REQUESTED BOOK IS SUCCESSFULLY APPLIED!");
-            else CommonView.RuntimeMessageForm("APPLY FAIL : CHECK REQUESTED BOOK ID");
+            if (executionSuccess)
+            {
+                Logger.recordLog(DateTime.Now, "manager", "APPLY REQUEST BOOK SUCCESS", applyingBookID.ToString());
+
+                CommonView.RuntimeMessageForm("REQUESTED BOOK IS SUCCESSFULLY APPLIED!");
+            }
+            else
+            {
+                Logger.recordLog(DateTime.Now, "manager", "APPLY REQUEST BOOK FAIL", "INVALID ID");
+
+                CommonView.RuntimeMessageForm("APPLY FAIL : CHECK REQUESTED BOOK ID");
+            }
         }
 
         public void RunManagerMode()
@@ -124,7 +171,7 @@ namespace Library
                         break;
 
                     case ManagerMenuState.PRINTALLBOOK:
-                        PrintAllBook();
+                        PrintAllBooks();
                         break;
 
                     case ManagerMenuState.FINDBOOK:
@@ -144,7 +191,7 @@ namespace Library
                         break;
 
                     case ManagerMenuState.MEMBERMANAGEMENT:
-                        MemberManagement();
+                        PrintAllMembers();
                         break;
                     
                     case ManagerMenuState.BORROWLIST:
@@ -154,8 +201,9 @@ namespace Library
                         NaverSearch();
                         break;
                     
+                    // 나중에 Logger로 바꾸기?
                     case ManagerMenuState.LOGMANAGEMENT:
-                        LogManagement();
+                        StartLogManagement();
                         break;
                     
                     case ManagerMenuState.APPLYREQUESTEDBOOK:

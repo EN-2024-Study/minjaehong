@@ -33,7 +33,46 @@ namespace Library
             return instance;
         }
 
-        //============== SIMPLE GET CHECK FUNCTIONS ====================//
+        //================================= CHECK QUERY =================================//
+
+        // 특정 ID 존재유무 파악
+        public bool CheckIfMemberExists(string userID)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.checkIfMemberExistsQuery;
+
+            command.Parameters.AddWithValue("@userID", userID);
+            bool exists = Convert.ToBoolean(command.ExecuteScalar()); // 어차피 한개밖에 안넘어옴
+
+            connection.Close();
+
+            if (exists) return true;
+            else return false;
+        }
+
+        // ID PW 유효성 검사
+        public bool CheckIfValidLogin(List<string> loginInfo)
+        {
+            string userID = loginInfo[0];
+            string userPW = loginInfo[1];
+
+            connection.Open();
+            command.Parameters.Clear();
+
+            command.CommandText = Querys.checkIfValidLoginQuery;
+            command.Parameters.AddWithValue("@userID", userID);
+            command.Parameters.AddWithValue("@userPW", userPW);
+            bool exists = Convert.ToBoolean(command.ExecuteScalar()); // 어차피 한개밖에 안넘어옴
+
+            connection.Close();
+
+            if (exists) return true;
+            else return false;
+        }
+
+        //================================== GET QUERY ===================================//
 
         // 무조건 존재하는 member에 대한 ID 값만 들어옴
         // 이미 service에서 존재성 판단함
@@ -92,46 +131,9 @@ namespace Library
             return memberList;
         }
 
-        // 특정 ID 존재유무 파악
-        public bool CheckIfMemberExists(string userID)
-        {
-            connection.Open();
-            command.Parameters.Clear();
-            
-            command.CommandText = Querys.checkIfMemberExistsQuery;
-
-            command.Parameters.AddWithValue("@userID", userID);
-            bool exists = Convert.ToBoolean(command.ExecuteScalar()); // 어차피 한개밖에 안넘어옴
-
-            connection.Close();
-
-            if (exists) return true;
-            else return false;
-        }
-
-        // ID PW 유효성 검사
-        public bool CheckIfValidLogin(List<string> loginInfo)
-        {
-            string userID = loginInfo[0];
-            string userPW = loginInfo[1];
-
-            connection.Open();
-            command.Parameters.Clear();
-
-            command.CommandText = Querys.checkIfValidLoginQuery;
-            command.Parameters.AddWithValue("@userID", userID);
-            command.Parameters.AddWithValue("@userPW", userPW);
-            bool exists = Convert.ToBoolean(command.ExecuteScalar()); // 어차피 한개밖에 안넘어옴
-
-            connection.Close();
-
-            if (exists) return true;
-            else return false;
-        }
-
-        //===================== MEMBER CRUD ========================//
+        //================================= CRUD QUERY ==================================//
+        
         // service에서 넘겨주면 CRUD 진행
-
         public bool Add(MemberDTO newMember)
         {
             connection.Open();

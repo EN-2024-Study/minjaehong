@@ -16,8 +16,6 @@ namespace Library
         private MySqlConnection connection;
         private MySqlCommand command;
 
-        //===================== SINGELTON ========================//
-
         private static BookDAO instance;
 
         private BookDAO()
@@ -41,8 +39,6 @@ namespace Library
             return instance;
         }
 
-        //===================== SIMPLE FUNCTIONS ========================//
-
         // 매번 실행결과 확인 위해 지우고 다시 시작
         // 빼도 상관없음
         private void InitializeBookDB()
@@ -57,6 +53,8 @@ namespace Library
             
             connection.Close();
         }
+
+        //================================= CHECK QUERY =================================//
 
         public bool CheckIfBookExists(int bookID)
         {
@@ -100,6 +98,8 @@ namespace Library
 
             return exists;
         }
+
+        //================================== GET QUERY ===================================//
 
         // 전체 책(삭제된거 포함)을 다 끌고옴
         // 이건 returnedBooks 에서만 필요함
@@ -209,8 +209,8 @@ namespace Library
             return bookDB[bookID];
         }
 
+        //================================= CRUD QUERY ==================================//
 
-        //==================== CRUD ===================//
         public bool Add(BookDTO book)
         {
             connection.Open();

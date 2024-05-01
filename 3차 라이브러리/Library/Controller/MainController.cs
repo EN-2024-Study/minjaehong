@@ -42,15 +42,21 @@ namespace Library
             {
                 if (LibraryApp.managerPW == inputPW)
                 {
+                    Logger.recordLog(DateTime.Now, "manager", "LOGIN SUCCESS");
+
                     managerController.RunManagerMode();
                 }
                 else
                 {
+                    Logger.recordLog(DateTime.Now, "manager", "LOGIN FAIL", "INCORRECT PW");
+
                     CommonView.RuntimeMessageForm("MANAGER PASSWORD IS INCORRECT!");
                 }
             }
             else
             {
+                Logger.recordLog(DateTime.Now, "manager", "LOGIN FAIL", "INCORRECT ID");
+
                 CommonView.RuntimeMessageForm("MANAGER ID IS INCORRECT!");
             }
         }

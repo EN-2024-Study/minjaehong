@@ -12,6 +12,10 @@ namespace Library
 
     // RequestController??
 
+    // 이거 두 개 밖에 없는데 이걸 클래스로 만들어놔야함??
+    // 일단 두 개를 usercontroller랑 managercontroller 안에 둘 수 는 있는데
+    // 이 함수들이 핀트가 너무 안맞음
+
     class RequestController
     {
         private RequestView requestView;

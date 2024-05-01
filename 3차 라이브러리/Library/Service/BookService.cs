@@ -31,7 +31,7 @@ namespace Library
             AddNewBook(new BookDTO(defaultBook5));
         }
 
-        //========================== CHECK FUNCTIONS BEFORE CRUDs ===========================//
+        //======================== CHECK FUNCTIONS BEFORE CRUDs ==========================//
 
         public bool CheckIfBookExists(int bookID)
         {
@@ -54,7 +54,7 @@ namespace Library
         }
 
         //============================= SIMPLE GET FUNCTIONS =============================//
-
+        
         public BookDTO GetBookByID(int bookID)
         {
             return bookDAO.GetBookByID(bookID);
@@ -104,7 +104,7 @@ namespace Library
             return retList;
         }
 
-        //===================================== CRUDs ====================================//
+        //==================================== CRUDs =====================================//
 
         public void AddNewBook(BookDTO newBook)
         {

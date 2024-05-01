@@ -34,7 +34,7 @@ namespace Library
             return instance;
         }
 
-        //============== SIMPLE GET CHECK FUNCTIONS ====================//
+        //================================== GET QUERY ===================================//
 
         public List<LogDTO> GetAllLogs()
         {
@@ -63,7 +63,10 @@ namespace Library
             return logList;
         }
 
+        //================================= CHECK QUERY =================================//
+
         // 특정 ID 존재유무 파악
+        // Delete 하기 전 예외처리로 사용
         public bool CheckIfLogExists(int logID)
         {
             connection.Open();
@@ -71,7 +74,6 @@ namespace Library
 
             command.CommandText = Querys.checkIfLogExistsQuery;
             command.Parameters.AddWithValue("@logID", logID);
-            // 어차피 값이 하나밖에 안날라옴
             bool exists = Convert.ToBoolean(command.ExecuteScalar());
 
             connection.Close();
@@ -79,9 +81,8 @@ namespace Library
             return exists; 
         }
 
-        //===================== LOGGER CRUD ========================//
+        //================================= CRUD QUERY ==================================//
 
-        //public static bool Add(DateTime timeStamp, MySqlConnection connection, MySqlCommand command)
         public bool Add(DateTime timeStamp, string user, string action, string note)
         {
             connection.Open();
