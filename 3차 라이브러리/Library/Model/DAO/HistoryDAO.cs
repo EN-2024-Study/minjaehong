@@ -66,7 +66,7 @@ namespace Library
 
         // 해당 책을 빌린 사람이 있는지 확인
         // SERVICE에서 DELETE BOOK 할때 예외처리 용도로 쓰임
-        public bool CheckIfBookIsBorrowed(int bookID)
+        public bool CheckIfBookIsBorrowed(string bookID)
         {
             connection.Open();
             command.Parameters.Clear();
@@ -99,9 +99,9 @@ namespace Library
         //================================== GET QUERY ===================================//
 
         // 현재 USER가 BORROW한 BOOK들의 ID에 대한 정보 반환 -> BOOKID LIST로
-        public List<int> GetMemberBorrowedBooks(string curUserID)
+        public List<string> GetMemberBorrowedBooks(string curUserID)
         {
-            List<int> curUserBorrowedBookList = new List<int>();
+            List<string> curUserBorrowedBookList = new List<string>();
 
             connection.Open();
             command.Parameters.Clear();
@@ -113,7 +113,7 @@ namespace Library
 
             while (reader.Read())
             {
-                curUserBorrowedBookList.Add(int.Parse(reader["book_id"].ToString()));
+                curUserBorrowedBookList.Add(reader["book_id"].ToString());
             }
 
             reader.Close();
@@ -123,9 +123,9 @@ namespace Library
         }
 
         // 현재 USER가 RETURN한 BOOK들의 ID에 대한 정보 반환 -> BOOKID LIST로
-        public List<int> GetMemberReturnedBooks(string curUserID)
+        public List<string> GetMemberReturnedBooks(string curUserID)
         {
-            List<int> curUserReturnedBookList = new List<int>();
+            List<string> curUserReturnedBookList = new List<string>();
 
             connection.Open();
             command.Parameters.Clear();
@@ -137,7 +137,7 @@ namespace Library
 
             while (reader.Read())
             {
-                curUserReturnedBookList.Add(int.Parse(reader["book_id"].ToString()));
+                curUserReturnedBookList.Add(reader["book_id"].ToString());
             }
 
             reader.Close();

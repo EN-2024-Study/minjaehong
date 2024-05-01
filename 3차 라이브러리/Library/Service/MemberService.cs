@@ -34,15 +34,14 @@ namespace Library
             return memberDAO.CheckIfMemberExists(userID);
         }
 
-        public bool CheckIfValidLogin(List<string> loginInfo)
+        public bool CheckIfValidLogin(LoginDTO loginDTO)
         {
-            return memberDAO.CheckIfValidLogin(loginInfo);
+            return memberDAO.CheckIfValidLogin(loginDTO);
         }
 
         // USER가 진짜 빌린 책인지 확인
-        public bool CheckIfUserBorrowed(string curUserID, MiniDTO miniDTO)
+        public bool CheckIfUserBorrowed(string curUserID, string bookID)
         {
-            string bookID = miniDTO.GetBookID();
             if (historyDAO.CheckIfUserBorrowed(curUserID, bookID)) return true;
             else return false;
         }
@@ -60,13 +59,13 @@ namespace Library
         }
 
         // 로그인한 USER가 BORROW한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
-        public List<int> GetMemberBorrowedBooks(string curUserID)
+        public List<string> GetMemberBorrowedBooks(string curUserID)
         {
             return historyDAO.GetMemberBorrowedBooks(curUserID);
         }
 
         // 로그인한 USER가 RETURN한 BOOK들에 대한 정보 반환 -> BOOKID LIST로
-        public List<int> GetMemberReturnedBooks(string curUserID)
+        public List<string> GetMemberReturnedBooks(string curUserID)
         {
             return historyDAO.GetMemberReturnedBooks(curUserID);
         }
@@ -122,10 +121,8 @@ namespace Library
         // 여기서 MemberDAO 호출 절대 하지말기
         // 그래도 Service니까 조건은 따지고 호출해줘야함
         // 그니까 조건만 따지고 memberDAO는 절대 호출하지말고 historyDAO로 모든 상황 해결하기
-        public bool UpdateBorrow(string curUserID, MiniDTO miniDTO)
+        public bool UpdateBorrow(string curUserID, string bookID)
         {
-            string bookID = miniDTO.GetBookID();
-            
             bool isBorrowed = historyDAO.CheckIfUserBorrowed(curUserID, bookID);
 
             // 이미 빌린 책이면 대여불가
@@ -142,10 +139,8 @@ namespace Library
         // 여기서 MemberDAO 호출 절대 하지말기
         // 그래도 Service니까 조건은 따지고 호출해줘야함
         // 그니까 조건만 따지고 memberDAO는 절대 호출하지말고 historyDAO로 모든 상황 해결하기
-        public bool UpdateReturned(string curUserID, MiniDTO miniDTO)
+        public bool UpdateReturned(string curUserID, string bookID)
         {
-            string bookID = miniDTO.GetBookID();
-            
             bool isBorrowed = historyDAO.CheckIfUserBorrowed(curUserID, bookID);
 
             // 빌린 책이 아니면 반납 불가

@@ -28,14 +28,14 @@ namespace Library
             mainView = new MainView();
         }
 
-        void RunManagerMode()
+        private void RunManagerMode()
         {
             // MANAGERMODE이면 별로 할게 없기 때문에
             // ID PW 확인만 하고 managercontroller를 여기서 바로 Run해줘도 됨
-            List<string> loginInfo = mainView.ManagerLoginForm();
+            LoginDTO loginDTO = mainView.ManagerLoginForm();
 
-            string inputID = loginInfo[0];
-            string inputPW = loginInfo[1];
+            string inputID = loginDTO.GetID();
+            string inputPW = loginDTO.GetPW();
 
             // ID PW 이 둘 다 맞으면
             if (LibraryApp.managerID == inputID)

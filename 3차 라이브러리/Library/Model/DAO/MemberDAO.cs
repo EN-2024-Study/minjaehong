@@ -53,10 +53,10 @@ namespace Library
         }
 
         // ID PW 유효성 검사
-        public bool CheckIfValidLogin(List<string> loginInfo)
+        public bool CheckIfValidLogin(LoginDTO loginDTO)
         {
-            string userID = loginInfo[0];
-            string userPW = loginInfo[1];
+            string userID = loginDTO.GetID();
+            string userPW = loginDTO.GetPW();
 
             connection.Open();
             command.Parameters.Clear();

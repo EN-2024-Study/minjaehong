@@ -25,11 +25,11 @@ namespace Library
 
         private void UserLogin()
         {
-            List<string> loginInfo = userFrontView.UserLoginForm();
-            string curUserID = loginInfo[0];
+            LoginDTO loginDTO = userFrontView.UserLoginForm();
+            string curUserID = loginDTO.GetID();
 
             // ID가 존재를 하고 && ID PW 이 둘 다 맞으면
-            if (memberService.CheckIfMemberExists(curUserID) && memberService.CheckIfValidLogin(loginInfo))
+            if (memberService.CheckIfMemberExists(curUserID) && memberService.CheckIfValidLogin(loginDTO))
             {
                 Logger.recordLog(DateTime.Now, curUserID, "LOGIN SUCCESS");
 
@@ -49,20 +49,19 @@ namespace Library
         {
             bool isCreateAccountSuccessful = false;
 
-            List<string> dataFromView = userFrontView.UserCreateAccountForm();
+            MemberDTO newMemberDTO = userFrontView.UserCreateAccountForm();
 
-            MemberDTO newMember = new MemberDTO(dataFromView);
-            isCreateAccountSuccessful = memberService.AddNewMember(newMember);
+            isCreateAccountSuccessful = memberService.AddNewMember(newMemberDTO);
 
             if (isCreateAccountSuccessful)
             {
-                Logger.recordLog(DateTime.Now, newMember.GetId(), "CREATE ACCOUNT SUCCESS", "");
+                Logger.recordLog(DateTime.Now, newMemberDTO.GetId(), "CREATE ACCOUNT SUCCESS", "");
                 
                 CommonView.RuntimeMessageForm("NEW ACCOUNT IS CREATED!");
             }
             else
             {
-                Logger.recordLog(DateTime.Now, newMember.GetId(), "CREATE ACCOUNT FAIL", "ALREADY EXISTING ID");
+                Logger.recordLog(DateTime.Now, newMemberDTO.GetId(), "CREATE ACCOUNT FAIL", "ALREADY EXISTING ID");
 
                 CommonView.RuntimeMessageForm("THIS ID ALREADY EXISTS!");
             }

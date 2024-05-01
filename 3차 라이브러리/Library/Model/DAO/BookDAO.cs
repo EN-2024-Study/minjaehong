@@ -10,7 +10,7 @@ namespace Library
     class BookDAO
     {
         // CRUD해서 받을 것들을 Dictionary로 저장
-        private Dictionary<int, BookDTO> bookDB;
+        private Dictionary<string, BookDTO> bookDB;
 
         private string connectionString;
         private MySqlConnection connection;
@@ -20,7 +20,7 @@ namespace Library
 
         private BookDAO()
         {
-            bookDB = new Dictionary<int, BookDTO>();
+            bookDB = new Dictionary<string, BookDTO>();
 
             connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
             connection = new MySqlConnection(connectionString);
@@ -56,7 +56,7 @@ namespace Library
 
         //================================= CHECK QUERY =================================//
 
-        public bool CheckIfBookExists(int bookID)
+        public bool CheckIfBookExists(string bookID)
         {
             connection.Open();
             command.Parameters.Clear();
@@ -71,7 +71,7 @@ namespace Library
             return exists;
         }
 
-        public bool CheckIfBookAvailable(int bookID)
+        public bool CheckIfBookAvailable(string bookID)
         {
             connection.Open();
             command.Parameters.Clear();
@@ -85,7 +85,7 @@ namespace Library
             return exists;
         }
 
-        public bool CheckIfBookRequested(int bookID)
+        public bool CheckIfBookRequested(string bookID)
         {
             connection.Open();
             command.Parameters.Clear();
@@ -105,7 +105,7 @@ namespace Library
         // 이건 returnedBooks 에서만 필요함
         // returned에서는 삭제된 것들도 다 보여줘야하기 때문임
         // "SELECT * FROM bookDB WHERE deleted = FALSE";
-        public Dictionary<int, BookDTO> GetAllBooks()
+        public Dictionary<string, BookDTO> GetAllBooks()
         {
             bookDB.Clear();
 
@@ -118,7 +118,8 @@ namespace Library
             while (reader.Read())
             {
                 BookDTO book = new BookDTO();
-                book.SetId(int.Parse(reader["id"].ToString()));
+
+                book.SetId(reader["id"].ToString());
                 book.SetName(reader["name"].ToString());
                 book.SetAuthor(reader["author"].ToString());
                 book.SetPublisher(reader["publisher"].ToString());
@@ -137,7 +138,7 @@ namespace Library
             return bookDB;
         }
 
-        public Dictionary<int, BookDTO> GetAvailableBooks()
+        public Dictionary<string, BookDTO> GetAvailableBooks()
         {
             bookDB.Clear();
 
@@ -150,7 +151,7 @@ namespace Library
             while (reader.Read())
             {
                 BookDTO book = new BookDTO();
-                book.SetId(int.Parse(reader["id"].ToString()));
+                book.SetId(reader["id"].ToString());
                 book.SetName(reader["name"].ToString());
                 book.SetAuthor(reader["author"].ToString());
                 book.SetPublisher(reader["publisher"].ToString());
@@ -169,7 +170,7 @@ namespace Library
             return bookDB;
         }
 
-        public Dictionary<int,BookDTO> GetRequestedBooks()
+        public Dictionary<string,BookDTO> GetRequestedBooks()
         {
             bookDB.Clear();
 
@@ -182,7 +183,7 @@ namespace Library
             while (reader.Read())
             {
                 BookDTO book = new BookDTO();
-                book.SetId(int.Parse(reader["id"].ToString()));
+                book.SetId(reader["id"].ToString());
                 book.SetName(reader["name"].ToString());
                 book.SetAuthor(reader["author"].ToString());
                 book.SetPublisher(reader["publisher"].ToString());
@@ -202,7 +203,7 @@ namespace Library
         }
 
         // 특정 책만 가져옴
-        public BookDTO GetBookByID(int bookID)
+        public BookDTO GetBookByID(string bookID)
         {
             bookDB.Clear();
             bookDB = GetAllBooks();
@@ -235,7 +236,7 @@ namespace Library
 
         // 실제로 delete 하는게 아니라 deleted 값만 TRUE로 바꿔줌
         // 실제로 delete하면 반납내역에서 못띄우는거 방지하기 위해
-        public bool Delete(int deletingBookID)
+        public bool Delete(string deletingBookID)
         {
             connection.Open();
             command.Parameters.Clear();
@@ -249,7 +250,7 @@ namespace Library
             return true;
         }
 
-        public void Update(int updatingBookID, BookDTO book)
+        public void Update(string updatingBookID, BookDTO book)
         {
             connection.Open();
             command.Parameters.Clear();
@@ -268,7 +269,7 @@ namespace Library
             connection.Close();
         }
 
-        public void UpdateStock(int bookID, string updatedStock)
+        public void UpdateStock(string bookID, string updatedStock)
         {
             connection.Open();
             command.Parameters.Clear();
@@ -281,7 +282,7 @@ namespace Library
             connection.Close();
         }
 
-        public void ApplyRequested(int bookID)
+        public void ApplyRequested(string bookID)
         {
             connection.Open();
             command.Parameters.Clear();

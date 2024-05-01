@@ -48,16 +48,17 @@ namespace Library
         }
 
         // 2. 도서 대여
-        public List<string> BorrowBookForm(List<BookDTO> bookList)
+        public string BorrowBookForm(List<BookDTO> bookList)
         {
             Console.Clear();
 
             MyConsole.PrintHeader("[LETS BORROW A BOOK]");
             CommonView.PrintAllBooks(bookList);
-            // ID NUM 입력받아 controller한테 전달
+
+            // borrow 할 bookID 입력받고 controller한테 전달
             List<string> borrowInfo = MyConsole.GetUserInputs(borrowBookArr, MyConsole.MENU_STARTX, Console.CursorTop+2, ExceptionHandler.borrowBookExceptionArr);
             
-            return borrowInfo;
+            return borrowInfo[0];
         }
 
         // 3. 도서 대여 확인
@@ -70,14 +71,16 @@ namespace Library
         }
 
         // 4. 도서 반납
-        public List<string> ReturnBookForm()
+        public string ReturnBookForm()
         {
             Console.Clear();
 
             MyConsole.PrintHeader("[LETS RETURN BOOK]");
             
-            // ID NUM 입력받아 controller한테 전달
-            return MyConsole.GetUserInputs(returnBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.returnBookExceptionArr);
+            // Return 할 bookID 입력받고 controller한테 전달
+            List<string> returnInfo = MyConsole.GetUserInputs(returnBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.returnBookExceptionArr);
+
+            return returnInfo[0];
         }
 
         // 5. 도서 반납 확인
@@ -90,7 +93,7 @@ namespace Library
         }
 
         // 6. 정보 수정
-        public List<string> UpdateMyInfoForm()
+        public MemberDTO UpdateMyInfoForm()
         {
             Console.Clear();
 
@@ -102,7 +105,8 @@ namespace Library
             
             // ID는 입력받는게 아니므로 그냥 0번에 추가해서 ID PW NAME AGE PHONENUM 받은 것처럼 만들기
             updatedUserInfo.Insert(0, "");
-            return updatedUserInfo;
+
+            return new MemberDTO(updatedUserInfo);
         }
 
         public void PrintAllBooksForm(List<BookDTO> allBooks)

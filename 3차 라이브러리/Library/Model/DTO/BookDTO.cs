@@ -8,7 +8,7 @@ namespace Library
 {
     class BookDTO
     {
-        private int id; // DB에서 알아서 넣어줌
+        private string id; // DB에서 알아서 넣어줌
 
         private string name; // dataFromView[0]
         private string author; // dataFromView[1]
@@ -49,11 +49,12 @@ namespace Library
             this.inStock = dataFromView[4];
             this.date = dataFromView[5];
             this.isbn = dataFromView[6];
+
             this.deleted = false;
             this.requested = false;
         }
 
-        public void SetId(int keyId) { this.id = keyId; } // DB에서 알아서 넣어줌
+        public void SetId(string id) { this.id = id; } // DB에서 알아서 넣어줌
         public void SetName(string name) { this.name = name; }
         public void SetAuthor(string author) { this.author = author; }
         public void SetPublisher(string publisher) { this.publisher = publisher; }
@@ -64,7 +65,7 @@ namespace Library
         public void SetDeleted(bool deleted) { this.deleted = deleted; }
         public void SetRequested(bool requested) { this.requested = requested; }
 
-        public int GetId() { return id; }
+        public string GetId() { return id; }
         public string GetName() { return name; }
         public string GetAuthor() { return author; }
         public string GetPublisher() { return publisher; }

@@ -49,8 +49,8 @@ namespace Library
 
         private void AddBook()
         {
-            List<string> newBookInfo = managerView.AddBookForm();
-            BookDTO newBook = new BookDTO(newBookInfo);
+            BookDTO newBook = managerView.AddBookForm();
+
             bookService.AddNewBook(newBook);
 
             Logger.recordLog(DateTime.Now, "manager", "ADD BOOK SUCCESS", newBook.GetName());
@@ -60,12 +60,12 @@ namespace Library
 
         private void DeleteBook()
         {
-            int deletingBookID = managerView.DeleteBookForm();
+            string deletingBookID = managerView.DeleteBookForm();
             bool executionSuccess = bookService.DeleteBook(deletingBookID);
 
             if (executionSuccess)
             {
-                Logger.recordLog(DateTime.Now, "manager", "DELETE BOOK SUCCESS", deletingBookID.ToString());
+                Logger.recordLog(DateTime.Now, "manager", "DELETE BOOK SUCCESS", deletingBookID);
                 
                 CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY DELETED!");
             }
@@ -79,19 +79,17 @@ namespace Library
 
         private void UpdateBook()
         {
-            int updatingBookID = managerView.UpdateBookSelectForm();
+            string updatingBookID = managerView.UpdateBookSelectForm();
 
             // BOOK이 존재하면 수정 폼으로 이동
             if (bookService.CheckIfBookExists(updatingBookID))
             {
-                List<string> updatedBookInfo = managerView.UpdateBookForm();
+                BookDTO updatingBookDTO = managerView.UpdateBookForm();
+                updatingBookDTO.SetId(updatingBookID);
 
-                BookDTO updatedBook = new BookDTO(updatedBookInfo);
-                updatedBook.SetId(updatingBookID);
+                bookService.UpdateBook(updatingBookID, updatingBookDTO);
 
-                bookService.UpdateBook(updatingBookID, updatedBook);
-
-                Logger.recordLog(DateTime.Now, "manager", "UPDATE BOOK SUCCESS", updatingBookID.ToString());
+                Logger.recordLog(DateTime.Now, "manager", "UPDATE BOOK SUCCESS", updatingBookID);
 
                 CommonView.RuntimeMessageForm("BOOK IS SUCCESSFULLY UPDATED!");
             }
@@ -135,7 +133,7 @@ namespace Library
             if (requestedBooks.Count() == 0) return;
 
             // 승인할 책 입력받기
-            int applyingBookID = managerView.ApplyRequestedBookSelectForm();
+            string applyingBookID = managerView.ApplyRequestedBookSelectForm();
 
             // 승인 함 시도해보기
             bool executionSuccess = bookService.ApplyRequested(applyingBookID);
@@ -143,7 +141,7 @@ namespace Library
             // 승인 시도 결과 확인
             if (executionSuccess)
             {
-                Logger.recordLog(DateTime.Now, "manager", "APPLY REQUEST BOOK SUCCESS", applyingBookID.ToString());
+                Logger.recordLog(DateTime.Now, "manager", "APPLY REQUEST BOOK SUCCESS", applyingBookID);
 
                 CommonView.RuntimeMessageForm("REQUESTED BOOK IS SUCCESSFULLY APPLIED!");
             }

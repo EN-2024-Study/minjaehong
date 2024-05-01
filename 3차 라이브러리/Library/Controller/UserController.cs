@@ -59,15 +59,12 @@ namespace Library
             List<BookDTO> bookList = bookService.GetAvailableBooks();
 
             // BORROW할 책에 대한 정보를 userView에서 받아오기
-            List<string> dataFromView = userView.BorrowBookForm(bookList);
-            // 책 정보를 MiniDTO에 담아주기
-            MiniDTO miniDTO = new MiniDTO(dataFromView);
+            string bookID = userView.BorrowBookForm(bookList);
 
             // 해당 책이 존재하면 bookService에 누가 빌린거 적용해주기
-            int bookID = int.Parse(miniDTO.GetBookID());
-
+            
             // 이미 빌린거면 대여불가
-            if(memberService.CheckIfUserBorrowed(curUserID, miniDTO))
+            if(memberService.CheckIfUserBorrowed(curUserID, bookID))
             {
                 Logger.recordLog(DateTime.Now, curUserID, "BORROW FAIL", "ALREADY BORROWED");
                 
@@ -79,8 +76,8 @@ namespace Library
             // 대여가능하면 대여
             if (bookService.CheckIfBookAvailable(bookID))
             {
-                bookService.UpdateBorrowed(miniDTO);
-                memberService.UpdateBorrow(curUserID, miniDTO);
+                bookService.UpdateBorrowed(bookID);
+                memberService.UpdateBorrow(curUserID, bookID);
 
                 Logger.recordLog(DateTime.Now, curUserID, "BORROW SUCCESS", bookID.ToString());
 
@@ -98,13 +95,13 @@ namespace Library
 
         private void CheckBorrow()
         {
-            List<int> curUserBorrowedBookIDs = memberService.GetMemberBorrowedBooks(curUserID);
+            List<string> curUserBorrowedBookIDs = memberService.GetMemberBorrowedBooks(curUserID);
             List<BookDTO> curUserBorrowedBooks = new List<BookDTO>();
 
             for (int i = 0; i < curUserBorrowedBookIDs.Count; i++)
             {
-                int curId = curUserBorrowedBookIDs[i];
-                curUserBorrowedBooks.Add(bookService.GetBookByID(curId));
+                string curBookID = curUserBorrowedBookIDs[i];
+                curUserBorrowedBooks.Add(bookService.GetBookByID(curBookID));
             }
 
             Logger.recordLog(DateTime.Now, curUserID, "CHECKED BORROW LIST");
@@ -115,17 +112,15 @@ namespace Library
         private void Return()
         {
             // RETURN할 책에 대한 정보를 userView에서 받아오기
-            List<string> dataFromView = userView.ReturnBookForm();
-            // 책 정보를 MiniDTO에 담아주기
-            MiniDTO miniDTO = new MiniDTO(dataFromView);
-
+            string bookID = userView.ReturnBookForm();
+            
             // 만약 진짜로 빌린거면 반납 적용해주기
-            if (memberService.CheckIfUserBorrowed(curUserID, miniDTO))
+            if (memberService.CheckIfUserBorrowed(curUserID, bookID))
             {
-                bookService.UpdateReturned(miniDTO);
-                memberService.UpdateReturned(curUserID, miniDTO);
+                bookService.UpdateReturned(bookID);
+                memberService.UpdateReturned(curUserID, bookID);
 
-                Logger.recordLog(DateTime.Now, curUserID, "RETURN SUCCESS", miniDTO.GetBookID());
+                Logger.recordLog(DateTime.Now, curUserID, "RETURN SUCCESS", bookID);
                 
                 CommonView.RuntimeMessageForm("BOOK RETURN SUCCESSFUL!");
             }
@@ -133,19 +128,19 @@ namespace Library
             {
                 Logger.recordLog(DateTime.Now, curUserID, "RETURN FAIL", "DIDNT BORROW");
 
-                CommonView.RuntimeMessageForm("YOU DIDNT BORROW ID " + miniDTO.GetBookID() + " BOOK!");
+                CommonView.RuntimeMessageForm("YOU DIDNT BORROW ID " + bookID + " BOOK!");
             }
         }
 
         private void CheckReturn()
         {
-            List<int> curUserReturnedBookIDs = memberService.GetMemberReturnedBooks(curUserID);
+            List<string> curUserReturnedBookIDs = memberService.GetMemberReturnedBooks(curUserID);
             List<BookDTO> curUserReturnedBooks = new List<BookDTO>();
 
             for (int i = 0; i < curUserReturnedBookIDs.Count; i++)
             {
-                int curId = curUserReturnedBookIDs[i];
-                curUserReturnedBooks.Add(bookService.GetBookByID(curId));
+                string curBookID = curUserReturnedBookIDs[i];
+                curUserReturnedBooks.Add(bookService.GetBookByID(curBookID));
             }
 
             Logger.recordLog(DateTime.Now, curUserID, "CHECKED RETURN LIST");
@@ -155,13 +150,11 @@ namespace Library
 
         private void UpdateInfo()
         {
-            // update info 받아오기
-            List<string> updatedUserInfo = userView.UpdateMyInfoForm();
+            // Update된 member에 대한 정보 받기
+            MemberDTO memberDTO = userView.UpdateMyInfoForm();
+            memberDTO.SetId(curUserID);
 
-            MemberDTO updatedMember = new MemberDTO(updatedUserInfo);
-            updatedMember.SetId(curUserID);
-
-            memberService.UpdateMember(curUserID, updatedMember);
+            memberService.UpdateMember(curUserID, memberDTO);
 
             Logger.recordLog(DateTime.Now, curUserID, "UPDATED INFO");
 

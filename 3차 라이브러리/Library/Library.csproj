@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Querys.cs" />
+    <Compile Include="Model\DTO\LoginDTO.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Controller\RequestController.cs" />
     <Compile Include="Controller\UserFrontController.cs" />

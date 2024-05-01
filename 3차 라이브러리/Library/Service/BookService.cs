@@ -33,29 +33,29 @@ namespace Library
 
         //======================== CHECK FUNCTIONS BEFORE CRUDs ==========================//
 
-        public bool CheckIfBookExists(int bookID)
+        public bool CheckIfBookExists(string bookID)
         {
             return bookDAO.CheckIfBookExists(bookID);
         }
 
-        public bool CheckIfBookAvailable(int bookID)
+        public bool CheckIfBookAvailable(string bookID)
         {
             return bookDAO.CheckIfBookAvailable(bookID);
         }
 
-        public bool CheckIfBookRequested(int bookID)
+        public bool CheckIfBookRequested(string bookID)
         {
             return bookDAO.CheckIfBookRequested(bookID);
         }
 
-        public bool CheckIfBookIsBorrowed(int bookID)
+        public bool CheckIfBookIsBorrowed(string bookID)
         {
             return historyDAO.CheckIfBookIsBorrowed(bookID);
         }
 
         //============================= SIMPLE GET FUNCTIONS =============================//
         
-        public BookDTO GetBookByID(int bookID)
+        public BookDTO GetBookByID(string bookID)
         {
             return bookDAO.GetBookByID(bookID);
         }
@@ -87,9 +87,9 @@ namespace Library
             List<BookDTO> retList = new List<BookDTO>();
 
             // bookDAO에서 bookDB 가져오기
-            Dictionary<int, BookDTO> bookDB = bookDAO.GetAvailableBooks();
+            Dictionary<string, BookDTO> bookDB = bookDAO.GetAvailableBooks();
 
-            foreach (int curKey in bookDB.Keys)
+            foreach (string curKey in bookDB.Keys)
             {
                 // 삭제된 책이면 continue
                 if (bookDB[curKey].GetDeleted()) continue;
@@ -111,7 +111,7 @@ namespace Library
             bookDAO.Add(newBook);
         }
 
-        public bool DeleteBook(int deletingBookID)
+        public bool DeleteBook(string deletingBookID)
         {
             // BOOK 존재 확인(bookDB) + BOOK 빌린 사람 없는지 확인(historyDB) 후 진행
             if (CheckIfBookExists(deletingBookID) && !CheckIfBookIsBorrowed(deletingBookID))
@@ -124,7 +124,7 @@ namespace Library
 
         // 얘는 책 존재성 확인 후에 호출되서 안에서 예외처리 안해줘도 됨
         // User가 입력한 새 책 정보가 들어옴
-        public bool UpdateBook(int updatingBookID, BookDTO updatingBook)
+        public bool UpdateBook(string updatingBookID, BookDTO updatingBook)
         {
             // 만약 해당 책이 존재하면
             if (CheckIfBookExists(updatingBookID))
@@ -146,17 +146,14 @@ namespace Library
             return false;
         }
 
-        public bool UpdateBorrowed(MiniDTO miniDTO)
+        public bool UpdateBorrowed(string bookID)
         {
-            int bookID = int.Parse(miniDTO.GetBookID());
-            int borrowNum = int.Parse(miniDTO.GetQuantity());
-
             // BOOK이 존재하고 빌릴 수 있는만큼 QUANTITY가 남아있으면
             if (CheckIfBookExists(bookID))
             {
                 // 남은 수량 업뎃
                 int curNum = int.Parse(GetBookByID(bookID).GetInStock());
-                int updatedStock = curNum - borrowNum;
+                int updatedStock = curNum - 1;
 
                 bookDAO.UpdateStock(bookID, updatedStock.ToString());
 
@@ -165,18 +162,13 @@ namespace Library
             return false;
         }
 
-        public bool UpdateReturned(MiniDTO miniDTO)
+        public bool UpdateReturned(string bookID)
         {
-            // string으로 받아왔으니 int로 형변환 시키기 -> bookID는 int니까
-            int bookID = int.Parse(miniDTO.GetBookID());
-            // 계산을 위해 return 책 수 도 int로 형변환 시키기
-            int returnedNum = int.Parse(miniDTO.GetQuantity());
-
             if (CheckIfBookExists(bookID))
             {
                 // 남은 수량 업뎃
                 int curNum = int.Parse(GetBookByID(bookID).GetInStock());
-                int updatedStock = curNum + returnedNum;
+                int updatedStock = curNum + 1;
 
                 bookDAO.UpdateStock(bookID, updatedStock.ToString());
                 return true;
@@ -184,7 +176,7 @@ namespace Library
             return false;
         }
 
-        public bool ApplyRequested(int applyingBookID)
+        public bool ApplyRequested(string applyingBookID)
         {
             if (CheckIfBookRequested(applyingBookID))
             {

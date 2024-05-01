@@ -25,13 +25,15 @@ namespace Library
         }
 
         // MANAGER LOGIN
-        public List<string> ManagerLoginForm()
+        public LoginDTO ManagerLoginForm()
         {
             Console.Clear();
 
             MyConsole.PrintHeader("[MANAGER LOGIN]");
             
-            return MyConsole.GetUserInputs(managerLoginArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.managerLoginExceptionArr);
+            List<string> managerLoginInputs = MyConsole.GetUserInputs(managerLoginArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.managerLoginExceptionArr);
+
+            return new LoginDTO(managerLoginInputs);
         }
     }
 }
