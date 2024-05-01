@@ -79,7 +79,7 @@ namespace Library
 
                 switch (userMode)
                 {
-                    case UserFrontMode.GOBACK:
+                    case UserFrontMode.GO_BACK:
                         isUserFrontRunning = false;
                         break;
 

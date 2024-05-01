@@ -7,25 +7,25 @@ namespace Library
     class ManagerController
     {
         // ManagerController와 연결되어야하는 애들
-        private RequestController requestController;
-
         private ManagerView managerView;
 
         private BookService bookService;
         private MemberService memberService;
+        private NaverAPIService naverAPIService;
 
         private Logger logger;
 
         // 생성자로 필요한 MVC 연결
         public ManagerController(BookService bookService, MemberService memberService) {
-            this.requestController = new RequestController();
-
-            this.managerView = new ManagerView();
+            
+            managerView = new ManagerView();
 
             this.bookService = bookService; 
             this.memberService = memberService;
+            
+            naverAPIService = NaverAPIService.GetInstance();
 
-            this.logger = new Logger();
+            logger = new Logger();
         }
 
         private void PrintAllBooks()
@@ -113,7 +113,14 @@ namespace Library
         private void NaverSearch()
         {
             // NaverAPI 사용해서 처리하는 작업 자체를 RequestController 한테 위임
-            requestController.SearchBookByNaverAPI();
+            RequestDTO requestDTO = CommonView.RequestBookForm();
+
+            // Service 호출해서 검색된 책 받기
+            List<BookDTO> searchedBooks = naverAPIService.GetBooksByNaverAPI(requestDTO);
+
+            // API로 받은 책들 출력하기
+            CommonView.PrintAllBooks(searchedBooks);
+            MyConsole.WaitForBackSpace();
         }
 
         private void StartLogManagement()
@@ -128,7 +135,7 @@ namespace Library
             // MEMBER들이 요청한 책들 일단 가져오기
             List<BookDTO> requestedBooks = bookService.GetRequestedBooks();
             // MEMBER들이 요청한 책 보여주기
-            managerView.PrintAllBooksForm(requestedBooks);
+            CommonView.PrintAllBooks(requestedBooks);
 
             if (requestedBooks.Count() == 0) return;
 
@@ -188,11 +195,8 @@ namespace Library
                         UpdateBook();
                         break;
 
-                    case ManagerMenuState.MEMBERMANAGEMENT:
+                    case ManagerMenuState.PRINTALLMEMBER:
                         PrintAllMembers();
-                        break;
-                    
-                    case ManagerMenuState.BORROWLIST:
                         break;
                     
                     case ManagerMenuState.NAVERSEARCH:
@@ -204,7 +208,7 @@ namespace Library
                         StartLogManagement();
                         break;
                     
-                    case ManagerMenuState.APPLYREQUESTEDBOOK:
+                    case ManagerMenuState.APPLYREQUESTED:
                         ApplyRequestedBook();
                         break;
                     

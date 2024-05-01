@@ -102,5 +102,19 @@ namespace Library
             Console.CursorLeft = BOOK_STARTX;
             Console.WriteLine("────────────────────────────────");
         }
+
+        //네이버 검색은 우선 공용으로 사용하는거니까 여따 두자 일단은
+        public static RequestDTO RequestBookForm()
+        {
+            string[] searchByNaverAPIArr = { "1. NAME :", "2. NUMBER :" };
+
+            Console.Clear();
+
+            MyConsole.PrintHeader("[REQUEST BY NAVER API]");
+
+            List<string> requestInfo = MyConsole.GetUserInputs(searchByNaverAPIArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.searchByNaverAPIExceptionArr);
+
+            return new RequestDTO(requestInfo);
+        }
     }
 }

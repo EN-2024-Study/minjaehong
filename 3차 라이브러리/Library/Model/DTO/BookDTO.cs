@@ -10,6 +10,7 @@ namespace Library
     {
         private string id; // DB에서 알아서 넣어줌
 
+        // 이거 나중에 Title로 바꾸기
         private string name; // dataFromView[0]
         private string author; // dataFromView[1]
         private string publisher; // dataFromView[2]

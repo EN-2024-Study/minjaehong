@@ -150,19 +150,19 @@ namespace Library
 
                 switch (mode)
                 {
-                    case LoggerMenuState.DELETE_LOG:
+                    case LoggerMenuState.DELETELOG:
                         DeleteCertainLog();
                         break;
 
-                    case LoggerMenuState.SAVE_LOG:
+                    case LoggerMenuState.SAVELOG:
                         SaveLogFile();
                         break;
 
-                    case LoggerMenuState.DELETE_LOGFILE:
+                    case LoggerMenuState.DELETELOGFILE:
                         DeleteLogFile();
                         break;
 
-                    case LoggerMenuState.RESET_LOG:
+                    case LoggerMenuState.RESETLOG:
                         ResetLog();
                         break;
 

@@ -39,8 +39,8 @@
   <ItemGroup>
     <Compile Include="Constants\Querys.cs" />
     <Compile Include="Model\DTO\LoginDTO.cs" />
+    <Compile Include="Model\DTO\RequestDTO.cs" />
     <Compile Include="Utility\Logger.cs" />
-    <Compile Include="Controller\RequestController.cs" />
     <Compile Include="Controller\UserFrontController.cs" />
     <Compile Include="Model\DTO\BookDTO.cs" />
     <Compile Include="Controller\MainController.cs" />
@@ -54,7 +54,6 @@
     <Compile Include="Model\DAO\HistoryDAO.cs" />
     <Compile Include="Model\DAO\LogDAO.cs" />
     <Compile Include="Model\DAO\MemberDAO.cs" />
-    <Compile Include="Model\DTO\MiniDTO.cs" />
     <Compile Include="Service\BookService.cs" />
     <Compile Include="Service\MemberService.cs" />
     <Compile Include="Service\NaverAPIService.cs" />
@@ -64,7 +63,6 @@
     <Compile Include="View\MainView.cs" />
     <Compile Include="View\ManagerView.cs" />
     <Compile Include="View\CommonView.cs" />
-    <Compile Include="View\RequestView.cs" />
     <Compile Include="View\UserFrontView.cs" />
     <Compile Include="View\UserView.cs" />
   </ItemGroup>

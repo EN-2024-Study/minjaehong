@@ -17,29 +17,42 @@ namespace Library
 
     class NaverAPIService
     {
-        public string clientID = "LzrVM4JtNzEjcjhnf21x";
-        public string clientSecretID = "wHE6dYhDob";
+        private static NaverAPIService instance;
+
+        private string clientID = "LzrVM4JtNzEjcjhnf21x";
+        private string clientSecretID = "wHE6dYhDob";
 
         private List<BookDTO> naverBookList = new List<BookDTO>();
 
         private BookDAO bookDAO;
 
         public NaverAPIService() {
-            bookDAO = BookDAO.GetInstance();
+            this.bookDAO = BookDAO.GetInstance();
+        }
+
+        public static NaverAPIService GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new NaverAPIService();
+            }
+            return instance;
         }
 
         // 이걸 NaverDAO로 뺄까?
         // API 사용하는 함수들도 모두 DAO 쪽임???
         // 민감한 정보를 사용하는건데 이걸 service에 이대로 둬도 됨??
 
-        public List<BookDTO> GetBooksByNaverAPI(string bookTitle, string num)
+        public List<BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)
         {
             // List<BookDTO> 초기화
             naverBookList.Clear();
 
-            string sort = "sim";
-            string query = string.Format("?query={0}&display={1}&sort={2}", bookTitle, num, sort);
+            string bookTitle = requestDTO.GetTitle();
+            string howMany = requestDTO.GetHowMany();
 
+            string sort = "sim";
+            string query = string.Format("?query={0}&display={1}&sort={2}", bookTitle, howMany, sort);
             string apiURL = "https://openapi.naver.com/v1/search/book.json";
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiURL + query);
@@ -58,7 +71,7 @@ namespace Library
             // JObject = newtonjson에서 제공하는 Json 객체 담는 클래스
             JObject json = JObject.Parse(text);
 
-            for (int i = 0; i < int.Parse(num); i++)
+            for (int i = 0; i < int.Parse(howMany); i++)
             {
                 string title = json["items"][i]["title"].ToString();
                 title = title.Replace("</b>", "").Replace("<b>", "");
@@ -97,7 +110,6 @@ namespace Library
         {
             for (int i = 0; i < searchedBooks.Count; i++)
             {
-                // GetName GetTitle로 바꾸기
                 if (searchedBooks[i].GetName() == requestedBookTitle)
                 {
                     return true;
@@ -117,7 +129,6 @@ namespace Library
                     bookDAO.Add(searchedBooks[i]);
                 }
             }
-
             return true;
         }
     }

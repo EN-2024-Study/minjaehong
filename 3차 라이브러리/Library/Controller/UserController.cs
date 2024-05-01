@@ -12,15 +12,14 @@ namespace Library
         
         private MemberService memberService;
         private BookService bookService;
-
-        private RequestController requestController; // 도서 요청 위임
+        private NaverAPIService naverAPIService;
 
         public UserController(BookService bookService, MemberService memberService)
         {
             this.bookService = bookService;
             this.memberService = memberService;
-
-            this.requestController = new RequestController();
+            
+            naverAPIService = NaverAPIService.GetInstance();
 
             userView = new UserView();
         }
@@ -148,7 +147,7 @@ namespace Library
             userView.CheckReturnedForm(curUserReturnedBooks);
         }
 
-        private void UpdateInfo()
+        private void UpdateMyInfo()
         {
             // Update된 member에 대한 정보 받기
             MemberDTO memberDTO = userView.UpdateMyInfoForm();
@@ -183,10 +182,33 @@ namespace Library
             }
         }
 
-        private void RequestBookByNaverAPI()
+        private bool RequestBookByNaverAPI()
         {
-            // NaverAPI 사용해서 처리하는 작업 자체를 RequestController 한테 위임
-            requestController.RequestBookByNaverAPI();
+            RequestDTO requestDTO = CommonView.RequestBookForm();
+
+            // Service 호출해서 검색된 책 받기
+            List<BookDTO> searchedBooks = naverAPIService.GetBooksByNaverAPI(requestDTO);
+
+            // API로 받은 책들 출력하기
+            CommonView.PrintAllBooks(searchedBooks);
+
+            List<string> requestedBook = userView.RequestBookTitleForm();
+
+            string requestedBookTitle = requestedBook[0];
+
+            bool exists = naverAPIService.CheckIfRequestBookExistsInSearchedBooks(requestedBookTitle, searchedBooks);
+
+            if (exists)
+            {
+                naverAPIService.AddRequestedBook(requestedBookTitle, searchedBooks);
+                CommonView.RuntimeMessageForm("BOOK REQUEST SUCCESS!");
+                return true;
+            }
+            else
+            {
+                CommonView.RuntimeMessageForm("BOOK REQUEST FAIL!");
+                return false;
+            }
         }
 
         public void RunUserMode()
@@ -209,7 +231,7 @@ namespace Library
                         PrintAllBook();
                         break;
 
-                    case UserMenuState.FIND:
+                    case UserMenuState.FINDBOOK:
                         Find();
                         break;
 
@@ -229,8 +251,8 @@ namespace Library
                         CheckReturn();
                         break;
                     
-                    case UserMenuState.UPDATEINFO:
-                        UpdateInfo();
+                    case UserMenuState.UPDATEMYINFO:
+                        UpdateMyInfo();
                         break;
                     
                     case UserMenuState.DELETEMYSELF:
@@ -241,7 +263,7 @@ namespace Library
                         RequestBookByNaverAPI();
                         break;
                     
-                    case UserMenuState.REQUESTED:
+                    case UserMenuState.PRINTREQUESTED:
                         break;
                 }
             }
