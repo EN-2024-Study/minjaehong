@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Library
 {
-    class UserController
+    partial class UserController
     {
         private string curUserID;
 
@@ -12,14 +12,14 @@ namespace Library
         
         private MemberService memberService;
         private BookService bookService;
-        private NaverAPIService naverAPIService;
+        private NaverService naverService;
 
         public UserController(BookService bookService, MemberService memberService)
         {
             this.bookService = bookService;
             this.memberService = memberService;
             
-            naverAPIService = NaverAPIService.GetInstance();
+            naverService = NaverService.GetInstance();
 
             userView = new UserView();
         }
@@ -186,21 +186,18 @@ namespace Library
         {
             RequestDTO requestDTO = CommonView.RequestBookForm();
 
-            // Service 호출해서 검색된 책 받기
-            List<BookDTO> searchedBooks = naverAPIService.GetBooksByNaverAPI(requestDTO);
+            // naverservice 호출해서 검색된 책들 받기
+            Dictionary<string, BookDTO> searchedBooks = naverService.GetBooksByNaverAPI(requestDTO);
 
-            // API로 받은 책들 출력하기
-            CommonView.PrintAllBooks(searchedBooks);
+            // 받은 책들 일단 출력
+            CommonView.PrintAllBooks(searchedBooks.Values.ToList());
 
-            List<string> requestedBook = userView.RequestBookTitleForm();
+            // request 할 book title 받기
+            string requestedBookTitle = userView.RequestBookTitleForm();
 
-            string requestedBookTitle = requestedBook[0];
-
-            bool exists = naverAPIService.CheckIfRequestBookExistsInSearchedBooks(requestedBookTitle, searchedBooks);
-
-            if (exists)
+            if (searchedBooks.ContainsKey(requestedBookTitle))
             {
-                naverAPIService.AddRequestedBook(requestedBookTitle, searchedBooks);
+                bookService.AddNewBook(searchedBooks[requestedBookTitle]);
                 CommonView.RuntimeMessageForm("BOOK REQUEST SUCCESS!");
                 return true;
             }

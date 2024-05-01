@@ -14,28 +14,22 @@ namespace Library
         private string age;
         private string phoneNum;
 
-        //=================== CONSTRUCTOR =================//
-
         public MemberDTO() { }
 
         public MemberDTO(List<string> dataFromView)
         {
-            this.id = dataFromView[0];
-            this.pw = dataFromView[1];
-            this.name = dataFromView[2];
-            this.age = dataFromView[3];
-            this.phoneNum = dataFromView[4];
+            id = dataFromView[0];
+            pw = dataFromView[1];
+            name = dataFromView[2];
+            age = dataFromView[3];
+            phoneNum = dataFromView[4];
         }
-
-        //=================== GETTER =====================//
 
         public string GetId() { return id; }
         public string GetPw() { return pw; }
         public string GetName() { return name; }
         public string GetAge() { return age; }
         public string GetPhoneNum() { return phoneNum; }
-
-        //=================== SETTER =====================//
 
         public void SetId(string id) { this.id = id; }
         public void SetPw(string pw) { this.pw = pw; }

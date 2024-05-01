@@ -131,13 +131,13 @@ namespace Library
             MyConsole.WaitForBackSpace();
         }
 
-        public List<String> RequestBookTitleForm()
+        public string RequestBookTitleForm()
         {
             string[] requestByUserArr = { "BOOK TITLE :" };
 
             List<String> requestedInfo = MyConsole.GetUserInputs(requestByUserArr, MyConsole.MENU_STARTX, Console.CursorTop + 2, ExceptionHandler.requestByNaverAPIExceptionArr);
 
-            return requestedInfo;
+            return requestedInfo[0];
         }
     }
 }

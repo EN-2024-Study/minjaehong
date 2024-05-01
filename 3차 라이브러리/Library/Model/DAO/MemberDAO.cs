@@ -13,8 +13,6 @@ namespace Library
         private MySqlConnection connection;
         private MySqlCommand command;
 
-        //================== SINGLETON ===============//
-
         private static MemberDAO instance;
 
         private MemberDAO()

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Library
 {
@@ -13,18 +9,11 @@ namespace Library
 
         public RequestDTO(List<string> requestInfo)
         {
-            this.title = requestInfo[0];
-            this.howMany = requestInfo[1];
+            title = requestInfo[0];
+            howMany = requestInfo[1];
         }
 
-        public string GetTitle()
-        {
-            return title;
-        }
-
-        public string GetHowMany()
-        {
-            return howMany;
-        }
+        public string GetTitle() { return title; }
+        public string GetHowMany() { return howMany; }
     }
 }

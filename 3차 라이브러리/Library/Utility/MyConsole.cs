@@ -17,8 +17,8 @@ namespace Library
         public const int MENU_STARTX = 40; // MENU가 끝나야하는 X좌표
         public const int MENU_STARTY = 8; // MENU가 찍혀야하는 Y좌표
 
-        private const int BOOK_STARTX = 40;
-        private const int BOOK_STARTY = 8;
+        public const int BOOK_STARTX = 40;
+        public const int BOOK_STARTY = 8;
 
         private const int INSTRUCTION_X = 40; // INSTRUCTION START X
 

@@ -16,9 +16,9 @@ namespace Library
         
         public UserFrontController(BookService bookService, MemberService memberService)
         {
-            this.userController = new UserController(bookService, memberService);
+            userController = new UserController(bookService, memberService);
 
-            this.userFrontView = new UserFrontView();
+            userFrontView = new UserFrontView();
 
             this.memberService = memberService;
         }

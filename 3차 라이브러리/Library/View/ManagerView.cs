@@ -132,7 +132,33 @@ namespace Library
             Console.Clear();
 
             MyConsole.PrintHeader("[MEMBER INFO]");
-            CommonView.PrintAllMembers(memberList);
+
+            if (memberList.Count == 0)
+            {
+                MyConsole.PrintHeader("[NO RESULT]");
+            }
+
+            Console.SetCursorPosition(MyConsole.BOOK_STARTX, MyConsole.BOOK_STARTY);
+            for (int i = 0; i < memberList.Count; i++)
+            {
+                Console.WriteLine("");
+                Console.CursorLeft = MyConsole.BOOK_STARTX;
+                Console.WriteLine("────────────────────────────────");
+                Console.WriteLine("");
+                Console.CursorLeft = MyConsole.BOOK_STARTX;
+                Console.WriteLine("ID       : " + memberList[i].GetId());
+                Console.CursorLeft = MyConsole.BOOK_STARTX;
+                Console.WriteLine("PW       : " + memberList[i].GetPw());
+                Console.CursorLeft = MyConsole.BOOK_STARTX;
+                Console.WriteLine("NAME     : " + memberList[i].GetName());
+                Console.CursorLeft = MyConsole.BOOK_STARTX;
+                Console.WriteLine("AGE      : " + memberList[i].GetAge());
+                Console.CursorLeft = MyConsole.BOOK_STARTX;
+                Console.WriteLine("PHONENUM : " + memberList[i].GetPhoneNum());
+            }
+            Console.WriteLine("");
+            Console.CursorLeft = MyConsole.BOOK_STARTX;
+            Console.WriteLine("────────────────────────────────");
 
             MyConsole.WaitForBackSpace();
         }

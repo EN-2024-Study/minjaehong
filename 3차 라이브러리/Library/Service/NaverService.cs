@@ -7,34 +7,20 @@ using Newtonsoft.Json.Linq;
 
 namespace Library
 {
-    // 이걸 connection이랑 같이 두기??
-    // const static? 으로 ??
-    // 이 인자를 BookDAO로 넘김
-
-    // 예외처리와 조건처리가 주된 작업
-
-    // REQUEST SERVICE ??
-
-    class NaverAPIService
+    class NaverService
     {
-        private static NaverAPIService instance;
+        private static NaverService instance;
 
         private string clientID = "LzrVM4JtNzEjcjhnf21x";
         private string clientSecretID = "wHE6dYhDob";
 
-        private List<BookDTO> naverBookList = new List<BookDTO>();
+        private Dictionary<string, BookDTO> naverBookList = new Dictionary<string,BookDTO>();
 
-        private BookDAO bookDAO;
-
-        public NaverAPIService() {
-            this.bookDAO = BookDAO.GetInstance();
-        }
-
-        public static NaverAPIService GetInstance()
+        public static NaverService GetInstance()
         {
             if (instance == null)
             {
-                instance = new NaverAPIService();
+                instance = new NaverService();
             }
             return instance;
         }
@@ -42,8 +28,7 @@ namespace Library
         // 이걸 NaverDAO로 뺄까?
         // API 사용하는 함수들도 모두 DAO 쪽임???
         // 민감한 정보를 사용하는건데 이걸 service에 이대로 둬도 됨??
-
-        public List<BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)
+        public Dictionary<string,BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)
         {
             // List<BookDTO> 초기화
             naverBookList.Clear();
@@ -95,41 +80,12 @@ namespace Library
 
                 // 애초에 API로 받아올때 requested = true로 받아와서
                 // 애초에 받아올때부터 기존 bookDB에 있는 책들이랑 구분되게 하기
-                naverBookList.Add(new BookDTO(title, author, publisher, price, "1", date, isbn, false, true));
+                naverBookList.Add(title, new BookDTO(title, author, publisher, price, "1", date, isbn, false, true));
             }
 
             response.Close();
 
             return naverBookList;
-        }
-
-        // AddRequestedBook 하기 전에 Service 단에서 미리 예외처리 조건확인해주기
-        // 이건 Controller에서 호출함
-        // 해당 책의 전체 제목을 쳐야지 true 반환됨. 포함된거 반환안됨
-        public bool CheckIfRequestBookExistsInSearchedBooks(string requestedBookTitle, List<BookDTO> searchedBooks)
-        {
-            for (int i = 0; i < searchedBooks.Count; i++)
-            {
-                if (searchedBooks[i].GetName() == requestedBookTitle)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        // 이미 예외처리가 다 된 놈이 호출됨
-        // 예외처리는 위의 CheckIfRequestedBookExistsInSearchedBooks로 된 상태에서 얘가 호출됨
-        public bool AddRequestedBook(string requestedBookTitle, List<BookDTO> searchedBooks)
-        {
-            for(int i = 0; i < searchedBooks.Count; i++)
-            {
-                if (searchedBooks[i].GetName() == requestedBookTitle)
-                {
-                    bookDAO.Add(searchedBooks[i]);
-                }
-            }
-            return true;
         }
     }
 }

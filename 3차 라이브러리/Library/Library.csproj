@@ -56,7 +56,7 @@
     <Compile Include="Model\DAO\MemberDAO.cs" />
     <Compile Include="Service\BookService.cs" />
     <Compile Include="Service\MemberService.cs" />
-    <Compile Include="Service\NaverAPIService.cs" />
+    <Compile Include="Service\NaverService.cs" />
     <Compile Include="Utility\ExceptionHandler.cs" />
     <Compile Include="Utility\MyConsole.cs" />
     <Compile Include="View\LogView.cs" />

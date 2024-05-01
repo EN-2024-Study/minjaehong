@@ -9,8 +9,8 @@ namespace Library
 
         public LoginDTO(List<string> loginInfo)
         {
-            this.id = loginInfo[0];
-            this.pw = loginInfo[1];
+            id = loginInfo[0];
+            pw = loginInfo[1];
         }
 
         public string GetID() { return id; }

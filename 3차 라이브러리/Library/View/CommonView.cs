@@ -72,47 +72,16 @@ namespace Library
             }
         }
 
-        // USER 정보 보여주는 UI
-        public static void PrintAllMembers(List<MemberDTO> memberList)
-        {
-            Console.SetCursorPosition(BOOK_STARTX, BOOK_STARTY);
-
-            if (memberList.Count == 0)
-            {
-                MyConsole.PrintHeader("[NO RESULT]");
-            }
-            for (int i = 0; i < memberList.Count; i++)
-            {
-                Console.WriteLine("");
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("────────────────────────────────");
-                Console.WriteLine("");
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("ID       : " + memberList[i].GetId());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("PW       : " + memberList[i].GetPw());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("NAME     : " + memberList[i].GetName());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("AGE      : " + memberList[i].GetAge());
-                Console.CursorLeft = BOOK_STARTX;
-                Console.WriteLine("PHONENUM : " + memberList[i].GetPhoneNum());
-            }
-            Console.WriteLine("");
-            Console.CursorLeft = BOOK_STARTX;
-            Console.WriteLine("────────────────────────────────");
-        }
-
         //네이버 검색은 우선 공용으로 사용하는거니까 여따 두자 일단은
         public static RequestDTO RequestBookForm()
         {
-            string[] searchByNaverAPIArr = { "1. NAME :", "2. NUMBER :" };
-
             Console.Clear();
 
-            MyConsole.PrintHeader("[REQUEST BY NAVER API]");
+            string[] requestBookArr = { "1. NAME :", "2. NUMBER :" };
 
-            List<string> requestInfo = MyConsole.GetUserInputs(searchByNaverAPIArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.searchByNaverAPIExceptionArr);
+            MyConsole.PrintHeader("[REQUEST FROM NAVER]");
+
+            List<string> requestInfo = MyConsole.GetUserInputs(requestBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.searchByNaverAPIExceptionArr);
 
             return new RequestDTO(requestInfo);
         }
