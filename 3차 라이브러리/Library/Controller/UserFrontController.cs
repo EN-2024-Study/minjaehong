@@ -55,7 +55,7 @@ namespace Library
 
             if (isCreateAccountSuccessful)
             {
-                Logger.recordLog(DateTime.Now, newMemberDTO.GetId(), "CREATE ACCOUNT SUCCESS", "");
+                Logger.recordLog(DateTime.Now, newMemberDTO.GetId(), "CREATE ACCOUNT SUCCESS");
                 
                 CommonView.RuntimeMessageForm("NEW ACCOUNT IS CREATED!");
             }

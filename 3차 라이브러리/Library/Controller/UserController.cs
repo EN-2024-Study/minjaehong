@@ -32,7 +32,7 @@ namespace Library
         {
             List<BookDTO> availableBooks = bookService.GetAvailableBooks();
 
-            Logger.recordLog(DateTime.Now, curUserID, "PRINTALLBOOK", "");
+            Logger.recordLog(DateTime.Now, curUserID, "PRINT ALL");
 
             userView.PrintAllBooksForm(availableBooks);
         }
@@ -44,7 +44,7 @@ namespace Library
             // bookService로 전달해서 매칭된 List<BookDTO> 받아오기
             List<BookDTO> retList = bookService.FindBook(dataFromView);
 
-            Logger.recordLog(DateTime.Now, curUserID, "FIND_BOOK", "");
+            Logger.recordLog(DateTime.Now, curUserID, "FIND BOOK");
 
             // 다시 userView에 전달해서 매칭된 책들 모두 출력해서 보여주기
             userView.PrintSelectedBooksForm(retList);
@@ -190,7 +190,6 @@ namespace Library
                     filteredBooks.Add(curBook.Value);
                 }
             }
-
             return filteredBooks;
         }
 
@@ -201,8 +200,18 @@ namespace Library
             // naverservice 호출해서 검색된 책들 받기
             Dictionary<Tuple<string,string>, BookDTO> searchedBooks = NaverService.GetBooksByNaverAPI(requestDTO);
 
+            Console.Clear();
+
             // 받은 책들 일단 출력
             CommonView.PrintAllBooks(searchedBooks.Values.ToList());
+
+            if (searchedBooks.Count() == 0)
+            {
+                Logger.recordLog(DateTime.Now, curUserID, "REQUEST BOOK FAIL","NOTHING FOUND");
+
+                CommonView.RuntimeMessageForm("NOTHING FOUND BY NAVER");
+                return false;
+            }
 
             // request 할 book title 받기
             string requestedBookTitle = userView.RequestBookTitleForm();
@@ -228,6 +237,15 @@ namespace Library
                 CommonView.RuntimeMessageForm("BOOK REQUEST FAIL!");
                 return false;
             }
+        }
+
+        private void PrintRequestedBooks()
+        {
+            List<BookDTO> requestedBooks = bookService.GetRequestedBooks();
+
+            Logger.recordLog(DateTime.Now, curUserID, "PRINT REQUESTED");
+
+            userView.PrintAllBooksForm(requestedBooks);
         }
 
         public void RunUserMode()
@@ -283,6 +301,7 @@ namespace Library
                         break;
                     
                     case UserMenuState.PRINTREQUESTED:
+                        PrintRequestedBooks();
                         break;
                 }
             }

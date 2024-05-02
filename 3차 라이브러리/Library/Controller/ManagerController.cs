@@ -118,6 +118,8 @@ namespace Library
             string requestedBookTitle = requestDTO.GetTitle();
             Logger.recordLog(DateTime.Now, "manager", "NAVER SEARCH", requestedBookTitle);
 
+            Console.Clear();
+
             // API로 받은 책들 출력하기
             CommonView.PrintAllBooks(searchedBooks.Values.ToList());
 

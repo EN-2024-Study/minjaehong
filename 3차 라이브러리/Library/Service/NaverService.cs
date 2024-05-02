@@ -7,13 +7,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Library
 {
-    // 이 함수 자체를 static으로?
-    // 어차피 함수 하나 밖에 안씀
-
-    // 동일한 이름 두 개 들어오면 터짐
-    // Dictionary라서 그럼 title 동일하면 이미 key 있어서 터짐
-    // 1.제목 괄호 그냥 유지하고 다치게 하기 or 비슷하면 앞에꺼부터 추가?
-    // 2.그냥 Dictionary말고 List 쓰기
     class NaverService
     {
         public static Dictionary<Tuple<string,string>,BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)
@@ -63,11 +56,6 @@ namespace Library
                 string title = json["items"][i]["title"].ToString();
                 title = title.Replace("</b>", "").Replace("<b>", "");
                 
-<<<<<<< Updated upstream
-=======
-                // 책 제목 길어지는거 방지
-                // 괄호 있는 부분부터 빼주고 trim으로 후행공백 모두 제거해주기
->>>>>>> Stashed changes
                 if (title.Contains("("))
                 {
                     int idx = title.IndexOf("(");
