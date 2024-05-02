@@ -142,7 +142,6 @@ namespace Library
 
             // 승인할 책 입력받기
             string applyingBookID = managerView.ApplyRequestedBookSelectForm();
-            string bookTitle = bookService.GetBookByID(applyingBookID).GetName();
 
             // 승인 함 시도해보기
             bool executionSuccess = bookService.ApplyRequested(applyingBookID);
@@ -150,7 +149,7 @@ namespace Library
             // 승인 시도 결과 확인
             if (executionSuccess)
             {
-                Logger.recordLog(DateTime.Now, "manager", "APPLY REQUEST BOOK SUCCESS", bookTitle);
+                Logger.recordLog(DateTime.Now, "manager", "APPLY REQUEST BOOK SUCCESS");
 
                 CommonView.RuntimeMessageForm("REQUESTED BOOK IS SUCCESSFULLY APPLIED!");
             }

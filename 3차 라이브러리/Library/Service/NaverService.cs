@@ -56,16 +56,12 @@ namespace Library
                 string title = json["items"][i]["title"].ToString();
                 title = title.Replace("</b>", "").Replace("<b>", "");
                 
-                // 책 제목 길어지는거 방지
-                // 괄호 있는 부분부터 빼주고 trim으로 후행공백 모두 제거해주기
-                /*
                 if (title.Contains("("))
                 {
                     int idx = title.IndexOf("(");
                     title = title.Substring(0, idx);
                     title = title.Trim();
                 }
-                */
 
                 string author = json["items"][i]["author"].ToString();
                 string publisher = json["items"][i]["publisher"].ToString().Replace("<b>", "").Replace("</b>", "");
