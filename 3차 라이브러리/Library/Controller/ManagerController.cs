@@ -113,7 +113,7 @@ namespace Library
             RequestDTO requestDTO = CommonView.RequestBookForm();
 
             // Service 호출해서 검색된 책 받기
-            Dictionary<string, BookDTO> searchedBooks = NaverService.GetBooksByNaverAPI(requestDTO);
+            Dictionary<Tuple<string, string>, BookDTO> searchedBooks = NaverService.GetBooksByNaverAPI(requestDTO);
 
             string requestedBookTitle = requestDTO.GetTitle();
             Logger.recordLog(DateTime.Now, "manager", "NAVER SEARCH", requestedBookTitle);

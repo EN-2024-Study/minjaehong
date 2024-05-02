@@ -81,7 +81,9 @@ namespace Library
 
             MyConsole.PrintHeader("[REQUEST FROM NAVER]");
 
-            List<string> requestInfo = MyConsole.GetUserInputs(requestBookArr, MyConsole.MENU_STARTX, MyConsole.MENU_STARTY, ExceptionHandler.searchByNaverAPIExceptionArr);
+            List<string> requestInfo = MyConsole.GetUserInputs(requestBookArr, MyConsole.MENU_STARTX, Console.CursorTop+2, ExceptionHandler.searchByNaverAPIExceptionArr);
+
+            //Console.Clear();
 
             return new RequestDTO(requestInfo);
         }

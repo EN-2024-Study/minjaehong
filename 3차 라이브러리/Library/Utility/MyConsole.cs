@@ -293,7 +293,7 @@ namespace Library
         {
             Console.SetCursorPosition(eraseStartX, eraseStartY);
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < input.Length; i++) sb.Append(" ");
+            for (int i = 0; i < input.Length*2; i++) sb.Append(" ");
             Console.WriteLine(sb);
             Console.SetCursorPosition(eraseStartX, eraseStartY);
         }

@@ -179,12 +179,27 @@ namespace Library
             }
         }
 
+        private List<BookDTO> filterBeforeRequesting(string requestedBookTitle, Dictionary<Tuple<string, string>, BookDTO> searchedBooks)
+        {
+            List<BookDTO> filteredBooks = new List<BookDTO>();
+
+            foreach (KeyValuePair<Tuple<string, string>, BookDTO> curBook in searchedBooks)
+            {
+                if (curBook.Key.Item1 == requestedBookTitle)
+                {
+                    filteredBooks.Add(curBook.Value);
+                }
+            }
+
+            return filteredBooks;
+        }
+
         private bool RequestBookByNaverAPI()
         {
             RequestDTO requestDTO = CommonView.RequestBookForm();
 
             // naverservice 호출해서 검색된 책들 받기
-            Dictionary<string, BookDTO> searchedBooks = NaverService.GetBooksByNaverAPI(requestDTO);
+            Dictionary<Tuple<string,string>, BookDTO> searchedBooks = NaverService.GetBooksByNaverAPI(requestDTO);
 
             // 받은 책들 일단 출력
             CommonView.PrintAllBooks(searchedBooks.Values.ToList());
@@ -192,9 +207,14 @@ namespace Library
             // request 할 book title 받기
             string requestedBookTitle = userView.RequestBookTitleForm();
 
-            if (searchedBooks.ContainsKey(requestedBookTitle))
+            List<BookDTO> filteredBooks = filterBeforeRequesting(requestedBookTitle, searchedBooks);
+
+            if (filteredBooks.Count!=0)
             {
-                bookService.AddNewBook(searchedBooks[requestedBookTitle]);
+                foreach(BookDTO curBook in filteredBooks)
+                {
+                    bookService.AddNewBook(curBook);
+                }
 
                 Logger.recordLog(DateTime.Now, curUserID, "REQUEST BOOK SUCCESS", requestedBookTitle);
 

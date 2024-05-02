@@ -16,10 +16,10 @@ namespace Library
     // 2.그냥 Dictionary말고 List 쓰기
     class NaverService
     {
-        public static Dictionary<string,BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)
+        public static Dictionary<Tuple<string,string>,BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)
         {
             // List<BookDTO> 초기화
-            Dictionary<string, BookDTO> naverBookList = new Dictionary<string, BookDTO>();
+            Dictionary<Tuple<string,string>, BookDTO> naverBookList = new Dictionary<Tuple<string, string>, BookDTO>();
 
             string bookTitle = requestDTO.GetTitle();
             int howMany = int.Parse(requestDTO.GetHowMany());
@@ -35,6 +35,13 @@ namespace Library
             request.Headers.Add("X-Naver-Client-Id", Configuration.GetNaverAPIID());
             request.Headers.Add("X-Naver-Client-Secret", Configuration.GetNaverAPIPW());
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            string responseStatus = response.StatusCode.ToString();
+
+            if (responseStatus != "OK")
+            {
+                return naverBookList;
+            }
 
             Stream stream = response.GetResponseStream();
             StreamReader reader = new StreamReader(stream, Encoding.UTF8);
@@ -56,6 +63,11 @@ namespace Library
                 string title = json["items"][i]["title"].ToString();
                 title = title.Replace("</b>", "").Replace("<b>", "");
                 
+<<<<<<< Updated upstream
+=======
+                // 책 제목 길어지는거 방지
+                // 괄호 있는 부분부터 빼주고 trim으로 후행공백 모두 제거해주기
+>>>>>>> Stashed changes
                 if (title.Contains("("))
                 {
                     int idx = title.IndexOf("(");
@@ -74,7 +86,7 @@ namespace Library
                 // 애초에 API로 받아올때 requested = true로 받아와서
                 // 애초에 받아올때부터 기존 bookDB에 있는 책들이랑 구분되게 하기
                 //naverBookList[title] = new BookDTO(title, author, publisher, price, "1", date, isbn, false, true);
-                naverBookList.Add(title, new BookDTO(title, author, publisher, price, "1", date, isbn, false, true));
+                naverBookList.Add(Tuple.Create(title,author), new BookDTO(title, author, publisher, price, "1", date, isbn, false, true));
             }
 
             response.Close();
