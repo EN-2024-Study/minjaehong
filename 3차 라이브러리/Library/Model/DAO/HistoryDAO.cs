@@ -9,7 +9,6 @@ namespace Library
     // 여기에 조건이 있으면 안됨
     class HistoryDAO
     {
-        private string connectionString;
         private MySqlConnection connection;
         private MySqlCommand command;
 
@@ -17,8 +16,7 @@ namespace Library
 
         private HistoryDAO()
         {
-            connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
-            connection = new MySqlConnection(connectionString);
+            connection = Configuration.GetConnection();
             // 해당 DB에 사용할 command 객체 생성
             command = connection.CreateCommand();
 

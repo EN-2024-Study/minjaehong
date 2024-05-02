@@ -12,14 +12,11 @@ namespace Library
         
         private MemberService memberService;
         private BookService bookService;
-        private NaverService naverService;
 
         public UserController(BookService bookService, MemberService memberService)
         {
             this.bookService = bookService;
             this.memberService = memberService;
-            
-            naverService = NaverService.GetInstance();
 
             userView = new UserView();
         }
@@ -187,7 +184,7 @@ namespace Library
             RequestDTO requestDTO = CommonView.RequestBookForm();
 
             // naverservice 호출해서 검색된 책들 받기
-            Dictionary<string, BookDTO> searchedBooks = naverService.GetBooksByNaverAPI(requestDTO);
+            Dictionary<string, BookDTO> searchedBooks = NaverService.GetBooksByNaverAPI(requestDTO);
 
             // 받은 책들 일단 출력
             CommonView.PrintAllBooks(searchedBooks.Values.ToList());

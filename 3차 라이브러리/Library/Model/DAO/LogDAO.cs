@@ -12,7 +12,6 @@ namespace Library
 
     class LogDAO
     {
-        private String connectionString;
         private MySqlConnection connection;
         private MySqlCommand command;
 
@@ -20,8 +19,7 @@ namespace Library
 
         private LogDAO()
         {
-            connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
-            connection = new MySqlConnection(connectionString);
+            connection = Configuration.GetConnection();
             command = connection.CreateCommand();
         }
 

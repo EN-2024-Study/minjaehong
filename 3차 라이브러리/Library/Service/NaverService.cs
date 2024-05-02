@@ -7,31 +7,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Library
 {
+    // 이 함수 자체를 static으로?
+    // 어차피 함수 하나 밖에 안씀
     class NaverService
     {
-        private static NaverService instance;
-
-        private string clientID = "LzrVM4JtNzEjcjhnf21x";
-        private string clientSecretID = "wHE6dYhDob";
-
-        private Dictionary<string, BookDTO> naverBookList = new Dictionary<string,BookDTO>();
-
-        public static NaverService GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new NaverService();
-            }
-            return instance;
-        }
-
-        // 이걸 NaverDAO로 뺄까?
-        // API 사용하는 함수들도 모두 DAO 쪽임???
-        // 민감한 정보를 사용하는건데 이걸 service에 이대로 둬도 됨??
-        public Dictionary<string,BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)
+        public static Dictionary<string,BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)
         {
             // List<BookDTO> 초기화
-            naverBookList.Clear();
+            Dictionary<string, BookDTO> naverBookList = new Dictionary<string, BookDTO>();
 
             string bookTitle = requestDTO.GetTitle();
             string howMany = requestDTO.GetHowMany();
@@ -44,8 +27,8 @@ namespace Library
             request.ContentType = "application/json; charset=utf-8";
             request.Method = "GET";
 
-            request.Headers.Add("X-Naver-Client-Id", clientID);
-            request.Headers.Add("X-Naver-Client-Secret", clientSecretID);
+            request.Headers.Add("X-Naver-Client-Id", Configuration.GetNaverAPIID());
+            request.Headers.Add("X-Naver-Client-Secret", Configuration.GetNaverAPIPW());
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
             Stream stream = response.GetResponseStream();
@@ -80,7 +63,8 @@ namespace Library
 
                 // 애초에 API로 받아올때 requested = true로 받아와서
                 // 애초에 받아올때부터 기존 bookDB에 있는 책들이랑 구분되게 하기
-                naverBookList.Add(title, new BookDTO(title, author, publisher, price, "1", date, isbn, false, true));
+                naverBookList[title] = new BookDTO(title, author, publisher, price, "1", date, isbn, false, true);
+                naverBookList.Add(title, new BookDTO(title, author, publisher, price, "1", date, isbn, false, true);
             }
 
             response.Close();

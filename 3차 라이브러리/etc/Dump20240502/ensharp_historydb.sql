@@ -16,29 +16,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `memberdb`
+-- Table structure for table `historydb`
 --
 
-DROP TABLE IF EXISTS `memberdb`;
+DROP TABLE IF EXISTS `historydb`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `memberdb` (
-  `id` varchar(15) NOT NULL,
-  `pw` varchar(15) NOT NULL,
-  `name` varchar(15) NOT NULL,
-  `age` varchar(15) NOT NULL,
-  `phonenum` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `historydb` (
+  `borrower_id` varchar(15) NOT NULL,
+  `book_id` int NOT NULL,
+  `returned` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `memberdb`
+-- Dumping data for table `historydb`
 --
 
-LOCK TABLES `memberdb` WRITE;
-/*!40000 ALTER TABLE `memberdb` DISABLE KEYS */;
-/*!40000 ALTER TABLE `memberdb` ENABLE KEYS */;
+LOCK TABLES `historydb` WRITE;
+/*!40000 ALTER TABLE `historydb` DISABLE KEYS */;
+/*!40000 ALTER TABLE `historydb` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +47,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-28 18:30:14
+-- Dump completed on 2024-05-02 10:52:39

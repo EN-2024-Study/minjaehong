@@ -9,7 +9,6 @@ namespace Library
     // 여기에 조건이 있으면 안됨
     class MemberDAO
     {
-        private String connectionString;
         private MySqlConnection connection;
         private MySqlCommand command;
 
@@ -17,8 +16,7 @@ namespace Library
 
         private MemberDAO()
         {
-            connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
-            connection = new MySqlConnection(connectionString);
+            connection = Configuration.GetConnection();
             command = connection.CreateCommand();
         }
 

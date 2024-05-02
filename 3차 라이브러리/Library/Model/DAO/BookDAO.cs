@@ -12,7 +12,6 @@ namespace Library
         // CRUD해서 받을 것들을 Dictionary로 저장
         private Dictionary<string, BookDTO> bookDB;
 
-        private string connectionString;
         private MySqlConnection connection;
         private MySqlCommand command;
 
@@ -22,9 +21,8 @@ namespace Library
         {
             bookDB = new Dictionary<string, BookDTO>();
 
-            connectionString = "Server=localhost;Database=ensharp;Uid=root;Pwd=1234;";
-            connection = new MySqlConnection(connectionString);
-            // 해당 DB에 사용할 command 객체 생성
+            connection = Configuration.GetConnection();
+            // 해당 DB에 사용할 command 객체 생성 
             command = connection.CreateCommand();
 
             InitializeBookDB();
@@ -232,7 +230,6 @@ namespace Library
             
             return true;
         }
-
 
         // 실제로 delete 하는게 아니라 deleted 값만 TRUE로 바꿔줌
         // 실제로 delete하면 반납내역에서 못띄우는거 방지하기 위해
