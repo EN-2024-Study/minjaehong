@@ -195,11 +195,16 @@ namespace Library
             if (searchedBooks.ContainsKey(requestedBookTitle))
             {
                 bookService.AddNewBook(searchedBooks[requestedBookTitle]);
+
+                Logger.recordLog(DateTime.Now, curUserID, "REQUEST BOOK SUCCESS", requestedBookTitle);
+
                 CommonView.RuntimeMessageForm("BOOK REQUEST SUCCESS!");
                 return true;
             }
             else
             {
+                Logger.recordLog(DateTime.Now, curUserID, "REQUEST BOOK FAIL");
+
                 CommonView.RuntimeMessageForm("BOOK REQUEST FAIL!");
                 return false;
             }

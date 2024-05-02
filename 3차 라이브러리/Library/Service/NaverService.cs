@@ -12,11 +12,8 @@ namespace Library
 
     // 동일한 이름 두 개 들어오면 터짐
     // Dictionary라서 그럼 title 동일하면 이미 key 있어서 터짐
-    // List로 할까? 아니면 제목 괄호 그냥 유지?
-    // 이러면 문제가 제목 다쳐야함
-    // 그럼 제목 비슷하게만 치면 추가되게? 근데 그럼 뭐 부터 추가?? 
-    // 이거 생각해보기 
-    // 아니면 그냥 Dictionary말고 List 쓸까
+    // 1.제목 괄호 그냥 유지하고 다치게 하기 or 비슷하면 앞에꺼부터 추가?
+    // 2.그냥 Dictionary말고 List 쓰기
     class NaverService
     {
         public static Dictionary<string,BookDTO> GetBooksByNaverAPI(RequestDTO requestDTO)

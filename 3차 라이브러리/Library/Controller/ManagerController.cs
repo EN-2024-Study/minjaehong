@@ -115,6 +115,9 @@ namespace Library
             // Service 호출해서 검색된 책 받기
             Dictionary<string, BookDTO> searchedBooks = NaverService.GetBooksByNaverAPI(requestDTO);
 
+            string requestedBookTitle = requestDTO.GetTitle();
+            Logger.recordLog(DateTime.Now, "manager", "NAVER SEARCH", requestedBookTitle);
+
             // API로 받은 책들 출력하기
             CommonView.PrintAllBooks(searchedBooks.Values.ToList());
 
@@ -139,6 +142,7 @@ namespace Library
 
             // 승인할 책 입력받기
             string applyingBookID = managerView.ApplyRequestedBookSelectForm();
+            string bookTitle = bookService.GetBookByID(applyingBookID).GetName();
 
             // 승인 함 시도해보기
             bool executionSuccess = bookService.ApplyRequested(applyingBookID);
@@ -146,7 +150,7 @@ namespace Library
             // 승인 시도 결과 확인
             if (executionSuccess)
             {
-                Logger.recordLog(DateTime.Now, "manager", "APPLY REQUEST BOOK SUCCESS", applyingBookID);
+                Logger.recordLog(DateTime.Now, "manager", "APPLY REQUEST BOOK SUCCESS", bookTitle);
 
                 CommonView.RuntimeMessageForm("REQUESTED BOOK IS SUCCESSFULLY APPLIED!");
             }
