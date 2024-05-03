@@ -243,6 +243,11 @@ namespace Library
         {
             List<BookDTO> requestedBooks = bookService.GetRequestedBooks();
 
+            if (requestedBooks.Count() == 0)
+            {
+                CommonView.RuntimeMessageForm("NO REQUESTED BOOKS YET!");
+                return;
+            }
             Logger.recordLog(DateTime.Now, curUserID, "PRINT REQUESTED");
 
             userView.PrintAllBooksForm(requestedBooks);

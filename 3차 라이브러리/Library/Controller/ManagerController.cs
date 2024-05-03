@@ -138,9 +138,14 @@ namespace Library
             // MEMBER들이 요청한 책들 일단 가져오기
             List<BookDTO> requestedBooks = bookService.GetRequestedBooks();
             // MEMBER들이 요청한 책 보여주기
-            CommonView.PrintAllBooks(requestedBooks);
 
-            if (requestedBooks.Count() == 0) return;
+            if (requestedBooks.Count() == 0)
+            {
+                CommonView.RuntimeMessageForm("NO REQUESTED BOOKS YET");
+            }
+
+
+            CommonView.PrintAllBooks(requestedBooks);
 
             // 승인할 책 입력받기
             string applyingBookID = managerView.ApplyRequestedBookSelectForm();

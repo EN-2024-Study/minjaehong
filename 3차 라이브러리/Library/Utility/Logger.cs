@@ -68,7 +68,7 @@ namespace Library
             // 로그파일 저장
             List<LogDTO> logList = logDAO.GetAllLogs();
 
-            StringBuilder logFileBuilder = new StringBuilder();
+            StringBuilder logFileBuilder = new StringBuilder(); // field값
 
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\LIBRARY_LOG.txt";
 
