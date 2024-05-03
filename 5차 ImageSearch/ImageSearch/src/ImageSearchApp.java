@@ -1,9 +1,12 @@
+import DAO.KakaoAPI;
+import org.json.simple.parser.ParseException;
+
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
+import java.io.IOException;
 
 // MVC 패턴이 아님 - Delegate 패턴??
 // 여기가 View 랑 Controller 작업을 모두 수행함
@@ -13,7 +16,7 @@ class ImageSearchApp extends JFrame{
 
     JPanel topPanel;
     JPanel centerPanel;
-    JPanel bottomPanel; // 왜 로그모드 갔을때 안보임??
+    JPanel bottomPanel;
 
     JTextField searchTextField;
     JButton searchBtn;
@@ -22,12 +25,10 @@ class ImageSearchApp extends JFrame{
     JButton backToHomeBtn;
     JButton deleteAllLogBtn;
 
-    JLabel imageLabel;
-
     FlowLayout searchModeLayout;
     GridLayout logModeLayout;
 
-    JButton[] buttonArr;
+    JLabel[] labelArr;
 
     ImageSearchApp(){
         setSize(1000,1000);
@@ -46,8 +47,8 @@ class ImageSearchApp extends JFrame{
         logModeLayout = new GridLayout(0,1);
 
         // test components
-        imageLabel = new JLabel();
-        buttonArr = new JButton[10];
+        labelArr = new JLabel[30];
+        for(int i=0;i<20;i++) labelArr[i] = new JLabel();
 
         changeToHomeMode();
 
@@ -98,10 +99,6 @@ class ImageSearchApp extends JFrame{
         topPanel.add(logBtn);
         topPanel.add(backToHomeBtn);
         topPanel.setBackground(Color.BLUE);
-
-        //requestFocus();
-        //setFocusable(true);
-        //setVisible(true);
     }
 
     public void InitializeCenterPanel(){
@@ -111,7 +108,6 @@ class ImageSearchApp extends JFrame{
 
     public void InitializeBottomPanel(){
         bottomPanel = new JPanel();
-        bottomPanel.setLayout(searchModeLayout);
 
         deleteAllLogBtn = new JButton("DELETE ALL LOG");
 
@@ -135,7 +131,7 @@ class ImageSearchApp extends JFrame{
         centerPanel.removeAll();
 
         // BOTTOM PANEL
-        //bottomPanel.setVisible(false);
+        bottomPanel.setVisible(false);
     }
 
     public void changeToSearchMode(){
@@ -145,17 +141,19 @@ class ImageSearchApp extends JFrame{
         backToHomeBtn.setVisible(true);
 
         // CENTER PANEL
-        //centerPanel.setBackground(Color.GREEN);
+        centerPanel.setBackground(Color.WHITE);
         centerPanel.setLayout(searchModeLayout);
 
-        for(int i=0;i<10;i++){
-            buttonArr[i] = new JButton(""+i);
-            buttonArr[i].setPreferredSize(new Dimension(150,150));
-            centerPanel.add(buttonArr[i]);
+        // API 로 가져와서 여기에 이렇게 뿌려주기
+        for(int i=0;i<30;i++){
+            labelArr[i].setText("label");
+            labelArr[i].setBorder(new LineBorder(Color.BLACK, 5,false));
+            labelArr[i].setPreferredSize(new Dimension(150,150));
+            centerPanel.add(labelArr[i]);
         }
 
         // BOTTOM PANEL
-        //bottomPanel.setVisible(false);
+        bottomPanel.setVisible(false);
 
         requestFocus();
         setFocusable(true);
@@ -171,37 +169,28 @@ class ImageSearchApp extends JFrame{
         backToHomeBtn.setVisible(true);
 
         // CENTER PANEL
-        centerPanel.setBackground(Color.BLACK);
+        centerPanel.setBackground(Color.WHITE);
         centerPanel.setLayout(logModeLayout);
+        
+        // Log 가져와서 여기에 뿌려주기
+        for(int i=0;i<20;i++){
+            labelArr[i].setText("label");
+            labelArr[i].setBorder(new LineBorder(Color.BLACK, 1,false));
+            centerPanel.add(labelArr[i]);
+        }
 
         // BOTTOM PANEL
-        // deleteAllLogBtn.setVisible(true);
-        // bottomPanel.setVisible(true);
-        this.add(bottomPanel, BorderLayout.SOUTH);
+        bottomPanel.setVisible(true);
 
         requestFocus();
         setFocusable(true);
         setVisible(true);
     }
 
-    public void AddDummyData(){
-
-        /*
-        centerPanel.add(imageLabel);
-
-        ImageIcon icon = new ImageIcon("C://Users//USER//Pictures//Saved Pictures//mario.png");
-
-        Image img = icon.getImage();
-        Image updateImg = img.getScaledInstance(50,50,Image.SCALE_SMOOTH);
-        ImageIcon updateIcon = new ImageIcon(updateImg);
-
-        imageLabel.setIcon(updateIcon);
-
-        imageLabel.setBounds();
-        */
-    }
-
     public static void main(String[] args){
-        ImageSearchApp app = new ImageSearchApp();
+
+        //ImageSearchApp app = new ImageSearchApp();
+
+        KakaoAPI.getAPITest();
     }
 }
