@@ -2,17 +2,16 @@ package DAO;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
+import DTO.ImageDTO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 // 인증방식 REST API KEY
 // 다음 검색 서비스에서 질의어로 이미지를 검색합니다
@@ -20,44 +19,40 @@ import org.json.simple.parser.ParseException;
 // 2. 원하는 검색어와 함께 결과 형식 파라미터를 선택적으로 추가할 수 있음
 // 3. Response Body 는 meta, documents 로 구성된 "JSON 객체"임
 
-public class KakaoAPI {
+public class ImageDAO {
 
-    public static void getAPITest(){
+    public static ImageDTO getImage(String keyWord){
+
+        // returning list
+        ArrayList<String> imageURLList = new ArrayList<>();
+
         URL url = null;
         String readLine = null;
         StringBuilder buffer = null;
         BufferedReader bufferedReader = null;
-        BufferedWriter bufferedWriter = null;
         HttpURLConnection urlConnection = null;
-
-        // 이거 왜 쓰이는거임? 단위 알아보기
-        int connTimeout = 5000;
-        int readTimeout = 3000;
-
-        String x = "mbappe";
 
         String RESTAPIKey = "bd02cf38bea539c77e8e9e7622711517";
 
         try {
             // 1. 날릴 URL 설정하기
-            x = URLEncoder.encode(x,"UTF-8");
+            keyWord = URLEncoder.encode(keyWord,"UTF-8");
 
+            // 2. URL 에 query parameters 붙여주기
             String apiUrl = "https://dapi.kakao.com/v2/search/image";
-            String queryParameters = "?query="+x;
+            String queryParameters = "?query="+keyWord;
             apiUrl+=queryParameters;
             
-            // 2. REQUEST MESSAGE 객체 만들기. REQUEST MESSAGE 설정정보 구성
-            url = new URL(apiUrl + "&sort=accuracy&size=10");
+            // 3. REQUEST MESSAGE 객체 만들기. REQUEST MESSAGE 설정정보 구성
+            // 무조건 30개 불러오기
+            url = new URL(apiUrl + "&sort=recency&size=30");
             urlConnection = (HttpURLConnection) url.openConnection();
 
-            // request method POST GET 중 하나 선택
+            // 4. REQUEST METHOD 설정
             urlConnection.setRequestMethod("GET");
-            urlConnection.setConnectTimeout(connTimeout);
-            urlConnection.setReadTimeout(readTimeout);
 
             // REQUEST MESSAGE HEADER 에 추가하는 작업??
-            // HEADER에 "KakaoAk + 내 API 키"로 넣어줘야함
-            // QUERY PARAMETER 로 USER 가 입력한 검색어 넣어줘야함
+            // REQUEST HEADER에 "KakaoAk + 내 API 키"로 넣어줘야함
             urlConnection.setRequestProperty("Authorization", "KakaoAK " + RESTAPIKey);
             urlConnection.setRequestProperty("Accept", "application/json");
 
@@ -89,11 +84,13 @@ public class KakaoAPI {
             for (int i = 0; i < documentArray.size(); i++) {
                 JSONObject curDocument = (JSONObject) documentArray.get(i);
 
-                String imageUrl = (String) curDocument.get("image_url");
-                System.out.println(imageUrl);
+                String curURL = (String) curDocument.get("image_url");
+                imageURLList.add(curURL); // O(1)
             }
         }catch(Exception e){
             e.printStackTrace();
         }
+
+        return new ImageDTO(imageURLList);
     }
 }
