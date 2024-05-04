@@ -8,12 +8,12 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Controller {
-    View view;
+    private View view;
 
-    ImageService imageService;
-    LogService logService;
+    private ImageService imageService;
+    private LogService logService;
 
-    MyListener myListener;
+    private MyListener myListener;
 
     public Controller(View view, ImageService imageService, LogService logService){
         this.view = view;
@@ -25,7 +25,7 @@ public class Controller {
         // View 초기화
         //InitView();
         // Controller 가 View 영향끼칠 수 있게 ActionListener 를 Component 들에게 모두 주기
-        BindActionListenersToViewComponents();
+        BindActionListenerToViewComponents();
 
         changeToHomeMode();
     }
@@ -37,7 +37,7 @@ public class Controller {
         changeToHomeMode();
     }
 
-    public void BindActionListenersToViewComponents(){
+    private void BindActionListenerToViewComponents(){
         // TOP PANEL 에게 모두 바인딩
         view.getSearchBtn().addActionListener(myListener);
         view.getHowMany().addActionListener(myListener);
@@ -48,7 +48,7 @@ public class Controller {
         view.getDeleteAllLogBtn().addActionListener(myListener);
     }
 
-    public void changeToHomeMode() {
+    private void changeToHomeMode() {
         // TOP PANEL
         view.getSearchTextField().setText("");
         view.getSearchTextField().setVisible(true);
@@ -66,7 +66,7 @@ public class Controller {
         view.getBottomPanel().setVisible(false);
     }
 
-    public void changeToSearchMode() {
+    private void changeToSearchMode() {
         // TOP PANEL
         view.getLogBtn().setVisible(false);
         view.getBackToHomeBtn().setVisible(true);
@@ -81,7 +81,7 @@ public class Controller {
         view.getBottomPanel().setVisible(false);
     }
 
-    public void changeToLogMode() {
+    private void changeToLogMode() {
         // TOP PANEL
         view.getSearchTextField().setVisible(false);
         view.getSearchBtn().setVisible(false);
@@ -99,29 +99,22 @@ public class Controller {
         view.getBottomPanel().setVisible(true);
     }
 
-    public void hideImage(int startIdx) {
+    private void hideImage(int startIdx) {
         for (int i = 0; i < startIdx; i++) view.getElementArr().get(i).setVisible(true);
         for (int i = startIdx; i < 30; i++) view.getElementArr().get(i).setVisible(false);
     }
 
-    public void addToCenterPanel(ArrayList<JLabel> elementArr){
+    private void addToCenterPanel(ArrayList<JLabel> elementArr){
         for(int i=0;i<elementArr.size();i++){
             view.getCenterPanel().add(elementArr.get(i));
         }
     }
 
     private class MyListener implements ActionListener{
-        //final Controller controller;
 
         public MyListener(){
 
         }
-
-        /*
-        public MyListener(Controller c){
-            this.controller = c;
-        }
-        */
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -132,7 +125,7 @@ public class Controller {
                     String keyWord = view.getSearchTextField().getText();
 
                     // SERVICE한테 넘기기
-                    view.elementArr = imageService.GetKeywordImages(keyWord);
+                    view.setElementArr(imageService.GetKeywordImages(keyWord));
 
                     // VIEW바꿔주기
                     changeToSearchMode();
@@ -154,23 +147,27 @@ public class Controller {
                 addToCenterPanel(view.getElementArr());
             }
 
-            if(e.getSource()==view.howMany){
+            if(e.getSource()==view.getHowMany()){
                 JComboBox comboBox = (JComboBox) e.getSource();
                 String curHowMany = comboBox.getSelectedItem().toString();
+
                 if (curHowMany == "10") hideImage(10);
                 else if (curHowMany == "20") hideImage(20);
                 else if(curHowMany=="30") hideImage(30);
             }
 
             if(e.getSource()==view.backToHomeBtn){
+                // VIEW ELEMENT 다 지워주기
                 view.getElementArr().clear();
+
                 // VIEW 바꿔주기
-                addToCenterPanel(view.elementArr);
                 changeToHomeMode();
+                addToCenterPanel(view.getElementArr());
             }
 
             if(e.getSource()==view.deleteAllLogBtn){
                 logService.DeleteAllLogs();
+
                 view.getCenterPanel().removeAll();
                 view.getCenterPanel().repaint();
             }

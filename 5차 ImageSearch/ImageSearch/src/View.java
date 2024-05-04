@@ -35,7 +35,7 @@ class View extends JFrame{
         imageService = new ImageService();
 
         setSize(new Dimension(1000,800));
-        setMinimumSize(new Dimension(1000,1000));
+        setMinimumSize(new Dimension(1000,800));
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         // 아이콘 처리
         //setIconImage();
@@ -108,6 +108,9 @@ class View extends JFrame{
         bottomPanel.add(deleteAllLogBtn);
         bottomPanel.setBackground(Color.WHITE);
     }
+
+    //================================= SET FUNCTIONS FOR CONTROLLER =================================//
+    public void setElementArr(ArrayList<JLabel> newElementArr) { this.elementArr = newElementArr; }
 
     //================================= GET FUNCTIONS FOR CONTROLLER =================================//
 
