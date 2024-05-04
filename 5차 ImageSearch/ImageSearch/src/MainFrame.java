@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ class MainFrame extends JFrame {
     FlowLayout searchModeLayout;
     GridLayout logModeLayout;
 
-    JLabel[] imageArr;
+    ArrayList<JLabel> elementArr;
 
     LogDAO logDAO;
     ImageDAO imageDAO;
@@ -50,8 +51,8 @@ class MainFrame extends JFrame {
         logModeLayout = new GridLayout(0, 1);
 
         // imageArr 초기화
-        imageArr = new JLabel[30];
-        for(int i=0;i<30;i++) imageArr[i] = new JLabel();
+        elementArr = new ArrayList<JLabel>();
+        for(int i=0;i<30;i++) elementArr.add(new JLabel());
 
         // 이때 처음이자 마지막으로 초기화됨
         imageDAO = ImageDAO.GetInstance();
@@ -85,7 +86,7 @@ class MainFrame extends JFrame {
         topPanel.add(howMany);
         topPanel.add(logBtn);
         topPanel.add(backToHomeBtn);
-        topPanel.setBackground(Color.BLUE);
+        topPanel.setBackground(Color.WHITE);
 
         // TopPanel ActionListener 추가
         searchBtn.addActionListener(new ActionListener() {
@@ -97,11 +98,15 @@ class MainFrame extends JFrame {
                     // 이 함수 안에 Model.DAO 작업 들어가야함
                     String keyWord = searchTextField.getText();
 
-                    changeToSearchMode();
                     // Model.DAO 작업
                     // 뿌려주기까지 하는데
                     // 이걸 그냥 데이터 받고 뿌려주는걸 따로 나누면 MVC 분리가 가능하지 않을까??
-                    GetKeywordImages(keyWord);
+                    elementArr = GetKeywordImages(keyWord);
+
+                    changeToSearchMode();
+
+                    AddToCenterPanel(elementArr);
+
                     logDAO.AddLog(keyWord);
                 }
             }
@@ -121,15 +126,20 @@ class MainFrame extends JFrame {
         logBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeToLogMode();
                 // 로그 가져와서 여기서 뿌려주기
-                GetAllLogs();
+                elementArr = GetAllLogs();
+
+                changeToLogMode();
+
+                AddToCenterPanel(elementArr);
             }
         });
 
         backToHomeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                elementArr.clear();
+
                 changeToHomeMode();
             }
         });
@@ -145,7 +155,7 @@ class MainFrame extends JFrame {
         deleteAllLogBtn = new JButton("DELETE ALL LOG");
 
         bottomPanel.add(deleteAllLogBtn);
-        bottomPanel.setBackground(Color.GREEN);
+        bottomPanel.setBackground(Color.WHITE);
     }
 
     public void changeToHomeMode() {
@@ -159,7 +169,7 @@ class MainFrame extends JFrame {
 
         // CENTER PANEL
         centerPanel.removeAll();
-        centerPanel.setBackground(Color.RED);
+        centerPanel.setBackground(Color.WHITE);
 
         // BOTTOM PANEL
         bottomPanel.setVisible(false);
@@ -198,20 +208,22 @@ class MainFrame extends JFrame {
     }
 
     public void HideImage(int startIdx) {
-        for (int i = 0; i < startIdx; i++) imageArr[i].setVisible(true);
-        for (int i = startIdx; i < 30; i++) imageArr[i].setVisible(false);
+        for (int i = 10; i < startIdx; i++) elementArr.get(i).setVisible(true);
+        for (int i = startIdx; i < 30; i++) elementArr.get(i).setVisible(false);
     }
 
     //======================== 사실 상 Controller 에 있어야할 작업들임 ========================//
 
-    public void AddToCenterPanel(JLabel[] elementArr){
-        for(int i=0;i<elementArr.length;i++){
-            centerPanel.add(elementArr[i]);
+    public void AddToCenterPanel(ArrayList<JLabel> elementArr){
+        for(int i=0;i<elementArr.size();i++){
+            centerPanel.add(elementArr.get(i));
         }
     }
 
-    public void GetKeywordImages(String keyWord){
-        
+    public ArrayList<JLabel> GetKeywordImages(String keyWord){
+
+        ArrayList<JLabel> retList = new ArrayList<>();
+
         // 싱글톤 DAO로 받기
         imageListVO = imageDAO.GetImageURLs(keyWord);
 
@@ -229,20 +241,20 @@ class MainFrame extends JFrame {
                 curImage = curImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 
                 // 새 이미지 화면에 추가하기
-                imageArr[i] = new JLabel(new ImageIcon(curImage));
-
-                // panel 에도 추가
-                // 이 작업이 여기 가있는게 맞는걸까
-                centerPanel.add(imageArr[i]);
+                retList.add(new JLabel(new ImageIcon(curImage)));
 
                 System.out.println("DONE!");
             } catch (Exception e) {
 
             }
         }
+
+        return retList;
     }
 
-    public void GetAllLogs(){
+    public ArrayList<JLabel> GetAllLogs(){
+
+        ArrayList<JLabel> retList = new ArrayList<>();
 
         // 싱글톤 DAO로 받기
         logListVO = logDAO.GetLogs();
@@ -256,13 +268,10 @@ class MainFrame extends JFrame {
         String curLog;
         for (int i = 0; i < logList.size(); i++) {
             curLog = logList.get(i);
-
             // 새 이미지 화면에 추가하기
-            imageArr[i] = new JLabel(curLog);
-
-            // panel 에도 추가
-            // 이 작업이 여기 가있는게 맞는걸까
-            centerPanel.add(imageArr[i]);
+            retList.add(new JLabel(curLog));
         }
+
+        return retList;
     }
 }
