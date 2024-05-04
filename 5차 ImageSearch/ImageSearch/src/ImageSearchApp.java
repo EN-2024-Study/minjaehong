@@ -10,11 +10,14 @@
 // 그래서 얘랑 Model 만 필요함
 // 여기서 바로 Model.DAO 호출하고 바로 DTO 로 받기
 
+import Service.ImageService;
+import Service.LogService;
+
 // 자동정렬 ctrl alt shift L
 class ImageSearchApp{
 
     public static void main(String[] args){
-        View mainFrame = new View();
-        // new Controller(new MainFrame(), new MainService);
+
+        new Controller(new View(), new ImageService(), new LogService());
     }
 }
