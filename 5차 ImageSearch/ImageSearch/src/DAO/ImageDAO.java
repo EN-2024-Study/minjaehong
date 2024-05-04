@@ -71,6 +71,8 @@ public class ImageDAO {
 
             String totalJSONstring = buffer.toString();
 
+            System.out.println("TOTAL JSON TO STRING DONE");
+
             // JSONString 을 JSON Objects 로 파싱해줌
             JSONParser parser = new JSONParser();
 
@@ -87,6 +89,8 @@ public class ImageDAO {
                 String curURL = (String) curDocument.get("image_url");
                 imageURLList.add(curURL); // O(1)
             }
+
+            System.out.println("GET ALL IMAGES BY URLS DONE");
         }catch(Exception e){
             e.printStackTrace();
         }
