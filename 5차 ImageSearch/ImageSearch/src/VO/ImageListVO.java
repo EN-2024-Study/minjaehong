@@ -1,11 +1,12 @@
-package DTO;
+package VO;
 
 import java.util.ArrayList;
 
-public class ImageListDTO {
+public class ImageListVO {
+    // O(1) O(1)
     private ArrayList<String> imageURLList;
 
-    public ImageListDTO(ArrayList<String> imageURLs){
+    public ImageListVO(ArrayList<String> imageURLs){
         this.imageURLList = imageURLs;
     }
 

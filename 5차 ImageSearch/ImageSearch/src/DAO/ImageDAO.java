@@ -1,14 +1,13 @@
 package DAO;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import DTO.*;
+import VO.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,7 +33,7 @@ public class ImageDAO {
 
     //=========================== SINGLETON =============================//
 
-    public ImageListDTO GetImage(String keyWord){
+    public ImageListVO GetImageURLs(String keyWord){
 
         // returning list
         ArrayList<String> imageURLList = new ArrayList<>();
@@ -55,7 +54,7 @@ public class ImageDAO {
             String apiUrl = "https://dapi.kakao.com/v2/search/image";
             String queryParameters = "?query="+keyWord;
             apiUrl+=queryParameters;
-            
+
             // 3. REQUEST MESSAGE 객체 만들기. REQUEST MESSAGE 설정정보 구성
             // 무조건 30개 불러오기
             url = new URL(apiUrl + "&sort=recency&size=30");
@@ -70,16 +69,10 @@ public class ImageDAO {
             urlConnection.setRequestProperty("Accept", "application/json");
 
             buffer = new StringBuilder();
-            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                while ((readLine = bufferedReader.readLine()) != null) {
-                    buffer.append(readLine).append("\n");
-                }
-            } else {
-                buffer.append("code : ");
-                buffer.append(urlConnection.getResponseCode()).append("\n");
-                buffer.append("message : ");
-                buffer.append(urlConnection.getResponseMessage()).append("\n");
+
+            bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+            while ((readLine = bufferedReader.readLine()) != null) {
+                buffer.append(readLine).append("\n");
             }
 
             String totalJSONstring = buffer.toString();
@@ -108,6 +101,6 @@ public class ImageDAO {
             e.printStackTrace();
         }
 
-        return new ImageListDTO(imageURLList);
+        return new ImageListVO(imageURLList);
     }
 }

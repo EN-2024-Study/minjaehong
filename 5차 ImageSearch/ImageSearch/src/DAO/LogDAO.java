@@ -1,7 +1,7 @@
 package DAO;
 
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
-import javax.sql.DataSource;
+import VO.LogListVO;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -122,7 +122,7 @@ public class LogDAO {
 
     //=========================== SELECT CRUD =============================//
 
-    public ArrayList<String> GetAllLogs(){
+    public LogListVO GetLogs(){
         Connection conn = null;
         ArrayList<String> logList = new ArrayList<>();
 
@@ -132,14 +132,15 @@ public class LogDAO {
 
             statement = conn.createStatement();
 
-            String selectLogQuery = "SELECT log FROM imagesearchlogdb";
+            String selectLogQuery = "SELECT keyword FROM imagesearchlogdb";
 
             // select 문으로 조회된 row를 다 받기
             resultSet = statement.executeQuery(selectLogQuery);
 
             while (resultSet.next()) {
-                String curLog = resultSet.getString("log");
-                System.out.println("[LOG] "+curLog);
+                String curLog = resultSet.getString("keyword");
+                logList.add(curLog);
+                System.out.println("[LOG KEYWORD] "+curLog);
             }
 
             // 자원반환
@@ -151,6 +152,6 @@ public class LogDAO {
             e.printStackTrace();
         }
 
-        return logList;
+        return new LogListVO(logList);
     }
 }

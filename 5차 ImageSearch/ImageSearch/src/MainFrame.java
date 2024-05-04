@@ -1,9 +1,8 @@
 import DAO.*;
-import DTO.*;
+import VO.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,11 +25,13 @@ class MainFrame extends JFrame {
     FlowLayout searchModeLayout;
     GridLayout logModeLayout;
 
-    ImageListDTO imageListDTO;
     JLabel[] imageArr;
 
     LogDAO logDAO;
     ImageDAO imageDAO;
+
+    ImageListVO imageListVO;
+    LogListVO logListVO;
 
     public MainFrame() {
         setSize(800, 800);
@@ -100,7 +101,7 @@ class MainFrame extends JFrame {
                     // DAO 작업
                     // 뿌려주기까지 하는데
                     // 이걸 그냥 데이터 받고 뿌려주는걸 따로 나누면 MVC 분리가 가능하지 않을까??
-                    GetResultImages(keyWord);
+                    GetKeywordImages(keyWord);
                     logDAO.AddLog(keyWord);
                 }
             }
@@ -122,7 +123,7 @@ class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 changeToLogMode();
                 // 로그 가져와서 여기서 뿌려주기
-
+                GetAllLogs();
             }
         });
 
@@ -201,13 +202,16 @@ class MainFrame extends JFrame {
         for (int i = startIdx; i < 30; i++) imageArr[i].setVisible(false);
     }
 
-    public void GetResultImages(String keyWord){
-        imageListDTO = imageDAO.GetImage(keyWord);
+    //======================== 사실 상 Controller 에 있어야할 작업들임 ========================//
 
-        ArrayList<String> imageURLList = imageListDTO.GetImageURLList();
+    public void GetKeywordImages(String keyWord){
+        
+        // 싱글톤 DAO로 받기
+        imageListVO = imageDAO.GetImageURLs(keyWord);
+
+        ArrayList<String> imageURLList = imageListVO.GetImageURLList();
 
         // API 로 가져와서 여기에 이렇게 뿌려주기
-
         URL url;
         Image curImage; // BufferedImage??
 
@@ -229,6 +233,30 @@ class MainFrame extends JFrame {
             } catch (Exception e) {
 
             }
+        }
+    }
+
+    public void GetAllLogs(){
+
+        // 싱글톤 DAO로 받기
+        logListVO = logDAO.GetLogs();
+
+        // API 로 가져와서 여기에 이렇게 뿌려주기
+        URL url;
+        Image curImage; // BufferedImage??
+
+        ArrayList<String> logList = logListVO.GetLogList();
+
+        String curLog;
+        for (int i = 0; i < logList.size(); i++) {
+            curLog = logList.get(i);
+
+            // 새 이미지 화면에 추가하기
+            imageArr[i] = new JLabel(curLog);
+
+            // panel 에도 추가
+            // 이 작업이 여기 가있는게 맞는걸까
+            centerPanel.add(imageArr[i]);
         }
     }
 }
