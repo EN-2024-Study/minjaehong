@@ -22,6 +22,9 @@ class MainFrame extends JFrame {
     JButton backToHomeBtn;
     JButton deleteAllLogBtn;
 
+    Font mainFont;
+
+    FlowLayout homeModeLayout;
     FlowLayout searchModeLayout;
     GridLayout logModeLayout;
 
@@ -31,7 +34,10 @@ class MainFrame extends JFrame {
     LogService logService;
 
     public MainFrame() {
-        setSize(800, 800);
+        //setSize(1000, 800);
+        //setMinimumSize(getSize());
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         setTitle("ImagerSearcher");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -43,6 +49,10 @@ class MainFrame extends JFrame {
         this.add(centerPanel, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
+        Font mainFont = new Font("Consolas",Font.BOLD, 13);
+
+        homeModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
+        //searchModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
         searchModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
         logModeLayout = new GridLayout(0, 1);
 
@@ -55,8 +65,6 @@ class MainFrame extends JFrame {
 
         changeToHomeMode();
 
-        // 처음에 생성되고 setVisible 호출해서 쓰레드처럼 돌아가고 있는
-        // Swing 의 EventListener 에게 rendering 하라고 하기
         setVisible(true);
     }
 
@@ -69,11 +77,17 @@ class MainFrame extends JFrame {
 
         // TopPanel Components 생성
         searchTextField = new JTextField(20);
+
+        searchTextField.setPreferredSize(new Dimension(80,28));
+
         searchBtn = new JButton("SEARCH");
+        searchBtn.setFont(mainFont);
         String s1[] = {"10", "20", "30"};
         howMany = new JComboBox(s1);
         logBtn = new JButton("SHOW LOGS");
+        logBtn.setFont(mainFont);
         backToHomeBtn = new JButton("BACK TO HOME");
+        backToHomeBtn.setFont(mainFont);
 
         // TopPanel Components 추가
         topPanel.add(searchTextField);
@@ -89,13 +103,8 @@ class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(searchTextField.getText().isEmpty()) return;
                 else{
-                    // DAO로 데이터 불러와서 뿌려주기
-                    // 이 함수 안에 Model.DAO 작업 들어가야함
                     String keyWord = searchTextField.getText();
 
-                    // Model.DAO 작업
-                    // 뿌려주기까지 하는데
-                    // 이걸 그냥 데이터 받고 뿌려주는걸 따로 나누면 MVC 분리가 가능하지 않을까??
                     elementArr = imageService.GetKeywordImages(keyWord);
 
                     // VIEW 바꿔주기
@@ -151,11 +160,23 @@ class MainFrame extends JFrame {
 
     public void InitializeBottomPanel() {
         bottomPanel = new JPanel();
+        bottomPanel.setLayout(logModeLayout);
+        bottomPanel.setBackground(Color.YELLOW);
 
         deleteAllLogBtn = new JButton("DELETE ALL LOG");
 
         bottomPanel.add(deleteAllLogBtn);
         bottomPanel.setBackground(Color.WHITE);
+
+        // Bottom Panel ActionListener 추가
+        deleteAllLogBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logService.DeleteAllLogs();
+                centerPanel.removeAll();
+                centerPanel.repaint();
+            }
+        });
     }
 
     public void changeToHomeMode() {
@@ -205,6 +226,7 @@ class MainFrame extends JFrame {
         centerPanel.setLayout(logModeLayout);
 
         // BOTTOM PANEL
+        bottomPanel.setLayout(logModeLayout);
         bottomPanel.setVisible(true);
     }
 

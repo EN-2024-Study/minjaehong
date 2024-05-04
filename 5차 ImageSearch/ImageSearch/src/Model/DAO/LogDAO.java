@@ -89,7 +89,7 @@ public class LogDAO {
         return newConnectionObject;
     }
 
-    //=========================== ADD CRUD =============================//
+    //=========================== ADD LOG =============================//
 
     public void AddLog(String keyWord){
 
@@ -120,7 +120,7 @@ public class LogDAO {
         }
     }
 
-    //=========================== SELECT CRUD =============================//
+    //=========================== GET ALL LOG =============================//
 
     public LogListVO GetLogs(){
         Connection conn = null;
@@ -153,5 +153,29 @@ public class LogDAO {
         }
 
         return new LogListVO(logList);
+    }
+
+    //=========================== DELETE ALL LOG =============================//
+    public void DeleteAll(){
+        Connection conn = null;
+
+        try{
+            // 새로운 Connection 객체 받기
+            conn = GetConnection();
+
+            statement = conn.createStatement();
+
+            String deleteLogQuery = "DELETE FROM imagesearchlogdb";
+
+            // 로그 전체 삭제 실행
+            statement.executeUpdate(deleteLogQuery);
+
+            System.out.println("[SUCCESS] LOG DELETE");
+            // 자원반환
+            conn.close();
+            statement.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
