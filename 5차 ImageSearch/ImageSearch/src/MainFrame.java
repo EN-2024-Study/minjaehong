@@ -1,5 +1,5 @@
-import DAO.ImageDAO;
-import DTO.ImageDTO;
+import DAO.*;
+import DTO.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,10 +26,13 @@ class MainFrame extends JFrame {
     FlowLayout searchModeLayout;
     GridLayout logModeLayout;
 
-    ImageDTO imageDTO;
+    ImageListDTO imageListDTO;
     JLabel[] imageArr;
 
-    MainFrame() {
+    LogDAO logDAO;
+    ImageDAO imageDAO;
+
+    public MainFrame() {
         setSize(800, 800);
         setTitle("ImagerSearcher");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -48,6 +51,10 @@ class MainFrame extends JFrame {
         // imageArr 초기화
         imageArr = new JLabel[30];
         for(int i=0;i<30;i++) imageArr[i] = new JLabel();
+
+        // 이때 처음이자 마지막으로 초기화됨
+        imageDAO = ImageDAO.GetInstance();
+        logDAO = LogDAO.GetInstance();
 
         changeToHomeMode();
 
@@ -90,7 +97,11 @@ class MainFrame extends JFrame {
                     String keyWord = searchTextField.getText();
 
                     changeToSearchMode();
+                    // DAO 작업
+                    // 뿌려주기까지 하는데
+                    // 이걸 그냥 데이터 받고 뿌려주는걸 따로 나누면 MVC 분리가 가능하지 않을까??
                     GetResultImages(keyWord);
+                    logDAO.AddLog(keyWord);
                 }
             }
         });
@@ -110,6 +121,8 @@ class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 changeToLogMode();
+                // 로그 가져와서 여기서 뿌려주기
+
             }
         });
 
@@ -178,14 +191,7 @@ class MainFrame extends JFrame {
         // CENTER PANEL
         centerPanel.setBackground(Color.WHITE);
         centerPanel.setLayout(logModeLayout);
-
-        // Log 가져와서 여기에 뿌려주기
-        for (int i = 0; i < 20; i++) {
-            //imageArr[i].setText("label");
-            //imageArr[i].setBorder(new LineBorder(Color.BLACK, 1, false));
-            //centerPanel.add(imageArr[i]);
-        }
-
+        
         // BOTTOM PANEL
         bottomPanel.setVisible(true);
     }
@@ -196,8 +202,9 @@ class MainFrame extends JFrame {
     }
 
     public void GetResultImages(String keyWord){
-        imageDTO = ImageDAO.getImage(keyWord);
-        ArrayList<String> imageURLs = imageDTO.GetImageURLs();
+        imageListDTO = imageDAO.GetImage(keyWord);
+
+        ArrayList<String> imageURLList = imageListDTO.GetImageURLList();
 
         // API 로 가져와서 여기에 이렇게 뿌려주기
 
@@ -206,7 +213,7 @@ class MainFrame extends JFrame {
 
         for (int i = 0; i < 30; i++) {
             try {
-                url = new URL(imageURLs.get(i));
+                url = new URL(imageURLList.get(i));
                 // URL 통해서 Image 가져오기
                 curImage = ImageIO.read(url);
                 curImage = curImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
@@ -214,7 +221,8 @@ class MainFrame extends JFrame {
                 // 새 이미지 화면에 추가하기
                 imageArr[i] = new JLabel(new ImageIcon(curImage));
 
-                // panel에도 추가
+                // panel 에도 추가
+                // 이 작업이 여기 가있는게 맞는걸까
                 centerPanel.add(imageArr[i]);
 
                 System.out.println("DONE!");

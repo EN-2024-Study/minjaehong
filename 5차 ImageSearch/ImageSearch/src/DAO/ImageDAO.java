@@ -8,7 +8,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import DTO.ImageDTO;
+import DTO.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,7 +21,20 @@ import org.json.simple.parser.JSONParser;
 
 public class ImageDAO {
 
-    public static ImageDTO getImage(String keyWord){
+    private static ImageDAO instance;
+
+    private ImageDAO(){ }
+
+    public static ImageDAO GetInstance(){
+        if(instance==null){
+            instance = new ImageDAO();
+        }
+        return instance;
+    }
+
+    //=========================== SINGLETON =============================//
+
+    public ImageListDTO GetImage(String keyWord){
 
         // returning list
         ArrayList<String> imageURLList = new ArrayList<>();
@@ -95,6 +108,6 @@ public class ImageDAO {
             e.printStackTrace();
         }
 
-        return new ImageDTO(imageURLList);
+        return new ImageListDTO(imageURLList);
     }
 }

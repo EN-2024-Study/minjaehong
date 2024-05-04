@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import DAO.ImageDAO;
 import DAO.LogDAO;
-import DTO.ImageDTO;
+import DTO.ImageListDTO;
 
 // revalidate repaint 써보기
 // 쓰레드처럼 돌아가고 있는 Swing의 EventListener를 호출해줘서 rendering하게 강제한다??
@@ -25,8 +25,7 @@ import DTO.ImageDTO;
 class ImageSearchApp{
 
     public static void main(String[] args){
-        //MainFrame mainFrame = new MainFrame();
-        LogDAO logDAO = new LogDAO();
-        logDAO.getAllLogs();
+
+        MainFrame mainFrame = new MainFrame();
     }
 }
