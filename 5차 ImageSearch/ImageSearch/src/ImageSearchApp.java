@@ -14,7 +14,7 @@
 class ImageSearchApp{
 
     public static void main(String[] args){
-
-        MainFrame mainFrame = new MainFrame();
+        View mainFrame = new View();
+        // new Controller(new MainFrame(), new MainService);
     }
 }

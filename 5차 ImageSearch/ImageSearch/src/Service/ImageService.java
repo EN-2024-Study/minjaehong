@@ -6,10 +6,12 @@ import Model.VO.ImageListVO;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.net.URL;
 import java.util.ArrayList;
 
 public class ImageService {
+
     public ArrayList<JLabel> GetKeywordImages(String keyWord){
 
         // 싱글톤 DAO 받기
@@ -31,12 +33,12 @@ public class ImageService {
                 curImage = ImageIO.read(url);
                 curImage = curImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 
-                // 새 이미지 화면에 추가하기
-                retList.add(new JLabel(new ImageIcon(curImage)));
+                JLabel curLabel = new JLabel(new ImageIcon(curImage));
+                retList.add(curLabel);
 
-                System.out.println("DONE!");
+                System.out.println("DONE");
             } catch (Exception e) {
-
+                System.out.println("FAILED");
             }
         }
 

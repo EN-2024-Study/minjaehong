@@ -1,15 +1,71 @@
-import Model.DAO.*;
-import Model.VO.*;
 import Service.ImageService;
 import Service.LogService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
-class MainFrame extends JFrame {
+class MyListener implements ActionListener{
+
+    View view;
+
+    MyListener(View view){
+        this.view = view;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==view.searchBtn){
+            if(view.searchTextField.getText().isEmpty()) return;
+            else{
+                String keyWord = view.searchTextField.getText();
+
+                view.elementArr = view.imageService.GetKeywordImages(keyWord);
+
+                // VIEW 바꿔주기
+                view.changeToSearchMode();
+                view.AddToCenterPanel(view.elementArr);
+
+                view.howMany.setVisible(true);
+                view.howMany.setSelectedIndex(0);
+
+                view.logService.AddLog(keyWord);
+            }
+        }
+
+        if(e.getSource() == view.logBtn){
+            view.elementArr = view.logService.GetAllLogs();
+
+            // VIEW 바꿔주기
+            view.changeToLogMode();
+            view.AddToCenterPanel(view.elementArr);
+        }
+
+        if(e.getSource()==view.howMany){
+            JComboBox comboBox = (JComboBox) e.getSource();
+            String curHowMany = comboBox.getSelectedItem().toString();
+            if (curHowMany == "10") view.HideImage(10);
+            else if (curHowMany == "20") view.HideImage(20);
+            else if(curHowMany=="30") view.HideImage(30);
+        }
+
+        if(e.getSource()==view.backToHomeBtn){
+            view.elementArr.clear();
+            // VIEW 바꿔주기
+            view.AddToCenterPanel(view.elementArr);
+            view.changeToHomeMode();
+        }
+
+        if(e.getSource()==view.deleteAllLogBtn){
+            view.logService.DeleteAllLogs();
+            view.centerPanel.removeAll();
+            view.centerPanel.repaint();
+        }
+    }
+}
+
+class View extends JFrame{
 
     JPanel topPanel;
     JPanel centerPanel;
@@ -30,20 +86,35 @@ class MainFrame extends JFrame {
 
     ArrayList<JLabel> elementArr;
 
+    JDialog dialog;
+
     ImageService imageService;
     LogService logService;
 
-    public MainFrame() {
-        //setSize(1000, 800);
-        //setMinimumSize(getSize());
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
+    MyListener myListener;
+
+    public View() {
+
+        myListener = new MyListener(this);
+
+        setSize(new Dimension(1000,800));
+        setMinimumSize(new Dimension(1000,1000));
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // 아이콘 처리
+        //setIconImage();
+
         setTitle("ImagerSearcher");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         InitializeTopPanel();
         InitializeCenterPanel();
         InitializeBottomPanel();
+
+        searchBtn.addActionListener(myListener);
+        howMany.addActionListener(myListener);
+        logBtn.addActionListener(myListener);
+        backToHomeBtn.addActionListener(myListener);
+        deleteAllLogBtn.addActionListener(myListener);
 
         this.add(topPanel, BorderLayout.NORTH);
         this.add(centerPanel, BorderLayout.CENTER);
@@ -54,7 +125,7 @@ class MainFrame extends JFrame {
         homeModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
         //searchModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
         searchModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
-        logModeLayout = new GridLayout(0, 1);
+        logModeLayout = new GridLayout(10, 1);
 
         // imageArr 초기화
         elementArr = new ArrayList<JLabel>();
@@ -64,6 +135,8 @@ class MainFrame extends JFrame {
         logService = new LogService();
 
         changeToHomeMode();
+
+        dialog = new JDialog();
 
         setVisible(true);
     }
@@ -84,8 +157,10 @@ class MainFrame extends JFrame {
         searchBtn.setFont(mainFont);
         String s1[] = {"10", "20", "30"};
         howMany = new JComboBox(s1);
+
         logBtn = new JButton("SHOW LOGS");
         logBtn.setFont(mainFont);
+
         backToHomeBtn = new JButton("BACK TO HOME");
         backToHomeBtn.setFont(mainFont);
 
@@ -96,66 +171,11 @@ class MainFrame extends JFrame {
         topPanel.add(logBtn);
         topPanel.add(backToHomeBtn);
         topPanel.setBackground(Color.WHITE);
-
-        // TopPanel ActionListener 추가
-        searchBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(searchTextField.getText().isEmpty()) return;
-                else{
-                    String keyWord = searchTextField.getText();
-
-                    elementArr = imageService.GetKeywordImages(keyWord);
-
-                    // VIEW 바꿔주기
-                    changeToSearchMode();
-                    AddToCenterPanel(elementArr);
-
-                    howMany.setVisible(true);
-                    howMany.setSelectedIndex(0);
-
-                    logService.AddLog(keyWord);
-                }
-            }
-        });
-
-        howMany.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JComboBox comboBox = (JComboBox) e.getSource();
-                String curHowMany = comboBox.getSelectedItem().toString();
-                if (curHowMany == "10") HideImage(10);
-                else if (curHowMany == "20") HideImage(20);
-                else if(curHowMany=="30") HideImage(30);
-            }
-        });
-
-        logBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 로그 가져와서 여기서 뿌려주기
-                elementArr = logService.GetAllLogs();
-
-                // VIEW 바꿔주기
-                changeToLogMode();
-                AddToCenterPanel(elementArr);
-            }
-        });
-
-        backToHomeBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                elementArr.clear();
-
-                // VIEW 바꿔주기
-                AddToCenterPanel(elementArr);
-                changeToHomeMode();
-            }
-        });
     }
 
     public void InitializeCenterPanel() {
         centerPanel = new JPanel();
+        //centerPanel.add(dialog);
     }
 
     public void InitializeBottomPanel() {
@@ -167,17 +187,9 @@ class MainFrame extends JFrame {
 
         bottomPanel.add(deleteAllLogBtn);
         bottomPanel.setBackground(Color.WHITE);
-
-        // Bottom Panel ActionListener 추가
-        deleteAllLogBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                logService.DeleteAllLogs();
-                centerPanel.removeAll();
-                centerPanel.repaint();
-            }
-        });
     }
+
+    //======================== 사실 상 Controller 에 있어야할 작업들임 ========================//
 
     public void changeToHomeMode() {
         // TOP PANEL
@@ -234,8 +246,6 @@ class MainFrame extends JFrame {
         for (int i = 0; i < startIdx; i++) elementArr.get(i).setVisible(true);
         for (int i = startIdx; i < 30; i++) elementArr.get(i).setVisible(false);
     }
-
-    //======================== 사실 상 Controller 에 있어야할 작업들임 ========================//
 
     public void AddToCenterPanel(ArrayList<JLabel> elementArr){
         for(int i=0;i<elementArr.size();i++){
