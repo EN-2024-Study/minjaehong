@@ -9,6 +9,12 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class LogService {
+
+    public void AddLog(String keyWord){
+        LogDAO logDAO = LogDAO.GetInstance();
+        logDAO.AddLog(keyWord);
+    }
+
     public ArrayList<JLabel> GetAllLogs(){
 
         // 싱글톤 DAO 받기

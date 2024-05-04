@@ -1,13 +1,12 @@
 import Model.DAO.*;
 import Model.VO.*;
+import Service.ImageService;
+import Service.LogService;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
-import java.net.URL;
 import java.util.ArrayList;
 
 class MainFrame extends JFrame {
@@ -28,11 +27,8 @@ class MainFrame extends JFrame {
 
     ArrayList<JLabel> elementArr;
 
-    LogDAO logDAO;
-    ImageDAO imageDAO;
-
-    ImageListVO imageListVO;
-    LogListVO logListVO;
+    ImageService imageService;
+    LogService logService;
 
     public MainFrame() {
         setSize(800, 800);
@@ -54,9 +50,8 @@ class MainFrame extends JFrame {
         elementArr = new ArrayList<JLabel>();
         for(int i=0;i<30;i++) elementArr.add(new JLabel());
 
-        // 이때 처음이자 마지막으로 초기화됨
-        imageDAO = ImageDAO.GetInstance();
-        logDAO = LogDAO.GetInstance();
+        imageService = new ImageService();
+        logService = new LogService();
 
         changeToHomeMode();
 
@@ -101,13 +96,16 @@ class MainFrame extends JFrame {
                     // Model.DAO 작업
                     // 뿌려주기까지 하는데
                     // 이걸 그냥 데이터 받고 뿌려주는걸 따로 나누면 MVC 분리가 가능하지 않을까??
-                    elementArr = GetKeywordImages(keyWord);
+                    elementArr = imageService.GetKeywordImages(keyWord);
 
+                    // VIEW 바꿔주기
                     changeToSearchMode();
-
                     AddToCenterPanel(elementArr);
 
-                    logDAO.AddLog(keyWord);
+                    howMany.setVisible(true);
+                    howMany.setSelectedIndex(0);
+
+                    logService.AddLog(keyWord);
                 }
             }
         });
@@ -127,10 +125,10 @@ class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 로그 가져와서 여기서 뿌려주기
-                elementArr = GetAllLogs();
+                elementArr = logService.GetAllLogs();
 
+                // VIEW 바꿔주기
                 changeToLogMode();
-
                 AddToCenterPanel(elementArr);
             }
         });
@@ -140,6 +138,8 @@ class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 elementArr.clear();
 
+                // VIEW 바꿔주기
+                AddToCenterPanel(elementArr);
                 changeToHomeMode();
             }
         });
@@ -169,6 +169,7 @@ class MainFrame extends JFrame {
 
         // CENTER PANEL
         centerPanel.removeAll();
+        centerPanel.repaint();
         centerPanel.setBackground(Color.WHITE);
 
         // BOTTOM PANEL
@@ -178,12 +179,11 @@ class MainFrame extends JFrame {
     public void changeToSearchMode() {
         // TOP PANEL
         logBtn.setVisible(false);
-        howMany.setVisible(true);
-        howMany.setSelectedIndex(0);
         backToHomeBtn.setVisible(true);
 
         // CENTER PANEL
         centerPanel.removeAll();
+        centerPanel.repaint();
         centerPanel.setBackground(Color.WHITE);
         centerPanel.setLayout(searchModeLayout);
 
@@ -200,6 +200,7 @@ class MainFrame extends JFrame {
 
         // CENTER PANEL
         centerPanel.removeAll();
+        centerPanel.repaint();
         centerPanel.setBackground(Color.WHITE);
         centerPanel.setLayout(logModeLayout);
 
@@ -208,7 +209,7 @@ class MainFrame extends JFrame {
     }
 
     public void HideImage(int startIdx) {
-        for (int i = 10; i < startIdx; i++) elementArr.get(i).setVisible(true);
+        for (int i = 0; i < startIdx; i++) elementArr.get(i).setVisible(true);
         for (int i = startIdx; i < 30; i++) elementArr.get(i).setVisible(false);
     }
 
@@ -218,60 +219,5 @@ class MainFrame extends JFrame {
         for(int i=0;i<elementArr.size();i++){
             centerPanel.add(elementArr.get(i));
         }
-    }
-
-    public ArrayList<JLabel> GetKeywordImages(String keyWord){
-
-        ArrayList<JLabel> retList = new ArrayList<>();
-
-        // 싱글톤 DAO로 받기
-        imageListVO = imageDAO.GetImageURLs(keyWord);
-
-        ArrayList<String> imageURLList = imageListVO.GetImageURLList();
-
-        // API 로 가져와서 여기에 이렇게 뿌려주기
-        URL url;
-        Image curImage; // BufferedImage??
-
-        for (int i = 0; i < 30; i++) {
-            try {
-                url = new URL(imageURLList.get(i));
-                // URL 통해서 Image 가져오기
-                curImage = ImageIO.read(url);
-                curImage = curImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-
-                // 새 이미지 화면에 추가하기
-                retList.add(new JLabel(new ImageIcon(curImage)));
-
-                System.out.println("DONE!");
-            } catch (Exception e) {
-
-            }
-        }
-
-        return retList;
-    }
-
-    public ArrayList<JLabel> GetAllLogs(){
-
-        ArrayList<JLabel> retList = new ArrayList<>();
-
-        // 싱글톤 DAO로 받기
-        logListVO = logDAO.GetLogs();
-
-        // API 로 가져와서 여기에 이렇게 뿌려주기
-        URL url;
-        Image curImage; // BufferedImage??
-
-        ArrayList<String> logList = logListVO.GetLogList();
-
-        String curLog;
-        for (int i = 0; i < logList.size(); i++) {
-            curLog = logList.get(i);
-            // 새 이미지 화면에 추가하기
-            retList.add(new JLabel(curLog));
-        }
-
-        return retList;
     }
 }
