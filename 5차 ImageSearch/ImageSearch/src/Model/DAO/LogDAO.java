@@ -1,6 +1,6 @@
-package DAO;
+package Model.DAO;
 
-import VO.LogListVO;
+import Model.VO.LogListVO;
 
 import java.sql.*;
 import java.util.ArrayList;

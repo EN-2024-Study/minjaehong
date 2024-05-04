@@ -8,7 +8,7 @@
 // Swing 은 자체적으로 Delegate 패턴이라고 함
 // 얘가 View 랑 Controller 작업을 모두 수행함
 // 그래서 얘랑 Model 만 필요함
-// 여기서 바로 DAO 호출하고 바로 DTO 로 받기
+// 여기서 바로 Model.DAO 호출하고 바로 DTO 로 받기
 
 // 자동정렬 ctrl alt shift L
 class ImageSearchApp{

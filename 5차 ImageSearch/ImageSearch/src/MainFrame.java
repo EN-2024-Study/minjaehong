@@ -1,5 +1,5 @@
-import DAO.*;
-import VO.*;
+import Model.DAO.*;
+import Model.VO.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -94,11 +94,11 @@ class MainFrame extends JFrame {
                 if(searchTextField.getText().isEmpty()) return;
                 else{
                     // DAO로 데이터 불러와서 뿌려주기
-                    // 이 함수 안에 DAO 작업 들어가야함
+                    // 이 함수 안에 Model.DAO 작업 들어가야함
                     String keyWord = searchTextField.getText();
 
                     changeToSearchMode();
-                    // DAO 작업
+                    // Model.DAO 작업
                     // 뿌려주기까지 하는데
                     // 이걸 그냥 데이터 받고 뿌려주는걸 따로 나누면 MVC 분리가 가능하지 않을까??
                     GetKeywordImages(keyWord);
@@ -114,7 +114,7 @@ class MainFrame extends JFrame {
                 String curHowMany = comboBox.getSelectedItem().toString();
                 if (curHowMany == "10") HideImage(10);
                 else if (curHowMany == "20") HideImage(20);
-                else HideImage(30);
+                else if(curHowMany=="30") HideImage(30);
             }
         });
 
@@ -145,7 +145,7 @@ class MainFrame extends JFrame {
         deleteAllLogBtn = new JButton("DELETE ALL LOG");
 
         bottomPanel.add(deleteAllLogBtn);
-        bottomPanel.setBackground(Color.CYAN);
+        bottomPanel.setBackground(Color.GREEN);
     }
 
     public void changeToHomeMode() {
@@ -158,9 +158,8 @@ class MainFrame extends JFrame {
         backToHomeBtn.setVisible(false);
 
         // CENTER PANEL
-        centerPanel.setBackground(Color.RED);
-        centerPanel.setLayout(searchModeLayout);
         centerPanel.removeAll();
+        centerPanel.setBackground(Color.RED);
 
         // BOTTOM PANEL
         bottomPanel.setVisible(false);
@@ -174,6 +173,7 @@ class MainFrame extends JFrame {
         backToHomeBtn.setVisible(true);
 
         // CENTER PANEL
+        centerPanel.removeAll();
         centerPanel.setBackground(Color.WHITE);
         centerPanel.setLayout(searchModeLayout);
 
@@ -185,14 +185,14 @@ class MainFrame extends JFrame {
         // TOP PANEL
         searchTextField.setVisible(false);
         searchBtn.setVisible(false);
-        howMany.setVisible(false);
         logBtn.setVisible(false);
         backToHomeBtn.setVisible(true);
 
         // CENTER PANEL
+        centerPanel.removeAll();
         centerPanel.setBackground(Color.WHITE);
         centerPanel.setLayout(logModeLayout);
-        
+
         // BOTTOM PANEL
         bottomPanel.setVisible(true);
     }
@@ -203,6 +203,12 @@ class MainFrame extends JFrame {
     }
 
     //======================== 사실 상 Controller 에 있어야할 작업들임 ========================//
+
+    public void AddToCenterPanel(JLabel[] elementArr){
+        for(int i=0;i<elementArr.length;i++){
+            centerPanel.add(elementArr[i]);
+        }
+    }
 
     public void GetKeywordImages(String keyWord){
         
