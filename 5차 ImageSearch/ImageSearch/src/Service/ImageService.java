@@ -5,6 +5,7 @@ import Model.VO.ImageListVO;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
@@ -34,6 +35,8 @@ public class ImageService {
                 curImage = curImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 
                 JLabel curLabel = new JLabel(new ImageIcon(curImage));
+                curLabel.setSize(800,50);
+                curLabel.setBorder(new LineBorder(Color.BLACK, 5,false));
                 retList.add(curLabel);
 
                 System.out.println("DONE");

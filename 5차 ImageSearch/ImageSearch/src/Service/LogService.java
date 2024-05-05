@@ -26,14 +26,12 @@ public class LogService {
 
         // 반환할 ArrayList 생성
         ArrayList<JLabel> retList = new ArrayList<>();
-        
+
         String curLog;
         for (int i = 0; i < logList.size(); i++) {
             curLog = logList.get(i);
             // 새 이미지 return list 에 추가
             JLabel curLogLabel = new JLabel(curLog);
-            curLogLabel.setSize(800,50);
-            curLogLabel.setBorder(new LineBorder(Color.BLACK, 5,false));
             retList.add(curLogLabel);
         }
 

@@ -2,9 +2,11 @@ import Service.ImageService;
 import Service.LogService;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Controller {
@@ -112,6 +114,72 @@ public class Controller {
         }
     }
 
+    //========================== ACTIONLISTENER ==========================//
+
+    private void searchImage(){
+        if(view.getSearchTextField().getText().isEmpty()) return;
+        else{
+            // VIEW 에서 받아서
+            String keyWord = view.getSearchTextField().getText();
+
+            // SERVICE 한테 넘기기
+            view.setElementArr(imageService.GetKeywordImages(keyWord));
+
+            // VIEW 에 적용
+            changeToSearchMode();
+            addToCenterPanel(view.getElementArr());
+
+            view.getHowMany().setVisible(true);
+            view.getHowMany().setSelectedIndex(0);
+
+            // SERVICE 통해서 기록
+            logService.AddLog(keyWord);
+        }
+    }
+
+    private void getAllLog(){
+        // SERVICE 에서 받기
+        ArrayList<JLabel> newElementArr = logService.GetAllLogs();
+
+        // VIEW 에 적용하기 전에 ActionListener 달아주기
+        for(int i=0;i<newElementArr.size();i++){
+            // MouseListener 추가
+            // newElementArr.get(i).addMouseListener((MouseListener) myListener);
+        }
+
+        // VIEW 에 적용
+        view.setElementArr(newElementArr);
+
+        // VIEW 바꿔주기
+        changeToLogMode();
+        addToCenterPanel(view.getElementArr());
+    }
+
+    private void applyHowMany(String curHowMany){
+        // VIEW 에 다시 적용
+        if (curHowMany == "10") hideImage(10);
+        else if (curHowMany == "20") hideImage(20);
+        else if(curHowMany=="30") hideImage(30);
+    }
+
+    private void goBackToHome(){
+        // VIEW ELEMENT 다 지워주기
+        view.getElementArr().clear();
+
+        // VIEW 바꿔주기
+        changeToHomeMode();
+        addToCenterPanel(view.getElementArr());
+    }
+
+    private void deleteAllLog(){
+        // SERVICE 통해서 적용하고
+        logService.DeleteAllLogs();
+
+        // VIEW 에 적용
+        view.getCenterPanel().removeAll();
+        view.getCenterPanel().repaint();
+    }
+
     private class MyListener implements ActionListener{
 
         public MyListener(){
@@ -121,62 +189,26 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource()==view.getSearchBtn()){
-                if(view.getSearchTextField().getText().isEmpty()) return;
-                else{
-                    // VIEW에서 받아서
-                    String keyWord = view.getSearchTextField().getText();
-
-                    // SERVICE한테 넘기기
-                    view.setElementArr(imageService.GetKeywordImages(keyWord));
-
-                    // VIEW바꿔주기
-                    changeToSearchMode();
-                    addToCenterPanel(view.getElementArr());
-
-                    view.getHowMany().setVisible(true);
-                    view.getHowMany().setSelectedIndex(0);
-
-                    // SERVICE에 기록
-                    logService.AddLog(keyWord);
-                }
+                searchImage();
             }
 
             if(e.getSource() == view.getLogBtn()){
-                // SERVICE에서 받아서 VIEW에 적용
-                view.setElementArr(logService.GetAllLogs());
-
-                // VIEW 바꿔주기
-                changeToLogMode();
-                addToCenterPanel(view.getElementArr());
+                getAllLog();
             }
 
             if(e.getSource()==view.getHowMany()){
                 JComboBox comboBox = (JComboBox) e.getSource();
-                // VIEW에서 받아서
                 String curHowMany = comboBox.getSelectedItem().toString();
 
-                // VIEW에 다시 적용
-                if (curHowMany == "10") hideImage(10);
-                else if (curHowMany == "20") hideImage(20);
-                else if(curHowMany=="30") hideImage(30);
+                applyHowMany(curHowMany);
             }
 
             if(e.getSource()==view.getBackToHomeBtn()){
-                // VIEW ELEMENT 다 지워주기
-                view.getElementArr().clear();
-
-                // VIEW 바꿔주기
-                changeToHomeMode();
-                addToCenterPanel(view.getElementArr());
+                goBackToHome();
             }
 
             if(e.getSource()==view.getDeleteAllLogBtn()){
-                // SERVICE 통해서 적용하고
-                logService.DeleteAllLogs();
-
-                // VIEW에 적용
-                view.getCenterPanel().removeAll();
-                view.getCenterPanel().repaint();
+                deleteAllLog();
             }
         }
     }

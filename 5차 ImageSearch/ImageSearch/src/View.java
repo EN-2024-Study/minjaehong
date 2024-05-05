@@ -145,6 +145,9 @@ class View extends JFrame{
     // ELEMENT ARR
     public ArrayList<JLabel> getElementArr() { return elementArr; }
 
+    // MAIN FONT
+    public Font getMainFont() { return mainFont; }
+
     // LAYOUTS
     public FlowLayout getHomeModeLayout() { return homeModeLayout; }
     public FlowLayout getSearchModeLayout() { return searchModeLayout; }

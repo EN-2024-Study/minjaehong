@@ -12,11 +12,12 @@ public class AppConfig {
     // 이 jdbcDriverURL 가지고 Class.forName 쓰면 알아서 JDBC 드라이버를 등록해주는거임
     public static final String JDBC_DRIVER_URL = "com.mysql.cj.jdbc.Driver";
 
-    // 2. URL : DBMS(사용하는 실제 DB)와 연결하기 위한 URL
+    // 2. DB URL : DBMS(사용하는 실제 DB)와 연결하기 위한 URL
     // 사용하는 DB에 따라서 형식이 다르기 때문에 DB에 따라서 입력값이 달라짐
     // 얘는 위 jdbcDriverURL을 통해 얻은 JDBCDriver의 인자로 넘겨주면 실제 DB Connection 반환해줌
-
     public static final String DB_URL = "jdbc:mysql://localhost/ensharp";
+
+    // ENSHARP DB ID AND PW
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "1234";
 
