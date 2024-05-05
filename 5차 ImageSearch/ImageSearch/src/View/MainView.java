@@ -35,6 +35,8 @@ public class MainView extends JFrame{
     public MainView() {
 
         // 이거 없애면 왜 안됨???
+        // 일단 돌아가긴하니까 놔두자
+        // 나중에 없애기 무조건 Service Controller 에서만 되도록
         logService = new LogService();
         imageService = new ImageService();
 
@@ -115,6 +117,7 @@ public class MainView extends JFrame{
     }
 
     //================================= SET FUNCTIONS FOR CONTROLLER =================================//
+
     public void setElementArr(ArrayList<JLabel> newElementArr) { this.elementArr = newElementArr; }
 
     //================================= GET FUNCTIONS FOR CONTROLLER =================================//

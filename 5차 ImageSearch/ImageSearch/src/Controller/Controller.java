@@ -110,8 +110,12 @@ public class Controller {
     }
 
     private void hideImage(int startIdx) {
-        for (int i = 0; i < startIdx; i++) view.getElementArr().get(i).setVisible(true);
-        for (int i = startIdx; i < 30; i++) view.getElementArr().get(i).setVisible(false);
+        for (int i = 0; i < startIdx; i++) {
+            view.getElementArr().get(i).setVisible(true);
+        }
+        for (int i = startIdx; i < 30; i++) {
+            view.getElementArr().get(i).setVisible(false);
+        }
     }
 
     private void addToCenterPanel(ArrayList<JLabel> elementArr){
@@ -130,7 +134,7 @@ public class Controller {
 
             // SERVICE 통해서 기록
             logService.AddLog(keyWord);
-            
+
             // SERVICE 한테 넘기기
             ArrayList<JLabel> newElementArr = imageService.GetKeywordImages(keyWord);
 
@@ -157,10 +161,12 @@ public class Controller {
         ArrayList<JLabel> newElementArr = logService.GetAllLogs();
 
         // VIEW 에 적용하기 전에 ActionListener 달아주기
+        /*
         for(int i=0;i<newElementArr.size();i++){
             // MouseListener 추가
             // newElementArr.get(i).addMouseListener((MouseListener) ButtonObserver);
         }
+        */
 
         // VIEW 에 적용
         view.setElementArr(newElementArr);

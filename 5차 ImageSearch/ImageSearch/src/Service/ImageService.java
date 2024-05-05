@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.*;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -39,9 +38,9 @@ public class ImageService {
                 curLabel.setBorder(new LineBorder(Color.BLACK, 5,false));
                 retList.add(curLabel);
 
-                System.out.println("DONE");
+                System.out.println("[IMAGE SERVICE] DONE");
             } catch (Exception e) {
-                System.out.println("FAILED");
+                System.out.println("[IMAGE SERVICE] FAILED");
             }
         }
 

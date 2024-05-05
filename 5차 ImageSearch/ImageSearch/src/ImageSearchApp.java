@@ -7,7 +7,6 @@ import View.MainView;
 class ImageSearchApp{
 
     public static void main(String[] args){
-
         new Controller(new MainView(), new ImageService(), new LogService());
     }
 }
