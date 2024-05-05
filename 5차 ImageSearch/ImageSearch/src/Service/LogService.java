@@ -4,9 +4,6 @@ import Model.DAO.LogDAO;
 import Model.VO.LogListVO;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class LogService {

@@ -1,3 +1,5 @@
+package View;
+
 import Service.ImageService;
 import Service.LogService;
 
@@ -5,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-class View extends JFrame{
+public class MainView extends JFrame{
 
     private JPanel topPanel;
     private JPanel centerPanel;
@@ -30,7 +32,7 @@ class View extends JFrame{
     // CENTER PANEL 에 놓을 것들
     private ArrayList<JLabel> elementArr;
 
-    public View() {
+    public MainView() {
 
         // 이거 없애면 왜 안됨???
         logService = new LogService();

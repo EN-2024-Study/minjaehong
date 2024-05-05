@@ -1,33 +1,39 @@
+package Controller;
+
 import Service.ImageService;
 import Service.LogService;
 
+import Controller.Observer.ImageObserver;
+import Controller.Observer.ButtonObserver;
+
+import View.MainView;
+
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Controller {
-    private View view;
+    private MainView view;
 
     private ImageService imageService;
     private LogService logService;
 
-    private MyButtonListener myButtonListener;
-    private MyMouseListener myMouseListener;
+    private ButtonObserver ButtonObserver;
+    private ImageObserver ImageObserver;
 
-    public Controller(View view, ImageService imageService, LogService logService){
+    public Controller(MainView view, ImageService imageService, LogService logService){
         this.view = view;
         this.imageService = imageService;
         this.logService = logService;
 
-        myButtonListener = new MyButtonListener();
-        myMouseListener = new MyMouseListener();
+        ButtonObserver = new ButtonObserver(view, this);
+        ImageObserver = new ImageObserver();
 
         // View 초기화
         //InitView();
 
-        // Controller 가 View 영향끼칠 수 있게 ActionListener 를 Component 들에게 모두 주기
+        // Controller.Controller 가 View 영향끼칠 수 있게 ActionListener 를 Component 들에게 모두 주기
         BindButtonListenerToViewComponents();
 
         // 다 준비되었으면 HomeMode 로 시작하기
@@ -43,13 +49,13 @@ public class Controller {
 
     private void BindButtonListenerToViewComponents(){
         // TOP PANEL 에게 모두 바인딩
-        view.getSearchBtn().addActionListener(myButtonListener);
-        view.getHowMany().addActionListener(myButtonListener);
-        view.getLogBtn().addActionListener(myButtonListener);
-        view.getBackToHomeBtn().addActionListener(myButtonListener);
+        view.getSearchBtn().addActionListener(ButtonObserver);
+        view.getHowMany().addActionListener(ButtonObserver);
+        view.getLogBtn().addActionListener(ButtonObserver);
+        view.getBackToHomeBtn().addActionListener(ButtonObserver);
 
         // BOTTOM PANEL 에게 모두 바인딩
-        view.getDeleteAllLogBtn().addActionListener(myButtonListener);
+        view.getDeleteAllLogBtn().addActionListener(ButtonObserver);
     }
 
     private void changeToHomeMode() {
@@ -114,62 +120,24 @@ public class Controller {
         }
     }
 
-    //================================= CONTROLLER LISTENER =================================//
+    //========================== OBSERVER REACTION FUNCTIONS ==========================//
 
-    private class MyButtonListener implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            if(e.getSource()==view.getSearchBtn()) searchImage();
-            else if(e.getSource() == view.getLogBtn()) getAllLog();
-            else if(e.getSource()==view.getHowMany()) applyHowMany(e);
-            else if(e.getSource()==view.getBackToHomeBtn()) goBackToHome();
-            else if(e.getSource()==view.getDeleteAllLogBtn()) deleteAllLog();
-        }
-    }
-
-    // 얘는 ImageIcon 이 붙어있는 JLabel 들한테만 달리기 때문에
-    // mouseClicked 안에서 이게 ImageIcon 붙어있는 JLabel 인지 확인할 필요가 없음
-    // 그냥 ImageIcon 이라고 확신하고 들어가는거임 ImageIcon 이라는 것은 보장이 돼있음
-    private class MyMouseListener extends MouseAdapter {
-
-        // 기존 ImageIcon 을 받아서 더 4배의 ImageIcon 으로 만들어서 return 해줌
-        private ImageIcon changeToBiggerImageIcon(ImageIcon originalIcon, int width, int height){
-            Image originalImage = originalIcon.getImage();
-            Image scaledImage = originalImage.getScaledInstance(width * 4, height * 4, Image.SCALE_SMOOTH);
-            return new ImageIcon(scaledImage);
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (e.getClickCount() == 1) {
-                JLabel curLabel = (JLabel)e.getSource();
-                ImageIcon curImageIcon = (ImageIcon)curLabel.getIcon();
-
-                ImageIcon scaledImageIcon = changeToBiggerImageIcon(curImageIcon, curLabel.getWidth(), curLabel.getHeight());
-
-                // view 를 기준으로 생성해서 보여주기
-                JOptionPane.showMessageDialog(view, scaledImageIcon, "ENLARGED IMAGE", JOptionPane.PLAIN_MESSAGE);
-            }
-        }
-    }
-
-    //========================== ACTION LISTENER REACTION FUNCTIONS ==========================//
-
-    private void searchImage(){
+    public void searchImage(){
         if(view.getSearchTextField().getText().isEmpty()) return;
         else{
             // VIEW 에서 받아서
             String keyWord = view.getSearchTextField().getText();
 
+            // SERVICE 통해서 기록
+            logService.AddLog(keyWord);
+            
             // SERVICE 한테 넘기기
             ArrayList<JLabel> newElementArr = imageService.GetKeywordImages(keyWord);
 
-            // 각 JLABEL 에게 myMouseListener 바인딩하기
+            // 각 JLABEL 에게 ImageObserver 바인딩하기
             // 이거 나중에 함수로 빼보기 Bind 뭐시기로
             for(int i=0;i<newElementArr.size();i++){
-                newElementArr.get(i).addMouseListener(myMouseListener);
+                newElementArr.get(i).addMouseListener(ImageObserver);
             }
 
             // VIEW 에 적용
@@ -181,20 +149,17 @@ public class Controller {
 
             view.getHowMany().setVisible(true);
             view.getHowMany().setSelectedIndex(0);
-
-            // SERVICE 통해서 기록
-            logService.AddLog(keyWord);
         }
     }
 
-    private void getAllLog(){
+    public void getAllLog(){
         // SERVICE 에서 받기
         ArrayList<JLabel> newElementArr = logService.GetAllLogs();
 
         // VIEW 에 적용하기 전에 ActionListener 달아주기
         for(int i=0;i<newElementArr.size();i++){
             // MouseListener 추가
-            // newElementArr.get(i).addMouseListener((MouseListener) myButtonListener);
+            // newElementArr.get(i).addMouseListener((MouseListener) ButtonObserver);
         }
 
         // VIEW 에 적용
@@ -205,7 +170,7 @@ public class Controller {
         addToCenterPanel(view.getElementArr());
     }
 
-    private void applyHowMany(ActionEvent e){
+    public void applyHowMany(ActionEvent e){
         // VIEW 정보 확인
         JComboBox comboBox = (JComboBox) e.getSource();
         String curHowMany = comboBox.getSelectedItem().toString();
@@ -216,7 +181,7 @@ public class Controller {
         else if(curHowMany=="30") hideImage(30);
     }
 
-    private void goBackToHome(){
+    public void goBackToHome(){
         // VIEW ELEMENT 다 지워주기
         view.getElementArr().clear();
 
@@ -225,7 +190,7 @@ public class Controller {
         addToCenterPanel(view.getElementArr());
     }
 
-    private void deleteAllLog(){
+    public void deleteAllLog(){
         // SERVICE 통해서 적용하고
         logService.DeleteAllLogs();
 
