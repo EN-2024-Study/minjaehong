@@ -7,30 +7,32 @@ import java.util.ArrayList;
 
 class View extends JFrame{
 
-    JPanel topPanel;
-    JPanel centerPanel;
-    JPanel bottomPanel;
+    private JPanel topPanel;
+    private JPanel centerPanel;
+    private JPanel bottomPanel;
 
-    JTextField searchTextField;
-    JButton searchBtn;
-    JComboBox howMany;
-    JButton logBtn;
-    JButton backToHomeBtn;
-    JButton deleteAllLogBtn;
+    private JTextField searchTextField;
+    private JButton searchBtn;
+    private JComboBox howMany;
+    private JButton logBtn;
+    private JButton backToHomeBtn;
+    private JButton deleteAllLogBtn;
 
-    Font mainFont;
+    private Font mainFont;
 
-    FlowLayout homeModeLayout;
-    FlowLayout searchModeLayout;
-    GridLayout logModeLayout;
+    private FlowLayout homeModeLayout;
+    private FlowLayout searchModeLayout;
+    private GridLayout logModeLayout;
 
-    LogService logService;
-    ImageService imageService;
+    private LogService logService;
+    private ImageService imageService;
 
-    ArrayList<JLabel> elementArr;
+    // CENTER PANEL 에 놓을 것들
+    private ArrayList<JLabel> elementArr;
 
     public View() {
 
+        // 이거 없애면 왜 안됨???
         logService = new LogService();
         imageService = new ImageService();
 
@@ -43,15 +45,7 @@ class View extends JFrame{
         setTitle("ImagerSearcher");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        InitializeTopPanel();
-        InitializeCenterPanel();
-        InitializeBottomPanel();
-
-        this.add(topPanel, BorderLayout.NORTH);
-        this.add(centerPanel, BorderLayout.CENTER);
-        this.add(bottomPanel, BorderLayout.SOUTH);
-
-        Font mainFont = new Font("Consolas",Font.BOLD, 13);
+        mainFont = new Font("Consolas",Font.BOLD, 13);
 
         homeModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
         searchModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
@@ -60,6 +54,14 @@ class View extends JFrame{
         // imageArr 초기화
         elementArr = new ArrayList<JLabel>();
         for(int i=0;i<30;i++) elementArr.add(new JLabel());
+
+        InitializeTopPanel();
+        InitializeCenterPanel();
+        InitializeBottomPanel();
+
+        this.add(topPanel, BorderLayout.NORTH);
+        this.add(centerPanel, BorderLayout.CENTER);
+        this.add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -71,11 +73,11 @@ class View extends JFrame{
 
         // TopPanel Components 생성
         searchTextField = new JTextField(20);
-
         searchTextField.setPreferredSize(new Dimension(80,28));
 
         searchBtn = new JButton("SEARCH");
         searchBtn.setFont(mainFont);
+
         String s1[] = {"10", "20", "30"};
         howMany = new JComboBox(s1);
 
@@ -96,6 +98,7 @@ class View extends JFrame{
 
     public void InitializeCenterPanel() {
         centerPanel = new JPanel();
+        centerPanel.setBackground(Color.WHITE);
     }
 
     public void InitializeBottomPanel() {

@@ -24,9 +24,11 @@ public class Controller {
 
         // View 초기화
         //InitView();
+
         // Controller 가 View 영향끼칠 수 있게 ActionListener 를 Component 들에게 모두 주기
         BindActionListenerToViewComponents();
 
+        // 다 준비되었으면 HomeMode로 시작하기
         changeToHomeMode();
     }
 
@@ -34,7 +36,7 @@ public class Controller {
         view.InitializeTopPanel();
         view.InitializeCenterPanel();
         view.InitializeBottomPanel();
-        changeToHomeMode();
+        changeToHomeMode(); // ?
     }
 
     private void BindActionListenerToViewComponents(){
@@ -139,8 +141,9 @@ public class Controller {
                 }
             }
 
-            if(e.getSource() == view.logBtn){
-                view.elementArr = view.logService.GetAllLogs();
+            if(e.getSource() == view.getLogBtn()){
+                // SERVICE에서 받아서 VIEW에 적용
+                view.setElementArr(logService.GetAllLogs());
 
                 // VIEW 바꿔주기
                 changeToLogMode();
@@ -149,14 +152,16 @@ public class Controller {
 
             if(e.getSource()==view.getHowMany()){
                 JComboBox comboBox = (JComboBox) e.getSource();
+                // VIEW에서 받아서
                 String curHowMany = comboBox.getSelectedItem().toString();
 
+                // VIEW에 다시 적용
                 if (curHowMany == "10") hideImage(10);
                 else if (curHowMany == "20") hideImage(20);
                 else if(curHowMany=="30") hideImage(30);
             }
 
-            if(e.getSource()==view.backToHomeBtn){
+            if(e.getSource()==view.getBackToHomeBtn()){
                 // VIEW ELEMENT 다 지워주기
                 view.getElementArr().clear();
 
@@ -165,9 +170,11 @@ public class Controller {
                 addToCenterPanel(view.getElementArr());
             }
 
-            if(e.getSource()==view.deleteAllLogBtn){
+            if(e.getSource()==view.getDeleteAllLogBtn()){
+                // SERVICE 통해서 적용하고
                 logService.DeleteAllLogs();
 
+                // VIEW에 적용
                 view.getCenterPanel().removeAll();
                 view.getCenterPanel().repaint();
             }
