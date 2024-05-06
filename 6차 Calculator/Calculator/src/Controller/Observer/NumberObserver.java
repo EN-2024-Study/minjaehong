@@ -21,6 +21,8 @@ public class NumberObserver implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println("NumberObserver called");
+
         String str="";
 
         if (e.getSource() == buttonPanel.getNum0Button()) {
@@ -45,6 +47,6 @@ public class NumberObserver implements ActionListener {
             str = "9";
         }
 
-        controller.addToCurNumberText(str);
+        //controller.addToCurNumberText(str);
     }
 }

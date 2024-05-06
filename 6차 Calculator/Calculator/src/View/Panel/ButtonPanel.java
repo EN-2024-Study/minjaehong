@@ -203,4 +203,43 @@ public class ButtonPanel extends JPanel {
         return num9Button;
     }
 
+    public JButton getClearAllButton() {
+        return clearAllButton;
+    }
+
+    public JButton getClearButton() {
+        return clearButton;
+    }
+
+    public JButton getBackSpaceButton() {
+        return backSpaceButton;
+    }
+
+    public JButton getAddButton() {
+        return addButton;
+    }
+
+    public JButton getDivButton() {
+        return divButton;
+    }
+
+    public JButton getDotButton() {
+        return dotButton;
+    }
+
+    public JButton getEqualButton() {
+        return equalButton;
+    }
+
+    public JButton getMulButton() {
+        return mulButton;
+    }
+
+    public JButton getSignButton() {
+        return signButton;
+    }
+
+    public JButton getSubButton() {
+        return subButton;
+    }
 }

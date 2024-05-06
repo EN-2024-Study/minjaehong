@@ -19,6 +19,6 @@ public class OperationObserver implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        System.out.println("OperationObserver called");
     }
 }
