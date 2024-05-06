@@ -6,21 +6,29 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.ButtonUI;
 import java.awt.*;
 
+// curNumberLabel에 지금입력한 값이 들어갈때가 있고
+// 지금까지 입력한 결과값이 들어갈때가 있음
+
 public class ResultPanel extends JPanel {
 
     JLabel curEquationLabel;
     JLabel curNumberLabel;
     JButton showLogButton;
 
+    public ResultPanel(){
+        createComponents();
+        initializeResultPanel();
+    }
+
     private void createComponents(){
         curEquationLabel = new JLabel("curEquation");
-        curEquationLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+        //curEquationLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
 
         curNumberLabel = new JLabel("curNumber");
-        curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+        //curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
 
         showLogButton = new JButton("X");
-        curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+        //curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
     }
 
     private void initializeResultPanel(){
@@ -67,10 +75,5 @@ public class ResultPanel extends JPanel {
         gbc.weighty = 0.6;
         gbc.fill = GridBagConstraints.BOTH;
         add(curNumberLabel, gbc);
-    }
-
-    public ResultPanel(){
-        createComponents();
-        initializeResultPanel();
     }
 }

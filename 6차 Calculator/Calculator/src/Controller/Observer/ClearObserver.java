@@ -1,6 +1,5 @@
 package Controller.Observer;
 
-import View.MainView;
 import Controller.Controller;
 import View.Panel.ButtonPanel;
 

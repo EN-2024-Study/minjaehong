@@ -53,8 +53,7 @@ public class MainView extends JFrame {
     public MainView(){
         setTitle("Calculator");
         setSize(new Dimension(500,500));
-        setMinimumSize(new Dimension(500,500));
-
+        setMinimumSize(new Dimension(600,600));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         createComponents();
