@@ -4,6 +4,8 @@ import Model.DAO.LogDAO;
 import Model.VO.LogListVO;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class LogService {
@@ -29,6 +31,7 @@ public class LogService {
             curLog = logList.get(i);
             // 새 이미지 return list 에 추가
             JLabel curLogLabel = new JLabel(curLog);
+            curLogLabel.setBorder(new LineBorder(Color.BLACK, 3,false));
             retList.add(curLogLabel);
         }
 

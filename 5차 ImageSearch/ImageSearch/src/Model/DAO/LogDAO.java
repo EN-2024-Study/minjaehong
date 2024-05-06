@@ -6,6 +6,10 @@ import Model.AppConfig;
 import java.sql.*;
 import java.util.ArrayList;
 
+// 쿼리문 상수처리하기
+
+
+
 // JAVA > JDBC API > JDBC DRIVER > DBMS(각종 DB들)
 // JDBC API는 DBMS(실제 DB들)에 상관없이 사용할 수 있는 API를 제공함
 // 얘내는 JDK에 이미 포함이 되어있기 때문에 따로 다운로드하거나 설치할 필요가 없음
@@ -143,6 +147,7 @@ public class LogDAO {
     }
 
     //=========================== DELETE ALL LOG =============================//
+
     public void DeleteAll(){
         Connection conn = null;
 

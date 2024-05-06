@@ -1,6 +1,7 @@
 package Model;
 
 // member 가 static 이면 클래스는 명시하지 않아도 자동으로 static 클래스가 됨
+// gitignore 처리
 public class AppConfig {
 
     // 1. JDBC 드라이버 : DBMS(사용하는 실제 DB)에 맞는 드라이버를 runtime 때 로딩할 때 필요함

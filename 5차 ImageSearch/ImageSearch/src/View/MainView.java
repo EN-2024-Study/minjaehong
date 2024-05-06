@@ -53,7 +53,7 @@ public class MainView extends JFrame{
 
         homeModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
         searchModeLayout = new FlowLayout(FlowLayout.CENTER, 50, 50);
-        logModeLayout = new GridLayout(10, 1);
+        logModeLayout = new GridLayout(20, 1);
 
         // imageArr 초기화
         elementArr = new ArrayList<JLabel>();
@@ -107,13 +107,11 @@ public class MainView extends JFrame{
 
     public void InitializeBottomPanel() {
         bottomPanel = new JPanel();
-        bottomPanel.setLayout(logModeLayout);
-        bottomPanel.setBackground(Color.YELLOW);
+        bottomPanel.setBackground(Color.WHITE);
 
         deleteAllLogBtn = new JButton("DELETE ALL LOG");
 
         bottomPanel.add(deleteAllLogBtn);
-        bottomPanel.setBackground(Color.WHITE);
     }
 
     //================================= SET FUNCTIONS FOR CONTROLLER =================================//

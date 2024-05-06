@@ -105,7 +105,7 @@ public class Controller {
         view.getCenterPanel().setLayout(view.getLogModeLayout());
 
         // BOTTOM PANEL
-        view.getBottomPanel().setLayout(view.getLogModeLayout());
+        //view.getBottomPanel().setLayout(view.getLogModeLayout());
         view.getBottomPanel().setVisible(true);
     }
 
@@ -141,6 +141,7 @@ public class Controller {
             // 각 JLABEL 에게 ImageObserver 바인딩하기
             // 이거 나중에 함수로 빼보기 Bind 뭐시기로
             for(int i=0;i<newElementArr.size();i++){
+                newElementArr.get(i).setFont(view.getMainFont());
                 newElementArr.get(i).addMouseListener(ImageObserver);
             }
 

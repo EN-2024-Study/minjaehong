@@ -12,6 +12,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+// 여기 함수 분리하기
+
+// 1. 데이터베이스 연결
+// 2. json 파싱 부분
+
+
 // 인증방식 REST API KEY
 // 다음 검색 서비스에서 질의어로 이미지를 검색합니다
 // 1. REST API 키를 HEADER 에 담아 GET 으로 요청해야함
