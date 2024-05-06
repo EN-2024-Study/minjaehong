@@ -2,17 +2,18 @@ package Controller.Observer;
 
 import View.MainView;
 import Controller.Controller;
+import View.Panel.ButtonPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 // CE C <- 이렇게 3개 처리
 public class ClearObserver implements ActionListener {
-    MainView mainView;
+    ButtonPanel buttonPanel;
     Controller controller;
 
-    public ClearObserver(MainView mainView, Controller controller){
-        this.mainView = mainView;
+    public ClearObserver(ButtonPanel buttonPanel, Controller controller){
+        this.buttonPanel = buttonPanel;
         this.controller = controller;
     }
 

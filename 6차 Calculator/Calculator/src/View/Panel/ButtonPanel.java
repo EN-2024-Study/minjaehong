@@ -5,24 +5,6 @@ import java.awt.*;
 
 public class ButtonPanel extends JPanel {
 
-    public enum KeyBoard {
-        CLEAR_ALL, CLEAR, BACKSPACE, DIVIDE,
-        SEVEN, EIGHT, NINE, MULTIPLY,
-        FOUR, FIVE, SIX, MINUS,
-        ONE, TWO, THREE, PLUS,
-        SIGN, ZERO, DOT, EQUAL
-    }
-
-    private JButton[] buttonArr;
-
-    private String[] buttonName={
-            "CE","C","<-","/",
-            "7","8","9","X",
-            "4","5","6","-",
-            "1","2","3","+",
-            "+/-","0",".","="
-    };
-
     private JButton clearAllButton;
     private JButton clearButton;
     private JButton backSpaceButton;
@@ -137,7 +119,7 @@ public class ButtonPanel extends JPanel {
 
         GridBagLayout grid = new GridBagLayout();
         setLayout(grid);
-        
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
@@ -180,4 +162,45 @@ public class ButtonPanel extends JPanel {
         createComponents();
         initializeButtonPanel();
     }
+
+    public JButton getNum0Button() {
+        return num0Button;
+    }
+
+    public JButton getNum1Button() {
+        return num1Button;
+    }
+
+    public JButton getNum2Button() {
+        return num2Button;
+    }
+
+    public JButton getNum3Button() {
+        return num3Button;
+    }
+
+    public JButton getNum4Button() {
+        return num4Button;
+    }
+
+    public JButton getNum5Button() {
+        return num5Button;
+    }
+
+    public JButton getNum6Button() {
+        return num6Button;
+    }
+
+    public JButton getNum7Button() {
+        return num7Button;
+    }
+
+    public JButton getNum8Button() {
+        return num8Button;
+    }
+
+    public JButton getNum9Button() {
+        return num9Button;
+    }
+
 }

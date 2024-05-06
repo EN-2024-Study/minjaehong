@@ -19,8 +19,8 @@ public class ResultPanel extends JPanel {
         curNumberLabel = new JLabel("curNumber");
         curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
 
-        //showLogButton = new JButton("X");
-        //curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
+        showLogButton = new JButton("X");
+        curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
     }
 
     private void initializeResultPanel(){
@@ -33,6 +33,7 @@ public class ResultPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         /*
+        // 로그버튼
         gbc.gridx = 0;
         gbc.gridy = 0;
         // 컴포넌트의 디폴트 크기에 대한 폭과 높이의 소속 배율

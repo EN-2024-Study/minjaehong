@@ -6,7 +6,6 @@ import View.Panel.ResultPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 
 public class MainView extends JFrame {
 
