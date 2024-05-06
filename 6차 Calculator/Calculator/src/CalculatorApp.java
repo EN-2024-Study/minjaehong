@@ -1,8 +1,8 @@
-import View.Form.MainForm;
+import View.MainView;
 
 public class CalculatorApp {
     public static void main(String[] args) {
-        MainForm mainForm = new MainForm();
-        mainForm.setVisible(true);
+        MainView mainView = new MainView();
+        mainView.setVisible(true);
     }
 }

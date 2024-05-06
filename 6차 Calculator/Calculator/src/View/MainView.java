@@ -1,4 +1,4 @@
-package View.Form;
+package View;
 
 import View.Panel.ButtonPanel;
 import View.Panel.LogPanel;
@@ -6,8 +6,9 @@ import View.Panel.ResultPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 
-public class MainForm extends JFrame {
+public class MainView extends JFrame {
 
     private ButtonPanel buttonPanel;
     private LogPanel logPanel;
@@ -29,7 +30,7 @@ public class MainForm extends JFrame {
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.3; // 7/10 of the available vertical space
+        gbc.weighty = 0.4; // 7/10 of the available vertical space
         gbc.fill = GridBagConstraints.BOTH;
         this.add(resultPanel,gbc);
 
@@ -38,7 +39,7 @@ public class MainForm extends JFrame {
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.7; // 7/10 of the available vertical space
+        gbc.weighty = 0.6; // 7/10 of the available vertical space
         this.add(buttonPanel,gbc);
 
         gbc.gridx = 1;
@@ -50,7 +51,7 @@ public class MainForm extends JFrame {
         this.add(logPanel,gbc);
     }
 
-    public MainForm(){
+    public MainView(){
         setTitle("Calculator");
         setSize(new Dimension(500,500));
         setMinimumSize(new Dimension(500,500));
@@ -59,5 +60,17 @@ public class MainForm extends JFrame {
 
         createComponents();
         initializeMainForm();
+    }
+
+    public ResultPanel getResultPanel() {
+        return resultPanel;
+    }
+
+    public LogPanel getLogPanel(){
+        return logPanel;
+    }
+
+    public ButtonPanel getButtonPanel() {
+        return buttonPanel;
     }
 }

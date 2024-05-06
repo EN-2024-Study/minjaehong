@@ -6,12 +6,12 @@ import View.MainView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// 0~9 입력 처리
-public class NumberObserver implements ActionListener {
+// + - x / (+/-) = 이렇게 6개 처리
+public class OperationObserver implements ActionListener {
     MainView mainView;
     Controller controller;
 
-    public NumberObserver(MainView mainView, Controller controller){
+    public OperationObserver(MainView mainView, Controller controller){
         this.mainView = mainView;
         this.controller = controller;
     }

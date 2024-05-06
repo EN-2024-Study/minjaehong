@@ -1,17 +1,17 @@
 package Controller.Observer;
 
-import Controller.Controller;
 import View.MainView;
+import Controller.Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// 0~9 입력 처리
-public class NumberObserver implements ActionListener {
+// CE C <- 이렇게 3개 처리
+public class ClearObserver implements ActionListener {
     MainView mainView;
     Controller controller;
 
-    public NumberObserver(MainView mainView, Controller controller){
+    public ClearObserver(MainView mainView, Controller controller){
         this.mainView = mainView;
         this.controller = controller;
     }

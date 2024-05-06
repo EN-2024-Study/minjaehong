@@ -3,19 +3,24 @@ package View.Panel;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.ButtonUI;
 import java.awt.*;
 
 public class ResultPanel extends JPanel {
 
-    JLabel curEquation;
-    JLabel curNumber;
+    JLabel curEquationLabel;
+    JLabel curNumberLabel;
+    JButton showLogButton;
 
     private void createComponents(){
-        curEquation = new JLabel("curEquation");
-        curEquation.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+        curEquationLabel = new JLabel("curEquation");
+        curEquationLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
 
-        curNumber = new JLabel("curNumber");
-        curNumber.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+        curNumberLabel = new JLabel("curNumber");
+        curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+
+        //showLogButton = new JButton("X");
+        //curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
     }
 
     private void initializeResultPanel(){
@@ -27,7 +32,7 @@ public class ResultPanel extends JPanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // grid 내에서 [x][y] 위치
+        /*
         gbc.gridx = 0;
         gbc.gridy = 0;
         // 컴포넌트의 디폴트 크기에 대한 폭과 높이의 소속 배율
@@ -35,19 +40,32 @@ public class ResultPanel extends JPanel {
         gbc.gridheight = 1;
         // 컴포넌트 각 영역의 크기 비율
         gbc.weightx = 1.0;
-        gbc.weighty = 0.3;
+        gbc.weighty = 0.15;
         // 영역을 채우기 위한 속성 지정
-        gbc.fill = GridBagConstraints.BOTH;
-        add(curEquation, gbc);
+        add(showLogButton, gbc);
+        */
 
+        // grid 내에서 [x][y] 위치
         gbc.gridx = 0;
         gbc.gridy = 1;
+        // 컴포넌트의 디폴트 크기에 대한 폭과 높이의 소속 배율
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        // 컴포넌트 각 영역의 크기 비율
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.25;
+        // 영역을 채우기 위한 속성 지정
+        gbc.fill = GridBagConstraints.BOTH;
+        add(curEquationLabel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.7;
+        gbc.weighty = 0.6;
         gbc.fill = GridBagConstraints.BOTH;
-        add(curNumber, gbc);
+        add(curNumberLabel, gbc);
     }
 
     public ResultPanel(){

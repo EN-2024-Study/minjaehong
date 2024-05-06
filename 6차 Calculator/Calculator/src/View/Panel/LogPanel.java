@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class LogPanel extends JPanel{
 
-    JLabel logLabel;
+    private JLabel logLabel;
 
     private void createComponents(){
         logLabel = new JLabel("ALL LOGS");
@@ -21,5 +21,9 @@ public class LogPanel extends JPanel{
     public LogPanel(){
         createComponents();
         initializeLogPanel();
+    }
+
+    public JLabel getLogLabel() {
+        return logLabel;
     }
 }
