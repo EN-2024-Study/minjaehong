@@ -22,13 +22,14 @@ public class NumberObserver implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("NumberObserver called");
-        
+
+        String actioncommand = e.getActionCommand();
         String newNum = "";
         if (e.getSource() == buttonPanel.getNum0Button()) {
             newNum ="0";
-        } else if (e.getSource() == buttonPanel.getNum1Button()) {
+        } else if (actioncommand == "1") {
             newNum = "1";
-        } else if (e.getSource() == buttonPanel.getNum2Button()) {
+        } else if (actioncommand == "2") {
             newNum = "2";
         } else if (e.getSource() == buttonPanel.getNum3Button()) {
             newNum = "3";
@@ -44,6 +45,8 @@ public class NumberObserver implements ActionListener {
             newNum = "8";
         } else if (e.getSource() == buttonPanel.getNum9Button()) {
             newNum = "9";
+        }else if(e.getSource() == buttonPanel.getDotButton()){
+            newNum=".";
         }
 
         controller.numBtnClicked(newNum);

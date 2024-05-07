@@ -21,11 +21,11 @@ public class ClearObserver implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==buttonPanel.getClearEntryButton()){
+            controller.clearBtnClicked();;
+        }
         if(e.getSource()==buttonPanel.getClearButton()){
             controller.clearBtnClicked();
-        }
-        if(e.getSource()==buttonPanel.getClearAllButton()){
-            controller.clearAllBtnClicked();
         }
     }
 }

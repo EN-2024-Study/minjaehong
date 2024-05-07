@@ -34,5 +34,8 @@ public class OperationObserver implements ActionListener {
         if(e.getSource()==buttonPanel.getDivButton()){
             controller.optBtnClicked("÷");
         }
+        if(e.getSource()==buttonPanel.getSignButton()){
+            controller.optBtnClicked("+/-");
+        }
     }
 }

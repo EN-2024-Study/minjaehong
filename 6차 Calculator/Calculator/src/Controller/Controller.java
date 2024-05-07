@@ -9,6 +9,7 @@ import View.Panel.ResultPanel;
 import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayDeque;
 
 public class Controller {
     ButtonPanel buttonPanel;
@@ -21,12 +22,14 @@ public class Controller {
     JLabel smallLabel;
     JLabel bigLabel;
 
-    Double finalResult;
-    boolean isOperations;
+    ArrayDeque<String> numberDeque;
+    ArrayDeque<String> operatorDeque;
 
     public Controller(MainView mainView){
-        finalResult = (double)0;
-        isOperations = false;
+
+        numberDeque = new ArrayDeque<>();
+        numberDeque.add("0");
+        operatorDeque = new ArrayDeque<>();
 
         buttonPanel = mainView.getButtonPanel();
         resultPanel = mainView.getResultPanel();
@@ -54,76 +57,129 @@ public class Controller {
     }
 
     // 1. Number Button
+    // 이거 소수점도 받음
     public void numBtnClicked(String newNum){
 
-        if(isOperations || (bigLabel.getText()=="0")){
-            bigLabel.setText("");
+        // 숫자 0으로 시작할때 예외처리
+        // 빈 상태는 0임. CE 나 C도 다 빼고 0 넣어준게 default 상태
+        if(numberDeque.getLast()=="0"){
+            if(newNum=="."){
+                String lastNum = numberDeque.removeLast();
+                numberDeque.add(lastNum + newNum);
+            }else{
+                numberDeque.removeLast();
+                numberDeque.add(newNum);
+            }
         }
+        // 0이 아닌 숫자로 시작할때
+        else {
 
-        isOperations = false;
-
-        System.out.println(bigLabel.getText()+newNum);
-
+            // 한 숫자의 뒤에 추가되는 경우
+            // 이거 소수점도 받을 수 있음
+            if (numberDeque.size() > operatorDeque.size()) {
+                String lastNum = numberDeque.removeLast();
+                numberDeque.add(lastNum + newNum);
+            }
+            // 새 숫자가 추가되는 경우
+            // 두 덱의 개수가 같을때
+            else {
+                numberDeque.add(newNum);
+            }
+        }
         // VIEW 최신화
-        resultPanel.setBigLabel(bigLabel.getText()+newNum);
+        // numberBtn 은 BigLabel 만 render
+        resultPanel.setBigLabel(numberDeque.getLast());
     }
 
     // 2. Operation Button
+    // = 예외처리해야함
+    // 8 = 일때
+    // 6 + = = = 일떄
     public void optBtnClicked(String curOperator){
-        // 연산자는 무조건 STACK 에 PUSH 됨
 
-        System.out.println(bigLabel.getText());
+        // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
+        operatorDeque.add(curOperator);
 
-        // 마지막 연산이 0이 아니었으면
-        if(finalResult!=0) {
-            // 계산한거 받아주고
-            Double result = calculate(curOperator);
-            bigLabel.setText(result+"");
-            finalResult = result;
-            smallLabel.setText("");
-            bigLabel.setText(result+"");
+        // 만약 = 이 들어왔으면
+        if(curOperator=="="){
+            // 연산자 한 개 일때랑
+            if(operatorDeque.size()==1){
+
+            }
+            // 두개 일때랑 다름
+            if(operatorDeque.size()==2){
+
+            }
         }
 
-        finalResult = Double.parseDouble(bigLabel.getText());
-        smallLabel.setText(finalResult+" "+curOperator);
-        isOperations = true;
+        if(numberDeque.size()<operatorDeque.size()){
+            operatorDeque.removeFirst();
+            renderSmallLabel();
+        }
 
-        // 연산자는 무조건 inputLabel 결과로 최신화됨
-        //resultPanel.setCurInputLabel(Integer.toString(result));
-        // 연산자는 무조건 equationLabel 최신화됨
-        //resultPanel.setCurEquationLabel();
+        if (operatorDeque.size()==1) {
+            renderSmallLabel();
+        }
+
+        // 만약 일반 연산자이면
+        if(operatorDeque.size()==2){
+            String result = calculate();
+            // result 추가
+            numberDeque.add(result);
+
+            // calculate 에서 이미 계산하면서 Deque 값들을 다 빼냄
+
+            renderSmallLabel();
+            // 연산자 들어오면 BigLabel 항상 최신화
+            renderBigLabel();
+        }
     }
 
     // 값 진짜로 계산하기
-    public double calculate(String opt){
-        double result = (double)0;
+    public String calculate(){
+        Double num1 = Double.parseDouble(numberDeque.removeFirst());
+        String opt = operatorDeque.removeFirst();
+        Double num2 = Double.parseDouble(numberDeque.removeFirst());
+
+        double result = 0;
+
         switch(opt){
             case "+":
-                result = finalResult + Double.parseDouble(bigLabel.getText());
+                result = num1 + num2;
                 break;
             case "-":
-                result = finalResult - Double.parseDouble(bigLabel.getText());
+                result = num1 - num2;
                 break;
             case "×":
-                result = finalResult * Double.parseDouble(bigLabel.getText());
+                result = num1 * num2;
                 break;
             case"÷":
-                result = finalResult / Double.parseDouble(bigLabel.getText());
+                result = num1 / num2;
                 break;
         }
-        return result;
+        return Double.toString(result);
     }
 
     // bigLabel 0으로 만듬
-    public void clearBtnClicked(){
-        bigLabel.setText("0");
+    public void clearEntryBtnClicked(){
+        // 맨 마지막에 추가한거 빼주기
+        numberDeque.removeLast();
+        numberDeque.add("0");
+        renderBigLabel();
+        // renderBig to 0 always
     }
 
     // smallLabel bigLabel 모두 0으로 만듬
-    public void clearAllBtnClicked(){
-        bigLabel.setText("0");
-        smallLabel.setText("");
-        finalResult = 0.0;
+    public void clearBtnClicked(){
+        numberDeque.clear();
+        operatorDeque.clear();
+        // numberDeque에는 무조건 숫자 하나 들어가 있어야함
+        // 실제로 숫자 넣지 말기?? 그냥 0으로 보이게만 하기??
+        // numberDeque.add(0.0);
+
+        numberDeque.add("0");
+        renderBigLabel();
+        renderSmallLabel();
     }
 
     private void BindNumberObserverToButtonPanel(){
@@ -138,20 +194,40 @@ public class Controller {
         buttonPanel.getNum7Button().addActionListener(numberObserver);
         buttonPanel.getNum8Button().addActionListener(numberObserver);
         buttonPanel.getNum9Button().addActionListener(numberObserver);
+        buttonPanel.getDotButton().addActionListener(numberObserver);
 
         // CE C BACKSPACE 한테 clearObserver 바인딩
+        buttonPanel.getClearEntryButton().addActionListener(clearObserver);
         buttonPanel.getClearButton().addActionListener(clearObserver);
-        buttonPanel.getClearAllButton().addActionListener(clearObserver);
         buttonPanel.getBackSpaceButton().addActionListener(clearObserver);
 
-        // + - +/- = * / 한테 operationObserver 바인딩
+        // + - +/- = * / . 한테 operationObserver 바인딩
         buttonPanel.getAddButton().addActionListener(operationObserver);
         buttonPanel.getSubButton().addActionListener(operationObserver);
         buttonPanel.getMulButton().addActionListener(operationObserver);
         buttonPanel.getDivButton().addActionListener(operationObserver);
         buttonPanel.getEqualButton().addActionListener(operationObserver);
 
-        buttonPanel.getDotButton().addActionListener(operationObserver);
         buttonPanel.getSignButton().addActionListener(operationObserver);
+    }
+
+    private void renderSmallLabel(){
+        Object[] numberArr = numberDeque.toArray();
+        Object[] operatorArr = operatorDeque.toArray();
+
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<numberArr.length;i++){
+            sb.append(numberArr[i]);
+            sb.append(" ");
+            if(i<operatorArr.length) {
+                sb.append(operatorArr[i]);
+                sb.append(" ");
+            }
+        }
+        smallLabel.setText(sb.toString());
+    }
+
+    private void renderBigLabel(){
+        bigLabel.setText(numberDeque.getLast());
     }
 }

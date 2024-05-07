@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class ButtonPanel extends JPanel {
 
-    private JButton clearAllButton;
+    private JButton clearEntryButton;
     private JButton clearButton;
     private JButton backSpaceButton;
     private JButton addButton;
@@ -37,8 +37,8 @@ public class ButtonPanel extends JPanel {
     }
     
     private void createComponents() {
-        clearButton = new JButton("CE");
-        clearAllButton = new JButton("C");
+        clearEntryButton = new JButton("CE");
+        clearButton = new JButton("C");
         backSpaceButton = new JButton("<");
         addButton = new JButton("+");
         divButton = new JButton("/");
@@ -60,13 +60,13 @@ public class ButtonPanel extends JPanel {
         num8Button = new JButton("8");
         num9Button = new JButton("9");
 
+        clearEntryButton.setText("CE");
+        clearEntryButton.setBackground(Color.ORANGE);
+        clearEntryButton.setFocusable(false);
+
         clearButton.setText("C");
         clearButton.setBackground(Color.ORANGE);
         clearButton.setFocusable(false);
-
-        clearAllButton.setText("CE");
-        clearAllButton.setBackground(Color.ORANGE);
-        clearAllButton.setFocusable(false);
 
         backSpaceButton.setText("<");
         backSpaceButton.setBackground(Color.ORANGE);
@@ -101,10 +101,12 @@ public class ButtonPanel extends JPanel {
         dotButton.setFocusable(false);
 
         num1Button.setText("1");
+        //num1Button.setActionCommand("1");
         num1Button.setBackground(Color.WHITE);
         num1Button.setFocusable(false);
 
         num2Button.setText("2");
+        //num2Button.setActionCommand("2");
         num2Button.setBackground(Color.WHITE);
         num2Button.setFocusable(false);
 
@@ -153,8 +155,8 @@ public class ButtonPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(1, 1, 1, 1); // Padding
 
-        addButton(this, clearButton, gbc, 0, 0);
-        addButton(this, clearAllButton, gbc, 0, 1);
+        addButton(this, clearEntryButton, gbc, 0, 0);
+        addButton(this, clearButton, gbc, 0, 1);
         addButton(this, backSpaceButton, gbc, 0, 2);
         addButton(this, divButton, gbc, 0, 3);
 
@@ -196,7 +198,7 @@ public class ButtonPanel extends JPanel {
     public JButton getNum8Button() { return num8Button; }
     public JButton getNum9Button() { return num9Button; }
 
-    public JButton getClearAllButton() { return clearAllButton; }
+    public JButton getClearEntryButton() { return clearEntryButton; }
     public JButton getClearButton() { return clearButton; }
     public JButton getBackSpaceButton() { return backSpaceButton; }
     public JButton getAddButton() { return addButton; }
