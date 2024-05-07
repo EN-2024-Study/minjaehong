@@ -11,8 +11,8 @@ import java.awt.*;
 
 public class ResultPanel extends JPanel {
 
-    JLabel curEquationLabel;
-    JLabel curNumberLabel;
+    JLabel smallLabel; // 연산자 눌렸을때만 바뀜
+    JLabel bigLabel; // 숫자 + 연산자 눌렀을때 둘 다 바뀜
     JButton showLogButton;
 
     public ResultPanel(){
@@ -21,14 +21,17 @@ public class ResultPanel extends JPanel {
     }
 
     private void createComponents(){
-        curEquationLabel = new JLabel("curEquation");
-        //curEquationLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+        smallLabel = new JLabel();
+        smallLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        Border border = BorderFactory.createLineBorder(Color.RED,5); // Create a LineBorder with default color (black)
+        smallLabel.setBorder(border);
 
-        curNumberLabel = new JLabel("curNumber");
-        //curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+        bigLabel = new JLabel("0");
+        bigLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        border = BorderFactory.createLineBorder(Color.BLUE,5); // Create a LineBorder with default color (black)
+        bigLabel.setBorder(border);
 
         showLogButton = new JButton("X");
-        //curNumberLabel.setBorder(BorderFactory.createLineBorder(Color.GREEN,3));
     }
 
     private void initializeResultPanel(){
@@ -65,7 +68,7 @@ public class ResultPanel extends JPanel {
         gbc.weighty = 0.25;
         // 영역을 채우기 위한 속성 지정
         gbc.fill = GridBagConstraints.BOTH;
-        add(curEquationLabel, gbc);
+        add(smallLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -74,6 +77,22 @@ public class ResultPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 0.6;
         gbc.fill = GridBagConstraints.BOTH;
-        add(curNumberLabel, gbc);
+        add(bigLabel, gbc);
+    }
+
+    public JLabel getSmallLabel(){
+        return smallLabel;
+    }
+
+    public JLabel getBigLabel() {
+        return bigLabel;
+    }
+
+    public void setSmallLabel(String equation){
+        smallLabel.setText(equation);
+    }
+
+    public void setBigLabel(String input){
+        bigLabel.setText(input);
     }
 }

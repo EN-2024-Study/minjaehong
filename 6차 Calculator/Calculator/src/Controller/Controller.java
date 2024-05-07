@@ -6,43 +6,33 @@ import View.Panel.ButtonPanel;
 import View.Panel.LogPanel;
 import View.Panel.ResultPanel;
 
+import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-// Controller 는 3개의 Observer 로부터 해야할 일을 명령받음
-// 1. ClearObserver에게 연락이 왔을때
-// CE
-
-// 2. NumberObserver에게서 연락이 왔을때
-// 그냥 숫자 더 추가함 -> curNumberLabel에 숫자 계속 추가
-// 숫자추가되면서 따옴표 표시
-// 숫자추가되면서 길어지면 숫자 크기 작아짐
-// 건드릴 곳이 ResultPanel의 curNumberLabel 밖에 없음
-
-// 3. OperationObserver에게서 연락이 왔을때
-// +이면 -> 수식이 완성안된 경우에는 그냥 curEquation의 뒷자리를 +로 바꿈
-// -이면 -> 수식이 완성안된 경우에는 그냥 curEquation의 뒷자리를 -로 바꿈
-// x이면 -> 수식이 완성안된 경우에는 그냥 curEquation의 뒷자리를 x로 바꿈
-// /이면 -> 수식이 완성안된 경우에는 그냥 curEquation의 뒷자리를 /로 바꿈
-
-
 public class Controller {
-    private String curNumberText;
-    private String curEquationText;
-
     ButtonPanel buttonPanel;
-    LogPanel logPanel;
     ResultPanel resultPanel;
 
     NumberObserver numberObserver;
     ClearObserver clearObserver;
     OperationObserver operationObserver;
 
+    JLabel smallLabel;
+    JLabel bigLabel;
+
+    Double finalResult;
+    boolean isOperations;
+
     public Controller(MainView mainView){
-        curNumberText="";
-        curEquationText="";
+        finalResult = (double)0;
+        isOperations = false;
 
         buttonPanel = mainView.getButtonPanel();
+        resultPanel = mainView.getResultPanel();
+
+        smallLabel= resultPanel.getSmallLabel();
+        bigLabel = resultPanel.getBigLabel();
 
         numberObserver = new NumberObserver(buttonPanel, this);
         clearObserver = new ClearObserver(buttonPanel, this);
@@ -63,13 +53,77 @@ public class Controller {
         BindNumberObserverToButtonPanel();
     }
 
-    public void addToCurNumberText(String s){
-        curNumberText+=s;
-        System.out.println(curNumberText);
+    // 1. Number Button
+    public void numBtnClicked(String newNum){
+
+        if(isOperations || (bigLabel.getText()=="0")){
+            bigLabel.setText("");
+        }
+
+        isOperations = false;
+
+        System.out.println(bigLabel.getText()+newNum);
+
+        // VIEW 최신화
+        resultPanel.setBigLabel(bigLabel.getText()+newNum);
     }
 
-    public void addToCurEquationText(String s){
-        curEquationText+=s;
+    // 2. Operation Button
+    public void optBtnClicked(String curOperator){
+        // 연산자는 무조건 STACK 에 PUSH 됨
+
+        System.out.println(bigLabel.getText());
+
+        // 마지막 연산이 0이 아니었으면
+        if(finalResult!=0) {
+            // 계산한거 받아주고
+            Double result = calculate(curOperator);
+            bigLabel.setText(result+"");
+            finalResult = result;
+            smallLabel.setText("");
+            bigLabel.setText(result+"");
+        }
+
+        finalResult = Double.parseDouble(bigLabel.getText());
+        smallLabel.setText(finalResult+" "+curOperator);
+        isOperations = true;
+
+        // 연산자는 무조건 inputLabel 결과로 최신화됨
+        //resultPanel.setCurInputLabel(Integer.toString(result));
+        // 연산자는 무조건 equationLabel 최신화됨
+        //resultPanel.setCurEquationLabel();
+    }
+
+    // 값 진짜로 계산하기
+    public double calculate(String opt){
+        double result = (double)0;
+        switch(opt){
+            case "+":
+                result = finalResult + Double.parseDouble(bigLabel.getText());
+                break;
+            case "-":
+                result = finalResult - Double.parseDouble(bigLabel.getText());
+                break;
+            case "×":
+                result = finalResult * Double.parseDouble(bigLabel.getText());
+                break;
+            case"÷":
+                result = finalResult / Double.parseDouble(bigLabel.getText());
+                break;
+        }
+        return result;
+    }
+
+    // bigLabel 0으로 만듬
+    public void clearBtnClicked(){
+        bigLabel.setText("0");
+    }
+
+    // smallLabel bigLabel 모두 0으로 만듬
+    public void clearAllBtnClicked(){
+        bigLabel.setText("0");
+        smallLabel.setText("");
+        finalResult = 0.0;
     }
 
     private void BindNumberObserverToButtonPanel(){

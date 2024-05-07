@@ -22,31 +22,30 @@ public class NumberObserver implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("NumberObserver called");
-
-        String str="";
-
+        
+        String newNum = "";
         if (e.getSource() == buttonPanel.getNum0Button()) {
-            str ="0";
+            newNum ="0";
         } else if (e.getSource() == buttonPanel.getNum1Button()) {
-            str = "1";
+            newNum = "1";
         } else if (e.getSource() == buttonPanel.getNum2Button()) {
-            str = "2";
+            newNum = "2";
         } else if (e.getSource() == buttonPanel.getNum3Button()) {
-            str = "3";
+            newNum = "3";
         } else if (e.getSource() == buttonPanel.getNum4Button()) {
-            str = "4";
+            newNum = "4";
         } else if (e.getSource() == buttonPanel.getNum5Button()) {
-            str = "5";
+            newNum = "5";
         } else if (e.getSource() == buttonPanel.getNum6Button()) {
-            str = "6";
+            newNum = "6";
         } else if (e.getSource() == buttonPanel.getNum7Button()) {
-            str = "7";
+            newNum = "7";
         } else if (e.getSource() == buttonPanel.getNum8Button()) {
-            str = "8";
+            newNum = "8";
         } else if (e.getSource() == buttonPanel.getNum9Button()) {
-            str = "9";
+            newNum = "9";
         }
 
-        //controller.addToCurNumberText(str);
+        controller.numBtnClicked(newNum);
     }
 }
