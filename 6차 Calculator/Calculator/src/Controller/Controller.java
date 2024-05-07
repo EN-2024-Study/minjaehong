@@ -1,9 +1,7 @@
 package Controller;
 
-import Controller.Observer.*;
 import View.MainView;
 import View.Panel.ButtonPanel;
-import View.Panel.LogPanel;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
@@ -15,9 +13,7 @@ public class Controller {
     ButtonPanel buttonPanel;
     ResultPanel resultPanel;
 
-    NumberObserver numberObserver;
-    ClearObserver clearObserver;
-    OperationObserver operationObserver;
+    Observer observer;
 
     JLabel smallLabel;
     JLabel bigLabel;
@@ -37,9 +33,7 @@ public class Controller {
         smallLabel= resultPanel.getSmallLabel();
         bigLabel = resultPanel.getBigLabel();
 
-        numberObserver = new NumberObserver(buttonPanel, this);
-        clearObserver = new ClearObserver(buttonPanel, this);
-        operationObserver = new OperationObserver(buttonPanel, this);
+        observer = new Observer(buttonPanel, this);
 
         mainView.addComponentListener(new ComponentAdapter() {
             @Override
@@ -59,6 +53,11 @@ public class Controller {
     // 1. Number Button
     // 이거 소수점도 받음
     public void numBtnClicked(String newNum){
+
+        if(bigLabel.getText().contains(".") && newNum==".") {
+            //System.out.println("소수점 이미 있어!!!");
+            return;
+        }
 
         // 숫자 0으로 시작할때 예외처리
         // 빈 상태는 0임. CE 나 C도 다 빼고 0 넣어준게 default 상태
@@ -92,10 +91,12 @@ public class Controller {
     }
 
     // 2. Operation Button
-    // = 예외처리해야함
-    // 8 = 일때
-    // 6 + = = = 일떄
+    // 기본적인 사칙연산 + - x /
+    // 등호 연산
+    //
     public void optBtnClicked(String curOperator){
+
+        // 이미 소수점 있으면 return
 
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
         operatorDeque.add(curOperator);
@@ -182,35 +183,6 @@ public class Controller {
         renderSmallLabel();
     }
 
-    private void BindNumberObserverToButtonPanel(){
-        // 숫자 버튼한테 numberObserver 바인딩
-        buttonPanel.getNum0Button().addActionListener(numberObserver);
-        buttonPanel.getNum1Button().addActionListener(numberObserver);
-        buttonPanel.getNum2Button().addActionListener(numberObserver);
-        buttonPanel.getNum3Button().addActionListener(numberObserver);
-        buttonPanel.getNum4Button().addActionListener(numberObserver);
-        buttonPanel.getNum5Button().addActionListener(numberObserver);
-        buttonPanel.getNum6Button().addActionListener(numberObserver);
-        buttonPanel.getNum7Button().addActionListener(numberObserver);
-        buttonPanel.getNum8Button().addActionListener(numberObserver);
-        buttonPanel.getNum9Button().addActionListener(numberObserver);
-        buttonPanel.getDotButton().addActionListener(numberObserver);
-
-        // CE C BACKSPACE 한테 clearObserver 바인딩
-        buttonPanel.getClearEntryButton().addActionListener(clearObserver);
-        buttonPanel.getClearButton().addActionListener(clearObserver);
-        buttonPanel.getBackSpaceButton().addActionListener(clearObserver);
-
-        // + - +/- = * / . 한테 operationObserver 바인딩
-        buttonPanel.getAddButton().addActionListener(operationObserver);
-        buttonPanel.getSubButton().addActionListener(operationObserver);
-        buttonPanel.getMulButton().addActionListener(operationObserver);
-        buttonPanel.getDivButton().addActionListener(operationObserver);
-        buttonPanel.getEqualButton().addActionListener(operationObserver);
-
-        buttonPanel.getSignButton().addActionListener(operationObserver);
-    }
-
     private void renderSmallLabel(){
         Object[] numberArr = numberDeque.toArray();
         Object[] operatorArr = operatorDeque.toArray();
@@ -230,4 +202,30 @@ public class Controller {
     private void renderBigLabel(){
         bigLabel.setText(numberDeque.getLast());
     }
+
+    private void BindNumberObserverToButtonPanel(){
+        buttonPanel.getNum0Button().addActionListener(observer);
+        buttonPanel.getNum1Button().addActionListener(observer);
+        buttonPanel.getNum2Button().addActionListener(observer);
+        buttonPanel.getNum3Button().addActionListener(observer);
+        buttonPanel.getNum4Button().addActionListener(observer);
+        buttonPanel.getNum5Button().addActionListener(observer);
+        buttonPanel.getNum6Button().addActionListener(observer);
+        buttonPanel.getNum7Button().addActionListener(observer);
+        buttonPanel.getNum8Button().addActionListener(observer);
+        buttonPanel.getNum9Button().addActionListener(observer);
+        buttonPanel.getDotButton().addActionListener(observer);
+
+        buttonPanel.getClearEntryButton().addActionListener(observer);
+        buttonPanel.getClearButton().addActionListener(observer);
+        buttonPanel.getBackSpaceButton().addActionListener(observer);
+
+        buttonPanel.getAddButton().addActionListener(observer);
+        buttonPanel.getSubButton().addActionListener(observer);
+        buttonPanel.getMulButton().addActionListener(observer);
+        buttonPanel.getDivButton().addActionListener(observer);
+        buttonPanel.getEqualButton().addActionListener(observer);
+        buttonPanel.getSignButton().addActionListener(observer);
+    }
+
 }

@@ -101,12 +101,10 @@ public class ButtonPanel extends JPanel {
         dotButton.setFocusable(false);
 
         num1Button.setText("1");
-        //num1Button.setActionCommand("1");
         num1Button.setBackground(Color.WHITE);
         num1Button.setFocusable(false);
 
         num2Button.setText("2");
-        //num2Button.setActionCommand("2");
         num2Button.setBackground(Color.WHITE);
         num2Button.setFocusable(false);
 
@@ -201,11 +199,14 @@ public class ButtonPanel extends JPanel {
     public JButton getClearEntryButton() { return clearEntryButton; }
     public JButton getClearButton() { return clearButton; }
     public JButton getBackSpaceButton() { return backSpaceButton; }
+
     public JButton getAddButton() { return addButton; }
-    public JButton getDivButton() { return divButton; }
-    public JButton getDotButton() { return dotButton; }
-    public JButton getEqualButton() { return equalButton; }
-    public JButton getMulButton() { return mulButton; }
-    public JButton getSignButton() { return signButton; }
     public JButton getSubButton() { return subButton; }
+    public JButton getMulButton() { return mulButton; }
+    public JButton getDivButton() { return divButton; }
+
+    public JButton getEqualButton() { return equalButton; }
+
+    public JButton getDotButton() { return dotButton; }
+    public JButton getSignButton() { return signButton; }
 }
