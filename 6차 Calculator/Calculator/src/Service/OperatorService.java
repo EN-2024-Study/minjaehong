@@ -38,15 +38,23 @@ public class OperatorService {
                 // 저번 식 고대로 다시 해줘야함
                 String lastEquation = smallLabel.getText();
                 String[] arr = lastEquation.split(" ");
-                operatorDeque.addFirst(arr[1]);
-                numberDeque.add(arr[2]);
-                operatorDeque.add("=");
-                renderSmallLabel();
+                // 만약 = 4 이런 형식이면
+                if(arr.length==2){
+                    renderSmallLabel(); // 4 =
+                    operatorDeque.removeFirst(); // 들어온 = 빼주기
+                }
+                // 만약 1 + 2 = 3 이런 형식이면
+                else {
+                    operatorDeque.addFirst(arr[1]);
+                    numberDeque.add(arr[2]);
+                    operatorDeque.add("=");
+                    renderSmallLabel();
 
-                String result = calculate();
-                operatorDeque.removeFirst();
-                numberDeque.add(result);
-                renderBigLabel();
+                    String result = calculate();
+                    operatorDeque.removeFirst();
+                    numberDeque.add(result);
+                    renderBigLabel();
+                }
             }
             // 다른 연산자이면
             else {

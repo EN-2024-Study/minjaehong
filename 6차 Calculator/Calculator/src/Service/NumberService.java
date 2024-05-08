@@ -77,16 +77,21 @@ public class NumberService {
         }
         */
 
-        // 계산에 쓰이는 0 판단
+        // [계산에 쓰이는 0 판단]
         // 0 x 3 이면 연산자 x 가 들어왔기 때문에 기존 0은 연산에 쓰이는 0임
         if(numberDeque.getLast()=="0" && numberDeque.size()==1 && operatorDeque.size()==1){
             numberDeque.add(newNum);
             return;
         }
 
-        // 아직 안쓰이는 0 판단
-        // default 상태의 0 + 두번째로 0 들어갔다가 다른 숫자 들어갔을때
-        // 시작상태 or CE or C 후 상태가 numberDeque 에 0 하나만 들어가 있는 상태임
+        // [아직 안쓰이는 0 판단]
+        // 1. default 상태의 0 : 시작상태 or CE or C 후 상태가 numberDeque 에 0 하나만 들어가 있는 상태임
+        // (numberDeque.getLast() == "0" && numberDeque.size()==1)
+        // 2. 두번째 수로 0 들어갔다가 다른 숫자 들어갔을때
+        // (numberDeque.getLast()=="0" && numberDeque.size()==2 && operatorDeque.size()==1)
+        
+        // 사실 위처럼 해야하는데 위에서 이미 계산에 쓰이는 0이 걸러져 
+        // 남은 0일때는 아직 안쓰이는 0일때밖에 없음
         if (numberDeque.getLast() == "0") {
             // 0으로 시작하고 소수점 들어오면 0. 만들어야함
             if (newNum == ".") {
@@ -95,7 +100,6 @@ public class NumberService {
             }
             // 소수점 아니면 default 0을 바꿔주면 됨
             else {
-                System.out.println("changing default 0 to newNum");
                 numberDeque.removeLast();
                 numberDeque.add(newNum);
             }
