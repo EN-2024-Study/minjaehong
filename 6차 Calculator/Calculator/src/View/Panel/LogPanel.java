@@ -9,6 +9,7 @@ public class LogPanel extends JPanel{
     private JLabel logLabel;
 
     public LogPanel(){
+        setBackground(Color.WHITE);
         createComponents();
         initializeLogPanel();
     }

@@ -40,7 +40,7 @@ public class Observer implements ActionListener {
         }
 
         if(ac.equals("<")) {
-            
+            controller.backSpaceBtnClicked();
         }
     }
 }

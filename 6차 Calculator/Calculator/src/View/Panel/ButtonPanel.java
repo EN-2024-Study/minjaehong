@@ -1,5 +1,6 @@
 package View.Panel;
 
+import javax.imageio.plugins.tiff.TIFFField;
 import javax.swing.*;
 import java.awt.*;
 
@@ -33,6 +34,7 @@ public class ButtonPanel extends JPanel {
     private Font mainFont;
 
     public ButtonPanel() {
+        setBackground(Color.WHITE);
         // 필요한 버튼 모두 생성
         createComponents();
         // Panel 의 맞는 위치에 붙이기
@@ -67,52 +69,52 @@ public class ButtonPanel extends JPanel {
 
         clearEntryButton.setText("CE");
         clearEntryButton.setFont(mainFont);
-        clearEntryButton.setBackground(Color.ORANGE);
+        clearEntryButton.setBackground(Color.WHITE);
         clearEntryButton.setFocusable(false);
 
         clearButton.setText("C");
         clearButton.setFont(mainFont);
-        clearButton.setBackground(Color.ORANGE);
+        clearButton.setBackground(Color.WHITE);
         clearButton.setFocusable(false);
 
         backSpaceButton.setText("<");
         backSpaceButton.setFont(mainFont);
-        backSpaceButton.setBackground(Color.ORANGE);
+        backSpaceButton.setBackground(Color.WHITE);
         backSpaceButton.setFocusable(false);
 
         negateButton.setText("+/-");
         negateButton.setFont(mainFont);
-        negateButton.setBackground(Color.ORANGE);
+        negateButton.setBackground(Color.WHITE);
         negateButton.setFocusable(false);
 
         divButton.setText("÷");
         divButton.setFont(mainFont);
-        divButton.setBackground(Color.ORANGE);
+        divButton.setBackground(Color.WHITE);
         divButton.setFocusable(false);
 
         mulButton.setText("×");
         mulButton.setFont(mainFont);
-        mulButton.setBackground(Color.ORANGE);
+        mulButton.setBackground(Color.WHITE);
         mulButton.setFocusable(false);
 
         subButton.setText("-");
         subButton.setFont(mainFont);
-        subButton.setBackground(Color.ORANGE);
+        subButton.setBackground(Color.WHITE);
         subButton.setFocusable(false);
 
         addButton.setText("+");
         addButton.setFont(mainFont);
-        addButton.setBackground(Color.ORANGE);
+        addButton.setBackground(Color.WHITE);
         addButton.setFocusable(false);
 
         equalButton.setText("=");
         equalButton.setFont(mainFont);
-        equalButton.setBackground(Color.RED);
+        equalButton.setBackground(new Color(120,120,120));
         equalButton.setFocusable(false);
 
         dotButton.setText(".");
         dotButton.setFont(mainFont);
-        dotButton.setBackground(Color.ORANGE);
+        dotButton.setBackground(Color.WHITE);
         dotButton.setFocusable(false);
 
         num1Button.setText("1");

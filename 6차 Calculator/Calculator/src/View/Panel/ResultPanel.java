@@ -22,14 +22,18 @@ public class ResultPanel extends JPanel {
 
     private void createComponents(){
 
+        setBackground(Color.WHITE);
+
         smallLabel = new JLabel();
         smallLabel.setFont(new Font("Consolas", Font.BOLD, 16));
+        smallLabel.setBackground(Color.WHITE);
         smallLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         Border border = BorderFactory.createLineBorder(Color.RED,5); // Create a LineBorder with default color (black)
         smallLabel.setBorder(border);
 
         bigLabel = new JLabel("0");
         bigLabel.setFont(new Font("Consolas", Font.BOLD, 36));
+        bigLabel.setBackground(Color.WHITE);
         bigLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         border = BorderFactory.createLineBorder(Color.BLUE,5); // Create a LineBorder with default color (black)
         bigLabel.setBorder(border);

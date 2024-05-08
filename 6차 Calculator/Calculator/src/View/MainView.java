@@ -51,9 +51,14 @@ public class MainView extends JFrame {
     }
 
     public MainView(){
-        setTitle("Calculator");
-        setSize(new Dimension(500,500));
-        setMinimumSize(new Dimension(600,600));
+        setTitle("Windows Calculator");
+        setSize(new Dimension(400,600));
+
+        // 상대경로 지정
+        ImageIcon img = new ImageIcon("src/Images/AppIcon.png");
+        setIconImage(img.getImage());
+
+        setMinimumSize(new Dimension(400,600));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         createComponents();
