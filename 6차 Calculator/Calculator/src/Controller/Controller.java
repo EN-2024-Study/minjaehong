@@ -9,8 +9,6 @@ import View.Panel.ResultPanel;
 import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayDeque;
 
 public class Controller {
@@ -28,12 +26,21 @@ public class Controller {
     ArrayDeque<String> numberDeque;
     ArrayDeque<String> operatorDeque;
 
-    public Controller(MainView mainView){
+    private void initializeController(){
 
         // numberDeque 는 default 상태가 0이 들어가 있는 상태
         numberDeque = new ArrayDeque<>();
         numberDeque.add("0");
         operatorDeque = new ArrayDeque<>();
+
+        // controller 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
+        observer = new Observer(this);
+
+        numberService = new NumberService(numberDeque, operatorDeque, resultPanel);
+        operatorService = new OperatorService(numberDeque, operatorDeque, resultPanel);
+    }
+
+    public Controller(MainView mainView){
 
         buttonPanel = mainView.getButtonPanel();
         resultPanel = mainView.getResultPanel();
@@ -41,12 +48,9 @@ public class Controller {
         smallLabel= resultPanel.getSmallLabel();
         bigLabel = resultPanel.getBigLabel();
 
-        // controller 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
-        observer = new Observer(this);
+        initializeController();
 
-        numberService = new NumberService(numberDeque, operatorDeque, resultPanel);
-        operatorService = new OperatorService(numberDeque, operatorDeque, resultPanel);
-
+        // LogPanel visible 처리
         mainView.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -62,37 +66,32 @@ public class Controller {
         BindNumberObserverToButtonPanel();
     }
 
-    // numberDeque.getLast() 를 Panel 에 최신화해주기만 하면 됨
     public void numBtnClicked(String newNum){
         numberService.handleNumberInput(newNum);
-        resultPanel.setBigLabel(numberDeque.getLast());
-        // 이게 renderBigLabel 아님??
+        resultPanel.setBigLabel(numberDeque.getLast()); // 이게 renderBigLabel 아님??
     }
 
-    // 2. Operation Button
-    // 기본적인 사칙연산 + - x /
-    // 등호 연산
     public void optBtnClicked(String newOperator){
         operatorService.handleOperatorInput(newOperator);
     }
 
     // bigLabel 0으로 만듬
     public void clearEntryBtnClicked(){
+        //System.out.println(numberDeque.getLast());
+        //System.out.println(numberDeque.getFirst());
+        //System.out.println(operatorDeque.getFirst());
+        //System.out.println(operatorDeque.getLast());
+
         // 맨 마지막에 추가한거 빼주기
         numberDeque.removeLast();
         numberDeque.add("0");
         renderBigLabel();
-        // renderBig to 0 always
     }
 
     // smallLabel bigLabel 모두 0으로 만듬
     public void clearBtnClicked(){
         numberDeque.clear();
         operatorDeque.clear();
-        // numberDeque에는 무조건 숫자 하나 들어가 있어야함
-        // 실제로 숫자 넣지 말기?? 그냥 0으로 보이게만 하기??
-        // numberDeque.add(0.0);
-
         numberDeque.add("0");
         renderBigLabel();
         renderSmallLabel();
@@ -134,7 +133,6 @@ public class Controller {
     }
 
     private void renderBigLabel(){
-        System.out.println(numberDeque.getLast());
         bigLabel.setText(numberDeque.getLast());
     }
 

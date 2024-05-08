@@ -48,11 +48,11 @@ public class ButtonPanel extends JPanel {
         clearButton = new JButton("C");
         backSpaceButton = new JButton("<");
         addButton = new JButton("+");
-        divButton = new JButton("/");
+        divButton = new JButton("÷");
         dotButton = new JButton(".");
 
         equalButton = new JButton("=");
-        mulButton = new JButton("*");
+        mulButton = new JButton("×");
         negateButton = new JButton("+/-");
         subButton = new JButton("-");
 
@@ -67,102 +67,82 @@ public class ButtonPanel extends JPanel {
         num8Button = new JButton("8");
         num9Button = new JButton("9");
 
-        clearEntryButton.setText("CE");
         clearEntryButton.setFont(mainFont);
         clearEntryButton.setBackground(Color.WHITE);
         clearEntryButton.setFocusable(false);
 
-        clearButton.setText("C");
         clearButton.setFont(mainFont);
         clearButton.setBackground(Color.WHITE);
         clearButton.setFocusable(false);
 
-        backSpaceButton.setText("<");
         backSpaceButton.setFont(mainFont);
         backSpaceButton.setBackground(Color.WHITE);
         backSpaceButton.setFocusable(false);
 
-        negateButton.setText("+/-");
         negateButton.setFont(mainFont);
         negateButton.setBackground(Color.WHITE);
         negateButton.setFocusable(false);
 
-        divButton.setText("÷");
         divButton.setFont(mainFont);
         divButton.setBackground(Color.WHITE);
         divButton.setFocusable(false);
 
-        mulButton.setText("×");
         mulButton.setFont(mainFont);
         mulButton.setBackground(Color.WHITE);
         mulButton.setFocusable(false);
 
-        subButton.setText("-");
         subButton.setFont(mainFont);
         subButton.setBackground(Color.WHITE);
         subButton.setFocusable(false);
 
-        addButton.setText("+");
         addButton.setFont(mainFont);
         addButton.setBackground(Color.WHITE);
         addButton.setFocusable(false);
 
-        equalButton.setText("=");
         equalButton.setFont(mainFont);
         equalButton.setBackground(new Color(120,120,120));
         equalButton.setFocusable(false);
 
-        dotButton.setText(".");
         dotButton.setFont(mainFont);
         dotButton.setBackground(Color.WHITE);
         dotButton.setFocusable(false);
 
-        num1Button.setText("1");
         num1Button.setFont(mainFont);
         num1Button.setBackground(Color.WHITE);
         num1Button.setFocusable(false);
 
-        num2Button.setText("2");
         num2Button.setFont(mainFont);
         num2Button.setBackground(Color.WHITE);
         num2Button.setFocusable(false);
 
-        num3Button.setText("3");
         num3Button.setFont(mainFont);
         num3Button.setBackground(Color.WHITE);
         num3Button.setFocusable(false);
 
-        num4Button.setText("4");
         num4Button.setFont(mainFont);
         num4Button.setBackground(Color.WHITE);
         num4Button.setFocusable(false);
 
-        num5Button.setText("5");
         num5Button.setFont(mainFont);
         num5Button.setBackground(Color.WHITE);
         num5Button.setFocusable(false);
 
-        num6Button.setText("6");
         num6Button.setFont(mainFont);
         num6Button.setBackground(Color.WHITE);
         num6Button.setFocusable(false);
 
-        num7Button.setText("7");
         num7Button.setFont(mainFont);
         num7Button.setBackground(Color.WHITE);
         num7Button.setFocusable(false);
 
-        num8Button.setText("8");
         num8Button.setFont(mainFont);
         num8Button.setBackground(Color.WHITE);
         num8Button.setFocusable(false);
 
-        num9Button.setText("9");
         num9Button.setFont(mainFont);
         num9Button.setBackground(Color.WHITE);
         num9Button.setFocusable(false);
 
-        num0Button.setText("0");
         num0Button.setFont(mainFont);
         num0Button.setBackground(Color.WHITE);
         num0Button.setFocusable(false);

@@ -61,6 +61,21 @@ public class OperatorService {
         // 마지막 연산이 등호연산이 아니고
         // 이번에 들어온게 등호연산이면
         if (newOperator.equals("=")) {
+
+            // 만약 연산자가 = 1개이면
+            // ex) 4 =
+            if(operatorDeque.size()==1){
+                renderSmallLabel(); // 4 =
+                operatorDeque.removeFirst(); // 들어온 = 빼주기
+                return;
+            }
+
+            // 만약 연산자가 중복으로 들어온거면
+            // ex) 4 + = 이렇게 들어오면 4 + 4 = 으로 만들어줘야함
+            if(numberDeque.size() < operatorDeque.size()){
+                numberDeque.add(numberDeque.getLast());
+            }
+
             renderSmallLabel(); // 등호까지 모두 출력됨 ex) 1 + 2 =
             String result = calculate(); // 계산하면 numDeque 비고 optDeque 에 = 아직 남아있음
 

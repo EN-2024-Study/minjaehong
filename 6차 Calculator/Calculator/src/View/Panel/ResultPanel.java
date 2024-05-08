@@ -28,6 +28,7 @@ public class ResultPanel extends JPanel {
         smallLabel.setFont(new Font("Consolas", Font.BOLD, 16));
         smallLabel.setBackground(Color.WHITE);
         smallLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        smallLabel.setVerticalAlignment(SwingConstants.BOTTOM);
         Border border = BorderFactory.createLineBorder(Color.RED,5); // Create a LineBorder with default color (black)
         smallLabel.setBorder(border);
 
