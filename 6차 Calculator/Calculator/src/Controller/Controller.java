@@ -18,14 +18,19 @@ public class Controller {
     JLabel smallLabel;
     JLabel bigLabel;
 
+    boolean isLastOperationEqual;
+
     ArrayDeque<String> numberDeque;
     ArrayDeque<String> operatorDeque;
 
     public Controller(MainView mainView){
 
+        // numberDeque 는 default 상태가 0이 들어가 있는 상태
         numberDeque = new ArrayDeque<>();
         numberDeque.add("0");
         operatorDeque = new ArrayDeque<>();
+
+        isLastOperationEqual = false;
 
         buttonPanel = mainView.getButtonPanel();
         resultPanel = mainView.getResultPanel();
@@ -33,7 +38,8 @@ public class Controller {
         smallLabel= resultPanel.getSmallLabel();
         bigLabel = resultPanel.getBigLabel();
 
-        observer = new Observer(buttonPanel, this);
+        // controller 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
+        observer = new Observer(this);
 
         mainView.addComponentListener(new ComponentAdapter() {
             @Override
@@ -50,18 +56,31 @@ public class Controller {
         BindNumberObserverToButtonPanel();
     }
 
-    // 1. Number Button
-    // 이거 소수점도 받음
+    // 1. Number Button (소수점 +/- 받음)
     public void numBtnClicked(String newNum){
 
-        if(bigLabel.getText().contains(".") && newNum==".") {
-            //System.out.println("소수점 이미 있어!!!");
-            return;
+        // 소수점 예외처리
+        if(newNum=="."){
+            // 이미 소수점 존재하면
+            if(bigLabel.getText().contains(newNum)) return;
+            // 아니면 추가
+            else {
+                String lastNum = numberDeque.removeLast();
+                numberDeque.add(lastNum + newNum);
+            }
+        }
+
+        // 마지막에 등호연산이었는데
+        // 숫자 들어오면 덱 모두 비우고 새로운 연산 시작
+        else if(isLastOperationEqual){
+            numberDeque.clear();
+            operatorDeque.clear();
+            numberDeque.add(newNum);
         }
 
         // 숫자 0으로 시작할때 예외처리
         // 빈 상태는 0임. CE 나 C도 다 빼고 0 넣어준게 default 상태
-        if(numberDeque.getLast()=="0"){
+        else if(numberDeque.getLast()=="0"){
             if(newNum=="."){
                 String lastNum = numberDeque.removeLast();
                 numberDeque.add(lastNum + newNum);
@@ -72,7 +91,6 @@ public class Controller {
         }
         // 0이 아닌 숫자로 시작할때
         else {
-
             // 한 숫자의 뒤에 추가되는 경우
             // 이거 소수점도 받을 수 있음
             if (numberDeque.size() > operatorDeque.size()) {
@@ -85,54 +103,86 @@ public class Controller {
                 numberDeque.add(newNum);
             }
         }
-        // VIEW 최신화
-        // numberBtn 은 BigLabel 만 render
+
+        // numberBtn 은 언제나 BigLabel 만 render (최신화)
         resultPanel.setBigLabel(numberDeque.getLast());
     }
 
     // 2. Operation Button
     // 기본적인 사칙연산 + - x /
     // 등호 연산
-    //
     public void optBtnClicked(String curOperator){
-
-        // 이미 소수점 있으면 return
 
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
         operatorDeque.add(curOperator);
 
-        // 만약 = 이 들어왔으면
-        if(curOperator=="="){
-            // 연산자 한 개 일때랑
-            if(operatorDeque.size()==1){
+        // 만약 마지막 연산이 등호연산이고
+        if(isLastOperationEqual){
+            // 이번꺼도 등호연산이면
+            if(curOperator.equals("=")){
+                isLastOperationEqual = true;
 
-            }
-            // 두개 일때랑 다름
-            if(operatorDeque.size()==2){
+                // 저번 식 고대로 다시 해줘야함
+                String lastEquation = smallLabel.getText();
+                String[] arr = lastEquation.split(" ");
+                operatorDeque.addFirst(arr[1]);
+                numberDeque.add(arr[2]);
+                operatorDeque.add("=");
+                renderSmallLabel();
 
+                String result = calculate();
+                operatorDeque.removeFirst();
+                numberDeque.add(result);
+                renderBigLabel();
             }
+            // 다른 연산자이면
+            else{
+                isLastOperationEqual = false;
+                // 등호연산이었으면 무조건 숫자 1개 연산자 1개임(등호, 새연산자)
+                // 그래서 smallLabel render 만 해주면 됨
+                renderSmallLabel();
+            }
+            return;
         }
 
-        if(numberDeque.size()<operatorDeque.size()){
+        // 마지막 연산이 등호연산이 아니었고
+        // 이번에 들어온게 등호연산이면
+        if (curOperator == "=") {
+            isLastOperationEqual = true;
+
+            renderSmallLabel(); // 등호까지 모두 출력됨 ex) 1 + 2 =
+            String result = calculate(); // 계산하면 numDeque 비고 optDeque 에 = 아직 남아있음
+            // 이 =을 그냥 빼고 넘어가기
             operatorDeque.removeFirst();
-            renderSmallLabel();
-        }
 
-        if (operatorDeque.size()==1) {
-            renderSmallLabel();
-        }
-
-        // 만약 일반 연산자이면
-        if(operatorDeque.size()==2){
-            String result = calculate();
-            // result 추가
             numberDeque.add(result);
-
-            // calculate 에서 이미 계산하면서 Deque 값들을 다 빼냄
-
-            renderSmallLabel();
-            // 연산자 들어오면 BigLabel 항상 최신화
             renderBigLabel();
+        }
+        // 일반 연산자 일때
+        else {
+            isLastOperationEqual = false;
+
+            if (numberDeque.size() < operatorDeque.size()) {
+                operatorDeque.removeFirst();
+                renderSmallLabel();
+            }
+
+            if (operatorDeque.size() == 1) {
+                renderSmallLabel();
+            }
+
+            // 만약 일반 연산자이면
+            if (operatorDeque.size() == 2) {
+                String result = calculate();
+                // result 추가
+                numberDeque.add(result);
+
+                // calculate 에서 이미 계산하면서 Deque 값들을 다 빼냄
+
+                renderSmallLabel();
+                // 연산자 들어오면 BigLabel 항상 최신화
+                renderBigLabel();
+            }
         }
     }
 
@@ -225,7 +275,7 @@ public class Controller {
         buttonPanel.getMulButton().addActionListener(observer);
         buttonPanel.getDivButton().addActionListener(observer);
         buttonPanel.getEqualButton().addActionListener(observer);
-        buttonPanel.getSignButton().addActionListener(observer);
+        buttonPanel.getNegateButton().addActionListener(observer);
     }
 
 }

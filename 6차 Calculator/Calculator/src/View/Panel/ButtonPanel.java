@@ -5,17 +5,6 @@ import java.awt.*;
 
 public class ButtonPanel extends JPanel {
 
-    private JButton clearEntryButton;
-    private JButton clearButton;
-    private JButton backSpaceButton;
-    private JButton addButton;
-    private JButton divButton;
-    private JButton dotButton;
-    private JButton equalButton;
-    private JButton mulButton;
-    private JButton signButton;
-    private JButton subButton;
-
     private JButton num0Button;
     private JButton num1Button;
     private JButton num2Button;
@@ -27,7 +16,21 @@ public class ButtonPanel extends JPanel {
     private JButton num8Button;
     private JButton num9Button;
 
+    private JButton addButton;
+    private JButton divButton;
+    private JButton dotButton;
+    private JButton equalButton;
+    private JButton mulButton;
+    private JButton negateButton;
+    private JButton subButton;
+
+    private JButton clearEntryButton;
+    private JButton clearButton;
+    private JButton backSpaceButton;
+
     private JScrollPane resultScrollPane;
+
+    private Font mainFont;
 
     public ButtonPanel() {
         // 필요한 버튼 모두 생성
@@ -37,6 +40,8 @@ public class ButtonPanel extends JPanel {
     }
     
     private void createComponents() {
+        mainFont = new Font("Consolas",Font.BOLD,15);
+
         clearEntryButton = new JButton("CE");
         clearButton = new JButton("C");
         backSpaceButton = new JButton("<");
@@ -46,7 +51,7 @@ public class ButtonPanel extends JPanel {
 
         equalButton = new JButton("=");
         mulButton = new JButton("*");
-        signButton = new JButton("+/-");
+        negateButton = new JButton("+/-");
         subButton = new JButton("-");
 
         num0Button = new JButton("0");
@@ -61,82 +66,102 @@ public class ButtonPanel extends JPanel {
         num9Button = new JButton("9");
 
         clearEntryButton.setText("CE");
+        clearEntryButton.setFont(mainFont);
         clearEntryButton.setBackground(Color.ORANGE);
         clearEntryButton.setFocusable(false);
 
         clearButton.setText("C");
+        clearButton.setFont(mainFont);
         clearButton.setBackground(Color.ORANGE);
         clearButton.setFocusable(false);
 
         backSpaceButton.setText("<");
+        backSpaceButton.setFont(mainFont);
         backSpaceButton.setBackground(Color.ORANGE);
         backSpaceButton.setFocusable(false);
 
-        signButton.setText("+/-");
-        signButton.setBackground(Color.ORANGE);
-        signButton.setFocusable(false);
+        negateButton.setText("+/-");
+        negateButton.setFont(mainFont);
+        negateButton.setBackground(Color.ORANGE);
+        negateButton.setFocusable(false);
 
         divButton.setText("÷");
+        divButton.setFont(mainFont);
         divButton.setBackground(Color.ORANGE);
         divButton.setFocusable(false);
 
         mulButton.setText("×");
+        mulButton.setFont(mainFont);
         mulButton.setBackground(Color.ORANGE);
         mulButton.setFocusable(false);
 
         subButton.setText("-");
+        subButton.setFont(mainFont);
         subButton.setBackground(Color.ORANGE);
         subButton.setFocusable(false);
 
         addButton.setText("+");
+        addButton.setFont(mainFont);
         addButton.setBackground(Color.ORANGE);
         addButton.setFocusable(false);
 
         equalButton.setText("=");
+        equalButton.setFont(mainFont);
         equalButton.setBackground(Color.RED);
         equalButton.setFocusable(false);
 
         dotButton.setText(".");
+        dotButton.setFont(mainFont);
         dotButton.setBackground(Color.ORANGE);
         dotButton.setFocusable(false);
 
         num1Button.setText("1");
+        num1Button.setFont(mainFont);
         num1Button.setBackground(Color.WHITE);
         num1Button.setFocusable(false);
 
         num2Button.setText("2");
+        num2Button.setFont(mainFont);
         num2Button.setBackground(Color.WHITE);
         num2Button.setFocusable(false);
 
         num3Button.setText("3");
+        num3Button.setFont(mainFont);
         num3Button.setBackground(Color.WHITE);
         num3Button.setFocusable(false);
 
         num4Button.setText("4");
+        num4Button.setFont(mainFont);
         num4Button.setBackground(Color.WHITE);
         num4Button.setFocusable(false);
 
         num5Button.setText("5");
+        num5Button.setFont(mainFont);
         num5Button.setBackground(Color.WHITE);
         num5Button.setFocusable(false);
 
         num6Button.setText("6");
+        num6Button.setFont(mainFont);
         num6Button.setBackground(Color.WHITE);
         num6Button.setFocusable(false);
 
         num7Button.setText("7");
+        num7Button.setFont(mainFont);
         num7Button.setBackground(Color.WHITE);
         num7Button.setFocusable(false);
 
         num8Button.setText("8");
+        num8Button.setFont(mainFont);
         num8Button.setBackground(Color.WHITE);
         num8Button.setFocusable(false);
 
         num9Button.setText("9");
+        num9Button.setFont(mainFont);
         num9Button.setBackground(Color.WHITE);
         num9Button.setFocusable(false);
 
         num0Button.setText("0");
+        num0Button.setFont(mainFont);
         num0Button.setBackground(Color.WHITE);
         num0Button.setFocusable(false);
     }
@@ -173,7 +198,7 @@ public class ButtonPanel extends JPanel {
         addButton(this, num3Button, gbc, 3, 2);
         addButton(this, addButton, gbc, 3, 3);
 
-        addButton(this, signButton, gbc, 4, 0);
+        addButton(this, negateButton, gbc, 4, 0);
         addButton(this, num0Button, gbc, 4, 1);
         addButton(this, dotButton, gbc, 4, 2);
         addButton(this, equalButton, gbc, 4, 3);
@@ -195,6 +220,7 @@ public class ButtonPanel extends JPanel {
     public JButton getNum7Button() { return num7Button; }
     public JButton getNum8Button() { return num8Button; }
     public JButton getNum9Button() { return num9Button; }
+    public JButton getDotButton() { return dotButton; }
 
     public JButton getClearEntryButton() { return clearEntryButton; }
     public JButton getClearButton() { return clearButton; }
@@ -207,6 +233,5 @@ public class ButtonPanel extends JPanel {
 
     public JButton getEqualButton() { return equalButton; }
 
-    public JButton getDotButton() { return dotButton; }
-    public JButton getSignButton() { return signButton; }
+    public JButton getNegateButton() { return negateButton; }
 }

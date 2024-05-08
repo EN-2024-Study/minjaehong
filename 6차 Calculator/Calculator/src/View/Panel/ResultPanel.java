@@ -21,12 +21,15 @@ public class ResultPanel extends JPanel {
     }
 
     private void createComponents(){
+
         smallLabel = new JLabel();
+        smallLabel.setFont(new Font("Consolas", Font.BOLD, 16));
         smallLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         Border border = BorderFactory.createLineBorder(Color.RED,5); // Create a LineBorder with default color (black)
         smallLabel.setBorder(border);
 
         bigLabel = new JLabel("0");
+        bigLabel.setFont(new Font("Consolas", Font.BOLD, 36));
         bigLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         border = BorderFactory.createLineBorder(Color.BLUE,5); // Create a LineBorder with default color (black)
         bigLabel.setBorder(border);

@@ -1,24 +1,20 @@
 package Controller;
 
-import Controller.Controller;
-import View.MainView;
 import View.Panel.ButtonPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// 0~9 입력 처리
 public class Observer implements ActionListener {
     Controller controller;
-    ButtonPanel buttonPanel;
 
-    // ButtonPanel ELEMENTS 참조하기 위해 MainView 필요함
     // Controller 참조하기 위해 Controller 필요함
-    public Observer(ButtonPanel buttonPanel, Controller controller){
-        this.buttonPanel = buttonPanel;
+    public Observer(Controller controller){
         this.controller = controller;
     }
 
+    // ButtonPanel 에서 event 가 호출되면
+    // controller 에게 해야할 일을 알려줌
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -31,7 +27,7 @@ public class Observer implements ActionListener {
             controller.numBtnClicked(ac);
         }
 
-        if (ac.equals("+") || ac.equals("-") || ac.equals("×") || ac.equals("÷")) {
+        if (ac.equals("+") || ac.equals("-") || ac.equals("×") || ac.equals("÷") || ac.equals("=")) {
             controller.optBtnClicked(ac);
         }
 
@@ -41,6 +37,10 @@ public class Observer implements ActionListener {
 
         if (ac.equals("C")) {
             controller.clearBtnClicked();
+        }
+
+        if(ac.equals("<")) {
+            
         }
     }
 }
