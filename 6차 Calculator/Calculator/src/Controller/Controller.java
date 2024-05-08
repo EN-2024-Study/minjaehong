@@ -77,11 +77,6 @@ public class Controller {
 
     // bigLabel 0으로 만듬
     public void clearEntryBtnClicked(){
-        //System.out.println(numberDeque.getLast());
-        //System.out.println(numberDeque.getFirst());
-        //System.out.println(operatorDeque.getFirst());
-        //System.out.println(operatorDeque.getLast());
-
         // 맨 마지막에 추가한거 빼주기
         numberDeque.removeLast();
         numberDeque.add("0");
@@ -92,9 +87,9 @@ public class Controller {
     public void clearBtnClicked(){
         numberDeque.clear();
         operatorDeque.clear();
+        renderSmallLabel();
         numberDeque.add("0");
         renderBigLabel();
-        renderSmallLabel();
     }
 
     public void backSpaceBtnClicked(){

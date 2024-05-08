@@ -32,6 +32,7 @@ public class OperatorService {
 
         // 만약 마지막 연산이 등호연산이고
         if (smallLabel.getText().contains("=")) {
+
             // 이번꺼도 등호연산이면
             if (newOperator.equals("=")) {
                 // 저번 식 고대로 다시 해줘야함
@@ -62,7 +63,7 @@ public class OperatorService {
         // 이번에 들어온게 등호연산이면
         if (newOperator.equals("=")) {
 
-            // 만약 연산자가 = 1개이면
+            // 만약 연산자가 등호 1개이면
             // ex) 4 =
             if(operatorDeque.size()==1){
                 renderSmallLabel(); // 4 =
@@ -70,9 +71,10 @@ public class OperatorService {
                 return;
             }
 
-            // 만약 연산자가 중복으로 들어온거면
+            // 만약 연산자가 중복(일반 + 등호)으로 들어온거면
             // ex) 4 + = 이렇게 들어오면 4 + 4 = 으로 만들어줘야함
-            if(numberDeque.size() < operatorDeque.size()){
+            // numberDeque 에 똑같은 수 하나 추가해줘야함
+            if(numberDeque.size()==1 && operatorDeque.size()==2){
                 numberDeque.add(numberDeque.getLast());
             }
 
@@ -85,44 +87,39 @@ public class OperatorService {
             renderBigLabel();
             return;
         }
-        // 이번에 들어온게 일반 연산자이면
+        // 들어온게 일반 연산자이면
         else {
-            // 숫자 개수보다 연산자 개수가 많아진거면
-            // 기존 연산자 바꾸는 작업임
-            if (numberDeque.size() < operatorDeque.size()) {
+            if (numberDeque.size()==1 && operatorDeque.size()==2) {
+                // 숫자 개수 1개 연산자 개수 2개면
+                // 기존 연산자 바꾸는 작업임
                 operatorDeque.removeFirst();
                 renderSmallLabel();
             }
-
-            // 만약 이번꺼가 첫번째 연산자일때
-            else if (operatorDeque.size() == 1) {
+            else if (numberDeque.size()==1 && operatorDeque.size() == 1) {
+                // 만약 이번꺼가 첫번째 연산자일때
+                // 계산은 하지말고 smallLabel 만 최신화해주기
                 renderSmallLabel();
             }
+            else if (numberDeque.size()==2 && operatorDeque.size() == 2) {
+                // 만약 숫자 개수도 2개 연산자 개수도 2개이면
+                // 전자인 연산자 토대로 계산해줘야함
+                String result = calculate(); // 이거 끝나면 숫자 1개 연산자 1개임
 
-            // 만약 숫자 개수도 2개 연산자 개수도 2개이면
-            // 전자인 연산자 토대로 계산해줘야함
-            // 이거 끝나면 숫자 1개 연산자 1개임
-            else if (operatorDeque.size() == 2) {
-                String result = calculate();
-
-                // result 추가
+                /*
                 if (result.equals("0으로 나눌 수 없습니다")) {
-                    /*
                     buttonPanel.getDotButton().setEnabled(false);
                     buttonPanel.getDivButton().setEnabled(false);
                     buttonPanel.getAddButton().setEnabled(false);
                     buttonPanel.getMulButton().setEnabled(false);
                     buttonPanel.getSubButton().setEnabled(false);
                     buttonPanel.getNegateButton().setEnabled(false);
-                     */
                 }
+                */
 
                 // 계산결과 push
                 numberDeque.add(result);
 
-                // calculate 에서 이미 계산하면서 Deque 값들을 다 빼냄
                 renderSmallLabel();
-                // 연산자 들어오면 BigLabel 항상 최신화
                 renderBigLabel();
             }
         }

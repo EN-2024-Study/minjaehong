@@ -6,9 +6,9 @@ import Controller.Controller;
 // 자동정렬 = 정렬할 부분 지정하고 ctrl shift alt + l
 public class CalculatorApp {
     public static void main(String[] args) {
-        // 모든 Panel 다 붙여놓음
+        // 모든 Panel 붙어있는 MainView 생성해놓기
         MainView mainView = new MainView();
-        //
+
         Controller controller = new Controller(mainView);
         mainView.setVisible(true);
     }
