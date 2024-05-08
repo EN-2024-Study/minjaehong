@@ -106,7 +106,7 @@ public class OperatorService {
                 String result = calculate(); // 이거 끝나면 숫자 1개 연산자 1개임
 
                 /*
-                if (result.equals("0으로 나눌 수 없습니다")) {
+                if (result.equals("impossible")) {
                     buttonPanel.getDotButton().setEnabled(false);
                     buttonPanel.getDivButton().setEnabled(false);
                     buttonPanel.getAddButton().setEnabled(false);
@@ -134,7 +134,7 @@ public class OperatorService {
         BigDecimal result = BigDecimal.ZERO;
 
         if (opt == "÷" && num2.equals(BigDecimal.ZERO)) {
-            return "0으로 나눌 수 없습니다";
+            return "impossible";
         }
 
         switch (opt) {
@@ -153,7 +153,7 @@ public class OperatorService {
                 result = num1.divide(num2, 16, RoundingMode.HALF_EVEN);
                 break;
         }
-        return result.toString();
+        return result.stripTrailingZeros().toPlainString();
     }
 
     private void renderBigLabel () {

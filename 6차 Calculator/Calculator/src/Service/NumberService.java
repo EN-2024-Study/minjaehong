@@ -27,6 +27,18 @@ public class NumberService {
         JLabel bigLabel = resultPanel.getBigLabel();
         JLabel smallLabel = resultPanel.getSmallLabel();
 
+        /*
+        if(newNum.equals("+/-") && numberDeque.getLast()!="0"){
+            String lastNum = numberDeque.removeLast();
+            if(lastNum.startsWith("-")){
+                numberDeque.add(lastNum.substring(1));
+            }else{
+                numberDeque.add("-"+lastNum);
+            }
+            return;
+        }
+        */
+
         // 소수점이면
         if (newNum.equals(".")) {
             // 이미 현재 값에 소수점 존재하면

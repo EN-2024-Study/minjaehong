@@ -68,6 +68,7 @@ public class Controller {
 
     public void numBtnClicked(String newNum){
         numberService.handleNumberInput(newNum);
+        if(newNum=="+/-") return;
         resultPanel.setBigLabel(numberDeque.getLast()); // 이게 renderBigLabel 아님??
     }
 

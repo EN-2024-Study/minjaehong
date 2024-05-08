@@ -29,15 +29,15 @@ public class ResultPanel extends JPanel {
         smallLabel.setBackground(Color.WHITE);
         smallLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         smallLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-        Border border = BorderFactory.createLineBorder(Color.RED,5); // Create a LineBorder with default color (black)
-        smallLabel.setBorder(border);
+        //Border border = BorderFactory.createLineBorder(Color.RED,5); // Create a LineBorder with default color (black)
+        //smallLabel.setBorder(border);
 
         bigLabel = new JLabel("0");
         bigLabel.setFont(new Font("Consolas", Font.BOLD, 36));
         bigLabel.setBackground(Color.WHITE);
         bigLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        border = BorderFactory.createLineBorder(Color.BLUE,5); // Create a LineBorder with default color (black)
-        bigLabel.setBorder(border);
+        //border = BorderFactory.createLineBorder(Color.BLUE,5); // Create a LineBorder with default color (black)
+        //bigLabel.setBorder(border);
 
         showLogButton = new JButton("X");
     }
