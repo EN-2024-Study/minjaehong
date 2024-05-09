@@ -38,25 +38,27 @@ public class OperatorEventController {
                 // 저번 식 고대로 다시 해줘야함
                 String lastEquation = smallLabel.getText();
                 String[] arr = lastEquation.split(" ");
-                // 만약 = 4 이런 형식이면
+
+                // 만약 4 = 이런 형식이면
                 if(arr.length==2){
                     renderSmallLabel(); // 4 =
                     operatorDeque.removeFirst(); // 들어온 = 빼주기
                 }
                 // 만약 1 + 2 = 3 이런 형식이면
                 else {
+                    operatorDeque.clear();
                     operatorDeque.addFirst(arr[1]);
                     numberDeque.add(arr[2]);
                     operatorDeque.add("=");
                     renderSmallLabel();
 
                     String result = calculate();
-                    operatorDeque.removeFirst();
+                    operatorDeque.clear();
                     numberDeque.add(result);
                     renderBigLabel();
                 }
             }
-            // 다른 연산자이면
+            // 마지막 연산이 등호연산인데 이번꺼는 등호 연산자가 아니면
             else {
                 // 마지막꺼가 등호연산이었으면
                 // 지금 무조건 숫자 1개 연산자 1개임(등호, 새연산자)
@@ -133,6 +135,7 @@ public class OperatorEventController {
         }
     }
 
+    // 등호 연산 들어왔을때 + 연산자 두 개 채워지면
     // 값 진짜로 계산하기
     public String calculate () {
         BigDecimal num1 = new BigDecimal(numberDeque.removeFirst());
