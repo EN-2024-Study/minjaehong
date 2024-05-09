@@ -1,13 +1,15 @@
-package Controller;
+package Observer;
+
+import Controller.MainController;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class ButtonObserver extends KeyAdapter {
-    Controller controller;
+public class ButtonEventObserver extends KeyAdapter {
+    MainController mainController;
 
-    public ButtonObserver(Controller controller ){
-        this.controller = controller;
+    public ButtonEventObserver(MainController mainController){
+        this.mainController = mainController;
     }
 
     @Override
@@ -26,37 +28,35 @@ public class ButtonObserver extends KeyAdapter {
             case KeyEvent.VK_7:
             case KeyEvent.VK_8:
             case KeyEvent.VK_9:
-                controller.numBtnClicked(String.valueOf((char)key));
+                mainController.numBtnClicked(String.valueOf((char)key));
                 break;
             case KeyEvent.VK_PERIOD:
-                controller.numBtnClicked(".");
+                mainController.numBtnClicked(".");
                 break;
             case KeyEvent.VK_ADD:
                 System.out.println("add clicked");
-                controller.optBtnClicked("+");
+                mainController.optBtnClicked("+");
                 break;
             case KeyEvent.VK_SUBTRACT:
-                controller.optBtnClicked("-");
+                mainController.optBtnClicked("-");
                 break;
             case KeyEvent.VK_MULTIPLY:
-                controller.optBtnClicked("×");
+                mainController.optBtnClicked("×");
                 break;
             case KeyEvent.VK_DIVIDE:
-                controller.optBtnClicked("÷");
+                mainController.optBtnClicked("÷");
                 break;
             case KeyEvent.VK_ENTER:
-                controller.optBtnClicked("=");
+                mainController.optBtnClicked("=");
                 break;
             case KeyEvent.VK_BACK_SPACE:
-                controller.backSpaceBtnClicked();
+                mainController.eraseBtnClicked("<");
                 break;
             case KeyEvent.VK_DELETE:
-                controller.clearEntryBtnClicked();
+                mainController.eraseBtnClicked("CE");
                 break;
             case KeyEvent.VK_ESCAPE:
-                controller.clearBtnClicked();
-                break;
-            default:
+                mainController.eraseBtnClicked("C");
                 break;
         }
     }

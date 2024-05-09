@@ -1,5 +1,5 @@
+import Controller.MainController;
 import View.MainView;
-import Controller.Controller;
 
 // 변수명 일괄변경 = shift + f6
 // 주석처리 = ctrl shift alt + /
@@ -8,8 +8,8 @@ public class CalculatorApp {
     public static void main(String[] args) {
         // 모든 Panel 붙어있는 MainView 생성해놓기
         MainView mainView = new MainView();
-
-        Controller controller = new Controller(mainView);
         mainView.setVisible(true);
+
+        MainController mainController = new MainController(mainView);
     }
 }

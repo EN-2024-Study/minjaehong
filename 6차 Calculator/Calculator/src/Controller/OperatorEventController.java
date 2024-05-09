@@ -1,4 +1,4 @@
-package Service;
+package Controller;
 
 import View.Panel.ResultPanel;
 
@@ -7,12 +7,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayDeque;
 
-public class OperatorService {
+public class OperatorEventController {
     private ArrayDeque<String> numberDeque;
     private ArrayDeque<String> operatorDeque;
     private ResultPanel resultPanel;
 
-    public OperatorService(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, ResultPanel resultPanel) {
+    public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, ResultPanel resultPanel) {
         this.numberDeque = numberDeque;
         this.operatorDeque = operatorDeque;
 
@@ -20,7 +20,7 @@ public class OperatorService {
     }
 
     // operatorDeque 랑 numberDeque 만 변경해주면 됨
-    // 이에 따른 Label Rendering 은 Controller 가 알아서 해줄거임
+    // 이에 따른 Label Rendering 은 MainController 가 알아서 해줄거임
     // 들어온 연산자에 따라 ArrayDeque 조작만 해주면 됨
     public void handleOperatorInput(String newOperator) {
 

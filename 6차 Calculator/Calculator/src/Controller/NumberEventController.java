@@ -1,17 +1,17 @@
-package Service;
+package Controller;
 
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
 import java.util.ArrayDeque;
 
-public class NumberService {
+public class NumberEventController {
 
     private ArrayDeque<String> numberDeque;
     private ArrayDeque<String> operatorDeque;
     private ResultPanel resultPanel;
 
-    public NumberService(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, ResultPanel resultPanel) {
+    public NumberEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, ResultPanel resultPanel) {
         this.numberDeque = numberDeque;
         this.operatorDeque = operatorDeque;
 
