@@ -1,7 +1,7 @@
 package Controller;
 
-import Observer.ButtonEventObserver;
-import Observer.MouseEventObserver;
+import Listener.ButtonEventListener;
+import Listener.MouseEventListener;
 import View.MainView;
 import View.Panel.ButtonPanel;
 import View.Panel.ResultPanel;
@@ -18,8 +18,8 @@ public class MainController {
     JLabel smallLabel;
     JLabel bigLabel;
 
-    MouseEventObserver mouseEventObserver;
-    ButtonEventObserver buttonObserver;
+    MouseEventListener mouseEventListener;
+    ButtonEventListener buttonObserver;
 
     NumberEventController numberEventController;
     OperatorEventController operatorEventController;
@@ -36,8 +36,8 @@ public class MainController {
         operatorDeque = new ArrayDeque<>();
 
         // eventController 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
-        mouseEventObserver = new MouseEventObserver(this);
-        buttonObserver = new ButtonEventObserver(this);
+        mouseEventListener = new MouseEventListener(this);
+        buttonObserver = new ButtonEventListener(this);
 
         numberEventController = new NumberEventController(numberDeque, operatorDeque, resultPanel);
         operatorEventController = new OperatorEventController(numberDeque, operatorDeque, resultPanel);
@@ -72,7 +72,7 @@ public class MainController {
 
     public void numBtnClicked(String newNum){
         numberEventController.handleNumberInput(newNum);
-        if(newNum=="+/-") return;
+        if(newNum.equals("+/-")) return;
         resultPanel.setBigLabel(numberDeque.getLast()); // 이게 renderBigLabel 아님??
     }
 
@@ -111,27 +111,27 @@ public class MainController {
         buttonPanel.setFocusable(true);
         buttonPanel.requestFocus();
 
-        buttonPanel.getNum0Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum1Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum2Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum3Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum4Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum5Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum6Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum7Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum8Button().addActionListener(mouseEventObserver);
-        buttonPanel.getNum9Button().addActionListener(mouseEventObserver);
-        buttonPanel.getDotButton().addActionListener(mouseEventObserver);
+        buttonPanel.getNum0Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum1Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum2Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum3Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum4Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum5Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum6Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum7Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum8Button().addActionListener(mouseEventListener);
+        buttonPanel.getNum9Button().addActionListener(mouseEventListener);
+        buttonPanel.getDotButton().addActionListener(mouseEventListener);
 
-        buttonPanel.getClearEntryButton().addActionListener(mouseEventObserver);
-        buttonPanel.getClearButton().addActionListener(mouseEventObserver);
-        buttonPanel.getBackSpaceButton().addActionListener(mouseEventObserver);
+        buttonPanel.getClearEntryButton().addActionListener(mouseEventListener);
+        buttonPanel.getClearButton().addActionListener(mouseEventListener);
+        buttonPanel.getBackSpaceButton().addActionListener(mouseEventListener);
 
-        buttonPanel.getAddButton().addActionListener(mouseEventObserver);
-        buttonPanel.getSubButton().addActionListener(mouseEventObserver);
-        buttonPanel.getMulButton().addActionListener(mouseEventObserver);
-        buttonPanel.getDivButton().addActionListener(mouseEventObserver);
-        buttonPanel.getEqualButton().addActionListener(mouseEventObserver);
-        buttonPanel.getNegateButton().addActionListener(mouseEventObserver);
+        buttonPanel.getAddButton().addActionListener(mouseEventListener);
+        buttonPanel.getSubButton().addActionListener(mouseEventListener);
+        buttonPanel.getMulButton().addActionListener(mouseEventListener);
+        buttonPanel.getDivButton().addActionListener(mouseEventListener);
+        buttonPanel.getEqualButton().addActionListener(mouseEventListener);
+        buttonPanel.getNegateButton().addActionListener(mouseEventListener);
     }
 }

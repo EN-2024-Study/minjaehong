@@ -1,14 +1,14 @@
-package Observer;
+package Listener;
 
 import Controller.MainController;
 
 import java.awt.event.*;
 
-public class MouseEventObserver implements ActionListener {
+public class MouseEventListener implements ActionListener {
     MainController mainController;
 
     // MainController 참조하기 위해 MainController 필요함
-    public MouseEventObserver(MainController mainController){
+    public MouseEventListener(MainController mainController){
         this.mainController = mainController;
     }
 

@@ -30,103 +30,88 @@ public class OperatorEventController {
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
         operatorDeque.add(newOperator);
 
-        // 만약 마지막 연산이 등호연산이고
-        if (smallLabel.getText().contains("=")) {
+        printStartMatrix(numberDeque, operatorDeque);
 
-            // 이번꺼도 등호연산이면
-            if (newOperator.equals("=")) {
-                // 저번 식 고대로 다시 해줘야함
+        // 이번꺼가 등호일때
+        // 등호일때는 무조건 계산해줘야함
+        if (newOperator.equals("=")) {
+            // 전꺼가 등호일때
+            if (operatorDeque.size()==2 && operatorDeque.getFirst().equals("=")) {
                 String lastEquation = smallLabel.getText();
                 String[] arr = lastEquation.split(" ");
 
-                // 만약 4 = 이런 형식이면
-                if(arr.length==2){
-                    renderSmallLabel(); // 4 =
+                // 전꺼가 4 = 이런 형식이었으면
+                if (arr.length == 2) {
+                    operatorDeque.removeFirst(); // (4 = =) -> (4 =)
+                    renderSmallLabel();
                 }
-                // 만약 1 + 2 = 3 이런 형식이면
+                // 전꺼가 2 + 3 = 5 이런 형식이었으면
                 else {
-                    operatorDeque.clear(); // 이번에 들어온 등호 아예 빼주고
-                    // Deque 수동으로 채우기
-                    operatorDeque.addFirst(arr[1]);
+                    operatorDeque.clear();
+                    operatorDeque.add(arr[1]);
                     numberDeque.add(arr[2]);
                     operatorDeque.add("=");
                     renderSmallLabel();
 
                     String result = calculate();
+
                     numberDeque.add(result);
-                    // 여기까지 하면 결과값 / = 이렇게 남음
                     renderBigLabel();
                 }
+                //return;
             }
-            // 마지막 연산이 등호연산인데 이번꺼는 등호 연산자가 아니면
+            // 전꺼가 등호가 아닐때
             else {
-                // 기존에 있었던 등호만 빼주면 됨
-                // 그냥 연산자 교체임
-                operatorDeque.removeFirst();
-                renderSmallLabel();
-            }
-            return;
-        }
-
-        // 마지막 연산이 등호연산이 아니고
-        // 이번에 들어온게 등호연산이면
-        if (newOperator.equals("=")) {
-
-            // 만약 연산자가 등호 1개이면
-            // ex) 4 =
-            if(operatorDeque.size()==1){
-                renderSmallLabel(); // 4 =
-                return;
-            }
-
-            // 만약 연산자가 중복(일반 + 등호)으로 들어온거면
-            // ex) 4 + = 이렇게 들어오면 4 + 4 = 으로 만들어줘야함
-            // numberDeque 에 똑같은 수 하나 추가해줘야함
-            if(numberDeque.size()==1 && operatorDeque.size()==2) {
-                numberDeque.add(numberDeque.getLast());
-            }
-            renderSmallLabel(); // 등호까지 모두 출력됨 ex) 4 + 4 =
-            String result = calculate(); // 계산하면 numDeque 비고 optDeque 에 = 아직 남아있음
-            numberDeque.add(result); // 계산된 값 push
-            renderBigLabel(); // 계산된 값 출력
-            return;
-        }
-        // 들어온게 일반 연산자이면
-        else {
-            if (numberDeque.size()==1 && operatorDeque.size()==2) {
-                // 숫자 개수 1개 연산자 개수 2개면
-                // 기존 연산자 바꾸는 작업임
-                operatorDeque.removeFirst();
-                renderSmallLabel();
-            }
-            else if (numberDeque.size()==1 && operatorDeque.size() == 1) {
-                // 만약 이번꺼가 첫번째 연산자일때
-                // 계산은 하지말고 smallLabel 만 최신화해주기
-                renderSmallLabel();
-            }
-            else if (numberDeque.size()==2 && operatorDeque.size() == 2) {
-                // 만약 숫자 개수도 2개 연산자 개수도 2개이면
-                // 전자인 연산자 토대로 계산해줘야함
-                String result = calculate(); // 이거 끝나면 숫자 1개 연산자 1개임
-
-                /*
-                if (result.equals("impossible")) {
-                    buttonPanel.getDotButton().setEnabled(false);
-                    buttonPanel.getDivButton().setEnabled(false);
-                    buttonPanel.getAddButton().setEnabled(false);
-                    buttonPanel.getMulButton().setEnabled(false);
-                    buttonPanel.getSubButton().setEnabled(false);
-                    buttonPanel.getNegateButton().setEnabled(false);
+                // 1. 숫자 1개 등호 1개 되면
+                // ex) 4 =
+                if (numberDeque.size() == 1 && operatorDeque.size() == 1) {
+                    renderSmallLabel();
+                    //return;
                 }
-                */
+                // 2. 숫자 1개 연산자 2개(일반 1개 등호 1개)
+                // matrix 수동 작성하고 calculate
+                else if (numberDeque.size() == 1 && operatorDeque.size() == 2) {
+                    numberDeque.add(numberDeque.getLast());
+                    renderSmallLabel();
+                    String result = calculate();
 
-                // 계산결과 push
-                numberDeque.add(result);
+                    numberDeque.add(result);
+                    renderBigLabel();
+                    //return;
+                }
+                // 3. 숫자 2개 연산자 2개(일반 1개 등호 1개)
+                // 진짜 calculate
+                else if (numberDeque.size() == 2 && operatorDeque.size() == 2) {
+                    renderSmallLabel();
+                    String result = calculate();
+                    numberDeque.add(result);
 
-                renderSmallLabel();
-                renderBigLabel();
+                    renderBigLabel();
+                    return;
+                }
             }
         }
+        // 이번꺼가 등호가 아닐때
+        else {
+            // 1. 숫자 1개 연산자 1개 = 할게 없음. 잘 추가하기만 해주면 됨 (잘됨)
+            if (numberDeque.size() == 1 && operatorDeque.size() == 1) {
+                renderSmallLabel();
+            }
+            // 2. 숫자 1개 연산자 2개 = 연산자 교체 (잘됨)
+            else if (numberDeque.size() == 1 && operatorDeque.size() == 2) {
+                operatorDeque.removeFirst();
+                renderSmallLabel();
+            }
+            // 3. 숫자 2개 연산자 2개 = 계산 (잘됨)
+            else if (numberDeque.size() == 2 && operatorDeque.size() == 2) {
+                String result = calculate(); // 계산하면 numDeque 비고 optDeque 에 = 아직 남아있음
+                numberDeque.add(result); // 계산된 값 push
+                renderSmallLabel();
+                renderBigLabel(); // 계산된 값 출력
+            }
+        }
+        printEndMatrix(numberDeque, operatorDeque);
+
     }
 
     // 등호 연산 들어왔을때 + 연산자 두 개 채워지면
@@ -135,7 +120,7 @@ public class OperatorEventController {
     // operatorDeque 에 지금 들어온 operator 하나 남음
     // 즉 결과값 / newOperator 이렇게 남음
     // 연산자 무조건 남기기
-    public String calculate () {
+    public String calculate() {
         BigDecimal num1 = new BigDecimal(numberDeque.removeFirst());
         String opt = operatorDeque.removeFirst();
         BigDecimal num2 = new BigDecimal(numberDeque.removeFirst());
@@ -165,7 +150,7 @@ public class OperatorEventController {
         return result.stripTrailingZeros().toPlainString();
     }
 
-    private void renderBigLabel () {
+    private void renderBigLabel() {
         resultPanel.getBigLabel().setText(numberDeque.getLast());
     }
 
@@ -177,11 +162,34 @@ public class OperatorEventController {
         for (int i = 0; i < numberArr.length; i++) {
             sb.append(numberArr[i]);
             sb.append(" ");
-            if (i < operatorArr.length) {
-                sb.append(operatorArr[i]);
-                sb.append(" ");
-            }
+
+            sb.append(operatorArr[i]);
+            sb.append(" ");
         }
         resultPanel.getSmallLabel().setText(sb.toString());
+    }
+
+    private void printStartMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
+        Object[] numberArr = numberDeque.toArray();
+        Object[] operatorArr = operatorDeque.toArray();
+
+        System.out.println("======[START]======");
+        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
+        System.out.println();
+        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
+        System.out.println();
+        System.out.println("===================");
+    }
+
+    private void printEndMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
+        Object[] numberArr = numberDeque.toArray();
+        Object[] operatorArr = operatorDeque.toArray();
+
+        System.out.println("===================");
+        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
+        System.out.println();
+        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
+        System.out.println();
+        System.out.println("=======[END]=======");
     }
 }

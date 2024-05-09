@@ -1,14 +1,14 @@
-package Observer;
+package Listener;
 
 import Controller.MainController;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class ButtonEventObserver extends KeyAdapter {
-    MainController mainController;
+public class ButtonEventListener extends KeyAdapter {
+    private MainController mainController;
 
-    public ButtonEventObserver(MainController mainController){
+    public ButtonEventListener(MainController mainController){
         this.mainController = mainController;
     }
 
