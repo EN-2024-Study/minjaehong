@@ -1,15 +1,12 @@
 package Controller;
 
-import View.Panel.ButtonPanel;
+import java.awt.event.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class Observer implements ActionListener {
+public class MouseObserver implements ActionListener {
     Controller controller;
 
     // Controller 참조하기 위해 Controller 필요함
-    public Observer(Controller controller){
+    public MouseObserver(Controller controller){
         this.controller = controller;
     }
 

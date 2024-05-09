@@ -15,7 +15,8 @@ public class Controller {
     ButtonPanel buttonPanel;
     ResultPanel resultPanel;
 
-    Observer observer;
+    MouseObserver mouseObserver;
+    ButtonObserver buttonObserver;
 
     NumberService numberService;
     OperatorService operatorService;
@@ -34,7 +35,8 @@ public class Controller {
         operatorDeque = new ArrayDeque<>();
 
         // controller 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
-        observer = new Observer(this);
+        mouseObserver = new MouseObserver(this);
+        buttonObserver = new ButtonObserver(this);
 
         numberService = new NumberService(numberDeque, operatorDeque, resultPanel);
         operatorService = new OperatorService(numberDeque, operatorDeque, resultPanel);
@@ -63,7 +65,7 @@ public class Controller {
             }
         });
 
-        BindNumberObserverToButtonPanel();
+        BindObserversToButtonPanel();
     }
 
     public void numBtnClicked(String newNum){
@@ -132,28 +134,33 @@ public class Controller {
         bigLabel.setText(numberDeque.getLast());
     }
 
-    private void BindNumberObserverToButtonPanel(){
-        buttonPanel.getNum0Button().addActionListener(observer);
-        buttonPanel.getNum1Button().addActionListener(observer);
-        buttonPanel.getNum2Button().addActionListener(observer);
-        buttonPanel.getNum3Button().addActionListener(observer);
-        buttonPanel.getNum4Button().addActionListener(observer);
-        buttonPanel.getNum5Button().addActionListener(observer);
-        buttonPanel.getNum6Button().addActionListener(observer);
-        buttonPanel.getNum7Button().addActionListener(observer);
-        buttonPanel.getNum8Button().addActionListener(observer);
-        buttonPanel.getNum9Button().addActionListener(observer);
-        buttonPanel.getDotButton().addActionListener(observer);
+    private void BindObserversToButtonPanel(){
+        buttonPanel.addKeyListener(buttonObserver);
+        // key event 받을 수 있는 조건 = focus 가 주어졌을 경우
+        buttonPanel.setFocusable(true);
+        buttonPanel.requestFocus();
 
-        buttonPanel.getClearEntryButton().addActionListener(observer);
-        buttonPanel.getClearButton().addActionListener(observer);
-        buttonPanel.getBackSpaceButton().addActionListener(observer);
+        buttonPanel.getNum0Button().addActionListener(mouseObserver);
+        buttonPanel.getNum1Button().addActionListener(mouseObserver);
+        buttonPanel.getNum2Button().addActionListener(mouseObserver);
+        buttonPanel.getNum3Button().addActionListener(mouseObserver);
+        buttonPanel.getNum4Button().addActionListener(mouseObserver);
+        buttonPanel.getNum5Button().addActionListener(mouseObserver);
+        buttonPanel.getNum6Button().addActionListener(mouseObserver);
+        buttonPanel.getNum7Button().addActionListener(mouseObserver);
+        buttonPanel.getNum8Button().addActionListener(mouseObserver);
+        buttonPanel.getNum9Button().addActionListener(mouseObserver);
+        buttonPanel.getDotButton().addActionListener(mouseObserver);
 
-        buttonPanel.getAddButton().addActionListener(observer);
-        buttonPanel.getSubButton().addActionListener(observer);
-        buttonPanel.getMulButton().addActionListener(observer);
-        buttonPanel.getDivButton().addActionListener(observer);
-        buttonPanel.getEqualButton().addActionListener(observer);
-        buttonPanel.getNegateButton().addActionListener(observer);
+        buttonPanel.getClearEntryButton().addActionListener(mouseObserver);
+        buttonPanel.getClearButton().addActionListener(mouseObserver);
+        buttonPanel.getBackSpaceButton().addActionListener(mouseObserver);
+
+        buttonPanel.getAddButton().addActionListener(mouseObserver);
+        buttonPanel.getSubButton().addActionListener(mouseObserver);
+        buttonPanel.getMulButton().addActionListener(mouseObserver);
+        buttonPanel.getDivButton().addActionListener(mouseObserver);
+        buttonPanel.getEqualButton().addActionListener(mouseObserver);
+        buttonPanel.getNegateButton().addActionListener(mouseObserver);
     }
 }

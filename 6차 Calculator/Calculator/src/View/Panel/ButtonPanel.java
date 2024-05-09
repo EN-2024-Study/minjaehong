@@ -47,14 +47,14 @@ public class ButtonPanel extends JPanel {
         clearEntryButton = new JButton("CE");
         clearButton = new JButton("C");
         backSpaceButton = new JButton("<");
+
         addButton = new JButton("+");
+        subButton = new JButton("-");
+        mulButton = new JButton("×");
         divButton = new JButton("÷");
         dotButton = new JButton(".");
-
-        equalButton = new JButton("=");
-        mulButton = new JButton("×");
         negateButton = new JButton("+/-");
-        subButton = new JButton("-");
+        equalButton = new JButton("=");
 
         num0Button = new JButton("0");
         num1Button = new JButton("1");
@@ -100,7 +100,8 @@ public class ButtonPanel extends JPanel {
         addButton.setFocusable(false);
 
         equalButton.setFont(mainFont);
-        equalButton.setBackground(new Color(120,120,120));
+        //equalButton.setBackground(Color.BLUE);
+        equalButton.setBackground(new Color(140,140,140));
         equalButton.setFocusable(false);
 
         dotButton.setFont(mainFont);
