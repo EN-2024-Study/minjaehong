@@ -42,28 +42,27 @@ public class OperatorEventController {
                 // 만약 4 = 이런 형식이면
                 if(arr.length==2){
                     renderSmallLabel(); // 4 =
-                    operatorDeque.removeFirst(); // 들어온 = 빼주기
                 }
                 // 만약 1 + 2 = 3 이런 형식이면
                 else {
-                    operatorDeque.clear();
+                    operatorDeque.clear(); // 이번에 들어온 등호 아예 빼주고
+                    // Deque 수동으로 채우기
                     operatorDeque.addFirst(arr[1]);
                     numberDeque.add(arr[2]);
                     operatorDeque.add("=");
                     renderSmallLabel();
 
                     String result = calculate();
-                    operatorDeque.clear();
                     numberDeque.add(result);
+                    // 여기까지 하면 결과값 / = 이렇게 남음
                     renderBigLabel();
                 }
             }
             // 마지막 연산이 등호연산인데 이번꺼는 등호 연산자가 아니면
             else {
-                // 마지막꺼가 등호연산이었으면
-                // 지금 무조건 숫자 1개 연산자 1개임(등호, 새연산자)
-                // 왜냐하면 위에서 무조건 add(newOperator) 해줬기 때문
-                // 그래서 smallLabel render 만 해주면 됨
+                // 기존에 있었던 등호만 빼주면 됨
+                // 그냥 연산자 교체임
+                operatorDeque.removeFirst();
                 renderSmallLabel();
             }
             return;
@@ -77,24 +76,19 @@ public class OperatorEventController {
             // ex) 4 =
             if(operatorDeque.size()==1){
                 renderSmallLabel(); // 4 =
-                operatorDeque.removeFirst(); // 들어온 = 빼주기
                 return;
             }
 
             // 만약 연산자가 중복(일반 + 등호)으로 들어온거면
             // ex) 4 + = 이렇게 들어오면 4 + 4 = 으로 만들어줘야함
             // numberDeque 에 똑같은 수 하나 추가해줘야함
-            if(numberDeque.size()==1 && operatorDeque.size()==2){
+            if(numberDeque.size()==1 && operatorDeque.size()==2) {
                 numberDeque.add(numberDeque.getLast());
             }
-
-            renderSmallLabel(); // 등호까지 모두 출력됨 ex) 1 + 2 =
+            renderSmallLabel(); // 등호까지 모두 출력됨 ex) 4 + 4 =
             String result = calculate(); // 계산하면 numDeque 비고 optDeque 에 = 아직 남아있음
-
-            operatorDeque.removeFirst(); // 들어온 = pop
-
             numberDeque.add(result); // 계산된 값 push
-            renderBigLabel();
+            renderBigLabel(); // 계산된 값 출력
             return;
         }
         // 들어온게 일반 연산자이면
@@ -137,6 +131,10 @@ public class OperatorEventController {
 
     // 등호 연산 들어왔을때 + 연산자 두 개 채워지면
     // 값 진짜로 계산하기
+    // 이거하면 numberDeque 에 result 값 하나랑
+    // operatorDeque 에 지금 들어온 operator 하나 남음
+    // 즉 결과값 / newOperator 이렇게 남음
+    // 연산자 무조건 남기기
     public String calculate () {
         BigDecimal num1 = new BigDecimal(numberDeque.removeFirst());
         String opt = operatorDeque.removeFirst();
