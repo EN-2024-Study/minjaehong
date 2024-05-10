@@ -7,9 +7,6 @@ import View.MainView;
 public class CalculatorApp {
     public static void main(String[] args) {
 
-        // 모든 Panel 붙어있는 MainView 생성해놓기
-        MainView mainView = new MainView();
-        mainView.setVisible(true);
-        MainController mainController = new MainController(mainView);
+        MainController mainController = new MainController();
     }
 }

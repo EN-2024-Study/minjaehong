@@ -1,155 +1,28 @@
 package View.Panel;
 
-import javax.imageio.plugins.tiff.TIFFField;
 import javax.swing.*;
 import java.awt.*;
 
 public class ButtonPanel extends JPanel {
 
-    private JButton num0Button;
-    private JButton num1Button;
-    private JButton num2Button;
-    private JButton num3Button;
-    private JButton num4Button;
-    private JButton num5Button;
-    private JButton num6Button;
-    private JButton num7Button;
-    private JButton num8Button;
-    private JButton num9Button;
-
-    private JButton addButton;
-    private JButton divButton;
-    private JButton dotButton;
-    private JButton equalButton;
-    private JButton mulButton;
-    private JButton negateButton;
-    private JButton subButton;
-
-    private JButton clearEntryButton;
-    private JButton clearButton;
-    private JButton backSpaceButton;
-
-    private JScrollPane resultScrollPane;
-
     private Font mainFont;
+    private JButton[] buttons;
+
+    private final String[] buttonName={
+            "CE","C","<","÷",
+            "7","8","9","×",
+            "4","5","6","-",
+            "1","2","3","+",
+            "+/-","0",".","="
+    };
 
     public ButtonPanel() {
         setBackground(Color.WHITE);
-        // 필요한 버튼 모두 생성
         createComponents();
-        // Panel 의 맞는 위치에 붙이기
         initializeButtonPanel();
     }
-    
-    private void createComponents() {
-        mainFont = new Font("Consolas",Font.BOLD,15);
 
-        clearEntryButton = new JButton("CE");
-        clearButton = new JButton("C");
-        backSpaceButton = new JButton("<");
-
-        addButton = new JButton("+");
-        subButton = new JButton("-");
-        mulButton = new JButton("×");
-        divButton = new JButton("÷");
-        dotButton = new JButton(".");
-        negateButton = new JButton("+/-");
-        equalButton = new JButton("=");
-
-        num0Button = new JButton("0");
-        num1Button = new JButton("1");
-        num2Button = new JButton("2");
-        num3Button = new JButton("3");
-        num4Button = new JButton("4");
-        num5Button = new JButton("5");
-        num6Button = new JButton("6");
-        num7Button = new JButton("7");
-        num8Button = new JButton("8");
-        num9Button = new JButton("9");
-
-        clearEntryButton.setFont(mainFont);
-        clearEntryButton.setBackground(Color.WHITE);
-        clearEntryButton.setFocusable(false);
-
-        clearButton.setFont(mainFont);
-        clearButton.setBackground(Color.WHITE);
-        clearButton.setFocusable(false);
-
-        backSpaceButton.setFont(mainFont);
-        backSpaceButton.setBackground(Color.WHITE);
-        backSpaceButton.setFocusable(false);
-
-        negateButton.setFont(mainFont);
-        negateButton.setBackground(Color.WHITE);
-        negateButton.setFocusable(false);
-
-        divButton.setFont(mainFont);
-        divButton.setBackground(Color.WHITE);
-        divButton.setFocusable(false);
-
-        mulButton.setFont(mainFont);
-        mulButton.setBackground(Color.WHITE);
-        mulButton.setFocusable(false);
-
-        subButton.setFont(mainFont);
-        subButton.setBackground(Color.WHITE);
-        subButton.setFocusable(false);
-
-        addButton.setFont(mainFont);
-        addButton.setBackground(Color.WHITE);
-        addButton.setFocusable(false);
-
-        equalButton.setFont(mainFont);
-        //equalButton.setBackground(Color.BLUE);
-        equalButton.setBackground(new Color(140,140,140));
-        equalButton.setFocusable(false);
-
-        dotButton.setFont(mainFont);
-        dotButton.setBackground(Color.WHITE);
-        dotButton.setFocusable(false);
-
-        num1Button.setFont(mainFont);
-        num1Button.setBackground(Color.WHITE);
-        num1Button.setFocusable(false);
-
-        num2Button.setFont(mainFont);
-        num2Button.setBackground(Color.WHITE);
-        num2Button.setFocusable(false);
-
-        num3Button.setFont(mainFont);
-        num3Button.setBackground(Color.WHITE);
-        num3Button.setFocusable(false);
-
-        num4Button.setFont(mainFont);
-        num4Button.setBackground(Color.WHITE);
-        num4Button.setFocusable(false);
-
-        num5Button.setFont(mainFont);
-        num5Button.setBackground(Color.WHITE);
-        num5Button.setFocusable(false);
-
-        num6Button.setFont(mainFont);
-        num6Button.setBackground(Color.WHITE);
-        num6Button.setFocusable(false);
-
-        num7Button.setFont(mainFont);
-        num7Button.setBackground(Color.WHITE);
-        num7Button.setFocusable(false);
-
-        num8Button.setFont(mainFont);
-        num8Button.setBackground(Color.WHITE);
-        num8Button.setFocusable(false);
-
-        num9Button.setFont(mainFont);
-        num9Button.setBackground(Color.WHITE);
-        num9Button.setFocusable(false);
-
-        num0Button.setFont(mainFont);
-        num0Button.setBackground(Color.WHITE);
-        num0Button.setFocusable(false);
-    }
-
-    private void initializeButtonPanel(){
+    private void initializeButtonPanel() {
         createComponents();
 
         GridBagLayout grid = new GridBagLayout();
@@ -161,60 +34,61 @@ public class ButtonPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(1, 1, 1, 1); // Padding
 
-        addButton(this, clearEntryButton, gbc, 0, 0);
-        addButton(this, clearButton, gbc, 0, 1);
-        addButton(this, backSpaceButton, gbc, 0, 2);
-        addButton(this, divButton, gbc, 0, 3);
-
-        addButton(this, num7Button, gbc, 1, 0);
-        addButton(this, num8Button, gbc, 1, 1);
-        addButton(this, num9Button, gbc, 1, 2);
-        addButton(this, mulButton, gbc, 1, 3);
-
-        addButton(this, num4Button, gbc, 2, 0);
-        addButton(this, num5Button, gbc, 2, 1);
-        addButton(this, num6Button, gbc, 2, 2);
-        addButton(this, subButton, gbc, 2, 3);
-
-        addButton(this, num1Button, gbc, 3, 0);
-        addButton(this, num2Button, gbc, 3, 1);
-        addButton(this, num3Button, gbc, 3, 2);
-        addButton(this, addButton, gbc, 3, 3);
-
-        addButton(this, negateButton, gbc, 4, 0);
-        addButton(this, num0Button, gbc, 4, 1);
-        addButton(this, dotButton, gbc, 4, 2);
-        addButton(this, equalButton, gbc, 4, 3);
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 4; col++) {
+                int curIdx = row * 4 + col;
+                gbc.gridx = col;
+                gbc.gridy = row;
+                this.add(buttons[curIdx], gbc);
+            }
+        }
     }
 
-    private void addButton(JPanel panel, JButton button, GridBagConstraints gbc, int row, int col) {
-        gbc.gridx = col;
-        gbc.gridy = row;
-        panel.add(button, gbc);
+
+    private void createComponents() {
+        // ButtonPanel 에 사용할 Font 생성
+        mainFont = new Font("Consolas",Font.BOLD,15);
+
+        // ButtonPanel 에 올려둘 Button 생성
+        buttons = new JButton[20];
+
+        // Button 이름 초기화
+        for(int row=0;row<5;row++){
+            for(int column=0;column<4;column++){
+                int curIdx = row*4 + column;
+                buttons[curIdx] = new JButton(buttonName[curIdx]);
+                buttons[curIdx].setFont(mainFont);
+                buttons[curIdx].setBackground(Color.WHITE);
+                buttons[curIdx].setFocusable(false);
+            }
+        }
+        
+        // 등호 버튼 색깔 예외처리
+        buttons[19].setBackground(new Color(140,140,140));
     }
 
-    public JButton getNum0Button() { return num0Button; }
-    public JButton getNum1Button() { return num1Button; }
-    public JButton getNum2Button() { return num2Button; }
-    public JButton getNum3Button() { return num3Button; }
-    public JButton getNum4Button() { return num4Button; }
-    public JButton getNum5Button() { return num5Button; }
-    public JButton getNum6Button() { return num6Button; }
-    public JButton getNum7Button() { return num7Button; }
-    public JButton getNum8Button() { return num8Button; }
-    public JButton getNum9Button() { return num9Button; }
-    public JButton getDotButton() { return dotButton; }
+    public JButton getClearEntryButton() { return buttons[0]; }
+    public JButton getClearButton() { return buttons[1]; }
+    public JButton getBackSpaceButton() { return buttons[2]; }
+    public JButton getDivButton() { return buttons[3]; }
 
-    public JButton getClearEntryButton() { return clearEntryButton; }
-    public JButton getClearButton() { return clearButton; }
-    public JButton getBackSpaceButton() { return backSpaceButton; }
+    public JButton getNum7Button() { return buttons[4]; }
+    public JButton getNum8Button() { return buttons[5]; }
+    public JButton getNum9Button() { return buttons[6]; }
+    public JButton getMulButton() { return buttons[7]; }
 
-    public JButton getAddButton() { return addButton; }
-    public JButton getSubButton() { return subButton; }
-    public JButton getMulButton() { return mulButton; }
-    public JButton getDivButton() { return divButton; }
+    public JButton getNum4Button() { return buttons[8]; }
+    public JButton getNum5Button() { return buttons[9]; }
+    public JButton getNum6Button() { return buttons[10]; }
+    public JButton getSubButton() { return buttons[11]; }
 
-    public JButton getEqualButton() { return equalButton; }
+    public JButton getNum1Button() { return buttons[12]; }
+    public JButton getNum2Button() { return buttons[13]; }
+    public JButton getNum3Button() { return buttons[14]; }
+    public JButton getAddButton() { return buttons[15]; }
 
-    public JButton getNegateButton() { return negateButton; }
+    public JButton getNegateButton() { return buttons[16]; }
+    public JButton getNum0Button() { return buttons[17]; }
+    public JButton getDotButton() { return buttons[18]; }
+    public JButton getEqualButton() { return buttons[19]; }
 }

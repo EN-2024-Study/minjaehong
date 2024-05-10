@@ -13,38 +13,43 @@ import java.util.ArrayDeque;
 
 public class MainController {
 
+    private MainView mainView;
+
     ButtonPanel buttonPanel;
     ResultPanel resultPanel;
     JLabel smallLabel;
     JLabel bigLabel;
 
-    MouseEventListener mouseEventListener;
-    ButtonEventListener buttonObserver;
+    private MouseEventListener mouseEventListener;
+    private ButtonEventListener buttonObserver;
 
-    NumberEventController numberEventController;
-    OperatorEventController operatorEventController;
-    EraserEventController eraserEventController;
+    private NumberEventController numberEventController;
+    private OperatorEventController operatorEventController;
+    private EraserEventController eraserEventController;
 
-    ArrayDeque<String> numberDeque;
-    ArrayDeque<String> operatorDeque;
+    private ArrayDeque<String> numberDeque;
+    private ArrayDeque<String> operatorDeque;
 
     private void initializeController(){
 
         // numberDeque 는 default 상태가 0이 들어가 있는 상태
-        numberDeque = new ArrayDeque<>();
-        numberDeque.add("0");
-        operatorDeque = new ArrayDeque<>();
+        this.numberDeque = new ArrayDeque<>();
+        this.numberDeque.add("0");
+        this. operatorDeque = new ArrayDeque<>();
 
         // eventController 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
         mouseEventListener = new MouseEventListener(this);
         buttonObserver = new ButtonEventListener(this);
 
         numberEventController = new NumberEventController(numberDeque, operatorDeque, resultPanel);
-        operatorEventController = new OperatorEventController(numberDeque, operatorDeque, resultPanel);
+        operatorEventController = new OperatorEventController(numberDeque, operatorDeque, resultPanel, buttonPanel);
         eraserEventController = new EraserEventController(numberDeque, operatorDeque, resultPanel);
     }
 
-    public MainController(MainView mainView){
+    public MainController(){
+
+        mainView = new MainView();
+        mainView.setVisible(true);
 
         buttonPanel = mainView.getButtonPanel();
         resultPanel = mainView.getResultPanel();
@@ -77,10 +82,12 @@ public class MainController {
     }
 
     public void optBtnClicked(String newOperator){
+
         operatorEventController.handleOperatorInput(newOperator);
     }
 
     public void eraseBtnClicked(String input){
+
         eraserEventController.handleEraseEvent(input);
     }
 

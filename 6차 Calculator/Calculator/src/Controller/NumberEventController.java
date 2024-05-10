@@ -24,40 +24,32 @@ public class NumberEventController {
         this.smallLabel = resultPanel.getSmallLabel();
     }
 
-    // 1. +/- 일때
-    // 2. 소수점일때
-    // 3. 숫자일때 -> 그 전꺼에 따라 경우의 수 나눠짐
-    public void handleNumberInput(String newNum) {
+    private void handleNegate(){
+        String lastNum = numberDeque.removeLast();
+        if (lastNum.startsWith("-")) {
+            numberDeque.add(lastNum.substring(1));
+        } else {
+            numberDeque.add("-" + lastNum);
+        }
+        return;
+    }
 
-        // 1. +/- 예외처리
-        if (newNum.equals("+/-") && numberDeque.getLast() != "0") {
+    private void handleDecimalPoint(){
+        // 이미 현재 값에 소수점 존재하면
+        if (numberDeque.getLast().contains(".")) {
+            // 아무것도 안해도 됨
+        } else {
+            // 아니면 소수점 추가
             String lastNum = numberDeque.removeLast();
-            if (lastNum.startsWith("-")) {
-                numberDeque.add(lastNum.substring(1));
-            } else {
-                numberDeque.add("-" + lastNum);
-            }
-            return;
+            numberDeque.add(lastNum + ".");
         }
+        return;
+    }
 
-        // 2. 소수점이면
-        if (newNum.equals(".")) {
-            // 이미 현재 값에 소수점 존재하면
-            if (numberDeque.getLast().contains(".")) {
-                // 아무것도 안해도 됨
-            } else {
-                // 아니면 소수점 추가
-                String lastNum = numberDeque.removeLast();
-                numberDeque.add(lastNum + newNum);
-            }
-            return;
-        }
-
-        // 3. 숫자이면
-
+    private void handleNumber(String newNum){
         // 연산자가 0개일때
         if (numberDeque.size() == 1 && operatorDeque.size() == 0) {
-            // 만약 0이면 지워도 되는 0임
+            // 만약 0이면 Default 0임. 지워지는 0임
             if (numberDeque.getLast() == "0") {
                 numberDeque.removeLast();
                 numberDeque.add(newNum);
@@ -101,6 +93,26 @@ public class NumberEventController {
                 }
                 return;
             }
+        }
+    }
+
+    // 1. +/- 일때
+    // 2. 소수점일때
+    // 3. 숫자일때 -> 그 전꺼에 따라 경우의 수 나눠짐
+    public void handleNumberInput(String newNum) {
+
+        // 1. +/- 예외처리
+        if (newNum.equals("+/-") && numberDeque.getLast() != "0") {
+            handleNegate();
+        }
+
+        // 2. 소수점이면
+        else if (newNum.equals(".")) {
+            handleDecimalPoint();
+        }
+
+        else{
+            handleNumber(newNum);
         }
     }
 

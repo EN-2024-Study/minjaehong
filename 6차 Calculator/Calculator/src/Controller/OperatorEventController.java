@@ -1,5 +1,6 @@
 package Controller;
 
+import View.Panel.ButtonPanel;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
@@ -11,12 +12,14 @@ public class OperatorEventController {
     private ArrayDeque<String> numberDeque;
     private ArrayDeque<String> operatorDeque;
     private ResultPanel resultPanel;
+    private ButtonPanel buttonPanel;
 
-    public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, ResultPanel resultPanel) {
+    public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, ResultPanel resultPanel, ButtonPanel buttonPanel) {
         this.numberDeque = numberDeque;
         this.operatorDeque = operatorDeque;
 
         this.resultPanel = resultPanel;
+        this.buttonPanel = buttonPanel;
     }
 
     // operatorDeque 랑 numberDeque 만 변경해주면 됨
@@ -98,6 +101,7 @@ public class OperatorEventController {
                 renderSmallLabel();
             }
             // 2. 숫자 1개 연산자 2개 = 연산자 교체 (잘됨)
+            // 전 연산이 등호였어도 잘됨
             else if (numberDeque.size() == 1 && operatorDeque.size() == 2) {
                 operatorDeque.removeFirst();
                 renderSmallLabel();
@@ -127,7 +131,13 @@ public class OperatorEventController {
 
         BigDecimal result = BigDecimal.ZERO;
 
-        if (opt == "÷" && num2.equals(BigDecimal.ZERO)) {
+        if (opt.equals("÷") && num2.equals(BigDecimal.ZERO)) {
+            buttonPanel.getDotButton().setEnabled(false);
+            buttonPanel.getDivButton().setEnabled(false);
+            buttonPanel.getAddButton().setEnabled(false);
+            buttonPanel.getMulButton().setEnabled(false);
+            buttonPanel.getSubButton().setEnabled(false);
+            buttonPanel.getNegateButton().setEnabled(false);
             return "impossible";
         }
 
