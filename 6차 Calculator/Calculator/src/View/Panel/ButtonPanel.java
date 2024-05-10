@@ -44,7 +44,6 @@ public class ButtonPanel extends JPanel {
         }
     }
 
-
     private void createComponents() {
         // ButtonPanel 에 사용할 Font 생성
         mainFont = new Font("Consolas",Font.BOLD,15);

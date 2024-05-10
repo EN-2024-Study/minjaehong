@@ -4,6 +4,7 @@ import View.MainView;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
 public class EraserEventController {
@@ -88,14 +89,6 @@ public class EraserEventController {
     }
 
     private void renderBigLabel(){
-        String newNum = numberDeque.getLast();
-
-        StringBuilder sb = new StringBuilder(newNum);
-
-        for(int idx=newNum.length()-3;idx>0;idx-=3){
-            sb.insert(idx,",");
-        }
-
-        mainView.renderBigLabel(sb.toString());
+        mainView.renderBigLabel(numberDeque.getLast());
     }
 }

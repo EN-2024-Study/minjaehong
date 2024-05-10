@@ -4,6 +4,7 @@ import View.MainView;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
 // 숫자 바뀌면 무조건 BigLabel 만 바뀜
@@ -119,14 +120,6 @@ public class NumberEventController {
     // operatorcontroller 에 backspace 할때도 똑같이 해줘야함
 
     private void renderBigLabel(){
-        String newNum = numberDeque.getLast();
-
-        StringBuilder sb = new StringBuilder(newNum);
-
-        for(int idx=newNum.length()-3;idx>0;idx-=3){
-            sb.insert(idx,",");
-        }
-
-        mainView.renderBigLabel(sb.toString());
+        mainView.renderBigLabel(numberDeque.getLast());
     }
 }

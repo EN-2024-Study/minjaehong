@@ -97,15 +97,26 @@ public class MainView extends JFrame {
         return buttonPanel;
     }
 
-    public boolean isBigLabelFull(){
-        return (resultPanel.getBigLabel().getText().length() == 21);
-    }
-
     public void renderSmallLabel(String newText){
         resultPanel.getSmallLabel().setText(newText);
     }
 
     public void renderBigLabel(String newText){
         resultPanel.getBigLabel().setText(newText);
+    }
+
+    public boolean isBigLabelFull(){
+        String curText = resultPanel.getBigLabel().getText();
+
+        // 소수일때
+        if(curText.contains(".")){
+            // 0으로 시작하는 소수면 18개
+            if(curText.charAt(0)=='0' && curText.length()==18) return true;
+            // 0이 아닌 수로 시작하는 소수면
+            else if(curText.length()==17) return true;
+        }else{
+            if(curText.length()==21) return true;
+        }
+        return false;
     }
 }

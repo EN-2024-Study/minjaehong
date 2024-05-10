@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
 public class OperatorEventController {
@@ -165,15 +166,7 @@ public class OperatorEventController {
     }
 
     private void renderBigLabel(){
-        String newNum = numberDeque.getLast();
-
-        StringBuilder sb = new StringBuilder(newNum);
-
-        for(int idx=newNum.length()-3;idx>0;idx-=3){
-            sb.insert(idx,",");
-        }
-
-        mainView.renderBigLabel(sb.toString());
+        mainView.renderBigLabel(numberDeque.getLast());
     }
 
     private void renderSmallLabel() {
