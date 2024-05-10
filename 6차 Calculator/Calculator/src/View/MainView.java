@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 public class MainView extends JFrame {
 
@@ -67,7 +69,7 @@ public class MainView extends JFrame {
     }
 
     public MainView(){
-        setTitle("Windows Controller.Calculator");
+        setTitle("Windows Calculator");
         setSize(new Dimension(400,600));
 
         // 상대경로 지정
@@ -105,22 +107,23 @@ public class MainView extends JFrame {
         resultPanel.getSmallLabel().setText(newText);
     }
 
-    public void renderBigLabel(String newText){
-        resultPanel.getBigLabel().setText(newText);
-    }
+    public void renderBigLabel(String newNum){
 
-    public boolean isBigLabelFull(){
-        String curText = resultPanel.getBigLabel().getText();
+        DecimalFormat df = new DecimalFormat("#,###");
 
-        // 소수일때
-        if(curText.contains(".")){
-            // 0으로 시작하는 소수면 18개
-            if(curText.charAt(0)=='0' && curText.length()==18) return true;
-            // 0이 아닌 수로 시작하는 소수면
-            else if(curText.length()==17) return true;
+        int decimalPointIndex = newNum.indexOf(".");
+
+        if(decimalPointIndex==-1){
+            BigDecimal temp = new BigDecimal(newNum);
+            newNum = df.format(temp);
         }else{
-            if(curText.length()==21) return true;
+            String integerPart = newNum.substring(0,decimalPointIndex);
+            String decimalPart = newNum.substring(decimalPointIndex);
+
+            BigDecimal temp = new BigDecimal(integerPart);
+            newNum = df.format(temp) + decimalPart;
         }
-        return false;
+
+        resultPanel.getBigLabel().setText(newNum);
     }
 }

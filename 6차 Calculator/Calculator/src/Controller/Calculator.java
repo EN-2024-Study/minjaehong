@@ -3,8 +3,6 @@ package Controller;
 import Listener.ButtonEventListener;
 import Listener.MouseEventListener;
 import View.MainView;
-import View.Panel.ButtonPanel;
-import View.Panel.ResultPanel;
 
 import javax.swing.*;
 import java.util.ArrayDeque;
@@ -14,7 +12,7 @@ public class Calculator {
     private MainView mainView;
 
     private MouseEventListener mouseEventListener;
-    private ButtonEventListener buttonObserver;
+    private ButtonEventListener buttonEventListener;
 
     private NumberEventController numberEventController;
     private OperatorEventController operatorEventController;
@@ -23,7 +21,9 @@ public class Calculator {
     private ArrayDeque<String> numberDeque;
     private ArrayDeque<String> operatorDeque;
 
-    private void initializeController(){
+    private void initializeComponents(){
+
+        this.mainView = new MainView();
 
         // numberDeque 는 default 상태가 0이 들어가 있는 상태
         this.numberDeque = new ArrayDeque<>();
@@ -32,29 +32,27 @@ public class Calculator {
         this.operatorDeque = new ArrayDeque<>();
 
         // eventController 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
-        mouseEventListener = new MouseEventListener(this);
-        buttonObserver = new ButtonEventListener(this);
+        this.mouseEventListener = new MouseEventListener(this);
+        this.buttonEventListener = new ButtonEventListener(this);
 
-        numberEventController = new NumberEventController(numberDeque, operatorDeque, mainView);
-        operatorEventController = new OperatorEventController(numberDeque, operatorDeque, mainView);
-        eraserEventController = new EraserEventController(numberDeque, operatorDeque, mainView);
+        this.numberEventController = new NumberEventController(numberDeque, operatorDeque, mainView);
+        this.operatorEventController = new OperatorEventController(numberDeque, operatorDeque, mainView);
+        this.eraserEventController = new EraserEventController(numberDeque, operatorDeque, mainView);
     }
 
-    public Calculator(){
+    // 시작하기 전 해야할 작업 수행
+    public Calculator() {
+        // Calculator 구성하는 모든 Component 객체 생성
+        initializeComponents();
 
-        mainView = new MainView();
+        // 돌아가기 위한 Listener 연결시켜주기
+        BindListenersToButtonPanel();
+    }
+
+    public void run(){
+        // Frame 띄우는게 run 하는 명령임
         mainView.setVisible(true);
-
-        initializeController();
-
-        BindObserversToButtonPanel();
     }
-
-    /*
-    public void handleInput(String newInput){
-        if()
-    }
-    */
 
     public void numberButtonClicked(String newNum){
         numberEventController.handleNumberInput(newNum);
@@ -64,38 +62,22 @@ public class Calculator {
         operatorEventController.handleOperatorInput(newOperator);
     }
 
-    public void eraseBtnClicked(String input){
-        eraserEventController.handleEraseEvent(input);
+    public void eraseBtnClicked(String eraser){
+        eraserEventController.handleEraseEvent(eraser);
     }
 
-    private void BindObserversToButtonPanel(){
+    private void BindListenersToButtonPanel(){
 
-        mainView.getButtonPanel().addKeyListener(buttonObserver);
+        mainView.getButtonPanel().addKeyListener(buttonEventListener);
+        
         // key event 받을 수 있는 조건 = focus 가 주어졌을 경우
         mainView.getButtonPanel().setFocusable(true);
         mainView.getButtonPanel().requestFocus();
 
-        mainView.getButtonPanel().getNum0Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum1Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum2Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum3Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum4Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum5Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum6Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum7Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum8Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNum9Button().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getDotButton().addActionListener(mouseEventListener);
-
-        mainView.getButtonPanel().getClearEntryButton().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getClearButton().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getBackSpaceButton().addActionListener(mouseEventListener);
-
-        mainView.getButtonPanel().getAddButton().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getSubButton().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getMulButton().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getDivButton().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getEqualButton().addActionListener(mouseEventListener);
-        mainView.getButtonPanel().getNegateButton().addActionListener(mouseEventListener);
+        // button 들 mouseEventListener 달아주기
+        JButton[] buttonArr = mainView.getButtonPanel().getButtonArray();
+        for(int i=0;i<buttonArr.length;i++){
+            buttonArr[i].addActionListener(mouseEventListener);
+        }
     }
 }
