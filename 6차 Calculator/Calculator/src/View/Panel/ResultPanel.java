@@ -24,7 +24,7 @@ public class ResultPanel extends JPanel {
 
         setBackground(Color.WHITE);
 
-        smallLabel = new JLabel();
+        smallLabel = new JLabel(" ");
         smallLabel.setFont(new Font("Consolas", Font.BOLD, 16));
         smallLabel.setBackground(Color.WHITE);
         smallLabel.setHorizontalAlignment(SwingConstants.RIGHT);

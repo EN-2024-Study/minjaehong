@@ -98,6 +98,10 @@ public class MainView extends JFrame {
     }
 
     public void renderSmallLabel(String newText){
+
+        // smallLabel 크기 줄어드는거 방지
+        if(newText.isEmpty()) newText=" ";
+
         resultPanel.getSmallLabel().setText(newText);
     }
 

@@ -24,6 +24,7 @@ public class NumberEventController {
        this.mainView = mainView;
     }
 
+    //BigDecimal.Negate 함수 써보기
     private void handleNegate(){
         // 0인데 negate 들어왔으면 아무것도 안하면 됨
         if(numberDeque.getLast().equals("0")) return;
