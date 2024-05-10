@@ -6,6 +6,8 @@ import View.Panel.ResultPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class MainView extends JFrame {
 
@@ -29,7 +31,7 @@ public class MainView extends JFrame {
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.4; // 7/10 of the available vertical space
+        gbc.weighty = 0.4;
         gbc.fill = GridBagConstraints.BOTH;
         this.add(resultPanel,gbc);
 
@@ -38,7 +40,7 @@ public class MainView extends JFrame {
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.6; // 7/10 of the available vertical space
+        gbc.weighty = 0.6;
         this.add(buttonPanel,gbc);
 
         gbc.gridx = 1;
@@ -46,12 +48,26 @@ public class MainView extends JFrame {
         gbc.gridwidth = 1;
         gbc.gridheight = 2;
         gbc.weightx = 1.0;
-        gbc.weighty = 1.0; // 7/10 of the available vertical space
+        gbc.weighty = 1.0;
         this.add(logPanel,gbc);
+
+        // logPanel visible effect 추가
+        // 람다 뭔지 모름 > 나중에 공부
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int width = getWidth();
+                if (width < 500) {
+                    logPanel.setVisible(false);
+                }else{
+                    logPanel.setVisible(true);
+                }
+            }
+        });
     }
 
     public MainView(){
-        setTitle("Windows Calculator");
+        setTitle("Windows Controller.Calculator");
         setSize(new Dimension(400,600));
 
         // 상대경로 지정
@@ -73,7 +89,23 @@ public class MainView extends JFrame {
         return logPanel;
     }
 
+    public String getLastEquation(){
+        return resultPanel.getSmallLabel().getText();
+    }
+
     public ButtonPanel getButtonPanel() {
         return buttonPanel;
+    }
+
+    public boolean isBigLabelFull(){
+        return (resultPanel.getBigLabel().getText().length() == 21);
+    }
+
+    public void renderSmallLabel(String newText){
+        resultPanel.getSmallLabel().setText(newText);
+    }
+
+    public void renderBigLabel(String newText){
+        resultPanel.getBigLabel().setText(newText);
     }
 }

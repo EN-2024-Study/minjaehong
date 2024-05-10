@@ -103,4 +103,9 @@ public class ResultPanel extends JPanel {
     public void setBigLabel(String input){
         bigLabel.setText(input);
     }
+
+    public boolean isFull(){
+        if(bigLabel.getText().length()==21) return true;
+        else return false;
+    }
 }

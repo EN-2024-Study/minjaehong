@@ -1,15 +1,15 @@
 package Listener;
 
-import Controller.MainController;
+import Controller.Calculator;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class ButtonEventListener extends KeyAdapter {
-    private MainController mainController;
+    private Calculator calculator;
 
-    public ButtonEventListener(MainController mainController){
-        this.mainController = mainController;
+    public ButtonEventListener(Calculator calculator){
+        this.calculator = calculator;
     }
 
     @Override
@@ -28,35 +28,34 @@ public class ButtonEventListener extends KeyAdapter {
             case KeyEvent.VK_7:
             case KeyEvent.VK_8:
             case KeyEvent.VK_9:
-                mainController.numBtnClicked(String.valueOf((char)key));
+                calculator.numberButtonClicked(String.valueOf((char)key));
                 break;
             case KeyEvent.VK_PERIOD:
-                mainController.numBtnClicked(".");
+                calculator.numberButtonClicked(".");
                 break;
             case KeyEvent.VK_ADD:
-                System.out.println("add clicked");
-                mainController.optBtnClicked("+");
+                calculator.operatorButtonClicked("+");
                 break;
             case KeyEvent.VK_SUBTRACT:
-                mainController.optBtnClicked("-");
+                calculator.operatorButtonClicked("-");
                 break;
             case KeyEvent.VK_MULTIPLY:
-                mainController.optBtnClicked("×");
+                calculator.operatorButtonClicked("×");
                 break;
             case KeyEvent.VK_DIVIDE:
-                mainController.optBtnClicked("÷");
+                calculator.operatorButtonClicked("÷");
                 break;
             case KeyEvent.VK_ENTER:
-                mainController.optBtnClicked("=");
+                calculator.operatorButtonClicked("=");
                 break;
             case KeyEvent.VK_BACK_SPACE:
-                mainController.eraseBtnClicked("<");
+                calculator.eraseBtnClicked("<");
                 break;
             case KeyEvent.VK_DELETE:
-                mainController.eraseBtnClicked("CE");
+                calculator.eraseBtnClicked("CE");
                 break;
             case KeyEvent.VK_ESCAPE:
-                mainController.eraseBtnClicked("C");
+                calculator.eraseBtnClicked("C");
                 break;
         }
     }

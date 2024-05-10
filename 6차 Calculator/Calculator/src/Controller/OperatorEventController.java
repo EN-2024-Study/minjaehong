@@ -1,34 +1,32 @@
 package Controller;
 
+import View.MainView;
 import View.Panel.ButtonPanel;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayDeque;
 
 public class OperatorEventController {
     private ArrayDeque<String> numberDeque;
     private ArrayDeque<String> operatorDeque;
-    private ResultPanel resultPanel;
-    private ButtonPanel buttonPanel;
 
-    public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, ResultPanel resultPanel, ButtonPanel buttonPanel) {
+    private MainView mainView;
+
+    public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
         this.numberDeque = numberDeque;
         this.operatorDeque = operatorDeque;
 
-        this.resultPanel = resultPanel;
-        this.buttonPanel = buttonPanel;
+        this.mainView = mainView;
     }
 
     // operatorDeque 랑 numberDeque 만 변경해주면 됨
-    // 이에 따른 Label Rendering 은 MainController 가 알아서 해줄거임
+    // 이에 따른 Label Rendering 은 Controller.Calculator 가 알아서 해줄거임
     // 들어온 연산자에 따라 ArrayDeque 조작만 해주면 됨
     public void handleOperatorInput(String newOperator) {
-
-        JLabel bigLabel = resultPanel.getBigLabel();
-        JLabel smallLabel = resultPanel.getSmallLabel();
 
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
         operatorDeque.add(newOperator);
@@ -40,7 +38,8 @@ public class OperatorEventController {
         if (newOperator.equals("=")) {
             // 전꺼가 등호일때
             if (operatorDeque.size()==2 && operatorDeque.getFirst().equals("=")) {
-                String lastEquation = smallLabel.getText();
+                // 마지막 식을 대상으로 판단해야함
+                String lastEquation = mainView.getLastEquation();
                 String[] arr = lastEquation.split(" ");
 
                 // 전꺼가 4 = 이런 형식이었으면
@@ -115,7 +114,6 @@ public class OperatorEventController {
             }
         }
         printEndMatrix(numberDeque, operatorDeque);
-
     }
 
     // 등호 연산 들어왔을때 + 연산자 두 개 채워지면
@@ -125,6 +123,9 @@ public class OperatorEventController {
     // 즉 결과값 / newOperator 이렇게 남음
     // 연산자 무조건 남기기
     public String calculate() {
+        // MathContext.Decimal64
+        // MathContext.Decimal128
+        // half even 은 맞음
         BigDecimal num1 = new BigDecimal(numberDeque.removeFirst());
         String opt = operatorDeque.removeFirst();
         BigDecimal num2 = new BigDecimal(numberDeque.removeFirst());
@@ -132,24 +133,25 @@ public class OperatorEventController {
         BigDecimal result = BigDecimal.ZERO;
 
         if (opt.equals("÷") && num2.equals(BigDecimal.ZERO)) {
-            buttonPanel.getDotButton().setEnabled(false);
-            buttonPanel.getDivButton().setEnabled(false);
-            buttonPanel.getAddButton().setEnabled(false);
-            buttonPanel.getMulButton().setEnabled(false);
-            buttonPanel.getSubButton().setEnabled(false);
-            buttonPanel.getNegateButton().setEnabled(false);
+            mainView.getButtonPanel().getDotButton().setEnabled(false);
+            mainView.getButtonPanel().getDivButton().setEnabled(false);
+            mainView.getButtonPanel().getAddButton().setEnabled(false);
+            mainView.getButtonPanel().getMulButton().setEnabled(false);
+            mainView.getButtonPanel().getSubButton().setEnabled(false);
+            mainView.getButtonPanel().getNegateButton().setEnabled(false);
             return "impossible";
         }
 
+        // 이거 뒤에 인자로 MathContext. 모두 박아놔야함??
         switch (opt) {
             case "+":
-                result = num1.add(num2);
+                result = num1.add(num2, MathContext.DECIMAL128);
                 break;
             case "-":
-                result = num1.subtract(num2);
+                result = num1.subtract(num2, MathContext.DECIMAL128);
                 break;
             case "×":
-                result = num1.multiply(num2);
+                result = num1.multiply(num2, MathContext.DECIMAL128);
                 break;
             case "÷":
                 // 16자리까지만 표기하고 반올림 해줌
@@ -157,11 +159,21 @@ public class OperatorEventController {
                 result = num1.divide(num2, 16, RoundingMode.HALF_EVEN);
                 break;
         }
+        // setScale
+
         return result.stripTrailingZeros().toPlainString();
     }
 
-    private void renderBigLabel() {
-        resultPanel.getBigLabel().setText(numberDeque.getLast());
+    private void renderBigLabel(){
+        String newNum = numberDeque.getLast();
+
+        StringBuilder sb = new StringBuilder(newNum);
+
+        for(int idx=newNum.length()-3;idx>0;idx-=3){
+            sb.insert(idx,",");
+        }
+
+        mainView.renderBigLabel(sb.toString());
     }
 
     private void renderSmallLabel() {
@@ -176,7 +188,8 @@ public class OperatorEventController {
             sb.append(operatorArr[i]);
             sb.append(" ");
         }
-        resultPanel.getSmallLabel().setText(sb.toString());
+
+        mainView.renderSmallLabel(sb.toString());
     }
 
     private void printStartMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){

@@ -1,5 +1,6 @@
 package Controller;
 
+import View.MainView;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
@@ -9,19 +10,13 @@ public class EraserEventController {
     private ArrayDeque<String> numberDeque;
     private ArrayDeque<String> operatorDeque;
 
-    JLabel bigLabel;
-    JLabel smallLabel;
+    private MainView mainView;
 
-    private ResultPanel resultPanel;
-
-    public EraserEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, ResultPanel resultPanel) {
+    public EraserEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
         this.numberDeque = numberDeque;
         this.operatorDeque = operatorDeque;
 
-        this.resultPanel = resultPanel;
-
-        bigLabel = resultPanel.getBigLabel();
-        smallLabel = resultPanel.getSmallLabel();
+        this.mainView = mainView;
     }
 
     public void handleEraseEvent(String input){
@@ -88,10 +83,19 @@ public class EraserEventController {
                 sb.append(" ");
             }
         }
-        smallLabel.setText(sb.toString());
+
+        mainView.renderSmallLabel(sb.toString());
     }
 
     private void renderBigLabel(){
-        bigLabel.setText(numberDeque.getLast());
+        String newNum = numberDeque.getLast();
+
+        StringBuilder sb = new StringBuilder(newNum);
+
+        for(int idx=newNum.length()-3;idx>0;idx-=3){
+            sb.insert(idx,",");
+        }
+
+        mainView.renderBigLabel(sb.toString());
     }
 }
