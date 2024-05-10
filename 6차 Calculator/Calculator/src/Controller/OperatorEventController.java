@@ -24,10 +24,23 @@ public class OperatorEventController {
         this.mainView = mainView;
     }
 
+    // smallLabel 로 올라가기 전 정제시켜주기
+    private void refineCurrentNumbers(){
+        BigDecimal refinedBigDecimal;
+
+        refinedBigDecimal = new BigDecimal(numberDeque.removeFirst());
+        numberDeque.addFirst(refinedBigDecimal.stripTrailingZeros().toPlainString());
+
+        refinedBigDecimal = new BigDecimal(numberDeque.removeLast());
+        numberDeque.addLast(refinedBigDecimal.stripTrailingZeros().toPlainString());
+    }
+
     // operatorDeque 랑 numberDeque 만 변경해주면 됨
     // 이에 따른 Label Rendering 은 Controller.Calculator 가 알아서 해줄거임
     // 들어온 연산자에 따라 ArrayDeque 조작만 해주면 됨
     public void handleOperatorInput(String newOperator) {
+
+        refineCurrentNumbers();
 
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
         operatorDeque.add(newOperator);

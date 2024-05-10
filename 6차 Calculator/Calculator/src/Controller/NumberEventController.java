@@ -4,6 +4,8 @@ import View.MainView;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
@@ -18,23 +20,21 @@ public class NumberEventController {
     private MainView mainView;
 
     public NumberEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
+
         this.numberDeque = numberDeque;
         this.operatorDeque = operatorDeque;
 
-       this.mainView = mainView;
+        this.mainView = mainView;
     }
 
-    //BigDecimal.Negate 함수 써보기
     private void handleNegate(){
+
         // 0인데 negate 들어왔으면 아무것도 안하면 됨
         if(numberDeque.getLast().equals("0")) return;
 
-        String lastNum = numberDeque.removeLast();
-        if (lastNum.startsWith("-")) {
-            numberDeque.add(lastNum.substring(1));
-        } else {
-            numberDeque.add("-" + lastNum);
-        }
+        BigDecimal lastNum = new BigDecimal(numberDeque.removeLast());
+        lastNum = lastNum.negate();
+        numberDeque.add(lastNum.toString());
     }
 
     private void handleDecimalPoint(){
@@ -49,6 +49,7 @@ public class NumberEventController {
     }
 
     private void handleNumber(String newNum){
+
         // 연산자가 0개일때
         if (numberDeque.size() == 1 && operatorDeque.size() == 0) {
             // 만약 0이면 Default 0임. 지워지는 0임
@@ -58,6 +59,8 @@ public class NumberEventController {
             }
             // 0 아니면 뒤에 추가하는 수임
             else {
+                if(isCurNumFull()) return;
+
                 String lastNum = numberDeque.removeLast();
                 numberDeque.add(lastNum + newNum);
             }
@@ -90,6 +93,8 @@ public class NumberEventController {
                 }
                 // 0 아니면 뒤에 추가하는 수임
                 else {
+                    if(isCurNumFull()) return;
+
                     String lastNum = numberDeque.removeLast();
                     numberDeque.add(lastNum + newNum);
                 }
@@ -98,9 +103,26 @@ public class NumberEventController {
         }
     }
 
-    public void handleNumberInput(String newNum) {
+    // 현재 숫자 꽉찼는지 판단
+    // 새로운 number 추가하기 직전에 호출해서 판단
+    private boolean isCurNumFull(){
 
-        if(mainView.isBigLabelFull()) return;
+        String curNum = numberDeque.getLast();
+
+        // 소수점 있을때
+        if(curNum.contains(".")){
+            // 정수부가 0이고 17자리 OR 정수부가 0이 아니고 16자리
+            if((curNum.startsWith("0") && curNum.length()-1==17) ||
+                    (!curNum.startsWith("0") && curNum.length()-1==16)) return true;
+        }
+        // 소수점 없을때 16자리가 MAX
+        else {
+            if(curNum.length()==16) return true;
+        }
+        return false;
+    }
+
+    public void handleNumberInput(String newNum) {
 
         switch (newNum){
             case "+/-":
@@ -119,7 +141,6 @@ public class NumberEventController {
     }
 
     // operatorcontroller 에 backspace 할때도 똑같이 해줘야함
-
     private void renderBigLabel(){
         mainView.renderBigLabel(numberDeque.getLast());
     }
