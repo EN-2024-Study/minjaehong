@@ -175,6 +175,7 @@ public class OperatorEventController {
         }
         // setScale
 
+        mainView.getLogPanel().addNewLogLabel(result.stripTrailingZeros().toPlainString());
         return result.stripTrailingZeros().toPlainString();
     }
 

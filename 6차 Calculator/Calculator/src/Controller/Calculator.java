@@ -5,9 +5,11 @@ import Listener.MouseEventListener;
 import View.MainView;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.util.ArrayDeque;
 
-public class Calculator {
+public class Calculator{
 
     private MainView mainView;
 
@@ -69,7 +71,7 @@ public class Calculator {
     private void BindListenersToButtonPanel(){
 
         mainView.getButtonPanel().addKeyListener(buttonEventListener);
-        
+
         // key event 받을 수 있는 조건 = focus 가 주어졌을 경우
         mainView.getButtonPanel().setFocusable(true);
         mainView.getButtonPanel().requestFocus();
@@ -79,5 +81,9 @@ public class Calculator {
         for(int i=0;i<buttonArr.length;i++){
             buttonArr[i].addActionListener(mouseEventListener);
         }
+    }
+
+    public void addNewLogToLogPanel(){
+
     }
 }
