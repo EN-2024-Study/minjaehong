@@ -144,6 +144,9 @@ public class OperatorEventController {
         String opt = operatorDeque.removeFirst();
         BigDecimal num2 = new BigDecimal(numberDeque.removeFirst());
 
+        // log 추가
+        String logEquationString = num1 + " "+ opt + " " + num2 + " = ";
+
         BigDecimal result = BigDecimal.ZERO;
 
         if (opt.equals("÷") && num2.equals(BigDecimal.ZERO)) {
@@ -175,7 +178,7 @@ public class OperatorEventController {
         }
         // setScale
 
-        mainView.getLogPanel().addNewLogLabel(result.stripTrailingZeros().toPlainString());
+        mainView.getLogPanel().addNewLogLabel(logEquationString, result.stripTrailingZeros().toPlainString());
         return result.stripTrailingZeros().toPlainString();
     }
 

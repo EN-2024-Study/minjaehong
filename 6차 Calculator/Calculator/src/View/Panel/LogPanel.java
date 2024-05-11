@@ -7,10 +7,7 @@ public class LogPanel extends JPanel{
 
     JPanel labelPanel;
 
-    int i;
-
     public LogPanel(){
-        i = 0;
         createComponents();
         initializeLogPanel();
     }
@@ -45,7 +42,7 @@ public class LogPanel extends JPanel{
         setVisible(true);
     }
 
-    public void addNewLogLabel(String result){
+    public void addNewLogLabel(String equationString, String result){
         /*
         JLabel newLogLabel = new JLabel();
         newLogLabel.setLayout(new BoxLayout(newLogLabel, BoxLayout.Y_AXIS)); // Set vertical BoxLayout
@@ -63,12 +60,33 @@ public class LogPanel extends JPanel{
         labelPanel.add(newLogLabel);
         */
 
+        /*
+        JLabel smallLabel = new JLabel(result);
+        smallLabel.setFont(new Font("Consolas", Font.BOLD, 15));
+        smallLabel.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align JLabels to the left
+
+        JLabel bigLabel = new JLabel(result);
+        bigLabel.setFont(new Font("Consolas", Font.BOLD, 30));
+        bigLabel.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align JLabels to the left
+
+        JLabel label = new JLabel();
+        label.add(smallLabel);
+        label.add(bigLabel);
+        label.setVisible(true);
+        */
+
         JLabel label = new JLabel(result);
-        label.setFont(new Font("Consolas", Font.BOLD, 45));
-        label.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align JLabels to the left
+        label.setFont(new Font("Consolas", Font.BOLD, 30));
+        label.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        // 새로 추가된 것은 항상 위쪽에 추가
         labelPanel.add(label, 0);
 
-        i++;
+        JLabel equationlabel = new JLabel(equationString);
+        equationlabel.setFont(new Font("Consolas", Font.BOLD, 15));
+        equationlabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        // 새로 추가된 것은 항상 위쪽에 추가
+        labelPanel.add(equationlabel, 0);
+
         revalidate();
         repaint();
     }
