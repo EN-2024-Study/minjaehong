@@ -11,7 +11,6 @@ public class LogPanel extends JPanel{
     private JLabel logLabel;
 
     public LogPanel(){
-        setBackground(Color.WHITE);
         createComponents();
         initializeLogPanel();
     }
@@ -34,9 +33,5 @@ public class LogPanel extends JPanel{
 
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
-    }
-
-    public JLabel getLogLabel() {
-        return logLabel;
     }
 }

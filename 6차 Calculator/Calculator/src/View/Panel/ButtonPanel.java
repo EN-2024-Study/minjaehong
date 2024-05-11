@@ -17,7 +17,6 @@ public class ButtonPanel extends JPanel {
     };
 
     public ButtonPanel() {
-        setBackground(Color.WHITE);
         createComponents();
         initializeButtonPanel();
     }

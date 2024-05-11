@@ -23,7 +23,7 @@ public class MainView extends JFrame {
         logPanel = new LogPanel();
     }
 
-    private void initializeMainForm(){
+    private void initializeMainView(){
         GridBagLayout grid = new GridBagLayout();
         setLayout(grid);
 
@@ -53,7 +53,10 @@ public class MainView extends JFrame {
         gbc.weighty = 1.0;
         this.add(logPanel,gbc);
 
-        // logPanel visible effect 추가
+        // pack 알아보기
+        //this.pack();
+
+        // logPanel and logButton visible effect 추가
         // 람다 뭔지 모름 > 나중에 공부
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -61,8 +64,10 @@ public class MainView extends JFrame {
                 int width = getWidth();
                 if (width < 500) {
                     logPanel.setVisible(false);
+                    resultPanel.getLogButton().setVisible(true);
                 }else{
                     logPanel.setVisible(true);
+                    resultPanel.getLogButton().setVisible(false);
                 }
             }
         });
@@ -80,7 +85,7 @@ public class MainView extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         createComponents();
-        initializeMainForm();
+        initializeMainView();
     }
 
     public ResultPanel getResultPanel() {
