@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 public class ButtonEventListener extends KeyAdapter {
     private Calculator calculator;
 
-    public ButtonEventListener(Calculator calculator){
+    public ButtonEventListener(Calculator calculator) {
         this.calculator = calculator;
     }
 
@@ -17,6 +17,21 @@ public class ButtonEventListener extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
 
         int key = e.getKeyCode();
+
+        // shift 예외 상황 처리
+        if (e.isShiftDown()) {
+            switch (key) {
+                // shift + "="
+                case KeyEvent.VK_EQUALS:
+                    calculator.operatorButtonClicked("+");
+                    break;
+                // shift + 8
+                case KeyEvent.VK_8:
+                    calculator.operatorButtonClicked("×");
+                    break;
+            }
+            return;
+        }
 
         switch (key) {
             case KeyEvent.VK_0:
@@ -29,7 +44,7 @@ public class ButtonEventListener extends KeyAdapter {
             case KeyEvent.VK_7:
             case KeyEvent.VK_8:
             case KeyEvent.VK_9:
-                calculator.numberButtonClicked(String.valueOf((char)key));
+                calculator.numberButtonClicked(String.valueOf((char) key));
                 break;
             case KeyEvent.VK_PERIOD:
                 calculator.numberButtonClicked(".");
@@ -47,6 +62,7 @@ public class ButtonEventListener extends KeyAdapter {
                 calculator.operatorButtonClicked("÷");
                 break;
             case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_EQUALS:
                 calculator.operatorButtonClicked("=");
                 break;
             case KeyEvent.VK_BACK_SPACE:
