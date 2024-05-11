@@ -2,10 +2,15 @@ package View.Panel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class LogPanel extends JPanel{
 
+    // Label 들이 올라갈 labelPanel 따로 생성
     JPanel labelPanel;
+    JScrollPane scrollPane;
+
+    JButton trashCanButton;
 
     public LogPanel(){
         createComponents();
@@ -13,81 +18,94 @@ public class LogPanel extends JPanel{
     }
 
     private void createComponents(){
-        //logLabel = new JLabel("ALL LOGS");
-        //Border border = BorderFactory.createLineBorder(Color.RED,5); // Create a LineBorder with default color (black)
-        //setBorder(border);
+        labelPanel = new JPanel();
+        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+
+        scrollPane = new JScrollPane(labelPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        trashCanButton = new JButton("TRASHCAN");
+        trashCanButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                labelPanel.removeAll();
+                labelPanel.revalidate();
+                labelPanel.repaint();
+            }
+        });
     }
 
     private void initializeLogPanel() {
-        setLayout(new BorderLayout());
 
-        labelPanel = new JPanel();
-        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS)); // Set vertical BoxLayout
+        this.setLayout(new BorderLayout());
 
-        /*
-        for (int i = 0; i < 20; i++) {
-            JLabel label = new JLabel("" + i);
-            label.setFont(new Font("Consolas", Font.BOLD, 45));
-            label.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align JLabels to the left
-            labelPanel.add(label);
-        }
-        */
+        scrollPane.setBorder(null);
 
-        JScrollPane scrollPane = new JScrollPane(labelPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.add(trashCanButton,BorderLayout.SOUTH);
 
-        add(scrollPane, BorderLayout.CENTER);
+        labelPanel.addContainerListener(new ContainerListener() {
+            @Override
+            public void componentAdded(ContainerEvent e) {
+                if(labelPanel.getComponentCount()>0){
+                    trashCanButton.setVisible(true);
+                }
+            }
+
+            @Override
+            public void componentRemoved(ContainerEvent e) {
+                if(labelPanel.getComponentCount()==0){
+                    trashCanButton.setVisible(false);
+                }
+            }
+        });
+
+        // label 들 붙일 labelPanel 을 들고 있는 scrollPane 을 LogPanel 에 붙이기
+        this.add(scrollPane, BorderLayout.CENTER);
 
         labelPanel.setVisible(true);
+        trashCanButton.setVisible(false);
+
         setVisible(true);
     }
 
+    // 로그 넣을때도 콤마 처리 해야함
     public void addNewLogLabel(String equationString, String result){
-        /*
-        JLabel newLogLabel = new JLabel();
-        newLogLabel.setLayout(new BoxLayout(newLogLabel, BoxLayout.Y_AXIS)); // Set vertical BoxLayout
 
-        JTextField smallLog = new JTextField(1);
-        smallLog.setText("small LOG!");
-        JTextField bigLog = new JTextField(1);
-        bigLog.setText(result);
+        // 여기 하다 감
+        JPanel newLogPanel = new JPanel();
+        newLogPanel.setLayout(new GridLayout(2, 1));
 
-        //newLogLabel.add(new JLabel("Row 1:"));
-        newLogLabel.add(smallLog);
-        //newLogLabel.add(new JLabel("Row 2:"));
-        newLogLabel.add(bigLog);
+        JTextArea equationTextArea = new JTextArea(equationString);
+        equationTextArea.setEditable(false);
+        equationTextArea.setFont(new Font("Consolas", Font.BOLD, 15));
+        equationTextArea.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        newLogPanel.add(equationTextArea);
 
-        labelPanel.add(newLogLabel);
-        */
+        JTextArea resultTextArea = new JTextArea(result);
+        resultTextArea.setEditable(false);
+        resultTextArea.setFont(new Font("Consolas", Font.BOLD, 30));
+        resultTextArea.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        newLogPanel.add(resultTextArea);
 
-        /*
-        JLabel smallLabel = new JLabel(result);
-        smallLabel.setFont(new Font("Consolas", Font.BOLD, 15));
-        smallLabel.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align JLabels to the left
+        newLogPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                newLogPanel.setBackground(Color.YELLOW);
+                newLogPanel.repaint();
+            }
 
-        JLabel bigLabel = new JLabel(result);
-        bigLabel.setFont(new Font("Consolas", Font.BOLD, 30));
-        bigLabel.setAlignmentX(Component.RIGHT_ALIGNMENT); // Align JLabels to the left
+            @Override
+            public void mouseExited(MouseEvent e) {
+                newLogPanel.setBackground(Color.WHITE);
+                newLogPanel.repaint();
+            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Mouse clicked!");
+            }
+        });
 
-        JLabel label = new JLabel();
-        label.add(smallLabel);
-        label.add(bigLabel);
-        label.setVisible(true);
-        */
-
-        JLabel label = new JLabel(result);
-        label.setFont(new Font("Consolas", Font.BOLD, 30));
-        label.setAlignmentX(Component.RIGHT_ALIGNMENT);
         // 새로 추가된 것은 항상 위쪽에 추가
-        labelPanel.add(label, 0);
-
-        JLabel equationlabel = new JLabel(equationString);
-        equationlabel.setFont(new Font("Consolas", Font.BOLD, 15));
-        equationlabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        // 새로 추가된 것은 항상 위쪽에 추가
-        labelPanel.add(equationlabel, 0);
-
-        revalidate();
-        repaint();
+       labelPanel.add(newLogPanel, 0);
     }
 }

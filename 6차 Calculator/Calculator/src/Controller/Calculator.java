@@ -1,20 +1,18 @@
 package Controller;
 
-import Listener.ButtonEventListener;
-import Listener.MouseEventListener;
+import Listener.KeyBoardListener;
+import Listener.MouseListener;
 import View.MainView;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.util.ArrayDeque;
 
 public class Calculator{
 
     private MainView mainView;
 
-    private MouseEventListener mouseEventListener;
-    private ButtonEventListener buttonEventListener;
+    private KeyBoardListener keyBoardListener;
+    private MouseListener mouseListener;
 
     private NumberEventController numberEventController;
     private OperatorEventController operatorEventController;
@@ -34,8 +32,8 @@ public class Calculator{
         this.operatorDeque = new ArrayDeque<>();
 
         // eventController 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
-        this.mouseEventListener = new MouseEventListener(this);
-        this.buttonEventListener = new ButtonEventListener(this);
+        this.mouseListener = new MouseListener(this);
+        this.keyBoardListener = new KeyBoardListener(this);
 
         this.numberEventController = new NumberEventController(numberDeque, operatorDeque, mainView);
         this.operatorEventController = new OperatorEventController(numberDeque, operatorDeque, mainView);
@@ -70,20 +68,16 @@ public class Calculator{
 
     private void BindListenersToButtonPanel(){
 
-        mainView.getButtonPanel().addKeyListener(buttonEventListener);
+        mainView.getButtonPanel().addKeyListener(keyBoardListener);
 
         // key event 받을 수 있는 조건 = focus 가 주어졌을 경우
         mainView.getButtonPanel().setFocusable(true);
         mainView.getButtonPanel().requestFocus();
 
-        // button 들 mouseEventListener 달아주기
+        // button 들 mouseListener 달아주기
         JButton[] buttonArr = mainView.getButtonPanel().getButtonArray();
         for(int i=0;i<buttonArr.length;i++){
-            buttonArr[i].addActionListener(mouseEventListener);
+            buttonArr[i].addActionListener(mouseListener);
         }
-    }
-
-    public void addNewLogToLogPanel(){
-
     }
 }

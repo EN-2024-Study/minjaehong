@@ -1,15 +1,14 @@
 package Listener;
 
 import Controller.Calculator;
-import Controller.CalculatorListener;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class ButtonEventListener extends KeyAdapter {
+public class KeyBoardListener extends KeyAdapter {
     private Calculator calculator;
 
-    public ButtonEventListener(Calculator calculator) {
+    public KeyBoardListener(Calculator calculator) {
         this.calculator = calculator;
     }
 

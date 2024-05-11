@@ -1,15 +1,14 @@
 package Listener;
 
 import Controller.Calculator;
-import Controller.CalculatorListener;
 
 import java.awt.event.*;
 
-public class MouseEventListener implements ActionListener{
+public class MouseListener implements ActionListener{
     Calculator calculator;
 
     // Controller.Calculator 참조하기 위해 Controller.Calculator 필요함
-    public MouseEventListener(Calculator calculator){
+    public MouseListener(Calculator calculator){
         this.calculator = calculator;
     }
 
