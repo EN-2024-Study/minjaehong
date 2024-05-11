@@ -4,6 +4,7 @@ import View.MainView;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
@@ -21,6 +22,24 @@ public class EraserEventController {
     }
 
     public void handleEraseEvent(String input){
+
+        // impossible 이면 C 효과
+        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")){
+            mainView.getButtonPanel().getDotButton().setEnabled(true);
+            mainView.getButtonPanel().getDotButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getDivButton().setEnabled(true);
+            mainView.getButtonPanel().getDivButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getAddButton().setEnabled(true);
+            mainView.getButtonPanel().getAddButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getMulButton().setEnabled(true);
+            mainView.getButtonPanel().getMulButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getSubButton().setEnabled(true);
+            mainView.getButtonPanel().getSubButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getNegateButton().setEnabled(true);
+            mainView.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
+            clearBtnClicked();
+            return;
+        }
 
         switch(input){
             case "CE":

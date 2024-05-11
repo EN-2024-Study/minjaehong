@@ -61,7 +61,7 @@ public class ResultPanel extends JPanel {
 
     private void createBigLabel(){
         bigLabel = new JLabel("0");
-        bigLabel.setFont(new Font("Consolas", Font.BOLD, 36));
+        bigLabel.setFont(new Font("Consolas", Font.BOLD, 30));
         bigLabel.setBackground(Color.WHITE);
 
         bigLabel.setHorizontalAlignment(SwingConstants.RIGHT);

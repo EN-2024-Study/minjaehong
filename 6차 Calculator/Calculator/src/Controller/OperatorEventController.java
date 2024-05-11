@@ -5,6 +5,7 @@ import View.Panel.ButtonPanel;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -39,6 +40,29 @@ public class OperatorEventController {
     // 이에 따른 Label Rendering 은 Controller.Calculator 가 알아서 해줄거임
     // 들어온 연산자에 따라 ArrayDeque 조작만 해주면 됨
     public void handleOperatorInput(String newOperator) {
+
+        // impossible 인데 등호 들어왔을때
+        if(newOperator.equals("=") && mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")){
+            mainView.getButtonPanel().getDotButton().setEnabled(true);
+            mainView.getButtonPanel().getDotButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getDivButton().setEnabled(true);
+            mainView.getButtonPanel().getDivButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getAddButton().setEnabled(true);
+            mainView.getButtonPanel().getAddButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getMulButton().setEnabled(true);
+            mainView.getButtonPanel().getMulButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getSubButton().setEnabled(true);
+            mainView.getButtonPanel().getSubButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getNegateButton().setEnabled(true);
+            mainView.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
+
+            numberDeque.clear();
+            operatorDeque.clear();
+            renderSmallLabel();
+            numberDeque.add("0");
+            renderBigLabel();
+            return;
+        }
 
         refineCurrentNumbers();
 
@@ -151,12 +175,18 @@ public class OperatorEventController {
 
         if (opt.equals("÷") && num2.equals(BigDecimal.ZERO)) {
             mainView.getButtonPanel().getDotButton().setEnabled(false);
+            mainView.getButtonPanel().getDotButton().setBackground(Color.RED);
             mainView.getButtonPanel().getDivButton().setEnabled(false);
+            mainView.getButtonPanel().getDivButton().setBackground(Color.RED);
             mainView.getButtonPanel().getAddButton().setEnabled(false);
+            mainView.getButtonPanel().getAddButton().setBackground(Color.RED);
             mainView.getButtonPanel().getMulButton().setEnabled(false);
+            mainView.getButtonPanel().getMulButton().setBackground(Color.RED);
             mainView.getButtonPanel().getSubButton().setEnabled(false);
+            mainView.getButtonPanel().getSubButton().setBackground(Color.RED);
             mainView.getButtonPanel().getNegateButton().setEnabled(false);
-            return "impossible";
+            mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
+            return "cant divide by zero!";
         }
 
         // 이거 뒤에 인자로 MathContext. 모두 박아놔야함??
@@ -179,6 +209,7 @@ public class OperatorEventController {
         // setScale
 
         mainView.getLogPanel().addNewLogLabel(logEquationString, result.stripTrailingZeros().toPlainString());
+
         return result.stripTrailingZeros().toPlainString();
     }
 

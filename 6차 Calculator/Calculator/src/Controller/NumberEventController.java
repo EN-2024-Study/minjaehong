@@ -4,6 +4,7 @@ import View.MainView;
 import View.Panel.ResultPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
@@ -124,6 +125,27 @@ public class NumberEventController {
 
     public void handleNumberInput(String newNum) {
 
+        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")){
+            mainView.getButtonPanel().getDotButton().setEnabled(true);
+            mainView.getButtonPanel().getDotButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getDivButton().setEnabled(true);
+            mainView.getButtonPanel().getDivButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getAddButton().setEnabled(true);
+            mainView.getButtonPanel().getAddButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getMulButton().setEnabled(true);
+            mainView.getButtonPanel().getMulButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getSubButton().setEnabled(true);
+            mainView.getButtonPanel().getSubButton().setBackground(Color.WHITE);
+            mainView.getButtonPanel().getNegateButton().setEnabled(true);
+            mainView.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
+
+            numberDeque.clear();
+            operatorDeque.clear();
+            renderSmallLabel();
+            numberDeque.add("0");
+            renderBigLabel();
+        }
+
         switch (newNum){
             case "+/-":
                 // 1. +/- 예외처리
@@ -143,5 +165,9 @@ public class NumberEventController {
     // operatorcontroller 에 backspace 할때도 똑같이 해줘야함
     private void renderBigLabel(){
         mainView.renderBigLabel(numberDeque.getLast());
+    }
+
+    private void renderSmallLabel(){
+        mainView.renderSmallLabel("");
     }
 }

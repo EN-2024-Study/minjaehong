@@ -13,17 +13,26 @@ import java.text.DecimalFormat;
 
 public class MainView extends JFrame {
 
+    private ImageIcon calculatorIcon;
+
     private ButtonPanel buttonPanel;
     private LogPanel logPanel;
     private ResultPanel resultPanel;
 
     private void createComponents(){
+        // 상대경로 지정
+        calculatorIcon = new ImageIcon("src/Images/AppIcon.png");
+
         resultPanel = new ResultPanel();
         buttonPanel = new ButtonPanel();
         logPanel = new LogPanel();
     }
 
     private void initializeMainView(){
+
+        // Icon 지정
+        setIconImage(calculatorIcon.getImage());
+
         GridBagLayout grid = new GridBagLayout();
         setLayout(grid);
 
@@ -53,9 +62,6 @@ public class MainView extends JFrame {
         gbc.weighty = 1.0;
         this.add(logPanel,gbc);
 
-        // pack 알아보기
-        //this.pack();
-
         // logPanel and logButton visible effect 추가
         // 람다 뭔지 모름 > 나중에 공부
         this.addComponentListener(new ComponentAdapter() {
@@ -76,11 +82,6 @@ public class MainView extends JFrame {
     public MainView(){
         setTitle("Windows Calculator");
         setSize(new Dimension(400,600));
-
-        // 상대경로 지정
-        ImageIcon img = new ImageIcon("src/Images/AppIcon.png");
-        setIconImage(img.getImage());
-
         setMinimumSize(new Dimension(400,600));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -114,6 +115,11 @@ public class MainView extends JFrame {
 
     public void renderBigLabel(String newNum){
 
+        if(newNum.equals("cant divide by zero!")) {
+            resultPanel.getBigLabel().setText(newNum);
+            return;
+        }
+
         DecimalFormat df = new DecimalFormat("#,###");
 
         int decimalPointIndex = newNum.indexOf(".");
@@ -128,7 +134,6 @@ public class MainView extends JFrame {
             BigDecimal temp = new BigDecimal(integerPart);
             newNum = df.format(temp) + decimalPart;
         }
-
         resultPanel.getBigLabel().setText(newNum);
     }
 }

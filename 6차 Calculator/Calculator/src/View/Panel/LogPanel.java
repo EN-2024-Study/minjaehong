@@ -90,22 +90,20 @@ public class LogPanel extends JPanel{
         newLogPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                newLogPanel.setBackground(Color.YELLOW);
-                newLogPanel.repaint();
+                setBackground(Color.ORANGE);
+                revalidate();
+                repaint();
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {
-                newLogPanel.setBackground(Color.WHITE);
-                newLogPanel.repaint();
-            }
-            @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Mouse clicked!");
+                System.out.println("mouse clicked");
             }
         });
 
+        newLogPanel.requestFocus();
+
         // 새로 추가된 것은 항상 위쪽에 추가
-       labelPanel.add(newLogPanel, 0);
+        labelPanel.add(newLogPanel, 0);
     }
 }
