@@ -3,6 +3,8 @@ package View.Panel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 public class LogPanel extends JPanel{
 
@@ -25,12 +27,12 @@ public class LogPanel extends JPanel{
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         trashCanButton = new JButton("TRASHCAN");
+        trashCanButton.setFont(new Font("Consolas", Font.BOLD, 14));
+        trashCanButton.setBackground(Color.ORANGE);
         trashCanButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 labelPanel.removeAll();
-                labelPanel.revalidate();
-                labelPanel.repaint();
             }
         });
     }
@@ -77,16 +79,33 @@ public class LogPanel extends JPanel{
 
         JTextArea equationTextArea = new JTextArea(equationString);
         equationTextArea.setEditable(false);
-        equationTextArea.setFont(new Font("Consolas", Font.BOLD, 15));
+        equationTextArea.setFont(new Font("Consolas", Font.BOLD, 16));
         equationTextArea.setAlignmentX(Component.RIGHT_ALIGNMENT);
         newLogPanel.add(equationTextArea);
 
+        // result 값 format 처리 해서 log에 넣어야함
+        DecimalFormat df = new DecimalFormat("#,###");
+
+        int decimalPointIndex = result.indexOf(".");
+
+        if(decimalPointIndex==-1){
+            BigDecimal temp = new BigDecimal(result);
+            result = df.format(temp);
+        }else{
+            String integerPart = result.substring(0,decimalPointIndex);
+            String decimalPart = result.substring(decimalPointIndex);
+
+            BigDecimal temp = new BigDecimal(integerPart);
+            result = df.format(temp) + decimalPart;
+        }
+
         JTextArea resultTextArea = new JTextArea(result);
         resultTextArea.setEditable(false);
-        resultTextArea.setFont(new Font("Consolas", Font.BOLD, 30));
+        resultTextArea.setFont(new Font("Consolas", Font.BOLD, 24));
         resultTextArea.setAlignmentX(Component.RIGHT_ALIGNMENT);
         newLogPanel.add(resultTextArea);
 
+        /*
         newLogPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -102,6 +121,7 @@ public class LogPanel extends JPanel{
         });
 
         newLogPanel.requestFocus();
+        */
 
         // 새로 추가된 것은 항상 위쪽에 추가
         labelPanel.add(newLogPanel, 0);

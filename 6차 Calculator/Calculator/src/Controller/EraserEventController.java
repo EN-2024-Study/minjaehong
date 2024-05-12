@@ -8,36 +8,17 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
-public class EraserEventController {
-    private ArrayDeque<String> numberDeque;
-    private ArrayDeque<String> operatorDeque;
-
-    private MainView mainView;
+public class EraserEventController extends EventController{
 
     public EraserEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
-        this.numberDeque = numberDeque;
-        this.operatorDeque = operatorDeque;
-
-        this.mainView = mainView;
+        super(numberDeque, operatorDeque, mainView);
     }
 
     public void handleEraseEvent(String input){
 
-        // impossible 이면 C 효과
-        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")){
-            mainView.getButtonPanel().getDotButton().setEnabled(true);
-            mainView.getButtonPanel().getDotButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getDivButton().setEnabled(true);
-            mainView.getButtonPanel().getDivButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getAddButton().setEnabled(true);
-            mainView.getButtonPanel().getAddButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getMulButton().setEnabled(true);
-            mainView.getButtonPanel().getMulButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getSubButton().setEnabled(true);
-            mainView.getButtonPanel().getSubButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getNegateButton().setEnabled(true);
-            mainView.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
-            clearBtnClicked();
+        // cant divide by zero 상태이면 다시 정상화시키기
+        if(checkIfCantDivideByZeroState()){
+            changeToNormalState();
             return;
         }
 
@@ -88,26 +69,5 @@ public class EraserEventController {
             }
             renderBigLabel();
         }
-    }
-
-    private void renderSmallLabel(){
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        StringBuilder sb = new StringBuilder();
-        for(int i=0;i<numberArr.length;i++){
-            sb.append(numberArr[i]);
-            sb.append(" ");
-            if(i<operatorArr.length) {
-                sb.append(operatorArr[i]);
-                sb.append(" ");
-            }
-        }
-
-        mainView.renderSmallLabel(sb.toString());
-    }
-
-    private void renderBigLabel(){
-        mainView.renderBigLabel(numberDeque.getLast());
     }
 }

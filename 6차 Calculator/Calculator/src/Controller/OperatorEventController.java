@@ -12,17 +12,10 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
-public class OperatorEventController {
-    private ArrayDeque<String> numberDeque;
-    private ArrayDeque<String> operatorDeque;
-
-    private MainView mainView;
+public class OperatorEventController extends EventController {
 
     public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
-        this.numberDeque = numberDeque;
-        this.operatorDeque = operatorDeque;
-
-        this.mainView = mainView;
+        super(numberDeque, operatorDeque, mainView);
     }
 
     // smallLabel 로 올라가기 전 정제시켜주기
@@ -36,31 +29,11 @@ public class OperatorEventController {
         numberDeque.addLast(refinedBigDecimal.stripTrailingZeros().toPlainString());
     }
 
-    // operatorDeque 랑 numberDeque 만 변경해주면 됨
-    // 이에 따른 Label Rendering 은 Controller.Calculator 가 알아서 해줄거임
-    // 들어온 연산자에 따라 ArrayDeque 조작만 해주면 됨
     public void handleOperatorInput(String newOperator) {
 
-        // impossible 인데 등호 들어왔을때
-        if(newOperator.equals("=") && mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")){
-            mainView.getButtonPanel().getDotButton().setEnabled(true);
-            mainView.getButtonPanel().getDotButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getDivButton().setEnabled(true);
-            mainView.getButtonPanel().getDivButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getAddButton().setEnabled(true);
-            mainView.getButtonPanel().getAddButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getMulButton().setEnabled(true);
-            mainView.getButtonPanel().getMulButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getSubButton().setEnabled(true);
-            mainView.getButtonPanel().getSubButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getNegateButton().setEnabled(true);
-            mainView.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
-
-            numberDeque.clear();
-            operatorDeque.clear();
-            renderSmallLabel();
-            numberDeque.add("0");
-            renderBigLabel();
+        // cant divide by zero 상태이면 다시 정상화시키기
+        if(checkIfCantDivideByZeroState()){
+            changeToNormalState();
             return;
         }
 
@@ -68,8 +41,6 @@ public class OperatorEventController {
 
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
         operatorDeque.add(newOperator);
-
-        printStartMatrix(numberDeque, operatorDeque);
 
         // 이번꺼가 등호일때
         // 등호일때는 무조건 계산해줘야함
@@ -151,7 +122,6 @@ public class OperatorEventController {
                 renderBigLabel(); // 계산된 값 출력
             }
         }
-        printEndMatrix(numberDeque, operatorDeque);
     }
 
     // 등호 연산 들어왔을때 + 연산자 두 개 채워지면
@@ -173,19 +143,9 @@ public class OperatorEventController {
 
         BigDecimal result = BigDecimal.ZERO;
 
+        // 0으로 나눴으면 cant divide by zero state 로 만들어주기
         if (opt.equals("÷") && num2.equals(BigDecimal.ZERO)) {
-            mainView.getButtonPanel().getDotButton().setEnabled(false);
-            mainView.getButtonPanel().getDotButton().setBackground(Color.RED);
-            mainView.getButtonPanel().getDivButton().setEnabled(false);
-            mainView.getButtonPanel().getDivButton().setBackground(Color.RED);
-            mainView.getButtonPanel().getAddButton().setEnabled(false);
-            mainView.getButtonPanel().getAddButton().setBackground(Color.RED);
-            mainView.getButtonPanel().getMulButton().setEnabled(false);
-            mainView.getButtonPanel().getMulButton().setBackground(Color.RED);
-            mainView.getButtonPanel().getSubButton().setEnabled(false);
-            mainView.getButtonPanel().getSubButton().setBackground(Color.RED);
-            mainView.getButtonPanel().getNegateButton().setEnabled(false);
-            mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
+            changeToCantDivideByZeroState();
             return "cant divide by zero!";
         }
 
@@ -206,54 +166,25 @@ public class OperatorEventController {
                 result = num1.divide(num2, 16, RoundingMode.HALF_EVEN);
                 break;
         }
-        // setScale
+        // setScale 써야함??
 
         mainView.getLogPanel().addNewLogLabel(logEquationString, result.stripTrailingZeros().toPlainString());
 
         return result.stripTrailingZeros().toPlainString();
     }
 
-    private void renderBigLabel(){
-        mainView.renderBigLabel(numberDeque.getLast());
-    }
-
-    private void renderSmallLabel() {
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < numberArr.length; i++) {
-            sb.append(numberArr[i]);
-            sb.append(" ");
-
-            sb.append(operatorArr[i]);
-            sb.append(" ");
-        }
-
-        mainView.renderSmallLabel(sb.toString());
-    }
-
-    private void printStartMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        System.out.println("======[START]======");
-        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
-        System.out.println();
-        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
-        System.out.println();
-        System.out.println("===================");
-    }
-
-    private void printEndMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        System.out.println("===================");
-        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
-        System.out.println();
-        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
-        System.out.println();
-        System.out.println("=======[END]=======");
+    private void changeToCantDivideByZeroState(){
+        mainView.getButtonPanel().getDotButton().setEnabled(false);
+        mainView.getButtonPanel().getDotButton().setBackground(Color.RED);
+        mainView.getButtonPanel().getDivButton().setEnabled(false);
+        mainView.getButtonPanel().getDivButton().setBackground(Color.RED);
+        mainView.getButtonPanel().getAddButton().setEnabled(false);
+        mainView.getButtonPanel().getAddButton().setBackground(Color.RED);
+        mainView.getButtonPanel().getMulButton().setEnabled(false);
+        mainView.getButtonPanel().getMulButton().setBackground(Color.RED);
+        mainView.getButtonPanel().getSubButton().setEnabled(false);
+        mainView.getButtonPanel().getSubButton().setBackground(Color.RED);
+        mainView.getButtonPanel().getNegateButton().setEnabled(false);
+        mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
     }
 }

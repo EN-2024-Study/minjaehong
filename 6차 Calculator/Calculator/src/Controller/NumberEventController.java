@@ -13,19 +13,10 @@ import java.util.ArrayDeque;
 // 숫자 바뀌면 무조건 BigLabel 만 바뀜
 // BigLabel 바꾸는건 controller 에서 하게 하자
 // 여기에 Label 직접 바꾸는 코드 없게 하자
-public class NumberEventController {
-
-    private ArrayDeque<String> numberDeque;
-    private ArrayDeque<String> operatorDeque;
-
-    private MainView mainView;
+public class NumberEventController extends EventController{
 
     public NumberEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
-
-        this.numberDeque = numberDeque;
-        this.operatorDeque = operatorDeque;
-
-        this.mainView = mainView;
+        super(numberDeque, operatorDeque, mainView);
     }
 
     private void handleNegate(){
@@ -125,25 +116,9 @@ public class NumberEventController {
 
     public void handleNumberInput(String newNum) {
 
-        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")){
-            mainView.getButtonPanel().getDotButton().setEnabled(true);
-            mainView.getButtonPanel().getDotButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getDivButton().setEnabled(true);
-            mainView.getButtonPanel().getDivButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getAddButton().setEnabled(true);
-            mainView.getButtonPanel().getAddButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getMulButton().setEnabled(true);
-            mainView.getButtonPanel().getMulButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getSubButton().setEnabled(true);
-            mainView.getButtonPanel().getSubButton().setBackground(Color.WHITE);
-            mainView.getButtonPanel().getNegateButton().setEnabled(true);
-            mainView.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
-
-            numberDeque.clear();
-            operatorDeque.clear();
-            renderSmallLabel();
-            numberDeque.add("0");
-            renderBigLabel();
+        // cant divide by zero 상태이면 다시 정상화시키기
+        if(checkIfCantDivideByZeroState()){
+            changeToNormalState();
         }
 
         switch (newNum){
@@ -160,14 +135,5 @@ public class NumberEventController {
                 break;
         }
         renderBigLabel();
-    }
-
-    // operatorcontroller 에 backspace 할때도 똑같이 해줘야함
-    private void renderBigLabel(){
-        mainView.renderBigLabel(numberDeque.getLast());
-    }
-
-    private void renderSmallLabel(){
-        mainView.renderSmallLabel("");
     }
 }
