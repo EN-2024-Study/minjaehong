@@ -5,8 +5,6 @@ import View.MainView;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
 public class OperatorEventController extends EventController {

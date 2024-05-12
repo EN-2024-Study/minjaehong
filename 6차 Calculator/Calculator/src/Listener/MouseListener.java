@@ -9,11 +9,10 @@ public class MouseListener implements ActionListener{
     private EventController operatorEventController;
     private EventController erasorEventController;
 
-    // Calculator 참조하기 위해 Calculator 필요함
-    public MouseListener(EventController numberEventController, EventController operatorEventController, EventController erasorEventController){
-        this.numberEventController = numberEventController;
-        this.operatorEventController = operatorEventController;
-        this.erasorEventController = erasorEventController;
+    public MouseListener(EventController[] eventControllers) {
+        this.numberEventController = eventControllers[0];
+        this.operatorEventController = eventControllers[1];
+        this.erasorEventController = eventControllers[2];
     }
 
     @Override

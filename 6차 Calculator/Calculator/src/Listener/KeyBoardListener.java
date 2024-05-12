@@ -10,10 +10,10 @@ public class KeyBoardListener extends KeyAdapter {
     private EventController operatorEventController;
     private EventController erasorEventController;
 
-    public KeyBoardListener(EventController numberEventController, EventController operatorEventController, EventController erasorEventController) {
-        this.numberEventController = numberEventController;
-        this.operatorEventController = operatorEventController;
-        this.erasorEventController = erasorEventController;
+    public KeyBoardListener(EventController[] eventControllers) {
+        this.numberEventController = eventControllers[0];
+        this.operatorEventController = eventControllers[1];
+        this.erasorEventController = eventControllers[2];
     }
 
     @Override

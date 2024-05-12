@@ -2,7 +2,6 @@ package Controller;
 
 import View.MainView;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
@@ -36,7 +35,7 @@ public class NumberEventController extends EventController{
         renderBigLabel();
     }
 
-
+    @Override
     protected void renderBigLabel(){
         String newNum = numberDeque.getLast();
 
@@ -45,6 +44,7 @@ public class NumberEventController extends EventController{
             return;
         }
 
+        // FORMATTING
         DecimalFormat df = new DecimalFormat("#,###");
 
         int decimalPointIndex = newNum.indexOf(".");

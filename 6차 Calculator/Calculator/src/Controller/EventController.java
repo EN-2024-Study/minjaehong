@@ -26,13 +26,6 @@ public abstract class EventController{
     }
 
     protected void renderSmallLabel() {
-
-        /* 이거 없어도 되긴함
-        if(numberDeque.size()==0 && operatorDeque.size()==0) {
-            mainView.renderSmallLabel("");
-            return;
-        }
-        */
         
         Object[] numberArr = numberDeque.toArray();
         Object[] operatorArr = operatorDeque.toArray();

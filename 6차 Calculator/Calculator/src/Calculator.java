@@ -1,4 +1,5 @@
 import Controller.EraserEventController;
+import Controller.EventController;
 import Controller.NumberEventController;
 import Controller.OperatorEventController;
 import Listener.KeyBoardListener;
@@ -11,16 +12,19 @@ import java.util.ArrayDeque;
 public class Calculator{
 
     private MainView mainView;
+    private ArrayDeque<String> numberDeque;
+    private ArrayDeque<String> operatorDeque;
 
     private KeyBoardListener keyBoardListener;
     private MouseListener mouseListener;
 
-    private NumberEventController numberEventController;
-    private OperatorEventController operatorEventController;
-    private EraserEventController eraserEventController;
+    private EventController[] eventControllerArr;
 
-    private ArrayDeque<String> numberDeque;
-    private ArrayDeque<String> operatorDeque;
+    // 시작하기 전 해야할 작업 수행
+    public Calculator() {
+        initializeComponents(); // Calculator 구성하는 모든 Component 객체 생성
+        BindListenersToButtonPanel(); // 돌아가기 위한 Listener 연결시켜주기
+    }
 
     private void initializeComponents(){
 
@@ -32,26 +36,14 @@ public class Calculator{
 
         this.operatorDeque = new ArrayDeque<>();
 
-        this.numberEventController = new NumberEventController(numberDeque, operatorDeque, mainView);
-        this.operatorEventController = new OperatorEventController(numberDeque, operatorDeque, mainView);
-        this.eraserEventController = new EraserEventController(numberDeque, operatorDeque, mainView);
+        this.eventControllerArr = new EventController[3];
 
-        this.mouseListener = new MouseListener(numberEventController, operatorEventController, eraserEventController);
-        this.keyBoardListener = new KeyBoardListener(numberEventController, operatorEventController, eraserEventController);
-    }
+        this.eventControllerArr[0] = new NumberEventController(numberDeque, operatorDeque, mainView);
+        this.eventControllerArr[1] = new OperatorEventController(numberDeque, operatorDeque, mainView);
+        this.eventControllerArr[2] = new EraserEventController(numberDeque, operatorDeque, mainView);
 
-    // 시작하기 전 해야할 작업 수행
-    public Calculator() {
-        // Calculator 구성하는 모든 Component 객체 생성
-        initializeComponents();
-
-        // 돌아가기 위한 Listener 연결시켜주기
-        BindListenersToButtonPanel();
-    }
-
-    public void run(){
-        // Frame 띄우는게 run 하는 명령임
-        mainView.setVisible(true);
+        this.mouseListener = new MouseListener(eventControllerArr);
+        this.keyBoardListener = new KeyBoardListener(eventControllerArr);
     }
 
     private void BindListenersToButtonPanel(){
@@ -67,5 +59,9 @@ public class Calculator{
         for(int i=0;i<buttonArr.length;i++){
             buttonArr[i].addActionListener(mouseListener);
         }
+    }
+
+    public void run(){
+        mainView.setVisible(true);
     }
 }

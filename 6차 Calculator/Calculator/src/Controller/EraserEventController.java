@@ -20,19 +20,19 @@ public class EraserEventController extends EventController{
 
         switch(input){
             case "CE":
-                clearEntryBtnClicked();
+                handleClearEntry();
                 break;
             case "C":
-                clearBtnClicked();
+                handleClear();
                 break;
             case "<":
-                backSpaceBtnClicked();
+                handleBackSpace();
                 break;
         }
     }
 
     // bigLabel 0으로 만듬
-    private void clearEntryBtnClicked(){
+    private void handleClearEntry(){
         // 맨 마지막에 추가한거 빼주기
         numberDeque.removeLast();
         numberDeque.add("0");
@@ -40,7 +40,7 @@ public class EraserEventController extends EventController{
     }
 
     // smallLabel bigLabel 모두 0으로 만듬
-    private void clearBtnClicked(){
+    private void handleClear(){
         numberDeque.clear();
         operatorDeque.clear();
         renderSmallLabel();
@@ -48,7 +48,7 @@ public class EraserEventController extends EventController{
         renderBigLabel();
     }
 
-    private void backSpaceBtnClicked(){
+    private void handleBackSpace(){
 
         // 새 숫자를 입력할때만 써져야함
         // 이미 들어간 숫자 삭제는 불가능해야함
