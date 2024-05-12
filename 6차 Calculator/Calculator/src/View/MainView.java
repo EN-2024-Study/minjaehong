@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class MainView extends JFrame {
@@ -113,6 +114,9 @@ public class MainView extends JFrame {
         resultPanel.getSmallLabel().setText(newText);
     }
 
+    // 직접적으로 BigLabel 변수를 바꿔주는 함수
+    // 모든 rendering 호출은 목적지가 얘임
+    // 그래서 얘만 바꿔주면 됨
     public void renderBigLabel(String newNum){
 
         if(newNum.equals("cant divide by zero!")) {
@@ -120,20 +124,32 @@ public class MainView extends JFrame {
             return;
         }
 
+        BigDecimal curNum = new BigDecimal(newNum);
+        curNum = curNum.setScale(16, RoundingMode.HALF_EVEN);
+
+        newNum = curNum.stripTrailingZeros().toPlainString();
+
+        newNum = getFormattedNumber(newNum);
+
+        resultPanel.getBigLabel().setText(newNum);
+    }
+
+    private String getFormattedNumber(String targetNum){
         DecimalFormat df = new DecimalFormat("#,###");
 
-        int decimalPointIndex = newNum.indexOf(".");
+        int decimalPointIndex = targetNum.indexOf(".");
 
         if(decimalPointIndex==-1){
-            BigDecimal temp = new BigDecimal(newNum);
-            newNum = df.format(temp);
+            BigDecimal temp = new BigDecimal(targetNum);
+            targetNum = df.format(temp);
         }else{
-            String integerPart = newNum.substring(0,decimalPointIndex);
-            String decimalPart = newNum.substring(decimalPointIndex);
+            String integerPart = targetNum.substring(0, decimalPointIndex);
+            String decimalPart = targetNum.substring(decimalPointIndex);
 
             BigDecimal temp = new BigDecimal(integerPart);
-            newNum = df.format(temp) + decimalPart;
+            targetNum = df.format(temp) + decimalPart;
         }
-        resultPanel.getBigLabel().setText(newNum);
+
+        return targetNum;
     }
 }

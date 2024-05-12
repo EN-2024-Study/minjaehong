@@ -1,11 +1,6 @@
 package Controller;
 
 import View.MainView;
-import View.Panel.ResultPanel;
-
-import javax.swing.*;
-import java.awt.*;
-import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
 public class EraserEventController extends EventController{

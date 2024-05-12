@@ -1,22 +1,37 @@
 package Controller;
 
 import View.MainView;
-import View.Panel.ResultPanel;
-
-import javax.swing.*;
-import java.awt.*;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
-// 숫자 바뀌면 무조건 BigLabel 만 바뀜
-// BigLabel 바꾸는건 controller 에서 하게 하자
-// 여기에 Label 직접 바꾸는 코드 없게 하자
 public class NumberEventController extends EventController{
 
     public NumberEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
         super(numberDeque, operatorDeque, mainView);
+    }
+
+    @Override
+    public void handleEvent(String newNum) {
+
+        // cant divide by zero 상태이면 다시 정상화시키기
+        if(checkIfCantDivideByZeroState()){
+            changeToNormalState();
+        }
+
+        switch (newNum){
+            case "+/-":
+                // 1. +/- 예외처리
+                handleNegate();
+                break;
+            case ".":
+                // 2. 소수점 예외처리
+                handleDecimalPoint();
+                break;
+            default:
+                handleNumber(newNum);
+                break;
+        }
+        renderBigLabel();
     }
 
     private void handleNegate(){
@@ -26,6 +41,7 @@ public class NumberEventController extends EventController{
 
         BigDecimal lastNum = new BigDecimal(numberDeque.removeLast());
         lastNum = lastNum.negate();
+
         numberDeque.add(lastNum.toString());
     }
 
@@ -112,29 +128,5 @@ public class NumberEventController extends EventController{
             if(curNum.length()==16) return true;
         }
         return false;
-    }
-
-    @Override
-    public void handleEvent(String newNum) {
-
-        // cant divide by zero 상태이면 다시 정상화시키기
-        if(checkIfCantDivideByZeroState()){
-            changeToNormalState();
-        }
-
-        switch (newNum){
-            case "+/-":
-                // 1. +/- 예외처리
-                handleNegate();
-                break;
-            case ".":
-                // 2. 소수점 예외처리
-                handleDecimalPoint();
-                break;
-            default:
-                handleNumber(newNum);
-                break;
-        }
-        renderBigLabel();
     }
 }

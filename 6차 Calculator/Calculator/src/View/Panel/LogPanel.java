@@ -105,24 +105,6 @@ public class LogPanel extends JPanel{
         resultTextArea.setAlignmentX(Component.RIGHT_ALIGNMENT);
         newLogPanel.add(resultTextArea);
 
-        /*
-        newLogPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                setBackground(Color.ORANGE);
-                revalidate();
-                repaint();
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("mouse clicked");
-            }
-        });
-
-        newLogPanel.requestFocus();
-        */
-
         // 새로 추가된 것은 항상 위쪽에 추가
         labelPanel.add(newLogPanel, 0);
     }

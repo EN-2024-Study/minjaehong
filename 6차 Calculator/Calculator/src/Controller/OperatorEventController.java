@@ -1,10 +1,7 @@
 package Controller;
 
 import View.MainView;
-import View.Panel.ButtonPanel;
-import View.Panel.ResultPanel;
 
-import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -16,17 +13,6 @@ public class OperatorEventController extends EventController {
 
     public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
         super(numberDeque, operatorDeque, mainView);
-    }
-
-    // smallLabel 로 올라가기 전 정제시켜주기
-    private void refineCurrentNumbers(){
-        BigDecimal refinedBigDecimal;
-
-        refinedBigDecimal = new BigDecimal(numberDeque.removeFirst());
-        numberDeque.addFirst(refinedBigDecimal.stripTrailingZeros().toPlainString());
-
-        refinedBigDecimal = new BigDecimal(numberDeque.removeLast());
-        numberDeque.addLast(refinedBigDecimal.stripTrailingZeros().toPlainString());
     }
 
     @Override
@@ -132,14 +118,12 @@ public class OperatorEventController extends EventController {
     // 즉 결과값 / newOperator 이렇게 남음
     // 연산자 무조건 남기기
     public String calculate() {
-        // MathContext.Decimal64
-        // MathContext.Decimal128
-        // half even 은 맞음
+
         BigDecimal num1 = new BigDecimal(numberDeque.removeFirst());
         String opt = operatorDeque.removeFirst();
         BigDecimal num2 = new BigDecimal(numberDeque.removeFirst());
 
-        // log 추가
+        // log equation 저장을 위해 계산하기 전 미리 저장해놓기
         String logEquationString = num1 + " "+ opt + " " + num2 + " = ";
 
         BigDecimal result = BigDecimal.ZERO;
@@ -149,29 +133,43 @@ public class OperatorEventController extends EventController {
             changeToCantDivideByZeroState();
             return "cant divide by zero!";
         }
+        else {
+            switch (opt) {
+                case "+":
+                    result = num1.add(num2, MathContext.DECIMAL128);
+                    break;
+                case "-":
+                    result = num1.subtract(num2, MathContext.DECIMAL128);
+                    break;
+                case "×":
+                    result = num1.multiply(num2, MathContext.DECIMAL128);
+                    break;
+                case "÷":
+                    // windows 는 손실을 싫어함
+                    // 연산하고 저장할때 바로 RoundingMode 쓰면 안됨
+                    // 그걸 여기서 쓰면 8/9*9 했을때 8이 안나오게 되는거임
+                    // 그래서 renderBigLabel 할때 그때 RoundingMode 로 잘라줘야하는거임
+                    result = num1.divide(num2, MathContext.DECIMAL128);
+                    break;
+            }
 
-        // 이거 뒤에 인자로 MathContext. 모두 박아놔야함??
-        switch (opt) {
-            case "+":
-                result = num1.add(num2, MathContext.DECIMAL128);
-                break;
-            case "-":
-                result = num1.subtract(num2, MathContext.DECIMAL128);
-                break;
-            case "×":
-                result = num1.multiply(num2, MathContext.DECIMAL128);
-                break;
-            case "÷":
-                // 16자리까지만 표기하고 반올림 해줌
-                // 금융권에서 쓰는 정책? 이라고 한다
-                result = num1.divide(num2, 16, RoundingMode.HALF_EVEN);
-                break;
+            //mainView.getLogPanel().addNewLogLabel(logEquationString, result.stripTrailingZeros().toPlainString());
+
+            addLog(logEquationString, result);
+
+            return result.stripTrailingZeros().toPlainString();
         }
-        // setScale 써야함??
+    }
 
-        mainView.getLogPanel().addNewLogLabel(logEquationString, result.stripTrailingZeros().toPlainString());
+    // smallLabel 로 올라가기 전 정제시켜주기
+    private void refineCurrentNumbers(){
+        BigDecimal refinedBigDecimal;
 
-        return result.stripTrailingZeros().toPlainString();
+        refinedBigDecimal = new BigDecimal(numberDeque.removeFirst());
+        numberDeque.addFirst(refinedBigDecimal.stripTrailingZeros().toPlainString());
+
+        refinedBigDecimal = new BigDecimal(numberDeque.removeLast());
+        numberDeque.addLast(refinedBigDecimal.stripTrailingZeros().toPlainString());
     }
 
     private void changeToCantDivideByZeroState(){
@@ -187,5 +185,11 @@ public class OperatorEventController extends EventController {
         mainView.getButtonPanel().getSubButton().setBackground(Color.RED);
         mainView.getButtonPanel().getNegateButton().setEnabled(false);
         mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
+    }
+
+    //
+    private void addLog(String logEquationString, BigDecimal result){
+        String resultToString = result.stripTrailingZeros().toPlainString();
+        mainView.getLogPanel().addNewLogLabel(logEquationString, resultToString);
     }
 }
