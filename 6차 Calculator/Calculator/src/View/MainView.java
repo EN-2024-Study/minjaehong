@@ -6,8 +6,7 @@ import View.Panel.ResultPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -76,6 +75,24 @@ public class MainView extends JFrame {
                     logPanel.setVisible(true);
                     resultPanel.getLogButton().setVisible(false);
                 }
+            }
+        });
+
+        /*
+        PopupFactory pf = new PopupFactory();
+        Popup test = pf.getPopup(this, logPanel,10,10);
+        */
+
+        getResultPanel().getLogButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //resultPanel.getComponentPopupMenu();
+
+                //test.show();
+
+                //logPanel.setSize(getWidth(), getHeight());
+                //logPanel.setLocation(getLocation().x, getLocation().y + getHeight());
+                //logPanel.setVisible(true);
             }
         });
     }

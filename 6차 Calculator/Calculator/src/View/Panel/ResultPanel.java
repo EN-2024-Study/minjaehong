@@ -1,13 +1,9 @@
 package View.Panel;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
-import javax.swing.plaf.ButtonUI;
 import java.awt.*;
-
-// curNumberLabel에 지금입력한 값이 들어갈때가 있고
-// 지금까지 입력한 결과값이 들어갈때가 있음
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ResultPanel extends JPanel {
 
@@ -27,7 +23,6 @@ public class ResultPanel extends JPanel {
     }
 
     private void initializeResultPanel(){
-
         GridBagLayout grid = new GridBagLayout();
         setLayout(grid);
 
@@ -39,6 +34,7 @@ public class ResultPanel extends JPanel {
     }
 
     private void createLogButton(){
+
         ImageIcon imgIcon = new ImageIcon("src/Images/HistoryIcon.png");
         Image scaledImage = imgIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -46,7 +42,7 @@ public class ResultPanel extends JPanel {
         logButton = new JButton(scaledIcon);
         logButton.setBorderPainted(true); // 버튼 테두리 설정
         logButton.setContentAreaFilled(false); // 버튼 영역 배경 표시 설정
-        logButton.setFocusable(false);
+        logButton.setFocusable(true);
     }
 
     private void createSmallLabel(){
@@ -59,7 +55,7 @@ public class ResultPanel extends JPanel {
         smallLabel.setVerticalAlignment(SwingConstants.BOTTOM);
     }
 
-    private void createBigLabel(){
+    private void createBigLabel() {
         bigLabel = new JLabel("0");
         bigLabel.setFont(new Font("Consolas", Font.BOLD, 30));
         bigLabel.setBackground(Color.WHITE);

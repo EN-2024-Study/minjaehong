@@ -2,7 +2,10 @@ package Controller;
 
 import View.MainView;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayDeque;
@@ -101,6 +104,7 @@ public class OperatorEventController extends EventController {
             }
             // 3. 숫자 2개 연산자 2개 = 계산 (잘됨)
             else if (numberDeque.size() == 2 && operatorDeque.size() == 2) {
+                renderSmallLabel();
                 String result = calculate(); // 계산하면 numDeque 비고 optDeque 에 = 아직 남아있음
                 numberDeque.add(result); // 계산된 값 push
                 renderSmallLabel();
@@ -123,6 +127,8 @@ public class OperatorEventController extends EventController {
 
         // log equation 저장을 위해 계산하기 전 미리 저장해놓기
         String logEquationString = num1 + " "+ opt + " " + num2 + " = ";
+
+        System.out.println(logEquationString);
 
         BigDecimal result = BigDecimal.ZERO;
 
@@ -150,8 +156,6 @@ public class OperatorEventController extends EventController {
                     result = num1.divide(num2, MathContext.DECIMAL128);
                     break;
             }
-
-            //mainView.getLogPanel().addNewLogLabel(logEquationString, result.stripTrailingZeros().toPlainString());
 
             addLog(logEquationString, result);
 
@@ -185,9 +189,30 @@ public class OperatorEventController extends EventController {
         mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
     }
 
-    //
-    private void addLog(String logEquationString, BigDecimal result){
+
+    private void addLog(String logEquationString, BigDecimal result) {
+
         String resultToString = result.stripTrailingZeros().toPlainString();
-        mainView.getLogPanel().addNewLogLabel(logEquationString, resultToString);
+
+        String html =
+                "<html>" +
+                    "<div style = 'text-align:right;'>" +
+                        logEquationString + "<br>" + result +
+                    "</div>" +
+                "</html>";
+
+        JButton newLogButton = new JButton(html);
+        newLogButton.setBackground(Color.WHITE);
+        newLogButton.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        newLogButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = e.getActionCommand();
+                System.out.println(s);
+            }
+        });
+
+        mainView.getLogPanel().addNewLogLabel(newLogButton);
     }
 }

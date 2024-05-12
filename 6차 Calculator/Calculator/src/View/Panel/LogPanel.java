@@ -57,8 +57,8 @@ public class LogPanel extends JPanel{
         labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
 
-        scrollPane = new JScrollPane(labelPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane = new JScrollPane(labelPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(null);
     }
 
@@ -88,41 +88,9 @@ public class LogPanel extends JPanel{
     }
 
     // 로그 넣을때도 콤마 처리 해야함
-    public void addNewLogLabel(String equationString, String result){
-
-        // 여기 하다 감
-        JPanel newLogPanel = new JPanel();
-        newLogPanel.setLayout(new GridLayout(2, 1));
-
-        JTextArea equationTextArea = new JTextArea(equationString);
-        equationTextArea.setEditable(false);
-        equationTextArea.setFont(new Font("Consolas", Font.BOLD, 16));
-        equationTextArea.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        newLogPanel.add(equationTextArea);
-
-        // result 값 format 처리 해서 log에 넣어야함
-        DecimalFormat df = new DecimalFormat("#,###");
-
-        int decimalPointIndex = result.indexOf(".");
-
-        if(decimalPointIndex==-1){
-            BigDecimal temp = new BigDecimal(result);
-            result = df.format(temp);
-        }else{
-            String integerPart = result.substring(0,decimalPointIndex);
-            String decimalPart = result.substring(decimalPointIndex);
-
-            BigDecimal temp = new BigDecimal(integerPart);
-            result = df.format(temp) + decimalPart;
-        }
-
-        JTextArea resultTextArea = new JTextArea(result);
-        resultTextArea.setEditable(false);
-        resultTextArea.setFont(new Font("Consolas", Font.BOLD, 24));
-        resultTextArea.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        newLogPanel.add(resultTextArea);
+    public void addNewLogLabel(JButton newLogButton){
 
         // 새로 추가된 것은 항상 위쪽에 추가
-        labelPanel.add(newLogPanel, 0);
+        labelPanel.add(newLogButton, 0);
     }
 }
