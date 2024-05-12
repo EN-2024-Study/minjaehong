@@ -2,6 +2,8 @@ package Controller;
 
 import View.MainView;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
 public class NumberEventController extends EventController{
@@ -32,6 +34,32 @@ public class NumberEventController extends EventController{
                 break;
         }
         renderBigLabel();
+    }
+
+
+    protected void renderBigLabel(){
+        String newNum = numberDeque.getLast();
+
+        if(newNum.equals("cant divide by zero!")) {
+            mainView.getResultPanel().getBigLabel().setText(newNum);
+            return;
+        }
+
+        DecimalFormat df = new DecimalFormat("#,###");
+
+        int decimalPointIndex = newNum.indexOf(".");
+
+        if(decimalPointIndex==-1){
+            BigDecimal temp = new BigDecimal(newNum);
+            newNum = df.format(temp);
+        }else{
+            String integerPart = newNum.substring(0,decimalPointIndex);
+            String decimalPart = newNum.substring(decimalPointIndex);
+
+            BigDecimal temp = new BigDecimal(integerPart);
+            newNum = df.format(temp) + decimalPart;
+        }
+        mainView.getResultPanel().getBigLabel().setText(newNum);
     }
 
     private void handleNegate(){

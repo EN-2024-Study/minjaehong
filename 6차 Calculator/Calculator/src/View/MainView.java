@@ -117,6 +117,10 @@ public class MainView extends JFrame {
     // 직접적으로 BigLabel 변수를 바꿔주는 함수
     // 모든 rendering 호출은 목적지가 얘임
     // 그래서 얘만 바꿔주면 됨
+
+    // 사용자 입력한거는 0 자르면 안됨
+    // 사용자 입력한 것도 setScale 하면 .0 같은거나 소수점 0 이 아예 표시가 안됨
+    // 숫자로는 잘 들어가긴함
     public void renderBigLabel(String newNum){
 
         if(newNum.equals("cant divide by zero!")) {
