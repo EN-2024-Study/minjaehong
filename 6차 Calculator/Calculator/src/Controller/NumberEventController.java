@@ -114,7 +114,8 @@ public class NumberEventController extends EventController{
         return false;
     }
 
-    public void handleNumberInput(String newNum) {
+    @Override
+    public void handleEvent(String newNum) {
 
         // cant divide by zero 상태이면 다시 정상화시키기
         if(checkIfCantDivideByZeroState()){

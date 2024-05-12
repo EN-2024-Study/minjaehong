@@ -5,7 +5,7 @@ import View.MainView;
 import java.awt.*;
 import java.util.ArrayDeque;
 
-public class EventController {
+public abstract class EventController{
     protected ArrayDeque<String> numberDeque;
     protected ArrayDeque<String> operatorDeque;
 
@@ -17,6 +17,9 @@ public class EventController {
 
         this.mainView = mainView;
     }
+
+    // 무조건 자식클래스에서 구현되어야함
+    public abstract void handleEvent(String userInput);
 
     protected void renderBigLabel(){
         mainView.renderBigLabel(numberDeque.getLast());

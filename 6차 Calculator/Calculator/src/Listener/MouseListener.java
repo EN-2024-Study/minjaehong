@@ -1,15 +1,20 @@
 package Listener;
 
 import Controller.Calculator;
+import Controller.EventController;
 
 import java.awt.event.*;
 
 public class MouseListener implements ActionListener{
-    Calculator calculator;
+    private EventController numberEventController;
+    private EventController operatorEventController;
+    private EventController erasorEventController;
 
     // Controller.Calculator 참조하기 위해 Controller.Calculator 필요함
-    public MouseListener(Calculator calculator){
-        this.calculator = calculator;
+    public MouseListener(EventController numberEventController, EventController operatorEventController, EventController erasorEventController){
+        this.numberEventController = numberEventController;
+        this.operatorEventController = operatorEventController;
+        this.erasorEventController = erasorEventController;
     }
 
     // ButtonPanel 에서 event 가 호출되면
@@ -23,15 +28,15 @@ public class MouseListener implements ActionListener{
                 ac.equals("3") || ac.equals("4") || ac.equals("5") ||
                 ac.equals("6") || ac.equals("7") || ac.equals("8") ||
                 ac.equals("9") || ac.equals(".") || ac.equals("+/-")) {
-            calculator.numberButtonClicked(ac);
+            numberEventController.handleEvent(ac);
         }
 
         if (ac.equals("+") || ac.equals("-") || ac.equals("×") || ac.equals("÷") || ac.equals("=")) {
-            calculator.operatorButtonClicked(ac);
+            operatorEventController.handleEvent(ac);
         }
 
         if (ac.equals("CE") || ac.equals("C") || ac.equals("<")) {
-            calculator.eraseBtnClicked(ac);
+            erasorEventController.handleEvent(ac);
         }
     }
 }

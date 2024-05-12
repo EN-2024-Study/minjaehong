@@ -14,7 +14,8 @@ public class EraserEventController extends EventController{
         super(numberDeque, operatorDeque, mainView);
     }
 
-    public void handleEraseEvent(String input){
+    @Override
+    public void handleEvent(String input){
 
         // cant divide by zero 상태이면 다시 정상화시키기
         if(checkIfCantDivideByZeroState()){

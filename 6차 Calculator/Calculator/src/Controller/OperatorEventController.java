@@ -29,7 +29,8 @@ public class OperatorEventController extends EventController {
         numberDeque.addLast(refinedBigDecimal.stripTrailingZeros().toPlainString());
     }
 
-    public void handleOperatorInput(String newOperator) {
+    @Override
+    public void handleEvent(String newOperator) {
 
         // cant divide by zero 상태이면 다시 정상화시키기
         if(checkIfCantDivideByZeroState()){

@@ -1,15 +1,19 @@
 package Listener;
 
-import Controller.Calculator;
+import Controller.EventController;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class KeyBoardListener extends KeyAdapter {
-    private Calculator calculator;
+    private EventController numberEventController;
+    private EventController operatorEventController;
+    private EventController erasorEventController;
 
-    public KeyBoardListener(Calculator calculator) {
-        this.calculator = calculator;
+    public KeyBoardListener(EventController numberEventController, EventController operatorEventController, EventController erasorEventController) {
+        this.numberEventController = numberEventController;
+        this.operatorEventController = operatorEventController;
+        this.erasorEventController = erasorEventController;
     }
 
     @Override
@@ -22,11 +26,11 @@ public class KeyBoardListener extends KeyAdapter {
             switch (key) {
                 // shift + "="
                 case KeyEvent.VK_EQUALS:
-                    calculator.operatorButtonClicked("+");
+                    operatorEventController.handleEvent("+");
                     break;
                 // shift + 8
                 case KeyEvent.VK_8:
-                    calculator.operatorButtonClicked("×");
+                    operatorEventController.handleEvent("×");
                     break;
             }
             return;
@@ -43,35 +47,35 @@ public class KeyBoardListener extends KeyAdapter {
             case KeyEvent.VK_7:
             case KeyEvent.VK_8:
             case KeyEvent.VK_9:
-                calculator.numberButtonClicked(String.valueOf((char) key));
+                numberEventController.handleEvent(String.valueOf((char) key));
                 break;
             case KeyEvent.VK_PERIOD:
-                calculator.numberButtonClicked(".");
+                numberEventController.handleEvent(".");
                 break;
             case KeyEvent.VK_ADD:
-                calculator.operatorButtonClicked("+");
+                operatorEventController.handleEvent("+");
                 break;
             case KeyEvent.VK_SUBTRACT:
-                calculator.operatorButtonClicked("-");
+                operatorEventController.handleEvent("-");
                 break;
             case KeyEvent.VK_MULTIPLY:
-                calculator.operatorButtonClicked("×");
+                operatorEventController.handleEvent("×");
                 break;
             case KeyEvent.VK_DIVIDE:
-                calculator.operatorButtonClicked("÷");
+                operatorEventController.handleEvent("÷");
                 break;
             case KeyEvent.VK_ENTER:
             case KeyEvent.VK_EQUALS:
-                calculator.operatorButtonClicked("=");
+                operatorEventController.handleEvent("=");
                 break;
             case KeyEvent.VK_BACK_SPACE:
-                calculator.eraseBtnClicked("<");
+                erasorEventController.handleEvent("<");
                 break;
             case KeyEvent.VK_DELETE:
-                calculator.eraseBtnClicked("CE");
+                erasorEventController.handleEvent("CE");
                 break;
             case KeyEvent.VK_ESCAPE:
-                calculator.eraseBtnClicked("C");
+                erasorEventController.handleEvent("C");
                 break;
         }
     }

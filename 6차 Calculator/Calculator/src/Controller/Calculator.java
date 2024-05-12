@@ -31,13 +31,12 @@ public class Calculator{
 
         this.operatorDeque = new ArrayDeque<>();
 
-        // eventController 자기 자신한테 해야할 일을 전달할 수 있게끔 자기 자신을 인자로 주기
-        this.mouseListener = new MouseListener(this);
-        this.keyBoardListener = new KeyBoardListener(this);
-
         this.numberEventController = new NumberEventController(numberDeque, operatorDeque, mainView);
         this.operatorEventController = new OperatorEventController(numberDeque, operatorDeque, mainView);
         this.eraserEventController = new EraserEventController(numberDeque, operatorDeque, mainView);
+
+        this.mouseListener = new MouseListener(numberEventController, operatorEventController, eraserEventController);
+        this.keyBoardListener = new KeyBoardListener(numberEventController, operatorEventController, eraserEventController);
     }
 
     // 시작하기 전 해야할 작업 수행
@@ -52,18 +51,6 @@ public class Calculator{
     public void run(){
         // Frame 띄우는게 run 하는 명령임
         mainView.setVisible(true);
-    }
-
-    public void numberButtonClicked(String newNum){
-        numberEventController.handleNumberInput(newNum);
-    }
-
-    public void operatorButtonClicked(String newOperator){
-        operatorEventController.handleOperatorInput(newOperator);
-    }
-
-    public void eraseBtnClicked(String eraser){
-        eraserEventController.handleEraseEvent(eraser);
     }
 
     private void BindListenersToButtonPanel(){
