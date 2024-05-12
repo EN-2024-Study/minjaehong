@@ -21,7 +21,7 @@ public class KeyBoardListener extends KeyAdapter {
 
         int key = e.getKeyCode();
 
-        // shift 예외 상황 처리
+        // SHIFT 예외처리
         if (e.isShiftDown()) {
             switch (key) {
                 // shift + "="
@@ -56,12 +56,14 @@ public class KeyBoardListener extends KeyAdapter {
                 operatorEventController.handleEvent("+");
                 break;
             case KeyEvent.VK_SUBTRACT:
+            case KeyEvent.VK_MINUS:
                 operatorEventController.handleEvent("-");
                 break;
             case KeyEvent.VK_MULTIPLY:
                 operatorEventController.handleEvent("×");
                 break;
             case KeyEvent.VK_DIVIDE:
+            case KeyEvent.VK_SLASH:
                 operatorEventController.handleEvent("÷");
                 break;
             case KeyEvent.VK_ENTER:
