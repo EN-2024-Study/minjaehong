@@ -74,6 +74,27 @@ public class NumberEventController extends EventController{
     }
 
     private void handleDecimalPoint(){
+
+        // 마지막 연산이 "=" 일때 or 다음 수 받아야할때
+        if(operatorDeque.size() > 0){
+            // 마지막 연산이 "=" 일때 예외처리
+            // 0. 이 찍히고 smallLabel 모두 비워져야함
+            if(operatorDeque.getFirst().equals("=")) {
+                numberDeque.clear();
+                operatorDeque.clear();
+                numberDeque.add("0.");
+
+                mainView.getResultPanel().getSmallLabel().setText("");
+                return;
+            }
+            // 다음 수 받아야할때
+            // 바로 . 으로 0. 받는거 예외처리
+            else if(numberDeque.size()==1 && operatorDeque.size()==1){
+                numberDeque.add("0.");
+                return;
+            }
+        }
+
         // 이미 현재 값에 소수점 존재하면
         if (numberDeque.getLast().contains(".")) {
             // 아무것도 안해도 됨

@@ -33,10 +33,15 @@ public class EraserEventController extends EventController{
 
     // bigLabel 0으로 만듬
     private void handleClearEntry(){
-        // 맨 마지막에 추가한거 빼주기
-        numberDeque.removeLast();
-        numberDeque.add("0");
-        renderBigLabel();
+
+        if(operatorDeque.size() > 0 && operatorDeque.getFirst().equals("=")){
+            handleClear();
+        }else {
+            // 맨 마지막에 추가한거 빼주기
+            numberDeque.removeLast();
+            numberDeque.add("0");
+            renderBigLabel();
+        }
     }
 
     // smallLabel bigLabel 모두 0으로 만듬
