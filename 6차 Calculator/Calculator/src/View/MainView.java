@@ -151,27 +151,27 @@ public class MainView extends JFrame {
 
         newNum = curNum.stripTrailingZeros().toPlainString();
 
-        newNum = getFormattedNumber(newNum);
+        newNum = changeToFormattedNumber(newNum);
 
         resultPanel.getBigLabel().setText(newNum);
     }
 
-    private String getFormattedNumber(String targetNum){
+    private String changeToFormattedNumber(String originalNum){
         DecimalFormat df = new DecimalFormat("#,###");
 
-        int decimalPointIndex = targetNum.indexOf(".");
+        int decimalPointIndex = originalNum.indexOf(".");
 
         if(decimalPointIndex==-1){
-            BigDecimal temp = new BigDecimal(targetNum);
-            targetNum = df.format(temp);
+            BigDecimal temp = new BigDecimal(originalNum);
+            originalNum = df.format(temp);
         }else{
-            String integerPart = targetNum.substring(0, decimalPointIndex);
-            String decimalPart = targetNum.substring(decimalPointIndex);
+            String integerPart = originalNum.substring(0, decimalPointIndex);
+            String decimalPart = originalNum.substring(decimalPointIndex);
 
             BigDecimal temp = new BigDecimal(integerPart);
-            targetNum = df.format(temp) + decimalPart;
+            originalNum = df.format(temp) + decimalPart;
         }
 
-        return targetNum;
+        return originalNum;
     }
 }

@@ -3,8 +3,13 @@ package Controller;
 import View.MainView;
 
 import java.awt.*;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 
+// 추상클래스니까 클래스만 직접 생성불가
+// protected 로 된 것들은 모두 자식클래스만 참조 가능
+// public 은 다른 곳에서 호출 가능
 public abstract class EventController{
     protected ArrayDeque<String> numberDeque;
     protected ArrayDeque<String> operatorDeque;
@@ -19,6 +24,8 @@ public abstract class EventController{
     }
 
     // 무조건 자식클래스에서 구현되어야함
+    // 만약 EventController 클래스로 자식클래스의 handleEvent 를 호출하면
+    // abstract function 은 동적 바인딩되므로 자식클래스의 구현된 handleEvent 함수를 호출할 수 있음
     public abstract void handleEvent(String userInput);
 
     protected void renderBigLabel(){
@@ -48,6 +55,29 @@ public abstract class EventController{
         else return false;
     }
 
+    // 결과에 콤마 추가한 결과를 반환
+    protected String changeToFormattedString(String originalString){
+
+        String formattedString;
+
+        DecimalFormat df = new DecimalFormat("#,###");
+
+        int decimalPointIndex = originalString.indexOf(".");
+
+        if(decimalPointIndex==-1){
+            BigDecimal originalNum = new BigDecimal(originalString);
+            formattedString = df.format(originalNum);
+        }else{
+            String integerPart = originalString.substring(0, decimalPointIndex);
+            String decimalPart = originalString.substring(decimalPointIndex);
+
+            BigDecimal integerNum = new BigDecimal(integerPart);
+            formattedString = df.format(integerNum) + decimalPart;
+        }
+
+        return formattedString;
+    }
+
     // cant divide by zero 로 disabled 된 button 들을 다시 enabled 시켜줌
     // 이건 모든 자식 controller 들이 가져야할 기능이라 부모 클래스에 있어야함
     protected void changeToNormalState(){
@@ -65,7 +95,8 @@ public abstract class EventController{
         mainView.getButtonPanel().getSubButton().setBackground(Color.WHITE);
         mainView.getButtonPanel().getNegateButton().setEnabled(true);
         mainView.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
-        
+
+        // 매끄러운 진행을 위한 matrix 조작
         // deque 다 비우고 default 0 집어넣어주기
         numberDeque.clear();
         operatorDeque.clear();

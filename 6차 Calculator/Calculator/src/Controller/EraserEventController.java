@@ -1,6 +1,9 @@
 package Controller;
 
 import View.MainView;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayDeque;
 import static Constants.ConstValue.*;
 
@@ -30,6 +33,8 @@ public class EraserEventController extends EventController{
                 handleBackSpace();
                 break;
         }
+        // 모든 작업은 BigLabel rendering 을 동반함
+        renderBigLabel();
     }
 
     // bigLabel 0으로 만듬
@@ -41,7 +46,6 @@ public class EraserEventController extends EventController{
             // 맨 마지막에 추가한거 빼주기
             numberDeque.removeLast();
             numberDeque.add("0");
-            renderBigLabel();
         }
     }
 
@@ -51,7 +55,6 @@ public class EraserEventController extends EventController{
         operatorDeque.clear();
         renderSmallLabel();
         numberDeque.add("0");
-        renderBigLabel();
     }
 
     private void handleBackSpace(){
@@ -61,15 +64,56 @@ public class EraserEventController extends EventController{
         // 그래서 숫자가 연산자 개수보다 많을때만 가능
         if(numberDeque.size() > operatorDeque.size()){
             int length = numberDeque.getLast().length();
+
+            // 만약 숫자 길이가 1보다 길면
             if(length > 1){
                 String lastNum = numberDeque.removeLast();
                 numberDeque.add(lastNum.substring(0, length-1));
             }
+            // 숫자 길이가 1이면
             else if(length==1){
                 numberDeque.removeLast();
                 numberDeque.add("0");
             }
-            renderBigLabel();
         }
+    }
+
+    @Override
+    public void renderBigLabel() {
+
+        String newNum = numberDeque.getLast();
+
+        if(newNum.equals("cant divide by zero!")) {
+            mainView.getResultPanel().getBigLabel().setText(newNum);
+        }else {
+
+            newNum = changeToFormattedString(newNum);
+            mainView.getResultPanel().getBigLabel().setText(newNum);
+        }
+        return;
+    }
+
+    @Override
+    public void renderSmallLabel() {
+        String newText;
+
+        Object[] numberArr = numberDeque.toArray();
+        Object[] operatorArr = operatorDeque.toArray();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numberArr.length; i++) {
+            sb.append(numberArr[i]);
+            sb.append(" ");
+
+            sb.append(operatorArr[i]);
+            sb.append(" ");
+        }
+
+        newText = sb.toString();
+
+        // smallLabel 크기 줄어드는거 방지
+        if (newText.isEmpty()) newText = " ";
+
+        mainView.getResultPanel().getSmallLabel().setText(newText);
     }
 }

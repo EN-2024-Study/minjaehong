@@ -20,12 +20,15 @@ public class OperatorEventController extends EventController {
     @Override
     public void handleEvent(String newOperator) {
 
+        printStartMatrix(numberDeque, operatorDeque);
+
         // cant divide by zero 상태이면 다시 정상화시키기
         if(checkIfCantDivideByZeroState()){
             changeToNormalState();
             return;
         }
 
+        // 이게 굳이 필요한 걸까?
         refineCurrentNumbers();
 
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
@@ -58,7 +61,7 @@ public class OperatorEventController extends EventController {
                     numberDeque.add(result);
                     renderBigLabel();
                 }
-                //return;
+                return;
             }
             // 전꺼가 등호가 아닐때
             else {
@@ -112,6 +115,8 @@ public class OperatorEventController extends EventController {
                 renderBigLabel(); // 계산된 값 출력
             }
         }
+
+        printEndMatrix(numberDeque, operatorDeque);
     }
 
     // 등호 연산 들어왔을때 + 연산자 두 개 채워지면
@@ -129,7 +134,7 @@ public class OperatorEventController extends EventController {
         // log equation 저장을 위해 계산하기 전 미리 저장해놓기
         String logEquationString = num1 + " "+ operator + " " + num2 + " = ";
 
-        System.out.println(logEquationString);
+        // System.out.println(logEquationString);
 
         BigDecimal result = BigDecimal.ZERO;
 
@@ -215,4 +220,28 @@ public class OperatorEventController extends EventController {
 
         mainView.getLogPanel().addNewLogLabel(newLogButton);
     }
+    private void printStartMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
+        Object[] numberArr = numberDeque.toArray();
+        Object[] operatorArr = operatorDeque.toArray();
+
+        System.out.println("======[START]======");
+        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
+        System.out.println();
+        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
+        System.out.println();
+        System.out.println("===================");
+    }
+
+    private void printEndMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
+        Object[] numberArr = numberDeque.toArray();
+        Object[] operatorArr = operatorDeque.toArray();
+
+        System.out.println("===================");
+        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
+        System.out.println();
+        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
+        System.out.println();
+        System.out.println("=======[END]=======");
+    }
+
 }
