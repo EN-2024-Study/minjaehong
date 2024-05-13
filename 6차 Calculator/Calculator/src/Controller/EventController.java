@@ -23,40 +23,33 @@ public abstract class EventController{
         this.mainView = mainView;
     }
 
+    //================ functions that have to be implemented in child classes ===============//
+
     // 무조건 자식클래스에서 구현되어야함
     // 만약 EventController 클래스로 자식클래스의 handleEvent 를 호출하면
     // abstract function 은 동적 바인딩되므로 자식클래스의 구현된 handleEvent 함수를 호출할 수 있음
     public abstract void handleEvent(String userInput);
 
+    public abstract void renderSmallLabel();
+
+    //============= functions that don't have to be implemented in child classes =============//
+
     protected void renderBigLabel(){
-        mainView.renderBigLabel(numberDeque.getLast());
-    }
+        String newNum = numberDeque.getLast();
 
-    protected void renderSmallLabel() {
-        
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < numberArr.length; i++) {
-            sb.append(numberArr[i]);
-            sb.append(" ");
-
-            sb.append(operatorArr[i]);
-            sb.append(" ");
+        // 예외면
+        if(newNum.equals("cant divide by zero!")) {
+            mainView.getResultPanel().getBigLabel().setText(newNum);
         }
-
-        mainView.renderSmallLabel(sb.toString());
-    }
-
-    // 현재 결과가 cant divide by zero 인지 확인해줌
-    protected boolean checkIfCantDivideByZeroState(){
-        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")) return true;
-        else return false;
+        // 아니면 string format 후 bigLabel 에 출력해주기
+        else{
+            newNum = changeToFormattedString(newNum);
+            mainView.getResultPanel().getBigLabel().setText(newNum);
+        }
     }
 
     // 결과에 콤마 추가한 결과를 반환
-    protected String changeToFormattedString(String originalString){
+    private String changeToFormattedString(String originalString){
 
         String formattedString;
 
@@ -76,6 +69,16 @@ public abstract class EventController{
         }
 
         return formattedString;
+    }
+
+    // 현재 결과가 cant divide by zero 인지 확인해줌
+    protected boolean checkIfCantDivideByZeroState(){
+        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     // cant divide by zero 로 disabled 된 button 들을 다시 enabled 시켜줌

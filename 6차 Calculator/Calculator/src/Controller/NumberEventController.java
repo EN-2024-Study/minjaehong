@@ -162,22 +162,6 @@ public class NumberEventController extends EventController{
     }
 
     @Override
-    public void renderBigLabel(){
-        String newNum = numberDeque.getLast();
-
-        // 예외면 
-        if(newNum.equals("cant divide by zero!")) {
-            mainView.getResultPanel().getBigLabel().setText(newNum);
-        }
-        // 아니면 string format 후 bigLabel 에 출력해주기
-        else{
-            newNum = changeToFormattedString(newNum);
-            mainView.getResultPanel().getBigLabel().setText(newNum);
-        }
-        return;
-    }
-
-    @Override
     public void renderSmallLabel(){
 
         String newText;

@@ -79,21 +79,6 @@ public class EraserEventController extends EventController{
     }
 
     @Override
-    public void renderBigLabel() {
-
-        String newNum = numberDeque.getLast();
-
-        if(newNum.equals("cant divide by zero!")) {
-            mainView.getResultPanel().getBigLabel().setText(newNum);
-        }else {
-
-            newNum = changeToFormattedString(newNum);
-            mainView.getResultPanel().getBigLabel().setText(newNum);
-        }
-        return;
-    }
-
-    @Override
     public void renderSmallLabel() {
         String newText;
 
