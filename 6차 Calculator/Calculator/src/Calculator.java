@@ -1,9 +1,6 @@
-import Controller.EraserEventController;
-import Controller.EventController;
-import Controller.NumberEventController;
-import Controller.OperatorEventController;
+import Controller.*;
 import Listener.KeyBoardListener;
-import Listener.MouseListener;
+import Listener.ButtonListener;
 import View.MainView;
 
 import javax.swing.*;
@@ -16,7 +13,7 @@ public class Calculator{
     private ArrayDeque<String> operatorDeque;
 
     private KeyBoardListener keyBoardListener;
-    private MouseListener mouseListener;
+    private ButtonListener buttonListener;
 
     private EventController[] eventControllerArr;
 
@@ -36,13 +33,14 @@ public class Calculator{
 
         this.operatorDeque = new ArrayDeque<>();
 
-        this.eventControllerArr = new EventController[3];
+        this.eventControllerArr = new EventController[4];
 
         this.eventControllerArr[0] = new NumberEventController(numberDeque, operatorDeque, mainView);
         this.eventControllerArr[1] = new OperatorEventController(numberDeque, operatorDeque, mainView);
         this.eventControllerArr[2] = new EraserEventController(numberDeque, operatorDeque, mainView);
+        this.eventControllerArr[3] = new LogEventController(numberDeque, operatorDeque, mainView);
 
-        this.mouseListener = new MouseListener(eventControllerArr);
+        this.buttonListener = new ButtonListener(eventControllerArr);
         this.keyBoardListener = new KeyBoardListener(eventControllerArr);
     }
 
@@ -54,10 +52,10 @@ public class Calculator{
         mainView.getButtonPanel().setFocusable(true);
         mainView.getButtonPanel().requestFocus();
 
-        // button 들 mouseListener 달아주기
+        // button 들 buttonListener 달아주기
         JButton[] buttonArr = mainView.getButtonPanel().getButtonArray();
         for(int i=0;i<buttonArr.length;i++){
-            buttonArr[i].addActionListener(mouseListener);
+            buttonArr[i].addActionListener(buttonListener);
         }
     }
 

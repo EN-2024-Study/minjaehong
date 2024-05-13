@@ -1,6 +1,7 @@
 package Controller;
 
 import View.MainView;
+import static Constants.ConstValue.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -122,33 +123,33 @@ public class OperatorEventController extends EventController {
     public String calculate() {
 
         BigDecimal num1 = new BigDecimal(numberDeque.removeFirst());
-        String opt = operatorDeque.removeFirst();
+        String operator = operatorDeque.removeFirst();
         BigDecimal num2 = new BigDecimal(numberDeque.removeFirst());
 
         // log equation 저장을 위해 계산하기 전 미리 저장해놓기
-        String logEquationString = num1 + " "+ opt + " " + num2 + " = ";
+        String logEquationString = num1 + " "+ operator + " " + num2 + " = ";
 
         System.out.println(logEquationString);
 
         BigDecimal result = BigDecimal.ZERO;
 
         // 0으로 나눴으면 cant divide by zero state 로 만들어주기
-        if (opt.equals("÷") && num2.equals(BigDecimal.ZERO)) {
+        if (operator.equals(KEYBOARD_DIVIDE) && num2.equals(BigDecimal.ZERO)) {
             changeToCantDivideByZeroState();
             return "cant divide by zero!";
         }
         else {
-            switch (opt) {
-                case "+":
+            switch (operator) {
+                case KEYBOARD_PLUS:
                     result = num1.add(num2, MathContext.DECIMAL128);
                     break;
-                case "-":
+                case KEYBOARD_MINUS:
                     result = num1.subtract(num2, MathContext.DECIMAL128);
                     break;
-                case "×":
+                case KEYBOARD_MULTIPLY:
                     result = num1.multiply(num2, MathContext.DECIMAL128);
                     break;
-                case "÷":
+                case KEYBOARD_DIVIDE:
                     // windows 는 손실을 싫어함
                     // 연산하고 저장할때 바로 RoundingMode 쓰면 안됨
                     // 그걸 여기서 쓰면 8/9*9 했을때 8이 안나오게 되는거임
@@ -188,7 +189,6 @@ public class OperatorEventController extends EventController {
         mainView.getButtonPanel().getNegateButton().setEnabled(false);
         mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
     }
-
 
     private void addLog(String logEquationString, BigDecimal result) {
 

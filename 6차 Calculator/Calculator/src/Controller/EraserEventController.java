@@ -2,6 +2,7 @@ package Controller;
 
 import View.MainView;
 import java.util.ArrayDeque;
+import static Constants.ConstValue.*;
 
 public class EraserEventController extends EventController{
 
@@ -19,13 +20,13 @@ public class EraserEventController extends EventController{
         }
 
         switch(input){
-            case "CE":
+            case KEYBOARD_CE:
                 handleClearEntry();
                 break;
-            case "C":
+            case KEYBOARD_C:
                 handleClear();
                 break;
-            case "<":
+            case KEYBOARD_BACKSPACE:
                 handleBackSpace();
                 break;
         }

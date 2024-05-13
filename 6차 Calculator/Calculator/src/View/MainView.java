@@ -3,6 +3,7 @@ package View;
 import View.Panel.ButtonPanel;
 import View.Panel.LogPanel;
 import View.Panel.ResultPanel;
+import static Constants.ConstValue.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ public class MainView extends JFrame {
 
     private void createComponents(){
         // 상대경로 지정
-        calculatorIcon = new ImageIcon("src/Images/AppIcon.png");
+        calculatorIcon = new ImageIcon(APP_ICON);
 
         resultPanel = new ResultPanel();
         buttonPanel = new ButtonPanel();

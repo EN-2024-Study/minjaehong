@@ -4,6 +4,7 @@ import View.MainView;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayDeque;
+import static Constants.ConstValue.*;
 
 public class NumberEventController extends EventController{
 
@@ -20,11 +21,11 @@ public class NumberEventController extends EventController{
         }
 
         switch (newNum){
-            case "+/-":
+            case KEYBOARD_NEGATE:
                 // 1. +/- 예외처리
                 handleNegate();
                 break;
-            case ".":
+            case KEYBOARD_DECIMAL_POINT:
                 // 2. 소수점 예외처리
                 handleDecimalPoint();
                 break;
@@ -47,7 +48,7 @@ public class NumberEventController extends EventController{
         // FORMATTING
         DecimalFormat df = new DecimalFormat("#,###");
 
-        int decimalPointIndex = newNum.indexOf(".");
+        int decimalPointIndex = newNum.indexOf(KEYBOARD_DECIMAL_POINT);
 
         if(decimalPointIndex==-1){
             BigDecimal temp = new BigDecimal(newNum);
@@ -128,7 +129,7 @@ public class NumberEventController extends EventController{
         if (operatorDeque.size() == 1) {
 
             // 만약 남아있는 연산자가 "=" 연산자이면
-            if(operatorDeque.getFirst().equals("=")){
+            if(operatorDeque.getFirst().equals(KEYBOARD_EQUAL)){
                 numberDeque.clear();
                 operatorDeque.clear();
                 numberDeque.add(newNum);
@@ -167,7 +168,7 @@ public class NumberEventController extends EventController{
         String curNum = numberDeque.getLast();
 
         // 소수점 있을때
-        if(curNum.contains(".")){
+        if(curNum.contains(KEYBOARD_DECIMAL_POINT)){
             // 정수부가 0이고 17자리 OR 정수부가 0이 아니고 16자리
             if((curNum.startsWith("0") && curNum.length()-1==17) ||
                     (!curNum.startsWith("0") && curNum.length()-1==16)) return true;
