@@ -160,34 +160,4 @@ public class NumberEventController extends EventController{
         }
         return false;
     }
-
-    @Override
-    public void renderSmallLabel(){
-
-        String newText;
-
-        // "0." 으로 시작할때 예외처리
-        if(operatorDeque.size()==0 && numberDeque.size()==1 && numberDeque.getFirst().equals("0.")){
-                newText=" ";
-        }else {
-            Object[] numberArr = numberDeque.toArray();
-            Object[] operatorArr = operatorDeque.toArray();
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < numberArr.length; i++) {
-                sb.append(numberArr[i]);
-                sb.append(" ");
-
-                sb.append(operatorArr[i]);
-                sb.append(" ");
-            }
-
-            newText = sb.toString();
-
-            // smallLabel 크기 줄어드는거 방지
-            if (newText.isEmpty()) newText = " ";
-        }
-
-        mainView.getResultPanel().getSmallLabel().setText(newText);
-    }
 }

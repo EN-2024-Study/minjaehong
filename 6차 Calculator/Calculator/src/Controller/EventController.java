@@ -10,6 +10,8 @@ import java.util.ArrayDeque;
 // 추상클래스니까 클래스만 직접 생성불가
 // protected 로 된 것들은 모두 자식클래스만 참조 가능
 // public 은 다른 곳에서 호출 가능
+
+// 자식 클래스에서 상속받아 받는 event 를 어떻게 다룰 건지 handleEvent 함수만 구현해주면 됨
 public abstract class EventController{
     protected ArrayDeque<String> numberDeque;
     protected ArrayDeque<String> operatorDeque;
@@ -30,8 +32,6 @@ public abstract class EventController{
     // abstract function 은 동적 바인딩되므로 자식클래스의 구현된 handleEvent 함수를 호출할 수 있음
     public abstract void handleEvent(String userInput);
 
-    public abstract void renderSmallLabel();
-
     //============= functions that don't have to be implemented in child classes =============//
 
     protected void renderBigLabel(){
@@ -46,6 +46,35 @@ public abstract class EventController{
             newNum = changeToFormattedString(newNum);
             mainView.getResultPanel().getBigLabel().setText(newNum);
         }
+    }
+
+    protected void renderSmallLabel(){
+
+        String newText;
+
+        // "0." 으로 시작할때 예외처리
+        if(operatorDeque.size()==0 && numberDeque.size()==1 && numberDeque.getFirst().equals("0.")){
+            newText=" ";
+        }else {
+            Object[] numberArr = numberDeque.toArray();
+            Object[] operatorArr = operatorDeque.toArray();
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < numberArr.length; i++) {
+                sb.append(numberArr[i]);
+                sb.append(" ");
+
+                sb.append(operatorArr[i]);
+                sb.append(" ");
+            }
+
+            newText = sb.toString();
+
+            // smallLabel 크기 줄어드는거 방지
+            if (newText.isEmpty()) newText = " ";
+        }
+
+        mainView.getResultPanel().getSmallLabel().setText(newText);
     }
 
     // 결과에 콤마 추가한 결과를 반환

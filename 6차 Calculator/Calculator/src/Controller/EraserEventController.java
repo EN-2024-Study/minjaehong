@@ -77,28 +77,4 @@ public class EraserEventController extends EventController{
             }
         }
     }
-
-    @Override
-    public void renderSmallLabel() {
-        String newText;
-
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < numberArr.length; i++) {
-            sb.append(numberArr[i]);
-            sb.append(" ");
-
-            sb.append(operatorArr[i]);
-            sb.append(" ");
-        }
-
-        newText = sb.toString();
-
-        // smallLabel 크기 줄어드는거 방지
-        if (newText.isEmpty()) newText = " ";
-
-        mainView.getResultPanel().getSmallLabel().setText(newText);
-    }
 }

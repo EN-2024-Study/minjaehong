@@ -118,24 +118,6 @@ public class OperatorEventController extends EventController {
         //printEndMatrix(numberDeque, operatorDeque);
     }
 
-    @Override
-    public void renderSmallLabel() {
-
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < numberArr.length; i++) {
-            sb.append(numberArr[i]);
-            sb.append(" ");
-
-            sb.append(operatorArr[i]);
-            sb.append(" ");
-        }
-
-        mainView.renderSmallLabel(sb.toString());
-    }
-
     // 등호 연산 들어왔을때 + 연산자 두 개 채워지면
     // 값 진짜로 계산하기
     // 이거하면 numberDeque 에 result 값 하나랑
