@@ -1,20 +1,27 @@
 import Controller.*;
 import Listener.KeyBoardListener;
 import Listener.ButtonListener;
-import View.MainView;
+import View.Frame.MainView;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.math.BigDecimal;
 import java.util.ArrayDeque;
 
-public class Calculator{
+public class Calculator {
 
     private MainView mainView;
+
     private ArrayDeque<String> numberDeque;
     private ArrayDeque<String> operatorDeque;
 
+    // system 전반적인 keyboard 입력 처리
     private KeyBoardListener keyBoardListener;
+    // system 전반적인 button 클릭 처리
     private ButtonListener buttonListener;
 
+    // system 에 쓰이는 모든 event controller 들 담는 배열
     private EventController[] eventControllerArr;
 
     // 시작하기 전 해야할 작업 수행
@@ -23,7 +30,7 @@ public class Calculator{
         BindListenersToButtonPanel(); // 돌아가기 위한 Listener 연결시켜주기
     }
 
-    private void initializeComponents(){
+    private void initializeComponents() {
 
         this.mainView = new MainView();
 
@@ -44,7 +51,7 @@ public class Calculator{
         this.keyBoardListener = new KeyBoardListener(eventControllerArr);
     }
 
-    private void BindListenersToButtonPanel(){
+    private void BindListenersToButtonPanel() {
 
         mainView.getButtonPanel().addKeyListener(keyBoardListener);
 
@@ -54,12 +61,26 @@ public class Calculator{
 
         // button 들 buttonListener 달아주기
         JButton[] buttonArr = mainView.getButtonPanel().getButtonArray();
-        for(int i=0;i<buttonArr.length;i++){
+        for (int i = 0; i < buttonArr.length; i++) {
             buttonArr[i].addActionListener(buttonListener);
         }
+
+        JPanel logLabelPanel = mainView.getLogPanel().getLabelPanel();
+
+        logLabelPanel.addContainerListener(new ContainerAdapter() {
+            @Override
+            public void componentAdded(ContainerEvent e) {
+                    Component component = logLabelPanel.getComponent(0);
+                    if (component instanceof JButton) {
+                        JButton newButton = (JButton) component;
+                        newButton.addActionListener(buttonListener);
+                    }
+                    System.out.println("component added!");
+                }
+        });
     }
 
-    public void run(){
+    public void run() {
         mainView.setVisible(true);
     }
 }

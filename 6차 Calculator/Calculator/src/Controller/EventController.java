@@ -1,6 +1,6 @@
 package Controller;
 
-import View.MainView;
+import View.Frame.MainView;
 
 import java.awt.*;
 import java.math.BigDecimal;

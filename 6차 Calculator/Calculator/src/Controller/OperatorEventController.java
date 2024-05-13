@@ -1,12 +1,9 @@
 package Controller;
 
-import View.MainView;
-import static Constants.ConstValue.*;
+import View.Frame.MainView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayDeque;
@@ -27,8 +24,9 @@ public class OperatorEventController extends EventController {
             changeToNormalState();
             return;
         }
-
-        // 이게 굳이 필요한 걸까?
+        
+        // operator 하나 들어갔다는 것은 그 전 숫자가 입력되었다는 것
+        // 그 전 숫자들 trailingZeros 다 잘라주기
         refineCurrentNumbers();
 
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
@@ -136,22 +134,22 @@ public class OperatorEventController extends EventController {
         BigDecimal result = BigDecimal.ZERO;
 
         // 0으로 나눴으면 cant divide by zero state 로 만들어주기
-        if (operator.equals(KEYBOARD_DIVIDE) && num2.equals(BigDecimal.ZERO)) {
+        if (operator.equals("÷") && num2.equals(BigDecimal.ZERO)) {
             changeToCantDivideByZeroState();
             return "cant divide by zero!";
         }
         else {
             switch (operator) {
-                case KEYBOARD_PLUS:
+                case "+":
                     result = num1.add(num2, MathContext.DECIMAL128);
                     break;
-                case KEYBOARD_MINUS:
+                case "-":
                     result = num1.subtract(num2, MathContext.DECIMAL128);
                     break;
-                case KEYBOARD_MULTIPLY:
+                case "×":
                     result = num1.multiply(num2, MathContext.DECIMAL128);
                     break;
-                case KEYBOARD_DIVIDE:
+                case "÷":
                     // windows 는 손실을 싫어함
                     // 연산하고 저장할때 바로 RoundingMode 쓰면 안됨
                     // 그걸 여기서 쓰면 8/9*9 했을때 8이 안나오게 되는거임
@@ -160,7 +158,7 @@ public class OperatorEventController extends EventController {
                     break;
             }
 
-            addLog(logEquationString, result);
+            addNewLogButton(logEquationString, result);
 
             return result.stripTrailingZeros().toPlainString();
         }
@@ -192,28 +190,19 @@ public class OperatorEventController extends EventController {
         mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
     }
 
-    private void addLog(String logEquationString, BigDecimal result) {
-
+    public void addNewLogButton(String logEquationString, BigDecimal result){
         String resultToString = result.stripTrailingZeros().toPlainString();
 
         String html =
                 "<html>" +
-                    "<div style = 'text-align:right;'>" +
+                        "<div style = 'text-align:right;'>" +
                         logEquationString + "<br>" + result +
-                    "</div>" +
-                "</html>";
+                        "</div>" +
+                        "</html>";
 
         JButton newLogButton = new JButton(html);
         newLogButton.setBackground(Color.WHITE);
         newLogButton.setHorizontalAlignment(SwingConstants.RIGHT);
-
-        newLogButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String s = e.getActionCommand();
-                System.out.println(s);
-            }
-        });
 
         mainView.getLogPanel().addNewLogLabel(newLogButton);
     }

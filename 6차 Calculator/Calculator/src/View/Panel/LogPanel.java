@@ -63,7 +63,7 @@ public class LogPanel extends JPanel{
     }
 
     private void createTrashCanButton(){
-        ImageIcon trashCanIcon = new ImageIcon("src/Images/TrashcanIcon.png");
+        ImageIcon trashCanIcon = new ImageIcon("src/Images/trashcanIcon.png");
 
         trashCanButton = new JButton(trashCanIcon);
         trashCanButton.setSize(20,20);
@@ -85,6 +85,10 @@ public class LogPanel extends JPanel{
         trashCanButtonPanel.setBackground(Color.WHITE);
 
         trashCanButtonPanel.add(trashCanButton);
+    }
+
+    public JPanel getLabelPanel(){
+        return labelPanel;
     }
 
     // 로그 넣을때도 콤마 처리 해야함

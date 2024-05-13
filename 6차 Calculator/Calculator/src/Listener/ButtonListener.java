@@ -37,6 +37,8 @@ public class ButtonListener implements ActionListener{
             erasorEventController.handleEvent(buttonText);
         }
 
+        // 만약 버튼 시작이 html 이면 
+        // logEventController 에게 보내기
         else if(buttonText.contains("<html>")){
             logEventController.handleEvent(buttonText);
         }

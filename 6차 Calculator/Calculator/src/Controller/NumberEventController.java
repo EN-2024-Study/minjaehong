@@ -1,10 +1,8 @@
 package Controller;
 
-import View.MainView;
+import View.Frame.MainView;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayDeque;
-import static Constants.ConstValue.*;
 
 // 무조건 BigLabel 만 변경
 public class NumberEventController extends EventController{
@@ -22,11 +20,11 @@ public class NumberEventController extends EventController{
         }
 
         switch (newNum){
-            case KEYBOARD_NEGATE:
+            case "+/-":
                 // 1. +/- 예외처리
                 handleNegate();
                 break;
-            case KEYBOARD_DECIMAL_POINT:
+            case ".":
                 // 2. 소수점 예외처리
                 handleDecimalPoint();
                 break;
@@ -92,7 +90,7 @@ public class NumberEventController extends EventController{
         // 연산자가 0개일때
         if (numberDeque.size() == 1 && operatorDeque.size() == 0) {
             // 만약 0이면 Default 0임. 지워지는 0임
-            if (numberDeque.getLast() == "0") {
+            if (numberDeque.getLast().equals("0")) {
                 numberDeque.removeLast();
                 numberDeque.add(newNum);
             }
@@ -110,7 +108,7 @@ public class NumberEventController extends EventController{
         if (operatorDeque.size() == 1) {
 
             // 만약 남아있는 연산자가 "=" 연산자이면
-            if(operatorDeque.getFirst().equals(KEYBOARD_EQUAL)){
+            if(operatorDeque.getFirst().equals("=")){
                 numberDeque.clear();
                 operatorDeque.clear();
                 numberDeque.add(newNum);
@@ -126,7 +124,7 @@ public class NumberEventController extends EventController{
 
             if (numberDeque.size() == 2) {
                 // 만약 0이면 지워도 되는 0임
-                if (numberDeque.getLast() == "0") {
+                if (numberDeque.getLast().equals("0")) {
                     numberDeque.removeLast();
                     numberDeque.add(newNum);
                 }
@@ -149,7 +147,7 @@ public class NumberEventController extends EventController{
         String curNum = numberDeque.getLast();
 
         // 소수점 있을때
-        if(curNum.contains(KEYBOARD_DECIMAL_POINT)){
+        if(curNum.contains(".")){
             // 정수부가 0이고 17자리 OR 정수부가 0이 아니고 16자리
             if((curNum.startsWith("0") && curNum.length()-1==17) ||
                     (!curNum.startsWith("0") && curNum.length()-1==16)) return true;

@@ -35,7 +35,7 @@ public class ResultPanel extends JPanel {
 
     private void createLogButton(){
 
-        ImageIcon imgIcon = new ImageIcon("src/Images/HistoryIcon.png");
+        ImageIcon imgIcon = new ImageIcon("src/Images/historyIcon.png");
         Image scaledImage = imgIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 

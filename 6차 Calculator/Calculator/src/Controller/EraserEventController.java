@@ -1,11 +1,9 @@
 package Controller;
 
-import View.MainView;
+import View.Frame.MainView;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayDeque;
-import static Constants.ConstValue.*;
+
 
 public class EraserEventController extends EventController{
 
@@ -23,13 +21,13 @@ public class EraserEventController extends EventController{
         }
 
         switch(input){
-            case KEYBOARD_CE:
+            case "CE":
                 handleClearEntry();
                 break;
-            case KEYBOARD_C:
+            case "C":
                 handleClear();
                 break;
-            case KEYBOARD_BACKSPACE:
+            case "<":
                 handleBackSpace();
                 break;
         }
