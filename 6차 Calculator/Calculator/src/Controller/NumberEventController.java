@@ -183,8 +183,8 @@ public class NumberEventController extends EventController{
         String newText;
 
         // "0." 으로 시작할때 예외처리
-        if(numberDeque.getFirst().equals("0.") && operatorDeque.size()==0){
-            newText=" ";
+        if(operatorDeque.size()==0 && numberDeque.size()==1 && numberDeque.getFirst().equals("0.")){
+                newText=" ";
         }else {
             Object[] numberArr = numberDeque.toArray();
             Object[] operatorArr = operatorDeque.toArray();
@@ -203,6 +203,7 @@ public class NumberEventController extends EventController{
             // smallLabel 크기 줄어드는거 방지
             if (newText.isEmpty()) newText = " ";
         }
+
         mainView.getResultPanel().getSmallLabel().setText(newText);
     }
 }
