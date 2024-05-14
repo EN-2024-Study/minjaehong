@@ -26,7 +26,7 @@ public class Calculator {
     // 시작하기 전 해야할 작업 수행
     public Calculator() {
         initializeComponents(); // Calculator 구성하는 모든 Component 객체 생성
-        BindListenersToButtonPanel(); // 돌아가기 위한 Listener 연결시켜주기
+        BindListenersToComponents(); // 돌아가기 위한 Listener 연결시켜주기
     }
 
     private void initializeComponents() {
@@ -50,34 +50,95 @@ public class Calculator {
         this.keyBoardListener = new KeyBoardListener(eventControllerArr);
     }
 
-    private void BindListenersToButtonPanel() {
+    private void BindListenersToComponents() {
 
         mainView.getButtonPanel().addKeyListener(keyBoardListener);
 
-        // key event 받을 수 있는 조건 = focus 가 주어졌을 경우
         mainView.getButtonPanel().setFocusable(true);
         mainView.getButtonPanel().requestFocus();
 
-        // button 들 buttonListener 달아주기
+        // ButtonPanel의 button들 buttonListener 달아주기
         JButton[] buttonArr = mainView.getButtonPanel().getButtonArray();
         for (int i = 0; i < buttonArr.length; i++) {
             buttonArr[i].addActionListener(buttonListener);
         }
 
+        // showLogButton에 buttonListener 달아주기
+        JButton showLogButton = mainView.getResultPanel().getShowLogButton();
+        showLogButton.addActionListener(buttonListener);
+
+        // logLabel 들 생길때마다 기존 buttonListener 달아주기
         JPanel logLabelPanel = mainView.getLogPanel().getLabelPanel();
         logLabelPanel.addContainerListener(new ContainerAdapter() {
             @Override
             public void componentAdded(ContainerEvent e) {
-                    Component component = logLabelPanel.getComponent(0);
-                    if (component instanceof JButton) {
-                        JButton newButton = (JButton) component;
-                        newButton.addActionListener(buttonListener);
-                    }
+                Component component = logLabelPanel.getComponent(0);
+                if (component instanceof JButton) {
+                    JButton newButton = (JButton) component;
+                    newButton.addActionListener(buttonListener);
                 }
+            }
         });
 
-        JButton showLogButton = mainView.getResultPanel().getLogButton();
-        showLogButton.addActionListener(buttonListener);
+        // logPanel and logButton visible effect 추가
+        mainView.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+
+                if(mainView.getButtonPanel().isVisible()==false){
+                    GridBagConstraints gbc = new GridBagConstraints();
+
+                    gbc.gridx = 1;
+                    gbc.gridy = 0;
+                    gbc.gridwidth = 1;
+                    gbc.gridheight = 2;
+                    gbc.weightx = 1.0;
+                    gbc.weighty = 1.0;
+                    gbc.fill = GridBagConstraints.BOTH;
+                    mainView.add(mainView.getLogPanel(),gbc);
+
+                    mainView.getResultPanel().setBackground(Color.WHITE);
+                    mainView.getLogPanel().setVisible(false);
+                    mainView.getButtonPanel().setVisible(true);
+                    mainView.getResultPanel().getShowLogButton().setEnabled(true);
+                    return;
+                }
+
+                int width = mainView.getWidth();
+                if (width < 500) {
+                    mainView.getLogPanel().setVisible(false);
+                    mainView.getResultPanel().getShowLogButton().setVisible(true);
+                }else{
+                    mainView.getLogPanel().setVisible(true);
+                    mainView.getResultPanel().getShowLogButton().setVisible(false);
+                }
+            }
+        });
+
+        JPanel resultPanel = mainView.getResultPanel();
+        resultPanel.addMouseListener(new MouseAdapter() {
+            GridBagConstraints gbc = new GridBagConstraints();
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(!mainView.getButtonPanel().isVisible()){
+                    gbc.gridx = 1;
+                    gbc.gridy = 0;
+                    gbc.gridwidth = 1;
+                    gbc.gridheight = 2;
+                    gbc.weightx = 1.0;
+                    gbc.weighty = 1.0;
+                    gbc.fill = GridBagConstraints.BOTH;
+                    mainView.add(mainView.getLogPanel(),gbc);
+
+                    mainView.getResultPanel().setBackground(Color.WHITE);
+                    mainView.getLogPanel().setVisible(false);
+                    mainView.getButtonPanel().setVisible(true);
+                    mainView.getResultPanel().getShowLogButton().setEnabled(true);
+                    return;
+                }
+            }
+        });
     }
 
     // Calculator 진짜로 실행하기

@@ -58,34 +58,6 @@ public class MainView extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         this.add(logPanel,gbc);
-
-        // logPanel and logButton visible effect 추가
-        // 람다 뭔지 모름 > 나중에 공부
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                int width = getWidth();
-                if (width < 500) {
-                    logPanel.setVisible(false);
-                    resultPanel.getLogButton().setVisible(true);
-                }else{
-                    logPanel.setVisible(true);
-                    resultPanel.getLogButton().setVisible(false);
-                }
-            }
-        });
-
-        /*
-        PopupFactory pf = new PopupFactory();
-        Popup test = pf.getPopup(this, logPanel,10,10);
-
-        getResultPanel().getLogButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        */
     }
 
     public MainView(){

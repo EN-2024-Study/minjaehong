@@ -30,21 +30,7 @@ public class LogEventController extends EventController{
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        if(!mainView.getButtonPanel().isVisible()){
-            gbc.gridx = 1;
-            gbc.gridy = 0;
-            gbc.gridwidth = 1;
-            gbc.gridheight = 2;
-            gbc.weightx = 1.0;
-            gbc.weighty = 1.0;
-            gbc.fill = GridBagConstraints.BOTH;
-            mainView.add(mainView.getLogPanel(),gbc);
-
-            mainView.getLogPanel().setVisible(false);
-            mainView.getButtonPanel().setVisible(true);
-            return;
-        }
-
+        mainView.getResultPanel().setBackground(Color.DARK_GRAY);
         mainView.getButtonPanel().setVisible(false);
 
         Dimension buttonPanelSize = mainView.getButtonPanel().getSize();
@@ -59,6 +45,7 @@ public class LogEventController extends EventController{
         gbc.fill = GridBagConstraints.BOTH;
         mainView.add(mainView.getLogPanel(),gbc);
 
+        mainView.getResultPanel().getShowLogButton().setEnabled(false);
         mainView.getButtonPanel().setVisible(false);
         mainView.getLogPanel().setVisible(true);
     }

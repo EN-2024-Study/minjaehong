@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ResultPanel extends JPanel {
 
@@ -119,7 +121,7 @@ public class ResultPanel extends JPanel {
         return bigLabel;
     }
 
-    public JButton getLogButton(){
+    public JButton getShowLogButton(){
         return showLogButton;
     }
 }

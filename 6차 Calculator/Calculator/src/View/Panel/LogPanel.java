@@ -8,11 +8,11 @@ import java.text.DecimalFormat;
 
 public class LogPanel extends JPanel{
     
-    JPanel labelPanel; // Log label 들이 올라갈 labelPanel
-    JScrollPane scrollPane; // labelPanel 을 대상으로 만들 JScrollPane 객체
+    private JPanel labelPanel; // Log label 들이 올라갈 labelPanel
+    private JScrollPane scrollPane; // labelPanel 을 대상으로 만들 JScrollPane 객체
 
-    JButton trashCanButton;
-    JPanel trashCanButtonPanel; // trashCanButton 을 붙일 flowlayout 형식의 panel
+    public JButton trashCanButton;
+    private JPanel trashCanButtonPanel; // trashCanButton 을 붙일 flowlayout 형식의 panel
 
     public LogPanel(){
         createComponents();
@@ -35,6 +35,14 @@ public class LogPanel extends JPanel{
 
         // label 들 붙일 labelPanel 을 들고 있는 scrollPane 을 LogPanel 에 붙이기
         this.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void createScrollPane(){
+        labelPanel = new JPanel();
+        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+
+        scrollPane = new JScrollPane(labelPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
 
         labelPanel.addContainerListener(new ContainerListener() {
             @Override
@@ -51,15 +59,6 @@ public class LogPanel extends JPanel{
                 }
             }
         });
-    }
-
-    private void createScrollPane(){
-        labelPanel = new JPanel();
-        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
-
-        scrollPane = new JScrollPane(labelPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBorder(null);
     }
 
     private void createTrashCanButton(){
@@ -89,6 +88,10 @@ public class LogPanel extends JPanel{
 
     public JPanel getLabelPanel(){
         return labelPanel;
+    }
+
+    public JButton getTrashCanButton(){
+        return trashCanButton;
     }
 
     // 로그 넣을때도 콤마 처리 해야함
