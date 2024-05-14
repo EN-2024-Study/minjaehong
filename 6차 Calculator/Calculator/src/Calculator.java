@@ -75,6 +75,9 @@ public class Calculator {
                     }
                 }
         });
+
+        JButton showLogButton = mainView.getResultPanel().getLogButton();
+        showLogButton.addActionListener(buttonListener);
     }
 
     // Calculator 진짜로 실행하기

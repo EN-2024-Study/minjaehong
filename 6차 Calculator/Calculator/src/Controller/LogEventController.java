@@ -2,6 +2,7 @@ package Controller;
 
 import View.Frame.MainView;
 
+import java.awt.*;
 import java.util.ArrayDeque;
 
 // [LogEventController 작동 원리]
@@ -17,8 +18,52 @@ public class LogEventController extends EventController{
     }
 
     @Override
-    public void handleEvent(String log) {
+    public void handleEvent(String buttonText) {
+        if(buttonText.startsWith("<html>")){
+            handleLogHistory(buttonText);
+        }else{
+            handleLogButtonClicked();
+        }
+    }
 
+    private void handleLogButtonClicked(){
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        if(!mainView.getButtonPanel().isVisible()){
+            gbc.gridx = 1;
+            gbc.gridy = 0;
+            gbc.gridwidth = 1;
+            gbc.gridheight = 2;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+            gbc.fill = GridBagConstraints.BOTH;
+            mainView.add(mainView.getLogPanel(),gbc);
+
+            mainView.getLogPanel().setVisible(false);
+            mainView.getButtonPanel().setVisible(true);
+            return;
+        }
+
+        mainView.getButtonPanel().setVisible(false);
+
+        Dimension buttonPanelSize = mainView.getButtonPanel().getSize();
+        mainView.getLogPanel().setSize(buttonPanelSize);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.6;
+        gbc.fill = GridBagConstraints.BOTH;
+        mainView.add(mainView.getLogPanel(),gbc);
+
+        mainView.getButtonPanel().setVisible(false);
+        mainView.getLogPanel().setVisible(true);
+    }
+
+    private void handleLogHistory(String log){
         String head = "<html><div style = 'text-align:right;'>";
         String body = "<br>";
         String tail = "</div></html>";

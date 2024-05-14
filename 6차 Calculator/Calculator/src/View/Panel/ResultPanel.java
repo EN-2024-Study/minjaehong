@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 public class ResultPanel extends JPanel {
 
-    JButton logButton;
+    JButton showLogButton;
     JLabel smallLabel;
     JLabel bigLabel;
 
@@ -34,15 +34,15 @@ public class ResultPanel extends JPanel {
     }
 
     private void createLogButton(){
-
         ImageIcon imgIcon = new ImageIcon("src/Images/historyIcon.png");
         Image scaledImage = imgIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-        logButton = new JButton(scaledIcon);
-        logButton.setBorderPainted(true); // 버튼 테두리 설정
-        logButton.setContentAreaFilled(false); // 버튼 영역 배경 표시 설정
-        logButton.setFocusable(true);
+        showLogButton = new JButton(scaledIcon);
+        showLogButton.setActionCommand("showLogButton");
+        showLogButton.setBorderPainted(true); // 버튼 테두리 설정
+        showLogButton.setContentAreaFilled(false); // 버튼 영역 배경 표시 설정
+        showLogButton.setFocusable(true);
     }
 
     private void createSmallLabel(){
@@ -74,7 +74,7 @@ public class ResultPanel extends JPanel {
 
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        add(logButton, gbc);
+        add(showLogButton, gbc);
     }
 
     private void addSmallLabel(GridBagConstraints gbc){
@@ -120,6 +120,6 @@ public class ResultPanel extends JPanel {
     }
 
     public JButton getLogButton(){
-        return logButton;
+        return showLogButton;
     }
 }
