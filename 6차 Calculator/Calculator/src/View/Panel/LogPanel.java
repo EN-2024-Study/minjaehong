@@ -93,8 +93,10 @@ public class LogPanel extends JPanel{
 
     // 로그 넣을때도 콤마 처리 해야함
     public void addNewLogLabel(JButton newLogButton){
-
         // 새로 추가된 것은 항상 위쪽에 추가
         labelPanel.add(newLogButton, 0);
+
+        revalidate();
+        repaint();
     }
 }

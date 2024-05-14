@@ -5,7 +5,10 @@ import Controller.EventController;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+// system 전반적인 keyboard event 를 얘가 모두 받음
+// 받아서 actionCommand 까보고 그에 알맞는 eventController 로 전달해줌
 public class KeyBoardListener extends KeyAdapter {
+
     private EventController numberEventController;
     private EventController operatorEventController;
     private EventController erasorEventController;

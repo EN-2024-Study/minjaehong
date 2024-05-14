@@ -6,7 +6,6 @@ import View.Frame.MainView;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.math.BigDecimal;
 import java.util.ArrayDeque;
 
 public class Calculator {
@@ -21,7 +20,7 @@ public class Calculator {
     // system 전반적인 button 클릭 처리
     private ButtonListener buttonListener;
 
-    // system 에 쓰이는 모든 event controller 들 담는 배열
+    // system 에 쓰이는 모든 event controller 의 자식클래스를 담는 배열
     private EventController[] eventControllerArr;
 
     // 시작하기 전 해야할 작업 수행
@@ -66,7 +65,6 @@ public class Calculator {
         }
 
         JPanel logLabelPanel = mainView.getLogPanel().getLabelPanel();
-
         logLabelPanel.addContainerListener(new ContainerAdapter() {
             @Override
             public void componentAdded(ContainerEvent e) {
@@ -75,11 +73,11 @@ public class Calculator {
                         JButton newButton = (JButton) component;
                         newButton.addActionListener(buttonListener);
                     }
-                    System.out.println("component added!");
                 }
         });
     }
 
+    // Calculator 진짜로 실행하기
     public void run() {
         mainView.setVisible(true);
     }

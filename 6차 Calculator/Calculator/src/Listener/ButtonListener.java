@@ -4,7 +4,10 @@ import Controller.EventController;
 
 import java.awt.event.*;
 
+// system 전반적인 button click event 를 얘가 모두 받음
+// 받아서 actionCommand 까보고 그에 알맞는 eventController 로 전달해줌
 public class ButtonListener implements ActionListener{
+
     private EventController numberEventController;
     private EventController operatorEventController;
     private EventController erasorEventController;
@@ -37,7 +40,7 @@ public class ButtonListener implements ActionListener{
             erasorEventController.handleEvent(buttonText);
         }
 
-        // 만약 버튼 시작이 html 이면 
+        // 만약 버튼 시작이 html 이면 이건 logButton 눌렸다는거임
         // logEventController 에게 보내기
         else if(buttonText.contains("<html>")){
             logEventController.handleEvent(buttonText);

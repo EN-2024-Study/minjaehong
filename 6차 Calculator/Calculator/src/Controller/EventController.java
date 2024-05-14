@@ -77,7 +77,8 @@ public abstract class EventController{
         mainView.getResultPanel().getSmallLabel().setText(newText);
     }
 
-    // 결과에 콤마 추가한 결과를 반환
+    // renderBigLabel 에서만 쓰임
+    // 받은 문자열을 view 에 출력하기 전에 formatting 하려고 쓰임
     private String changeToFormattedString(String originalString){
 
         String formattedString;
@@ -101,18 +102,14 @@ public abstract class EventController{
     }
 
     // 현재 결과가 cant divide by zero 인지 확인해줌
-    protected boolean checkIfCantDivideByZeroState(){
-        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    protected final boolean checkIfCantDivideByZeroState(){
+        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")) return true;
+        else return false;
     }
 
     // cant divide by zero 로 disabled 된 button 들을 다시 enabled 시켜줌
     // 이건 모든 자식 controller 들이 가져야할 기능이라 부모 클래스에 있어야함
-    protected void changeToNormalState(){
+    protected final void changeToNormalState(){
         
         // disabled 된 button 다시 enable
         mainView.getButtonPanel().getDotButton().setEnabled(true);

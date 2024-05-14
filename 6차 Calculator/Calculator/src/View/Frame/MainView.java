@@ -7,9 +7,6 @@ import View.Panel.ResultPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 public class MainView extends JFrame {
 
@@ -81,20 +78,14 @@ public class MainView extends JFrame {
         /*
         PopupFactory pf = new PopupFactory();
         Popup test = pf.getPopup(this, logPanel,10,10);
-        */
 
         getResultPanel().getLogButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //resultPanel.getComponentPopupMenu();
 
-                //test.show();
-
-                //logPanel.setSize(getWidth(), getHeight());
-                //logPanel.setLocation(getLocation().x, getLocation().y + getHeight());
-                //logPanel.setVisible(true);
             }
         });
+        */
     }
 
     public MainView(){
@@ -121,56 +112,5 @@ public class MainView extends JFrame {
 
     public ButtonPanel getButtonPanel() {
         return buttonPanel;
-    }
-
-    public void renderSmallLabel(String newText){
-
-        // smallLabel 크기 줄어드는거 방지
-        if(newText.isEmpty()) newText=" ";
-
-        resultPanel.getSmallLabel().setText(newText);
-    }
-
-    // 직접적으로 BigLabel 변수를 바꿔주는 함수
-    // 모든 rendering 호출은 목적지가 얘임
-    // 그래서 얘만 바꿔주면 됨
-
-    // 사용자 입력한거는 0 자르면 안됨
-    // 사용자 입력한 것도 setScale 하면 .0 같은거나 소수점 0 이 아예 표시가 안됨
-    // 숫자로는 잘 들어가긴함
-    public void renderBigLabel(String newNum){
-
-        if(newNum.equals("cant divide by zero!")) {
-            resultPanel.getBigLabel().setText(newNum);
-            return;
-        }
-
-        BigDecimal curNum = new BigDecimal(newNum);
-        curNum = curNum.setScale(16, RoundingMode.HALF_EVEN);
-
-        newNum = curNum.stripTrailingZeros().toPlainString();
-
-        newNum = changeToFormattedNumber(newNum);
-
-        resultPanel.getBigLabel().setText(newNum);
-    }
-
-    private String changeToFormattedNumber(String originalNum){
-        DecimalFormat df = new DecimalFormat("#,###");
-
-        int decimalPointIndex = originalNum.indexOf(".");
-
-        if(decimalPointIndex==-1){
-            BigDecimal temp = new BigDecimal(originalNum);
-            originalNum = df.format(temp);
-        }else{
-            String integerPart = originalNum.substring(0, decimalPointIndex);
-            String decimalPart = originalNum.substring(decimalPointIndex);
-
-            BigDecimal temp = new BigDecimal(integerPart);
-            originalNum = df.format(temp) + decimalPart;
-        }
-
-        return originalNum;
     }
 }

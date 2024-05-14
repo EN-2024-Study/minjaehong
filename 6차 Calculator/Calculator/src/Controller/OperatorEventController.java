@@ -44,6 +44,7 @@ public class OperatorEventController extends EventController {
                 // 전꺼가 4 = 이런 형식이었으면
                 if (arr.length == 2) {
                     operatorDeque.removeFirst(); // (4 = =) -> (4 =)
+                    addNewLogButton(lastEquation, new BigDecimal(arr[0]));
                     renderSmallLabel();
                 }
                 // 전꺼가 2 + 3 = 5 이런 형식이었으면
@@ -116,13 +117,12 @@ public class OperatorEventController extends EventController {
         //printEndMatrix(numberDeque, operatorDeque);
     }
 
-    // 등호 연산 들어왔을때 + 연산자 두 개 채워지면
-    // 값 진짜로 계산하기
-    // 이거하면 numberDeque 에 result 값 하나랑
-    // operatorDeque 에 지금 들어온 operator 하나 남음
-    // 즉 결과값 / newOperator 이렇게 남음
-    // 연산자 무조건 남기기
-    public String calculate() {
+    // 등호 연산 들어왔을때 or 연산자 두 개 채워지면 값 진짜로 계산하기
+    // 이거하면
+    // 무조건 numberDeque 는 size = 1 이고 결과값 들어감
+    // 무조건 operatorDeque 는 size = 1 이고 마지막 연산 들어감
+    // 연산자 무조건 남기기 등호여도 남기기
+    private String calculate() {
 
         BigDecimal num1 = new BigDecimal(numberDeque.removeFirst());
         String operator = operatorDeque.removeFirst();
@@ -190,9 +190,9 @@ public class OperatorEventController extends EventController {
         mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
     }
 
-    public void addNewLogButton(String logEquationString, BigDecimal result){
-        String resultToString = result.stripTrailingZeros().toPlainString();
-
+    // 등호 연산 될때마다 로그에 찍힘
+    private void addNewLogButton(String logEquationString, BigDecimal result){
+        
         String html =
                 "<html>" +
                         "<div style = 'text-align:right;'>" +
