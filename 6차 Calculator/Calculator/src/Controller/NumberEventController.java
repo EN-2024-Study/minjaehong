@@ -34,20 +34,13 @@ public class NumberEventController extends EventController{
                     break;
             }
         }
-        // 위 switch 문에서 항상 deque 에 원소를 추가하고 끝남
-        // 따라서 numberDeque 는 size > 0 일 수 밖에 없음
-        // 이미 numberDeque 에 반영된 상태에서 render 함수가 호출되기 때문에
-        // render 함수에서 한 작업은 기존 Deque 에 반영이 안됨
-        // 즉 진짜 프론트 작업 맘대로 해도 된다는 의미
-        // formatting 처리를 renderBigLabel 함수에서 해도 해당 결과는 numberDeque 에 반영이 안된다
+        // number 가 들어왔을때는 항상 BigLabel render
         renderBigLabel();
     }
     
     // negate 일때는 smallLabel 이 최신화되는 경우가 있음
     // 그래서 필요에 따라 renderSmallLabel 함수를 넣어줘야함
     private void handleNegate(){
-
-        //System.out.println("handeled negate!");
 
         // DEFAULT 0 이면 아무것도 안해도 됨
         if(numberDeque.getLast().equals("0") && operatorDeque.size()==0) return;

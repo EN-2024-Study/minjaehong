@@ -52,7 +52,10 @@ public class LogEventController extends EventController{
     }
 
     // LogPanel 에 있는 LogButton 눌렸을때
+    // log 파싱하고 numberDeque 랑 operatorDeque 를 수동으로 조작해서
+    // 다음 연산이 가능한 상태로 만들어줘야함
     private void handleLogHistory(String log){
+        // log parsing 하기
         String head = "<html><div style = 'text-align:right;'>";
         String body = "<br>";
         String tail = "</div></html>";
@@ -64,12 +67,13 @@ public class LogEventController extends EventController{
         String newSmallLabel = logDataArr[0];
         String newBigLabel = logDataArr[1];
 
+        // numberDeque operatorDeque 조작
         numberDeque.clear();
         operatorDeque.clear();
-
         numberDeque.add(newBigLabel);
         operatorDeque.add("=");
 
+        // bigLabel smallLabel rendering
         renderBigLabel();
         mainView.getResultPanel().getSmallLabel().setText(newSmallLabel);
 

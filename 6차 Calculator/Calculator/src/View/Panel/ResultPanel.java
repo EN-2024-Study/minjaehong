@@ -2,16 +2,12 @@ package View.Panel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class ResultPanel extends JPanel {
 
-    JButton showLogButton;
-    JLabel smallLabel;
-    JLabel bigLabel;
+    private JButton showLogButton;
+    private JLabel smallLabel;
+    private JLabel bigLabel;
 
     public ResultPanel(){
         createComponents();

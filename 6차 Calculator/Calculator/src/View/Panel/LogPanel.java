@@ -43,24 +43,6 @@ public class LogPanel extends JPanel{
 
         scrollPane = new JScrollPane(labelPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);
-
-        /*
-        labelPanel.addContainerListener(new ContainerListener() {
-            @Override
-            public void componentAdded(ContainerEvent e) {
-                if(labelPanel.getComponentCount()>0){
-                    trashCanButton.setVisible(true);
-                }
-            }
-
-            @Override
-            public void componentRemoved(ContainerEvent e) {
-                if(labelPanel.getComponentCount()==0){
-                    trashCanButton.setVisible(false);
-                }
-            }
-        });
-         */
     }
 
     private void createTrashCanButton(){

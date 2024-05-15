@@ -144,7 +144,7 @@ public abstract class EventController{
         renderBigLabel();
     }
 
-    //======================= functions for capsuled negate handling ========================//
+    //==================== functions for negate-capsuled string handling =====================//
 
     // negate capsule화를 한번 더 시킨 string을 return
     protected final String getNegateCapsuledString(String originalString){
@@ -153,11 +153,11 @@ public abstract class EventController{
     }
 
     // negate capsule화된 횟수를 return
-    private int getNegateCapsuledCount(String curString){
-        int lastIdx = curString.length()-1;
+    private int getNegateCapsuledCount(String capsuledString){
+        int lastIdx = capsuledString.length()-1;
         int capsuledCount = 0;
 
-        while(curString.charAt(lastIdx--)==')') capsuledCount++;
+        while(capsuledString.charAt(lastIdx--)==')') capsuledCount++;
 
         return capsuledCount;
     }
@@ -177,7 +177,7 @@ public abstract class EventController{
         // negate 된 대상 추출
         BigDecimal value = new BigDecimal(capsuledString.substring(numberStartIdx, numberEndIdx+1));
 
-        // 홀수번 했으면 -값임
+        // 홀수번 했으면 negate 해주기
         if(capsuledCount%2 != 0) value = value.negate();
 
         return value.toString();

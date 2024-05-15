@@ -17,16 +17,14 @@ public class OperatorEventController extends EventController {
     @Override
     public void handleEvent(String newOperator) {
 
-        printStartMatrix(numberDeque, operatorDeque);
-
         // cant divide by zero 상태이면 다시 정상화시키기
         if(checkIfCantDivideByZeroState()){
             changeToNormalState();
             return;
         }
         
-        // operator 하나 들어갔다는 것은 그 전 숫자가 입력되었다는 것
-        // 그 전 숫자들 trailingZeros 다 잘라주기
+        // operator 하나 들어갔다는 것은 그 전 숫자가 numberDeque 로 들어갔다는 것
+        // 들어간 숫자들 trailingZeros 다 잘라주기
         refineCurrentNumbers();
 
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
@@ -120,8 +118,6 @@ public class OperatorEventController extends EventController {
                 renderBigLabel(); // 계산된 값 출력
             }
         }
-
-        printEndMatrix(numberDeque, operatorDeque);
     }
 
     // 등호 연산 들어왔을때 or 연산자 두 개 채워지면 값 진짜로 계산하기
@@ -170,6 +166,7 @@ public class OperatorEventController extends EventController {
                     break;
             }
 
+            // 새로운 log 추가해주기
             addNewLogButton(logEquationString, result);
 
             return result.stripTrailingZeros().toPlainString();
@@ -177,18 +174,15 @@ public class OperatorEventController extends EventController {
     }
 
     // smallLabel 로 올라가기 전 정제시켜주기
+    // negate capsule화 되어있으면 정제시켜주기
     private void refineCurrentNumbers(){
         BigDecimal refinedBigDecimal;
-        
-        // 만약 numberDeque 의 첫번째 원소가 negate 캡슐화가 안되어있으면
-        // 정제할 수 있는 수이므로 정제해주기
+
         if(numberDeque.getFirst().contains("negate")==false){
             refinedBigDecimal = new BigDecimal(numberDeque.removeFirst());
             numberDeque.addFirst(refinedBigDecimal.stripTrailingZeros().toPlainString());
         }
-
-        // 만약 numberDeque 의 두번째 원소가 negate 캡슐화가 안되어있으면
-        // 정제할 수 있는 수이므로 정제해주기
+        
         if(numberDeque.getLast().contains("negate")==false){
             refinedBigDecimal = new BigDecimal(numberDeque.removeLast());
             numberDeque.addLast(refinedBigDecimal.stripTrailingZeros().toPlainString());
@@ -226,29 +220,5 @@ public class OperatorEventController extends EventController {
         newLogButton.setHorizontalAlignment(SwingConstants.RIGHT);
 
         mainView.getLogPanel().addNewLogLabel(newLogButton);
-    }
-
-    private void printStartMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        System.out.println("======[START]======");
-        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
-        System.out.println();
-        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
-        System.out.println();
-        System.out.println("===================");
-    }
-
-    private void printEndMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
-        Object[] numberArr = numberDeque.toArray();
-        Object[] operatorArr = operatorDeque.toArray();
-
-        System.out.println("===================");
-        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
-        System.out.println();
-        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
-        System.out.println();
-        System.out.println("=======[END]=======");
     }
 }
