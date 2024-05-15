@@ -37,15 +37,48 @@ public abstract class EventController{
     protected void renderBigLabel(){
         String newNum = numberDeque.getLast();
 
-        // 예외면
+        // cant divide by zero 예외면
         if(newNum.equals("cant divide by zero!")) {
             mainView.getResultPanel().getBigLabel().setText(newNum);
         }
+        
+        // negate capsuled string 이면
+        // negate 다 까줘야함
+
+        else if(newNum.contains("negate")){
+
+            // 몇 번 capsuled 됐는지
+            int capsuledCount = getNegateCapsuledCount(newNum);
+            // capsuledCount 가지고 실제 숫자 추출
+            int lastIdx = newNum.length() - 1;
+            char realNum = newNum.charAt(lastIdx - capsuledCount);
+
+            BigDecimal temp = new BigDecimal(realNum);
+            if(capsuledCount%2!=0){
+                temp = temp.negate();
+            }
+            mainView.getResultPanel().getBigLabel().setText(temp.toString());
+
+            return;
+        }
+
         // 아니면 string format 후 bigLabel 에 출력해주기
         else{
             newNum = changeToFormattedString(newNum);
             mainView.getResultPanel().getBigLabel().setText(newNum);
         }
+    }
+
+    private int getNegateCapsuledCount(String curString){
+        int lastIdx = curString.length()-1;
+
+        int capsuledCount = 0;
+        while(curString.charAt(lastIdx)==')'){
+            capsuledCount++;
+            lastIdx--;
+        }
+
+        return capsuledCount;
     }
 
     protected void renderSmallLabel(){

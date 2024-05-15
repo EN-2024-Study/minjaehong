@@ -52,35 +52,12 @@ public class Calculator {
 
     private void BindListenersToComponents() {
 
+        // 1. ButtonPanel 에 keyBoardListener 달기
         mainView.getButtonPanel().addKeyListener(keyBoardListener);
-
         mainView.getButtonPanel().setFocusable(true);
         mainView.getButtonPanel().requestFocus();
 
-        // ButtonPanel의 button들 buttonListener 달아주기
-        JButton[] buttonArr = mainView.getButtonPanel().getButtonArray();
-        for (int i = 0; i < buttonArr.length; i++) {
-            buttonArr[i].addActionListener(buttonListener);
-        }
-
-        // showLogButton에 buttonListener 달아주기
-        JButton showLogButton = mainView.getResultPanel().getShowLogButton();
-        showLogButton.addActionListener(buttonListener);
-
-        // logLabel 들 생길때마다 기존 buttonListener 달아주기
-        JPanel logLabelPanel = mainView.getLogPanel().getLabelPanel();
-        logLabelPanel.addContainerListener(new ContainerAdapter() {
-            @Override
-            public void componentAdded(ContainerEvent e) {
-                Component component = logLabelPanel.getComponent(0);
-                if (component instanceof JButton) {
-                    JButton newButton = (JButton) component;
-                    newButton.addActionListener(buttonListener);
-                }
-            }
-        });
-
-        // logPanel and logButton visible effect 추가
+        // 2. MainView 자체에 사이즈조절 및 showLogPanel 반응형 달기
         mainView.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -101,7 +78,6 @@ public class Calculator {
                     mainView.getLogPanel().setVisible(false);
                     mainView.getButtonPanel().setVisible(true);
                     mainView.getResultPanel().getShowLogButton().setEnabled(true);
-                    return;
                 }
 
                 int width = mainView.getWidth();
@@ -115,6 +91,30 @@ public class Calculator {
             }
         });
 
+        // 3. ButtonPanel 에 ButtonListener 달아주기
+        JButton[] buttonArr = mainView.getButtonPanel().getButtonArray();
+        for (int i = 0; i < buttonArr.length; i++) {
+            buttonArr[i].addActionListener(buttonListener);
+        }
+
+        // 4. showLogButton 에 buttonListener 달아주기
+        JButton showLogButton = mainView.getResultPanel().getShowLogButton();
+        showLogButton.addActionListener(buttonListener);
+
+        // 5. 새로운 logLabel 들 생길때마다 기존 buttonListener 달아주기
+        JPanel logLabelPanel = mainView.getLogPanel().getLabelPanel();
+        logLabelPanel.addContainerListener(new ContainerAdapter() {
+            @Override
+            public void componentAdded(ContainerEvent e) {
+                Component component = logLabelPanel.getComponent(0);
+                if (component instanceof JButton) {
+                    JButton newButton = (JButton) component;
+                    newButton.addActionListener(buttonListener);
+                }
+            }
+        });
+
+        // 6. resultPanel 에 log 보여질때 반응형 달기
         JPanel resultPanel = mainView.getResultPanel();
         resultPanel.addMouseListener(new MouseAdapter() {
             GridBagConstraints gbc = new GridBagConstraints();
@@ -135,7 +135,23 @@ public class Calculator {
                     mainView.getLogPanel().setVisible(false);
                     mainView.getButtonPanel().setVisible(true);
                     mainView.getResultPanel().getShowLogButton().setEnabled(true);
-                    return;
+                }
+            }
+        });
+
+        JButton trashCanButton = mainView.getLogPanel().getTrashCanButton();
+        logLabelPanel.addContainerListener(new ContainerListener() {
+            @Override
+            public void componentAdded(ContainerEvent e) {
+                if(logLabelPanel.getComponentCount()>0){
+                    trashCanButton.setVisible(true);
+                }
+            }
+
+            @Override
+            public void componentRemoved(ContainerEvent e) {
+                if(logLabelPanel.getComponentCount()==0){
+                    trashCanButton.setVisible(false);
                 }
             }
         });

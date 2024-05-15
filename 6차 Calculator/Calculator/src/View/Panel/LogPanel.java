@@ -11,7 +11,7 @@ public class LogPanel extends JPanel{
     private JPanel labelPanel; // Log label 들이 올라갈 labelPanel
     private JScrollPane scrollPane; // labelPanel 을 대상으로 만들 JScrollPane 객체
 
-    public JButton trashCanButton;
+    private JButton trashCanButton;
     private JPanel trashCanButtonPanel; // trashCanButton 을 붙일 flowlayout 형식의 panel
 
     public LogPanel(){
@@ -44,6 +44,7 @@ public class LogPanel extends JPanel{
         scrollPane = new JScrollPane(labelPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);
 
+        /*
         labelPanel.addContainerListener(new ContainerListener() {
             @Override
             public void componentAdded(ContainerEvent e) {
@@ -59,6 +60,7 @@ public class LogPanel extends JPanel{
                 }
             }
         });
+         */
     }
 
     private void createTrashCanButton(){

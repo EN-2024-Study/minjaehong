@@ -22,11 +22,12 @@ public class LogEventController extends EventController{
         if(buttonText.startsWith("<html>")){
             handleLogHistory(buttonText);
         }else{
-            handleLogButtonClicked();
+            handleShowLogButton();
         }
     }
 
-    private void handleLogButtonClicked(){
+    // showLogButton 눌렸을때
+    private void handleShowLogButton(){
 
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -50,6 +51,7 @@ public class LogEventController extends EventController{
         mainView.getLogPanel().setVisible(true);
     }
 
+    // LogPanel 에 있는 LogButton 눌렸을때
     private void handleLogHistory(String log){
         String head = "<html><div style = 'text-align:right;'>";
         String body = "<br>";
