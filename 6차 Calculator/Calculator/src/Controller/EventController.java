@@ -166,4 +166,21 @@ public abstract class EventController{
         numberDeque.add("0");
         renderBigLabel();
     }
+
+    // numberDeque 의 마지막 값을 인자로 주면 됨?
+    protected String getNegateCapsuledString(String originalString){
+        String capsuledString = "negate("+originalString+")";
+        return capsuledString;
+    }
+
+    protected String getValueFromNegateCapsuledString(String capsuledString){
+        int count = getNegateCapsuledCount(capsuledString);
+
+        int idx = capsuledString.length() - count - 1;
+        BigDecimal value = new BigDecimal(capsuledString.charAt(idx));
+
+        if(count%2!=0) value = value.negate();
+
+        return value.toString();
+    }
 }

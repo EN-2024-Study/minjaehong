@@ -55,6 +55,7 @@ public class NumberEventController extends EventController{
         // DEFAULT 0 이면 아무것도 안해도 됨
         if(numberDeque.getLast().equals("0") && operatorDeque.size()==0) return;
 
+        // 첫번째 negate 이면
         // negate 시 negate 로 capsule 화 될때는
         // 숫자 1개 연산자 1개 채워져있을때 밖에 없음
         // 하지만 이때도 마지막 연산자가 뭐였는지에 따라 case 가 나눠짐
@@ -87,6 +88,7 @@ public class NumberEventController extends EventController{
             }
         }
 
+        // 이미 negate 처리된 식이면
         if(numberDeque.getLast().contains("negate")){
             String curNum = numberDeque.removeLast();
             numberDeque.add(getNegateCapsuledString(curNum));
@@ -98,12 +100,6 @@ public class NumberEventController extends EventController{
         BigDecimal lastNum = new BigDecimal(numberDeque.removeLast());
         lastNum = lastNum.negate();
         numberDeque.add(lastNum.toString());
-    }
-
-    // numberDeque 의 마지막 값을 인자로 주면 됨?
-    private String getNegateCapsuledString(String originalString){
-        String capsuledString = "negate("+originalString+")";
-        return capsuledString;
     }
 
     private void handleDecimalPoint(){

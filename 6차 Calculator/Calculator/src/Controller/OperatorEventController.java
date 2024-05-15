@@ -124,9 +124,14 @@ public class OperatorEventController extends EventController {
     // 연산자 무조건 남기기 등호여도 남기기
     private String calculate() {
 
-        BigDecimal num1 = new BigDecimal(numberDeque.removeFirst());
+        String str1 = numberDeque.removeFirst();
+        if(str1.contains("negate")) str1 = getValueFromNegateCapsuledString(str1);
+        String str2 = numberDeque.removeFirst();
+        if(str2.contains("negate")) str2 = getValueFromNegateCapsuledString(str2);
+
+        BigDecimal num1 = new BigDecimal(str1);
         String operator = operatorDeque.removeFirst();
-        BigDecimal num2 = new BigDecimal(numberDeque.removeFirst());
+        BigDecimal num2 = new BigDecimal(str2);
 
         // log equation 저장을 위해 계산하기 전 미리 저장해놓기
         String logEquationString = num1 + " "+ operator + " " + num2 + " = ";
@@ -167,12 +172,20 @@ public class OperatorEventController extends EventController {
     // smallLabel 로 올라가기 전 정제시켜주기
     private void refineCurrentNumbers(){
         BigDecimal refinedBigDecimal;
+        
+        // 만약 numberDeque 의 첫번째 원소가 negate 캡슐화가 안되어있으면
+        // 정제할 수 있는 수이므로 정제해주기
+        if(numberDeque.getFirst().contains("negate")==false){
+            refinedBigDecimal = new BigDecimal(numberDeque.removeFirst());
+            numberDeque.addFirst(refinedBigDecimal.stripTrailingZeros().toPlainString());
+        }
 
-        refinedBigDecimal = new BigDecimal(numberDeque.removeFirst());
-        numberDeque.addFirst(refinedBigDecimal.stripTrailingZeros().toPlainString());
-
-        refinedBigDecimal = new BigDecimal(numberDeque.removeLast());
-        numberDeque.addLast(refinedBigDecimal.stripTrailingZeros().toPlainString());
+        // 만약 numberDeque 의 두번째 원소가 negate 캡슐화가 안되어있으면
+        // 정제할 수 있는 수이므로 정제해주기
+        if(numberDeque.getLast().contains("negate")==false){
+            refinedBigDecimal = new BigDecimal(numberDeque.removeLast());
+            numberDeque.addLast(refinedBigDecimal.stripTrailingZeros().toPlainString());
+        }
     }
 
     private void changeToCantDivideByZeroState(){
