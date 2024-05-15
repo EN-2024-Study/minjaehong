@@ -13,6 +13,7 @@ import java.util.ArrayDeque;
 
 // 자식 클래스에서 상속받아 받는 event를 어떻게 다룰 건지 handleEvent 함수만 구현해주면 됨
 public abstract class EventController{
+
     protected ArrayDeque<String> numberDeque;
     protected ArrayDeque<String> operatorDeque;
 
@@ -47,10 +48,12 @@ public abstract class EventController{
         }
         // 3. 그냥 일반적인 숫자면 format 처리해주기
         else{
+            newNum = changeToEngineeredString(newNum);
             newNum = changeToFormattedString(newNum);
         }
 
         // 작업 다 끝나면 bigLabel에 적용해주기
+
         mainFrame.getResultPanel().getBigLabel().setText(newNum);
     }
 
@@ -67,7 +70,7 @@ public abstract class EventController{
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < numberArr.length; i++) {
-                sb.append(numberArr[i]);
+                sb.append(changeToEngineeredString(numberArr[i].toString()));
                 sb.append(" ");
 
                 if(i < operatorArr.length) {
@@ -181,5 +184,20 @@ public abstract class EventController{
         if(capsuledCount%2 != 0) value = value.negate();
 
         return value.toString();
+    }
+
+    protected String changeToEngineeredString(String curNum){
+        BigDecimal standardNum = new BigDecimal("10E+14");
+        String resultString;
+
+        if(curNum.endsWith(".") || curNum.contains("negate")) return curNum;
+
+        BigDecimal testNum = new BigDecimal(curNum);
+        if(testNum.abs().compareTo(standardNum) > 0) {
+            resultString = testNum.stripTrailingZeros().toEngineeringString();
+        }else{
+            resultString = testNum.stripTrailingZeros().toPlainString();
+        }
+        return resultString;
     }
 }

@@ -43,12 +43,13 @@ public class OperatorEventController extends EventController {
                 if (arr.length == 2) {
                     operatorDeque.removeFirst(); // (4 = =) -> (4 =)
 
+                    String num1 = arr[0];
                     // negate 면 값 추출해야함
-                    if(arr[0].contains("negate")){
-                        arr[0] = getValueFromNegateCapsuledString(arr[0]);
+                    if(num1.contains("negate")){
+                        num1 = getValueFromNegateCapsuledString(num1);
                     }
 
-                    addNewLogButton(lastEquation, new BigDecimal(arr[0]));
+                    addNewLogButton(lastEquation, num1);
                     renderSmallLabel();
                 }
                 // 전꺼가 2 + 3 = 5 이런 형식이었으면
@@ -132,12 +133,15 @@ public class OperatorEventController extends EventController {
         String str2 = numberDeque.removeFirst();
         if(str2.contains("negate")) str2 = getValueFromNegateCapsuledString(str2);
 
-        BigDecimal num1 = new BigDecimal(str1);
+        str1 = changeToEngineeredString(str1);
+        str2 = changeToEngineeredString(str2);
         String operator = operatorDeque.removeFirst();
-        BigDecimal num2 = new BigDecimal(str2);
 
         // log equation 저장을 위해 계산하기 전 미리 저장해놓기
-        String logEquationString = num1 + " "+ operator + " " + num2 + " = ";
+        String logEquationString = changeToEngineeredString(str1) + " " + operator + " " + changeToEngineeredString(str2) + " = ";
+
+        BigDecimal num1 = new BigDecimal(str1);
+        BigDecimal num2 = new BigDecimal(str2);
 
         BigDecimal result = BigDecimal.ZERO;
 
@@ -166,10 +170,13 @@ public class OperatorEventController extends EventController {
                     break;
             }
 
-            // 새로운 log 추가해주기
-            addNewLogButton(logEquationString, result);
+            String returnedValue = changeToEngineeredString(result.toString());
 
-            return result.stripTrailingZeros().toPlainString();
+            // 새로운 log 추가해주기
+
+            addNewLogButton(logEquationString, returnedValue);
+
+            return returnedValue;
         }
     }
 
@@ -206,7 +213,7 @@ public class OperatorEventController extends EventController {
     }
 
     // 등호 연산 될때마다 로그에 찍힘
-    private void addNewLogButton(String logEquationString, BigDecimal result){
+    private void addNewLogButton(String logEquationString, String result){
         
         String html =
                 "<html>" +
