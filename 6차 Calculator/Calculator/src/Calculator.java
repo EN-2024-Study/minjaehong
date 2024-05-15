@@ -1,7 +1,7 @@
 import Controller.*;
 import Listener.KeyBoardListener;
 import Listener.ButtonListener;
-import View.Frame.MainView;
+import View.Frame.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.util.ArrayDeque;
 
 public class Calculator {
 
-    private MainView mainView;
+    private MainFrame mainFrame;
 
     private ArrayDeque<String> numberDeque;
     private ArrayDeque<String> operatorDeque;
@@ -30,7 +30,7 @@ public class Calculator {
 
     private void initializeComponents() {
 
-        this.mainView = new MainView();
+        this.mainFrame = new MainFrame();
 
         // numberDeque 는 default 상태가 0이 들어가 있는 상태
         this.numberDeque = new ArrayDeque<>();
@@ -40,10 +40,10 @@ public class Calculator {
 
         this.eventControllerArr = new EventController[4];
 
-        this.eventControllerArr[0] = new NumberEventController(numberDeque, operatorDeque, mainView);
-        this.eventControllerArr[1] = new OperatorEventController(numberDeque, operatorDeque, mainView);
-        this.eventControllerArr[2] = new EraserEventController(numberDeque, operatorDeque, mainView);
-        this.eventControllerArr[3] = new LogEventController(numberDeque, operatorDeque, mainView);
+        this.eventControllerArr[0] = new NumberEventController(numberDeque, operatorDeque, mainFrame);
+        this.eventControllerArr[1] = new OperatorEventController(numberDeque, operatorDeque, mainFrame);
+        this.eventControllerArr[2] = new EraserEventController(numberDeque, operatorDeque, mainFrame);
+        this.eventControllerArr[3] = new LogEventController(numberDeque, operatorDeque, mainFrame);
 
         this.buttonListener = new ButtonListener(eventControllerArr);
         this.keyBoardListener = new KeyBoardListener(eventControllerArr);
@@ -52,50 +52,50 @@ public class Calculator {
     private void bindDefaultListenersToComponents() {
 
         // 1. ButtonPanel 에 keyBoardListener 달기
-        mainView.addKeyListener(keyBoardListener);
-        mainView.setFocusable(true);
-        mainView.requestFocus();
+        mainFrame.addKeyListener(keyBoardListener);
+        mainFrame.setFocusable(true);
+        mainFrame.requestFocus();
         
         // 2. ButtonPanel 에 ButtonListener 달아주기
-        JButton[] buttonArr = mainView.getButtonPanel().getButtonArray();
+        JButton[] buttonArr = mainFrame.getButtonPanel().getButtonArray();
         for (int i = 0; i < buttonArr.length; i++) buttonArr[i].addActionListener(buttonListener);
 
         // 3. showLogButton 에 buttonListener 달아주기
-        mainView.getResultPanel().getShowLogButton().addActionListener(buttonListener);
+        mainFrame.getResultPanel().getShowLogButton().addActionListener(buttonListener);
     }
 
     private void bindRuntimeListenersToComponents(){
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // 1. mainView 자체에 runtime 시 사이즈조절 반응형 달아주기
-        mainView.addComponentListener(new ComponentAdapter() {
+        // 1. mainFrame 자체에 runtime 시 사이즈조절 반응형 달아주기
+        mainFrame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
 
                 // 만약 로그창 떠있었으면 다시 제자리에 갖다 붙혀주기
-                if(mainView.getButtonPanel().isVisible()==false) putLogPanelBackToDefaultLocation();
+                if(mainFrame.getButtonPanel().isVisible()==false) putLogPanelBackToDefaultLocation();
 
-                int width = mainView.getWidth();
+                int width = mainFrame.getWidth();
                 if (width < 500) {
-                    mainView.getLogPanel().setVisible(false);
-                    mainView.getResultPanel().getShowLogButton().setVisible(true);
+                    mainFrame.getLogPanel().setVisible(false);
+                    mainFrame.getResultPanel().getShowLogButton().setVisible(true);
                 }else{
-                    mainView.getLogPanel().setVisible(true);
-                    mainView.getResultPanel().getShowLogButton().setVisible(false);
+                    mainFrame.getLogPanel().setVisible(true);
+                    mainFrame.getResultPanel().getShowLogButton().setVisible(false);
                 }
             }
         });
 
         // 2. logLabelPanel에 runtime 시 log 추가 삭제에 따른 반응형 listener 달아주기
-        JPanel logLabelPanel = mainView.getLogPanel().getLabelPanel();
-        JButton trashCanButton = mainView.getLogPanel().getTrashCanButton();
+        JPanel logLabelPanel = mainFrame.getLogPanel().getLabelPanel();
+        JButton trashCanButton = mainFrame.getLogPanel().getTrashCanButton();
         logLabelPanel.addContainerListener(new ContainerAdapter() {
             @Override
             public void componentAdded(ContainerEvent e) {
 
                 // 첫번째 log 가 추가되어 총 logLabel 개수가 2개가 되면
-                // no logs yet 제거해주고 trashCanButton visible 해놓기
+                // no logs label 제거하고 trashCanButton visible 해놓기
                 if(logLabelPanel.getComponentCount()>0){
                     trashCanButton.setVisible(true);
                 }
@@ -122,10 +122,10 @@ public class Calculator {
         });
 
         // 3. runtime 시 resultPanel 클릭에 따른 반응형 달아주기
-        mainView.getResultPanel().addMouseListener(new MouseAdapter() {
+        mainFrame.getResultPanel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(mainView.getButtonPanel().isVisible()==false){
+                if(mainFrame.getButtonPanel().isVisible()==false){
                     putLogPanelBackToDefaultLocation();
                 }
             }
@@ -143,16 +143,16 @@ public class Calculator {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        mainView.add(mainView.getLogPanel(),gbc);
+        mainFrame.add(mainFrame.getLogPanel(),gbc);
 
-        mainView.getResultPanel().setBackground(Color.WHITE);
-        mainView.getLogPanel().setVisible(false);
-        mainView.getButtonPanel().setVisible(true);
-        mainView.getResultPanel().getShowLogButton().setEnabled(true);
+        mainFrame.getResultPanel().setBackground(Color.WHITE);
+        mainFrame.getLogPanel().setVisible(false);
+        mainFrame.getButtonPanel().setVisible(true);
+        mainFrame.getResultPanel().getShowLogButton().setEnabled(true);
     }
 
     // Calculator 진짜로 실행하기
     public void run() {
-        mainView.setVisible(true);
+        mainFrame.setVisible(true);
     }
 }

@@ -1,14 +1,15 @@
 package Controller;
 
-import View.Frame.MainView;
+import View.Frame.MainFrame;
+
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
 
 // 무조건 BigLabel 만 변경
 public class NumberEventController extends EventController{
 
-    public NumberEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
-        super(numberDeque, operatorDeque, mainView);
+    public NumberEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainFrame mainFrame) {
+        super(numberDeque, operatorDeque, mainFrame);
     }
 
     @Override
@@ -45,6 +46,8 @@ public class NumberEventController extends EventController{
         // DEFAULT 0 이면 아무것도 안해도 됨
         if(numberDeque.getLast().equals("0") && operatorDeque.size()==0) return;
 
+        //if(numberDeque.getLast().equals("0."))
+
         // negate capsule화가 처음일때는 
         // 숫자 1개 연산자 1개 채워져있을때 밖에 없음
         // 이때도 마지막 연산이 등호였는지 아닌지에 따라 경우가 나눠짐
@@ -80,6 +83,7 @@ public class NumberEventController extends EventController{
         // 위의 경우가 아닐때는 그냥 일반적인 - 부호만 붙이는 처리해주면 됨
         BigDecimal lastNum = new BigDecimal(numberDeque.removeLast());
         lastNum = lastNum.negate();
+
         numberDeque.add(lastNum.toString());
     }
 

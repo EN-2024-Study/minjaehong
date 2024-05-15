@@ -1,14 +1,14 @@
 package Controller;
 
-import View.Frame.MainView;
+import View.Frame.MainFrame;
 
 import java.util.ArrayDeque;
 
 
 public class EraserEventController extends EventController{
 
-    public EraserEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
-        super(numberDeque, operatorDeque, mainView);
+    public EraserEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainFrame mainFrame) {
+        super(numberDeque, operatorDeque, mainFrame);
     }
 
     @Override

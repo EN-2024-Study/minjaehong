@@ -1,6 +1,6 @@
 package Controller;
 
-import View.Frame.MainView;
+import View.Frame.MainFrame;
 
 import java.awt.*;
 import java.math.BigDecimal;
@@ -16,13 +16,13 @@ public abstract class EventController{
     protected ArrayDeque<String> numberDeque;
     protected ArrayDeque<String> operatorDeque;
 
-    protected MainView mainView;
+    protected MainFrame mainFrame;
 
-    protected EventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
+    protected EventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainFrame mainFrame) {
         this.numberDeque = numberDeque;
         this.operatorDeque = operatorDeque;
 
-        this.mainView = mainView;
+        this.mainFrame = mainFrame;
     }
 
     //================ functions that have to be implemented in child classes ===============//
@@ -50,10 +50,8 @@ public abstract class EventController{
             newNum = changeToFormattedString(newNum);
         }
 
-        System.out.println(newNum);
-
         // 작업 다 끝나면 bigLabel에 적용해주기
-        mainView.getResultPanel().getBigLabel().setText(newNum);
+        mainFrame.getResultPanel().getBigLabel().setText(newNum);
     }
 
     protected void renderSmallLabel(){
@@ -84,12 +82,14 @@ public abstract class EventController{
             if (newText.isEmpty()) newText = " ";
         }
 
-        mainView.getResultPanel().getSmallLabel().setText(newText);
+        mainFrame.getResultPanel().getSmallLabel().setText(newText);
     }
 
     // renderBigLabel 에서만 쓰임
     // 받은 문자열을 view 에 출력하기 전에 formatting 하려고 쓰임
     private String changeToFormattedString(String originalString){
+
+        if(originalString.startsWith("-0.")) return originalString;
 
         String formattedString;
 
@@ -113,7 +113,7 @@ public abstract class EventController{
 
     // 현재 결과가 cant divide by zero 인지 확인해줌
     protected final boolean checkIfCantDivideByZeroState(){
-        if(mainView.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")) return true;
+        if(mainFrame.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")) return true;
         else return false;
     }
 
@@ -122,18 +122,18 @@ public abstract class EventController{
     protected final void changeToNormalState(){
         
         // disabled 된 button 다시 enable
-        mainView.getButtonPanel().getDotButton().setEnabled(true);
-        mainView.getButtonPanel().getDotButton().setBackground(Color.WHITE);
-        mainView.getButtonPanel().getDivButton().setEnabled(true);
-        mainView.getButtonPanel().getDivButton().setBackground(Color.WHITE);
-        mainView.getButtonPanel().getAddButton().setEnabled(true);
-        mainView.getButtonPanel().getAddButton().setBackground(Color.WHITE);
-        mainView.getButtonPanel().getMulButton().setEnabled(true);
-        mainView.getButtonPanel().getMulButton().setBackground(Color.WHITE);
-        mainView.getButtonPanel().getSubButton().setEnabled(true);
-        mainView.getButtonPanel().getSubButton().setBackground(Color.WHITE);
-        mainView.getButtonPanel().getNegateButton().setEnabled(true);
-        mainView.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
+        mainFrame.getButtonPanel().getDotButton().setEnabled(true);
+        mainFrame.getButtonPanel().getDotButton().setBackground(Color.WHITE);
+        mainFrame.getButtonPanel().getDivButton().setEnabled(true);
+        mainFrame.getButtonPanel().getDivButton().setBackground(Color.WHITE);
+        mainFrame.getButtonPanel().getAddButton().setEnabled(true);
+        mainFrame.getButtonPanel().getAddButton().setBackground(Color.WHITE);
+        mainFrame.getButtonPanel().getMulButton().setEnabled(true);
+        mainFrame.getButtonPanel().getMulButton().setBackground(Color.WHITE);
+        mainFrame.getButtonPanel().getSubButton().setEnabled(true);
+        mainFrame.getButtonPanel().getSubButton().setBackground(Color.WHITE);
+        mainFrame.getButtonPanel().getNegateButton().setEnabled(true);
+        mainFrame.getButtonPanel().getNegateButton().setBackground(Color.WHITE);
 
         // 매끄러운 진행을 위한 deque 조작
         // deque 다 비우고 default 0 집어넣어주기

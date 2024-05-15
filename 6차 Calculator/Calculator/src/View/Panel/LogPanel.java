@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
 
 public class LogPanel extends JPanel{
     
-    private JPanel labelPanel; // Log label 들이 올라갈 labelPanel
+    private JPanel logLabelPanel; // Log label 들이 올라갈 logLabelPanel
     private JScrollPane scrollPane; // labelPanel 을 대상으로 만들 JScrollPane 객체
 
     private JButton trashCanButton;
@@ -38,10 +38,10 @@ public class LogPanel extends JPanel{
     }
 
     private void createScrollPane(){
-        labelPanel = new JPanel();
-        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+        logLabelPanel = new JPanel();
+        logLabelPanel.setLayout(new BoxLayout(logLabelPanel, BoxLayout.Y_AXIS));
 
-        scrollPane = new JScrollPane(labelPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane = new JScrollPane(logLabelPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);
     }
 
@@ -57,7 +57,7 @@ public class LogPanel extends JPanel{
         trashCanButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                labelPanel.removeAll();
+                logLabelPanel.removeAll();
             }
         });
     }
@@ -71,7 +71,7 @@ public class LogPanel extends JPanel{
     }
 
     public JPanel getLabelPanel(){
-        return labelPanel;
+        return logLabelPanel;
     }
 
     public JButton getTrashCanButton(){
@@ -81,7 +81,7 @@ public class LogPanel extends JPanel{
     // 로그 넣을때도 콤마 처리 해야함
     public void addNewLogLabel(JButton newLogButton){
         // 새로 추가된 것은 항상 위쪽에 추가
-        labelPanel.add(newLogButton, 0);
+        logLabelPanel.add(newLogButton, 0);
 
         // logPanel 다시 그리기
         revalidate();

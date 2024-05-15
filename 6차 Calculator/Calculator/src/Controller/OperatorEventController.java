@@ -1,6 +1,6 @@
 package Controller;
 
-import View.Frame.MainView;
+import View.Frame.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +10,8 @@ import java.util.ArrayDeque;
 
 public class OperatorEventController extends EventController {
 
-    public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
-        super(numberDeque, operatorDeque, mainView);
+    public OperatorEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainFrame mainFrame) {
+        super(numberDeque, operatorDeque, mainFrame);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class OperatorEventController extends EventController {
             // 전꺼가 등호일때
             if (operatorDeque.size()==2 && operatorDeque.getFirst().equals("=")) {
                 // 마지막 식을 대상으로 판단해야함
-                String lastEquation = mainView.getLastEquation();
+                String lastEquation = mainFrame.getLastEquation();
                 String[] arr = lastEquation.split(" ");
 
                 // 전꺼가 4 = 이런 형식이었으면
@@ -191,18 +191,18 @@ public class OperatorEventController extends EventController {
 
     // 0으로 나누기를 진행했을때 호출되는 함수
     private void changeToCantDivideByZeroState(){
-        mainView.getButtonPanel().getDotButton().setEnabled(false);
-        mainView.getButtonPanel().getDotButton().setBackground(Color.RED);
-        mainView.getButtonPanel().getDivButton().setEnabled(false);
-        mainView.getButtonPanel().getDivButton().setBackground(Color.RED);
-        mainView.getButtonPanel().getAddButton().setEnabled(false);
-        mainView.getButtonPanel().getAddButton().setBackground(Color.RED);
-        mainView.getButtonPanel().getMulButton().setEnabled(false);
-        mainView.getButtonPanel().getMulButton().setBackground(Color.RED);
-        mainView.getButtonPanel().getSubButton().setEnabled(false);
-        mainView.getButtonPanel().getSubButton().setBackground(Color.RED);
-        mainView.getButtonPanel().getNegateButton().setEnabled(false);
-        mainView.getButtonPanel().getNegateButton().setBackground(Color.RED);
+        mainFrame.getButtonPanel().getDotButton().setEnabled(false);
+        mainFrame.getButtonPanel().getDotButton().setBackground(Color.RED);
+        mainFrame.getButtonPanel().getDivButton().setEnabled(false);
+        mainFrame.getButtonPanel().getDivButton().setBackground(Color.RED);
+        mainFrame.getButtonPanel().getAddButton().setEnabled(false);
+        mainFrame.getButtonPanel().getAddButton().setBackground(Color.RED);
+        mainFrame.getButtonPanel().getMulButton().setEnabled(false);
+        mainFrame.getButtonPanel().getMulButton().setBackground(Color.RED);
+        mainFrame.getButtonPanel().getSubButton().setEnabled(false);
+        mainFrame.getButtonPanel().getSubButton().setBackground(Color.RED);
+        mainFrame.getButtonPanel().getNegateButton().setEnabled(false);
+        mainFrame.getButtonPanel().getNegateButton().setBackground(Color.RED);
     }
 
     // 등호 연산 될때마다 로그에 찍힘
@@ -219,6 +219,6 @@ public class OperatorEventController extends EventController {
         newLogButton.setBackground(Color.WHITE);
         newLogButton.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        mainView.getLogPanel().addNewLogLabel(newLogButton);
+        mainFrame.getLogPanel().addNewLogLabel(newLogButton);
     }
 }

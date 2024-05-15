@@ -6,9 +6,8 @@ import View.Panel.ResultPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
-public class MainView extends JFrame {
+public class MainFrame extends JFrame {
 
     private ImageIcon calculatorIcon;
 
@@ -60,7 +59,7 @@ public class MainView extends JFrame {
         this.add(logPanel,gbc);
     }
 
-    public MainView(){
+    public MainFrame(){
         setTitle("Windows Calculator");
         setSize(new Dimension(400,600));
         setMinimumSize(new Dimension(400,600));
