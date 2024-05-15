@@ -144,8 +144,10 @@ public abstract class EventController{
         renderBigLabel();
     }
 
-    // negate capsule화 한번 더 시킨 결과를 return
-    protected String getNegateCapsuledString(String originalString){
+    //======================= functions for capsuled negate handling ========================//
+
+    // negate capsule화를 한번 더 시킨 string을 return
+    protected final String getNegateCapsuledString(String originalString){
         String capsuledString = "negate("+originalString+")";
         return capsuledString;
     }
@@ -161,21 +163,23 @@ public abstract class EventController{
     }
 
     // negate capsule화된 string에서 negate 대상이 된 값을 return
-    protected String getValueFromNegateCapsuledString(String capsuledString){
-        int count = getNegateCapsuledCount(capsuledString);
+    protected final String getValueFromNegateCapsuledString(String capsuledString){
+        int capsuledCount = getNegateCapsuledCount(capsuledString);
 
-        int idx = capsuledString.length() - count - 1;
+        // 숫자 끝나는 idx 찾기
+        int numberEndIdx = capsuledString.length() - capsuledCount - 1;
 
-        BigDecimal value = new BigDecimal(String.valueOf(capsuledString.charAt(idx)));
+        // 숫자 시작 idx 찾기
+        int numberStartIdx = numberEndIdx;
+        while(capsuledString.charAt(numberStartIdx)!='(') numberStartIdx--;
+        numberStartIdx+=1;
 
-        System.out.println("negateCapsuleCount : " + count);
-        System.out.println("idx : "+idx);
-        System.out.println("value : "+value);
+        // negate 된 대상 추출
+        BigDecimal value = new BigDecimal(capsuledString.substring(numberStartIdx, numberEndIdx+1));
 
         // 홀수번 했으면 -값임
-        if(count%2!=0) value = value.negate();
+        if(capsuledCount%2 != 0) value = value.negate();
 
-        System.out.println(value);
         return value.toString();
     }
 }

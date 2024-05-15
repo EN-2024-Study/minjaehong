@@ -101,6 +101,7 @@ public class LogPanel extends JPanel{
         // 새로 추가된 것은 항상 위쪽에 추가
         labelPanel.add(newLogButton, 0);
 
+        // logPanel 다시 그리기
         revalidate();
         repaint();
     }

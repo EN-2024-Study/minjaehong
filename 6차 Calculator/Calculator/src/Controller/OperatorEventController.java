@@ -44,6 +44,12 @@ public class OperatorEventController extends EventController {
                 // 전꺼가 4 = 이런 형식이었으면
                 if (arr.length == 2) {
                     operatorDeque.removeFirst(); // (4 = =) -> (4 =)
+
+                    // negate 면 값 추출해야함
+                    if(arr[0].contains("negate")){
+                        arr[0] = getValueFromNegateCapsuledString(arr[0]);
+                    }
+
                     addNewLogButton(lastEquation, new BigDecimal(arr[0]));
                     renderSmallLabel();
                 }
