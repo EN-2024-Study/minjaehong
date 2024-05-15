@@ -146,6 +146,12 @@ public class Calculator {
                 if(logLabelPanel.getComponentCount()>0){
                     trashCanButton.setVisible(true);
                 }
+
+                // 20개 이상 누적되었으면
+                // 맨 첫번째꺼 지워주기
+                if(logLabelPanel.getComponentCount()>20){
+                    logLabelPanel.remove(20);
+                }
             }
 
             @Override
