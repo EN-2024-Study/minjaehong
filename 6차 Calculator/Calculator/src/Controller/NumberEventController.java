@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayDeque;
 
 // 무조건 BigLabel 만 변경
-// 예외로 negate 는 smallLabel 도 변경
-// smallLabel 변경하는 것은 EventController 의 renderSmallLabel 을 오버라이딩해서 사용하자
 public class NumberEventController extends EventController{
 
     public NumberEventController(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque, MainView mainView) {
@@ -20,83 +18,73 @@ public class NumberEventController extends EventController{
         if(checkIfCantDivideByZeroState()){
             changeToNormalState();
         }
+        // cant divide by zero 상태가 아닐때는 정상적으로 처리
+        else {
+            switch (newNum) {
+                case "+/-":
+                    handleNegate();
+                    break;
 
-        switch (newNum){
-            case "+/-":
-                // 1. +/- 예외처리
-                handleNegate();
-                break;
-            case ".":
-                // 2. 소수점 예외처리
-                handleDecimalPoint();
-                break;
-            default:
-                handleNumber(newNum);
-                break;
+                case ".":
+                    handleDecimalPoint();
+                    break;
+
+                default:
+                    handleNumber(newNum);
+                    break;
+            }
         }
-
         // 위 switch 문에서 항상 deque 에 원소를 추가하고 끝남
         // 따라서 numberDeque 는 size > 0 일 수 밖에 없음
         // 이미 numberDeque 에 반영된 상태에서 render 함수가 호출되기 때문에
         // render 함수에서 한 작업은 기존 Deque 에 반영이 안됨
         // 즉 진짜 프론트 작업 맘대로 해도 된다는 의미
-        // formatting 처리를 이 함수 안에서 해도 해당 결과는 numberDeque 에 반영이 안된다
+        // formatting 처리를 renderBigLabel 함수에서 해도 해당 결과는 numberDeque 에 반영이 안된다
         renderBigLabel();
     }
-
-    // negate 하면 bigLabel 은 무조건 바뀜
-    // 기존에 numberController 는 bigLabel 만 변경했으면
-    // 하지만 negate 는 경우에 따라 smallLabel 까지 바꿔줘야함
-    // negate 문자열로 출력하는 것은 그때 경우에 따라 rendering 되게 하면 됨
+    
+    // negate 일때는 smallLabel 이 최신화되는 경우가 있음
+    // 그래서 필요에 따라 renderSmallLabel 함수를 넣어줘야함
     private void handleNegate(){
 
-        System.out.println("handeled negate!");
+        //System.out.println("handeled negate!");
 
         // DEFAULT 0 이면 아무것도 안해도 됨
         if(numberDeque.getLast().equals("0") && operatorDeque.size()==0) return;
 
-        // 첫번째 negate 이면
-        // negate 시 negate 로 capsule 화 될때는
+        // negate capsule화가 처음일때는 
         // 숫자 1개 연산자 1개 채워져있을때 밖에 없음
-        // 하지만 이때도 마지막 연산자가 뭐였는지에 따라 case 가 나눠짐
+        // 이때도 마지막 연산이 등호였는지 아닌지에 따라 경우가 나눠짐
         if(numberDeque.size()==1 && operatorDeque.size()==1) {
+
+            String curNum = numberDeque.getFirst();
             
             // 만약 마지막 연산이 등호였으면
-            if (operatorDeque.getLast() == "=") {
-
-                String curNum = numberDeque.getFirst();
-
+            // 새로운 시작이므로 numberDeque operatorDeque 모두 비워주기
+            if (operatorDeque.getLast().equals("=")) {
                 operatorDeque.clear();
                 numberDeque.clear();
-                numberDeque.add(getNegateCapsuledString(curNum));
-
-                renderBigLabel();
-                renderSmallLabel();
-                return;
             }
 
-            // 만약 마지막 연산이 등호가 아니면
-            if (operatorDeque.getLast() != "=") {
-
-                String curNum = numberDeque.getFirst();
-
-                numberDeque.add(getNegateCapsuledString(curNum));
-
-                renderBigLabel();
-                renderSmallLabel();
-                return;
-            }
-        }
-
-        // 이미 negate 처리된 식이면
-        if(numberDeque.getLast().contains("negate")){
-            String curNum = numberDeque.removeLast();
+            // 마지막 연산이 등호가 아니면
+            // 이미 채워져있는 숫자의 negate 값을 두번째 수로 추가해줌
             numberDeque.add(getNegateCapsuledString(curNum));
-            renderBigLabel();
+            
             renderSmallLabel();
             return;
         }
 
+        // 이미 negate capsule화가 되어있는 식이면
+        // 캡슐화 한번 더 해서 넣어주기
+        if(numberDeque.getLast().contains("negate")){
+            String curNum = numberDeque.removeLast();
+            numberDeque.add(getNegateCapsuledString(curNum));
+            
+            renderSmallLabel();
+            return;
+        }
+
+        // 위의 경우가 아닐때는 그냥 일반적인 - 부호만 붙이는 처리해주면 됨
         BigDecimal lastNum = new BigDecimal(numberDeque.removeLast());
         lastNum = lastNum.negate();
         numberDeque.add(lastNum.toString());
@@ -206,38 +194,5 @@ public class NumberEventController extends EventController{
             if(curNum.length()==16) return true;
         }
         return false;
-    }
-
-    // negate 시 smallLabel 도 변경해야함
-    // 얘는 오로지 negate 를 위한 renderSmallLabel 임
-    // 왜냐하면 normalNumber 나 decimalPoint 치면 smallLabel 이 변경되지는 않기 때문
-    protected void renderSmallLabel(){
-
-        String newText;
-
-        // "0." 으로 시작할때 예외처리
-        if(operatorDeque.size()==0 && numberDeque.size()==1 && numberDeque.getFirst().equals("0.")){
-            newText=" ";
-        }else {
-            Object[] numberArr = numberDeque.toArray();
-            Object[] operatorArr = operatorDeque.toArray();
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < numberArr.length; i++) {
-                sb.append(numberArr[i]);
-                sb.append(" ");
-                if(i < operatorArr.length) {
-                    sb.append(operatorArr[i]);
-                    sb.append(" ");
-                }
-            }
-
-            newText = sb.toString();
-
-            // smallLabel 크기 줄어드는거 방지
-            if (newText.isEmpty()) newText = " ";
-        }
-
-        mainView.getResultPanel().getSmallLabel().setText(newText);
     }
 }
