@@ -50,6 +50,8 @@ public abstract class EventController{
             newNum = changeToFormattedString(newNum);
         }
 
+        System.out.println(newNum);
+
         // 작업 다 끝나면 bigLabel에 적용해주기
         mainView.getResultPanel().getBigLabel().setText(newNum);
     }
@@ -164,11 +166,16 @@ public abstract class EventController{
 
         int idx = capsuledString.length() - count - 1;
 
-        BigDecimal value = new BigDecimal(capsuledString.charAt(idx));
+        BigDecimal value = new BigDecimal(String.valueOf(capsuledString.charAt(idx)));
+
+        System.out.println("negateCapsuleCount : " + count);
+        System.out.println("idx : "+idx);
+        System.out.println("value : "+value);
 
         // 홀수번 했으면 -값임
         if(count%2!=0) value = value.negate();
 
+        System.out.println(value);
         return value.toString();
     }
 }

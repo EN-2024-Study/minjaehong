@@ -17,7 +17,7 @@ public class OperatorEventController extends EventController {
     @Override
     public void handleEvent(String newOperator) {
 
-        //printStartMatrix(numberDeque, operatorDeque);
+        printStartMatrix(numberDeque, operatorDeque);
 
         // cant divide by zero 상태이면 다시 정상화시키기
         if(checkIfCantDivideByZeroState()){
@@ -114,7 +114,8 @@ public class OperatorEventController extends EventController {
                 renderBigLabel(); // 계산된 값 출력
             }
         }
-        //printEndMatrix(numberDeque, operatorDeque);
+
+        printEndMatrix(numberDeque, operatorDeque);
     }
 
     // 등호 연산 들어왔을때 or 연산자 두 개 채워지면 값 진짜로 계산하기
@@ -188,6 +189,7 @@ public class OperatorEventController extends EventController {
         }
     }
 
+    // 0으로 나누기를 진행했을때 호출되는 함수
     private void changeToCantDivideByZeroState(){
         mainView.getButtonPanel().getDotButton().setEnabled(false);
         mainView.getButtonPanel().getDotButton().setBackground(Color.RED);
@@ -218,5 +220,29 @@ public class OperatorEventController extends EventController {
         newLogButton.setHorizontalAlignment(SwingConstants.RIGHT);
 
         mainView.getLogPanel().addNewLogLabel(newLogButton);
+    }
+
+    private void printStartMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
+        Object[] numberArr = numberDeque.toArray();
+        Object[] operatorArr = operatorDeque.toArray();
+
+        System.out.println("======[START]======");
+        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
+        System.out.println();
+        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
+        System.out.println();
+        System.out.println("===================");
+    }
+
+    private void printEndMatrix(ArrayDeque<String> numberDeque, ArrayDeque<String> operatorDeque){
+        Object[] numberArr = numberDeque.toArray();
+        Object[] operatorArr = operatorDeque.toArray();
+
+        System.out.println("===================");
+        for(int i=0;i<numberArr.length;i++) System.out.print(numberArr[i]+" ");
+        System.out.println();
+        for(int i=0;i<operatorArr.length;i++) System.out.print(operatorArr[i]+" ");
+        System.out.println();
+        System.out.println("=======[END]=======");
     }
 }

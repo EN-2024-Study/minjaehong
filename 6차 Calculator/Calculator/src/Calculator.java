@@ -53,9 +53,9 @@ public class Calculator {
     private void BindListenersToComponents() {
 
         // 1. ButtonPanel 에 keyBoardListener 달기
-        mainView.getButtonPanel().addKeyListener(keyBoardListener);
-        mainView.getButtonPanel().setFocusable(true);
-        mainView.getButtonPanel().requestFocus();
+        mainView.addKeyListener(keyBoardListener);
+        mainView.setFocusable(true);
+        mainView.requestFocus();
 
         // 2. MainView 자체에 사이즈조절 및 showLogPanel 반응형 달기
         mainView.addComponentListener(new ComponentAdapter() {

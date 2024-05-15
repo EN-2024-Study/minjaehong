@@ -72,5 +72,9 @@ public class LogEventController extends EventController{
 
         renderBigLabel();
         mainView.getResultPanel().getSmallLabel().setText(newSmallLabel);
+
+        // 다시 mainView 로 focus 주기
+        mainView.setFocusable(true);
+        mainView.requestFocus();
     }
 }
