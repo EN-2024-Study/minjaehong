@@ -48,8 +48,11 @@ public abstract class EventController{
         }
         // 3. 그냥 일반적인 숫자면 format 처리해주기
         else{
+            System.out.println("before : " + newNum);
             newNum = changeToEngineeredString(newNum);
+            System.out.println("after engineered : " + newNum);
             newNum = changeToFormattedString(newNum);
+            System.out.println("after formatted : " + newNum);
         }
 
         // 작업 다 끝나면 bigLabel에 적용해주기
@@ -152,7 +155,7 @@ public abstract class EventController{
         String resultString;
 
         // 예외일때는 skip
-        if(curNum.endsWith(".") || curNum.contains("negate") || curNum.equals("cant divide by zero!")) return curNum;
+        if(curNum.contains(".") || curNum.contains("negate") || curNum.equals("cant divide by zero!")) return curNum;
 
         BigDecimal testNum = new BigDecimal(curNum);
         if(testNum.abs().compareTo(standardNum) > 0) {
