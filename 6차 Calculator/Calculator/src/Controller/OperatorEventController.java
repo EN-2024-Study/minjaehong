@@ -42,7 +42,7 @@ public class OperatorEventController extends EventController {
         // 전꺼가 등호일때
         if (operatorDeque.size()==2 && operatorDeque.getFirst().equals("=")) {
             // 마지막 식을 대상으로 판단해야함
-            String lastEquation = mainFrame.getLastEquation();
+            String lastEquation = mainFrame.getLastSmallLabel();
             String[] arr = lastEquation.split(" ");
 
             // 전꺼가 4 = 이런 형식이었으면
@@ -116,6 +116,9 @@ public class OperatorEventController extends EventController {
             numberDeque.add(result); // 계산된 값 push
             renderBigLabel(); // 계산된 값 출력
         }
+
+        if(numberDeque.getLast().equals("cant divide by zero!")) return;
+
         renderSmallLabel();
     }
 
@@ -130,9 +133,16 @@ public class OperatorEventController extends EventController {
         String operator = operatorDeque.removeFirst();
         String str2 = numberDeque.removeFirst();
 
+        //System.out.println("============");
+        //System.out.println("before str1 :" + str1);
+        //System.out.println("before str2 : " + str2);
         // negate 이면 negate 다 깐 숫자 받기
         if(str1.contains("negate")) str1 = getValueFromNegateCapsuledString(str1);
         if(str2.contains("negate")) str2 = getValueFromNegateCapsuledString(str2);
+
+        //System.out.println("after str1 :" + str1);
+        //System.out.println("after str2 : " + str2);
+        //System.out.println("============");
 
         BigDecimal num1 = new BigDecimal(str1);
         BigDecimal num2 = new BigDecimal(str2);

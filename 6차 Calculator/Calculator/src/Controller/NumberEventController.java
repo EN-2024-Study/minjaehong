@@ -40,6 +40,11 @@ public class NumberEventController extends EventController{
     
     // negate 일때는 smallLabel 이 최신화되는 경우가 있음
     // 그래서 필요에 따라 renderSmallLabel 함수를 넣어줘야함
+    // 1. 일반 + negate (잘됨)
+    // 2. negate + 일반 (잘됨)
+    // 3. negate + negate (잘됨)
+    // 4. negate 등호 연산 (안됨)
+    // 5. negate 하고 그냥 일반쳤을때 바로 초기화 (잘됨) - smallLabel 초기화
     private void handleNegate(){
 
         // DEFAULT 0 이면 아무것도 안해도 됨
@@ -86,6 +91,14 @@ public class NumberEventController extends EventController{
 
     private void handleDecimalPoint(){
 
+        // 마지막꺼가 negate 였을때
+        if(numberDeque.getLast().contains("negate")){
+            numberDeque.clear();
+            numberDeque.add("0.");
+            renderSmallLabel();
+            return;
+        }
+
         // 마지막 연산이 "=" 일때 or 다음 수 받아야할때
         if(operatorDeque.size() > 0){
             // 마지막 연산이 "=" 일때 예외처리
@@ -107,7 +120,7 @@ public class NumberEventController extends EventController{
         }
 
         // 이미 현재 값에 소수점 존재하면
-        if (numberDeque.getLast().contains(".")==false) {
+        if (numberDeque.getLast().contains(".")) {
             // 아무것도 안해도 됨
         } else {
             // 아니면 소수점 추가
@@ -117,6 +130,11 @@ public class NumberEventController extends EventController{
     }
 
     private void handleNumber(String newNum){
+
+        if(operatorDeque.size()==0 && numberDeque.getLast().contains("negate")){
+            numberDeque.clear();
+            numberDeque.add("0");
+        }
 
         // 연산자가 0개일때
         if (numberDeque.size() == 1 && operatorDeque.size() == 0) {

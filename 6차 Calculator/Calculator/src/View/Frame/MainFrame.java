@@ -72,16 +72,15 @@ public class MainFrame extends JFrame {
     public ResultPanel getResultPanel() {
         return resultPanel;
     }
-
+    public ButtonPanel getButtonPanel() {
+        return buttonPanel;
+    }
     public LogPanel getLogPanel(){
         return logPanel;
     }
 
-    public String getLastEquation(){
+    public String getLastSmallLabel(){
         return resultPanel.getSmallLabel().getText();
     }
-
-    public ButtonPanel getButtonPanel() {
-        return buttonPanel;
-    }
+    public String getLastBigLabel() { return resultPanel.getBigLabel().getText(); }
 }

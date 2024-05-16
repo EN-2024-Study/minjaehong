@@ -115,7 +115,7 @@ public abstract class EventController{
 
     // 현재 결과가 cant divide by zero 인지 확인해줌
     protected final boolean checkIfCantDivideByZeroState(){
-        if(mainFrame.getResultPanel().getBigLabel().getText().equals("cant divide by zero!")) return true;
+        if(mainFrame.getLastBigLabel().equals("cant divide by zero!")) return true;
         else return false;
     }
 
