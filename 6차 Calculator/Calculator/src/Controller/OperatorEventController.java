@@ -16,7 +16,6 @@ public class OperatorEventController extends EventController {
 
     @Override
     public void handleEvent(String newOperator) {
-
         // cant divide by zero 상태이면 다시 정상화시키기
         if(checkIfCantDivideByZeroState()){
             changeToNormalState();
@@ -30,95 +29,94 @@ public class OperatorEventController extends EventController {
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
         operatorDeque.add(newOperator);
 
-        // 이번꺼가 등호일때
-        // 등호일때는 무조건 계산해줘야함
+        // 이번꺼가 등호일때 -> 등호일때는 무조건 계산해줘야함
         if (newOperator.equals("=")) {
-            // 전꺼가 등호일때
-            if (operatorDeque.size()==2 && operatorDeque.getFirst().equals("=")) {
-                // 마지막 식을 대상으로 판단해야함
-                String lastEquation = mainFrame.getLastEquation();
-                String[] arr = lastEquation.split(" ");
+            handleEqualOperator();
+        }
+        else {
+            handleNonEqualOperators();
+        }
+    }
 
-                // 전꺼가 4 = 이런 형식이었으면
-                if (arr.length == 2) {
-                    operatorDeque.removeFirst(); // (4 = =) -> (4 =)
+    private void handleEqualOperator(){
+        // 전꺼가 등호일때
+        if (operatorDeque.size()==2 && operatorDeque.getFirst().equals("=")) {
+            // 마지막 식을 대상으로 판단해야함
+            String lastEquation = mainFrame.getLastEquation();
+            String[] arr = lastEquation.split(" ");
 
-                    String num1 = arr[0];
-                    // negate 면 값 추출해야함
-                    if(num1.contains("negate")){
-                        num1 = getValueFromNegateCapsuledString(num1);
-                    }
+            // 전꺼가 4 = 이런 형식이었으면
+            if (arr.length == 2) {
+                operatorDeque.removeFirst(); // (4 = =) -> (4 =)
 
-                    addNewLogButton(lastEquation, num1);
-                    renderSmallLabel();
-                }
-                // 전꺼가 2 + 3 = 5 이런 형식이었으면
-                else {
-                    operatorDeque.clear();
-                    operatorDeque.add(arr[1]);
-                    numberDeque.add(arr[2]);
-                    operatorDeque.add("=");
-                    renderSmallLabel();
+                String num1 = arr[0];
+                // negate 면 negate 다 깐 값 추출해야함
+                if(num1.contains("negate")) num1 = getValueFromNegateCapsuledString(num1);
 
-                    String result = calculate();
-
-                    numberDeque.add(result);
-                    renderBigLabel();
-                }
-                return;
+                addNewLogButton(lastEquation, num1);
+                renderSmallLabel();
             }
-            // 전꺼가 등호가 아닐때
+            // 전꺼가 2 + 3 = 5 이런 형식이었으면
             else {
-                // 1. 숫자 1개 등호 1개 되면
-                // ex) 4 =
-                if (numberDeque.size() == 1 && operatorDeque.size() == 1) {
-                    renderSmallLabel();
-                    //return;
-                }
-                // 2. 숫자 1개 연산자 2개(일반 1개 등호 1개)
-                // matrix 수동 작성하고 calculate
-                else if (numberDeque.size() == 1 && operatorDeque.size() == 2) {
-                    numberDeque.add(numberDeque.getLast());
-                    renderSmallLabel();
-                    String result = calculate();
+                operatorDeque.clear();
+                operatorDeque.add(arr[1]);
+                numberDeque.add(arr[2]);
+                operatorDeque.add("=");
+                renderSmallLabel();
 
-                    numberDeque.add(result);
-                    renderBigLabel();
-                    //return;
-                }
-                // 3. 숫자 2개 연산자 2개(일반 1개 등호 1개)
-                // 진짜 calculate
-                else if (numberDeque.size() == 2 && operatorDeque.size() == 2) {
-                    renderSmallLabel();
-                    String result = calculate();
-                    numberDeque.add(result);
+                String result = calculate();
 
-                    renderBigLabel();
-                    return;
-                }
+                numberDeque.add(result);
+                renderBigLabel();
             }
         }
-        // 이번꺼가 등호가 아닐때
+        // 전꺼가 등호가 아닐때
         else {
-            // 1. 숫자 1개 연산자 1개 = 할게 없음. 잘 추가하기만 해주면 됨 (잘됨)
+            // 1. 숫자 1개 등호 1개 되면 (잘됨)
+            // ex) 4 =
             if (numberDeque.size() == 1 && operatorDeque.size() == 1) {
                 renderSmallLabel();
             }
-            // 2. 숫자 1개 연산자 2개 = 연산자 교체 (잘됨)
-            // 전 연산이 등호였어도 잘됨
+            // 2. 숫자 1개 연산자 2개(일반 1개 등호 1개) (잘됨)
+            // matrix 수동 작성하고 calculate
             else if (numberDeque.size() == 1 && operatorDeque.size() == 2) {
-                operatorDeque.removeFirst();
+                numberDeque.add(numberDeque.getLast());
                 renderSmallLabel();
+                String result = calculate();
+
+                numberDeque.add(result);
+                renderBigLabel();
             }
-            // 3. 숫자 2개 연산자 2개 = 계산 (잘됨)
+            // 3. 숫자 2개 연산자 2개(일반 1개 등호 1개) (잘됨)
+            // 진짜 calculate
             else if (numberDeque.size() == 2 && operatorDeque.size() == 2) {
                 renderSmallLabel();
-                String result = calculate(); // 계산하면 numDeque 비고 optDeque 에 = 아직 남아있음
-                numberDeque.add(result); // 계산된 값 push
-                renderSmallLabel();
-                renderBigLabel(); // 계산된 값 출력
+                String result = calculate();
+                numberDeque.add(result);
+
+                renderBigLabel();
             }
         }
+    }
+
+    private void handleNonEqualOperators(){
+        // 1. 숫자 1개 연산자 1개 = 할게 없음. 잘 추가하기만 해주면 됨 (잘됨)
+        if (numberDeque.size() == 1 && operatorDeque.size() == 1) {
+            // nothing to do
+        }
+        // 2. 숫자 1개 연산자 2개 = 연산자 교체 (잘됨)
+        // 전 연산이 등호였어도 잘됨
+        else if (numberDeque.size() == 1 && operatorDeque.size() == 2) {
+            operatorDeque.removeFirst();
+        }
+        // 3. 숫자 2개 연산자 2개 = 계산 (잘됨)
+        else if (numberDeque.size() == 2 && operatorDeque.size() == 2) {
+            renderSmallLabel();
+            String result = calculate(); // 계산하면 numDeque 비고 optDeque 에 = 아직 남아있음
+            numberDeque.add(result); // 계산된 값 push
+            renderBigLabel(); // 계산된 값 출력
+        }
+        renderSmallLabel();
     }
 
     // 등호 연산 들어왔을때 or 연산자 두 개 채워지면 값 진짜로 계산하기
@@ -127,25 +125,20 @@ public class OperatorEventController extends EventController {
     // 무조건 operatorDeque 는 size = 1 이고 마지막 연산 들어감
     // 연산자 무조건 남기기 등호여도 남기기
     private String calculate() {
-
+        // 연산에 필요한 숫자 2개 + 연산자 1개 추출
         String str1 = numberDeque.removeFirst();
-        if(str1.contains("negate")) str1 = getValueFromNegateCapsuledString(str1);
-        String str2 = numberDeque.removeFirst();
-        if(str2.contains("negate")) str2 = getValueFromNegateCapsuledString(str2);
-
-        str1 = changeToEngineeredString(str1);
-        str2 = changeToEngineeredString(str2);
         String operator = operatorDeque.removeFirst();
+        String str2 = numberDeque.removeFirst();
 
-        // log equation 저장을 위해 계산하기 전 미리 저장해놓기
-        String logEquationString = changeToEngineeredString(str1) + " " + operator + " " + changeToEngineeredString(str2) + " = ";
+        // negate 이면 negate 다 깐 숫자 받기
+        if(str1.contains("negate")) str1 = getValueFromNegateCapsuledString(str1);
+        if(str2.contains("negate")) str2 = getValueFromNegateCapsuledString(str2);
 
         BigDecimal num1 = new BigDecimal(str1);
         BigDecimal num2 = new BigDecimal(str2);
-
         BigDecimal result = BigDecimal.ZERO;
 
-        // 0으로 나눴으면 cant divide by zero state 로 만들어주기
+        // 나누기 0이면 cant divide by zero state 로 만들어주기
         if (operator.equals("÷") && num2.equals(BigDecimal.ZERO)) {
             changeToCantDivideByZeroState();
             return "cant divide by zero!";
@@ -170,13 +163,16 @@ public class OperatorEventController extends EventController {
                     break;
             }
 
-            String returnedValue = changeToEngineeredString(result.toString());
+            // logButton 작성을 위한 string 변환
+            str1 = changeToEngineeredString(str1);
+            str2 = changeToEngineeredString(str2);
+            String curSmallLabelString = str1 + " " + operator + " " + str2 + " = ";
+            String curBigLabelString = changeToEngineeredString(result.toString());
 
-            // 새로운 log 추가해주기
+            // 새로운 logButton 추가
+            addNewLogButton(curSmallLabelString, curBigLabelString);
 
-            addNewLogButton(logEquationString, returnedValue);
-
-            return returnedValue;
+            return curBigLabelString;
         }
     }
 

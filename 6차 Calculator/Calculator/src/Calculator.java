@@ -39,7 +39,6 @@ public class Calculator {
         this.operatorDeque = new ArrayDeque<>();
 
         this.eventControllerArr = new EventController[4];
-
         this.eventControllerArr[0] = new NumberEventController(numberDeque, operatorDeque, mainFrame);
         this.eventControllerArr[1] = new OperatorEventController(numberDeque, operatorDeque, mainFrame);
         this.eventControllerArr[2] = new EraserEventController(numberDeque, operatorDeque, mainFrame);
@@ -73,7 +72,7 @@ public class Calculator {
             @Override
             public void componentResized(ComponentEvent e) {
 
-                // 만약 로그창 떠있었으면 다시 제자리에 갖다 붙혀주기
+                // 만약 로그창 떠있었으면 다시 제자리에 갖다 붙여주기
                 if(mainFrame.getButtonPanel().isVisible()==false) putLogPanelBackToDefaultLocation();
 
                 int width = mainFrame.getWidth();
@@ -121,7 +120,7 @@ public class Calculator {
             }
         });
 
-        // 3. runtime 시 resultPanel 클릭에 따른 반응형 달아주기
+        // 3. runtime 시 resultPanel 클릭에 따른 반응형 listener 달아주기
         mainFrame.getResultPanel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -132,7 +131,7 @@ public class Calculator {
         });
     }
 
-    // LogPanel 제자리에 갖다 붙혀줌
+    // LogPanel 제자리에 갖다 붙여줌
     private void putLogPanelBackToDefaultLocation(){
         GridBagConstraints gbc = new GridBagConstraints();
 

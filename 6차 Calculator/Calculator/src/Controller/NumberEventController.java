@@ -15,25 +15,24 @@ public class NumberEventController extends EventController{
     @Override
     public void handleEvent(String newNum) {
 
-        // cant divide by zero 상태이면 다시 정상화시키기
-        if(checkIfCantDivideByZeroState()){
+        // cant divide by zero 상태이면 다시 정상화시키고 실행
+        // 어차피 cand divide by zero 일때는 정상 숫자만 입력가능해서 이거 다음에 switch-default로 처리됨
+        if (checkIfCantDivideByZeroState()) {
             changeToNormalState();
         }
-        // cant divide by zero 상태가 아닐때는 정상적으로 처리
-        else {
-            switch (newNum) {
-                case "+/-":
-                    handleNegate();
-                    break;
 
-                case ".":
-                    handleDecimalPoint();
-                    break;
+        switch (newNum) {
+            case "+/-":
+                handleNegate();
+                break;
 
-                default:
-                    handleNumber(newNum);
-                    break;
-            }
+            case ".":
+                handleDecimalPoint();
+                break;
+
+            default:
+                handleNumber(newNum);
+                break;
         }
         // number 가 들어왔을때는 항상 BigLabel render
         renderBigLabel();
@@ -45,8 +44,6 @@ public class NumberEventController extends EventController{
 
         // DEFAULT 0 이면 아무것도 안해도 됨
         if(numberDeque.getLast().equals("0") && operatorDeque.size()==0) return;
-
-        //if(numberDeque.getLast().equals("0."))
 
         // negate capsule화가 처음일때는 
         // 숫자 1개 연산자 1개 채워져있을때 밖에 없음
@@ -110,7 +107,7 @@ public class NumberEventController extends EventController{
         }
 
         // 이미 현재 값에 소수점 존재하면
-        if (numberDeque.getLast().contains(".")) {
+        if (numberDeque.getLast().contains(".")==false) {
             // 아무것도 안해도 됨
         } else {
             // 아니면 소수점 추가

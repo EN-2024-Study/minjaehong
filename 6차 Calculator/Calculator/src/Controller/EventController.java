@@ -53,7 +53,6 @@ public abstract class EventController{
         }
 
         // 작업 다 끝나면 bigLabel에 적용해주기
-
         mainFrame.getResultPanel().getBigLabel().setText(newNum);
     }
 
@@ -147,6 +146,23 @@ public abstract class EventController{
         renderBigLabel();
     }
 
+    // E 포함된 BigDecimal 로 바꿔줌
+    protected String changeToEngineeredString(String curNum){
+        BigDecimal standardNum = new BigDecimal("10E+14");
+        String resultString;
+
+        // 예외일때는 skip
+        if(curNum.endsWith(".") || curNum.contains("negate") || curNum.equals("cant divide by zero!")) return curNum;
+
+        BigDecimal testNum = new BigDecimal(curNum);
+        if(testNum.abs().compareTo(standardNum) > 0) {
+            resultString = testNum.stripTrailingZeros().toEngineeringString();
+        }else{
+            resultString = testNum.stripTrailingZeros().toPlainString();
+        }
+        return resultString;
+    }
+    
     //==================== functions for negate-capsuled string handling =====================//
 
     // negate capsule화를 한번 더 시킨 string을 return
@@ -184,20 +200,5 @@ public abstract class EventController{
         if(capsuledCount%2 != 0) value = value.negate();
 
         return value.toString();
-    }
-
-    protected String changeToEngineeredString(String curNum){
-        BigDecimal standardNum = new BigDecimal("10E+14");
-        String resultString;
-
-        if(curNum.endsWith(".") || curNum.contains("negate")) return curNum;
-
-        BigDecimal testNum = new BigDecimal(curNum);
-        if(testNum.abs().compareTo(standardNum) > 0) {
-            resultString = testNum.stripTrailingZeros().toEngineeringString();
-        }else{
-            resultString = testNum.stripTrailingZeros().toPlainString();
-        }
-        return resultString;
     }
 }

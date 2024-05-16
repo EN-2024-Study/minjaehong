@@ -28,12 +28,8 @@ public class LogEventController extends EventController{
 
     // showLogButton 눌렸을때
     private void handleShowLogButton(){
-
-        GridBagConstraints gbc = new GridBagConstraints();
-
         mainFrame.getResultPanel().setBackground(Color.DARK_GRAY);
         mainFrame.getButtonPanel().setVisible(false);
-
         putLogPanelOnButtonPanelLocation();
     }
 
@@ -41,8 +37,7 @@ public class LogEventController extends EventController{
     // log 파싱하고 numberDeque 랑 operatorDeque 를 수동으로 조작해서
     // 다음 연산이 가능한 상태로 만들어줘야함
     private void handleLogHistory(String log){
-
-        // cant divide by zero state 이면 normal state 로 바꿔주고 시작
+        // cant divide by zero state 일때 대비해서 normal state 로 바꿔주고 시작
         changeToNormalState();
 
         // log parsing 하기
@@ -76,6 +71,7 @@ public class LogEventController extends EventController{
         mainFrame.requestFocus();
     }
 
+    // logPanel 다시 제자리에 붙이기
     private void putLogPanelBackToDefaultLocation(){
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -94,6 +90,7 @@ public class LogEventController extends EventController{
         mainFrame.getResultPanel().getShowLogButton().setEnabled(true);
     }
 
+    // logPanel ButtonPanel 위치에 붙이기
     private void putLogPanelOnButtonPanelLocation(){
         GridBagConstraints gbc = new GridBagConstraints();
 
