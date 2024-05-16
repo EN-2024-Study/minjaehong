@@ -74,8 +74,8 @@ public class MainFrame extends JFrame {
 
     public MainFrame(){
         setTitle("Windows Calculator");
-        setSize(new Dimension(400,600));
-        setMinimumSize(new Dimension(400,600));
+        setSize(new Dimension(450,600));
+        setMinimumSize(new Dimension(500,600));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         createComponents();

@@ -76,7 +76,7 @@ public class Calculator {
                 if(mainFrame.getButtonPanel().isVisible()==false) putLogPanelBackToDefaultLocation();
 
                 int width = mainFrame.getWidth();
-                if (width < 500) {
+                if (width < 550) {
                     mainFrame.getLogPanel().setVisible(false);
                     mainFrame.getResultPanel().getShowLogButton().setVisible(true);
                 }else{
