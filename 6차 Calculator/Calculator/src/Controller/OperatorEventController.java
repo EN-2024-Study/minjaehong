@@ -14,6 +14,8 @@ public class OperatorEventController extends EventController {
         super(numberDeque, operatorDeque, mainFrame);
     }
 
+    //========================== IMPLEMENTED HANDLEEVENT FUNCTION ==========================//
+
     @Override
     public void handleEvent(String newOperator) {
         // cant divide by zero 상태이면 다시 정상화시키기
@@ -29,20 +31,23 @@ public class OperatorEventController extends EventController {
         // 일단 무조건 operatorDeque 에 PUSH 하고 판단하기
         operatorDeque.add(newOperator);
 
-        // 이번꺼가 등호일때 -> 등호일때는 무조건 계산해줘야함
+        // 이번꺼가 등호일때
         if (newOperator.equals("=")) {
             handleEqualOperator();
         }
+        // 이번꺼 등호 아니면
         else {
             handleNonEqualOperators();
         }
     }
 
+    //================================== PRIVATE FUNCTIONS =================================//
+
     private void handleEqualOperator(){
         // 전꺼가 등호일때
         if (operatorDeque.size()==2 && operatorDeque.getFirst().equals("=")) {
             // 마지막 식을 대상으로 판단해야함
-            String lastEquation = mainFrame.getLastSmallLabel();
+            String lastEquation = mainFrame.getLatestSmallLabel();
             String[] arr = lastEquation.split(" ");
 
             // 전꺼가 4 = 이런 형식이었으면
@@ -133,16 +138,9 @@ public class OperatorEventController extends EventController {
         String operator = operatorDeque.removeFirst();
         String str2 = numberDeque.removeFirst();
 
-        //System.out.println("============");
-        //System.out.println("before str1 :" + str1);
-        //System.out.println("before str2 : " + str2);
         // negate 이면 negate 다 깐 숫자 받기
         if(str1.contains("negate")) str1 = getValueFromNegateCapsuledString(str1);
         if(str2.contains("negate")) str2 = getValueFromNegateCapsuledString(str2);
-
-        //System.out.println("after str1 :" + str1);
-        //System.out.println("after str2 : " + str2);
-        //System.out.println("============");
 
         BigDecimal num1 = new BigDecimal(str1);
         BigDecimal num2 = new BigDecimal(str2);
@@ -232,6 +230,6 @@ public class OperatorEventController extends EventController {
         newLogButton.setBackground(Color.WHITE);
         newLogButton.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        mainFrame.getLogPanel().addNewLogLabel(newLogButton);
+        mainFrame.getLogPanel().addNewLog(newLogButton);
     }
 }

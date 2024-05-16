@@ -78,10 +78,9 @@ public class LogPanel extends JPanel{
         return trashCanButton;
     }
 
-    // 로그 넣을때도 콤마 처리 해야함
-    public void addNewLogLabel(JButton newLogButton){
+    public void addNewLog(JButton newLog){
         // 새로 추가된 것은 항상 위쪽에 추가
-        logLabelPanel.add(newLogButton, 0);
+        logLabelPanel.add(newLog, 0);
 
         // logPanel 다시 그리기
         revalidate();

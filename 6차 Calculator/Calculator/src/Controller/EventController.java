@@ -26,46 +26,43 @@ public abstract class EventController{
         this.mainFrame = mainFrame;
     }
 
-    //================ functions that have to be implemented in child classes ===============//
+    //================ FUNCTIONS THAT HAVE TO BE IMPLEMENTED IN CHILD CLASSES ===============//
 
     // 무조건 자식클래스에서 구현되어야함
     // 만약 EventController 클래스로 자식클래스의 handleEvent 를 호출하면
     // abstract function은 동적 바인딩되므로 자식클래스의 구현된 handleEvent 함수를 호출할 수 있음
     public abstract void handleEvent(String userInput);
 
-    //============= functions that don't have to be implemented in child classes =============//
+    //============= FUNCTIONS THAT DONT HAVE TO BE IMPLEMENTED IN CHILD CLASSES =============//
 
-    protected void renderBigLabel(){
-        String newNum = numberDeque.getLast();
+    protected final void renderBigLabel(){
+        String newResult = numberDeque.getLast();
 
         // 1. cant divide by zero 이면 아무것도 안해줘도 됨
-        if(newNum.equals("cant divide by zero!")) {
-
+        if(newResult.equals("cant divide by zero!")) {
+            // do nothing
         }
         // 2. negate capsuled string이면 negate 다 까줘야함
-        else if(newNum.contains("negate")){
-            newNum = getValueFromNegateCapsuledString(newNum);
+        else if(newResult.contains("negate")){
+            newResult = getValueFromNegateCapsuledString(newResult);
         }
         // 3. 그냥 일반적인 숫자면 format 처리해주기
         else{
-            System.out.println("before : " + newNum);
-            newNum = changeToEngineeredString(newNum);
-            System.out.println("after engineered : " + newNum);
-            newNum = changeToFormattedString(newNum);
-            System.out.println("after formatted : " + newNum);
+            newResult = changeToEngineeredString(newResult);
+            newResult = changeToFormattedString(newResult);
         }
 
         // 작업 다 끝나면 bigLabel에 적용해주기
-        mainFrame.getResultPanel().getBigLabel().setText(newNum);
+        mainFrame.setBigLabel(newResult);
     }
 
-    protected void renderSmallLabel(){
+    protected final void renderSmallLabel(){
 
-        String newText;
+        String newEquation;
 
         // "0." 으로 시작할때 예외처리
         if(operatorDeque.size()==0 && numberDeque.size()==1 && numberDeque.getFirst().equals("0.")){
-            newText=" ";
+            newEquation=" ";
         }else {
             Object[] numberArr = numberDeque.toArray();
             Object[] operatorArr = operatorDeque.toArray();
@@ -81,13 +78,13 @@ public abstract class EventController{
                 }
             }
 
-            newText = sb.toString();
+            newEquation = sb.toString();
 
             // smallLabel 크기 줄어드는거 방지
-            if (newText.isEmpty()) newText = " ";
+            if (newEquation.isEmpty()) newEquation = " ";
         }
 
-        mainFrame.getResultPanel().getSmallLabel().setText(newText);
+        mainFrame.setSmallLabel(newEquation);
     }
 
     // renderBigLabel 에서만 쓰임
@@ -118,7 +115,7 @@ public abstract class EventController{
 
     // 현재 결과가 cant divide by zero 인지 확인해줌
     protected final boolean checkIfCantDivideByZeroState(){
-        if(mainFrame.getLastBigLabel().equals("cant divide by zero!")) return true;
+        if(mainFrame.getLatestBigLabel().equals("cant divide by zero!")) return true;
         else return false;
     }
 
@@ -152,21 +149,19 @@ public abstract class EventController{
     // E 포함된 BigDecimal 로 바꿔줌
     protected String changeToEngineeredString(String curNum){
         BigDecimal standardNum = new BigDecimal("10E+14");
-        String resultString;
 
         // 예외일때는 skip
         if(curNum.contains(".") || curNum.contains("negate") || curNum.equals("cant divide by zero!")) return curNum;
 
         BigDecimal testNum = new BigDecimal(curNum);
         if(testNum.abs().compareTo(standardNum) > 0) {
-            resultString = testNum.stripTrailingZeros().toEngineeringString();
+            return testNum.stripTrailingZeros().toEngineeringString();
         }else{
-            resultString = testNum.stripTrailingZeros().toPlainString();
+            return testNum.stripTrailingZeros().toPlainString();
         }
-        return resultString;
     }
     
-    //==================== functions for negate-capsuled string handling =====================//
+    //==================== FUNCTIONS FOR NEGATE-CAPSULED STRING HANDLING =====================//
 
     // negate capsule화를 한번 더 시킨 string을 return
     protected final String getNegateCapsuledString(String originalString){

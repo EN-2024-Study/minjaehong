@@ -65,9 +65,10 @@ public class ButtonPanel extends JPanel {
         }
     }
 
+    // listener binding 해주기 위해 필요함
     public JButton[] getButtonArray() { return buttonArr; }
 
-    // 0 으로 나눌 수 없습니다 뜰때 enabled = false 시켜야되서 필요한 getter 들
+    // cant divide by zero 뜰때 enabled = false 시켜야되서 필요한 getter 들
     public JButton getDivButton() { return buttonArr[3]; }
     public JButton getMulButton() { return buttonArr[7]; }
     public JButton getSubButton() { return buttonArr[11]; }

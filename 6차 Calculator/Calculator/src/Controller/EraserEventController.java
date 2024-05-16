@@ -11,6 +11,8 @@ public class EraserEventController extends EventController{
         super(numberDeque, operatorDeque, mainFrame);
     }
 
+    //========================== IMPLEMENTED HANDLEEVENT FUNCTION ==========================//
+
     @Override
     public void handleEvent(String input){
 
@@ -34,6 +36,8 @@ public class EraserEventController extends EventController{
         // 모든 작업은 BigLabel rendering 을 동반함
         renderBigLabel();
     }
+
+    //================================== PRIVATE FUNCTIONS =================================//
 
     // bigLabel 0으로 만듬
     private void handleClearEntry(){

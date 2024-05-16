@@ -17,6 +17,8 @@ public class LogEventController extends EventController{
         super(numberDeque, operatorDeque, mainFrame);
     }
 
+    //========================== IMPLEMENTED HANDLEEVENT FUNCTION ==========================//
+
     @Override
     public void handleEvent(String buttonText) {
         if(buttonText.startsWith("<html>")){
@@ -25,6 +27,8 @@ public class LogEventController extends EventController{
             handleShowLogButton();
         }
     }
+
+    //================================== PRIVATE FUNCTIONS =================================//
 
     // showLogButton 눌렸을때
     private void handleShowLogButton(){
@@ -60,7 +64,7 @@ public class LogEventController extends EventController{
 
         // bigLabel smallLabel rendering
         renderBigLabel();
-        mainFrame.getResultPanel().getSmallLabel().setText(newSmallLabel);
+        mainFrame.setSmallLabel(newSmallLabel);
 
         // 현재 buttonPanel 이 invisible 하면
         // logPanel 다시 원위치로 복귀시키기

@@ -112,10 +112,11 @@ public class ResultPanel extends JPanel {
     public JLabel getSmallLabel(){
         return smallLabel;
     }
-
     public JLabel getBigLabel() {
         return bigLabel;
     }
+    public void setSmallLabel(String newEquation){ smallLabel.setText(newEquation); }
+    public void setBigLabel(String newResult){ bigLabel.setText(newResult);}
 
     public JButton getShowLogButton(){
         return showLogButton;

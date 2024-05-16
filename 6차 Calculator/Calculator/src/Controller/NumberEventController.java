@@ -12,6 +12,8 @@ public class NumberEventController extends EventController{
         super(numberDeque, operatorDeque, mainFrame);
     }
 
+    //========================== IMPLEMENTED HANDLEEVENT FUNCTION ==========================//
+
     @Override
     public void handleEvent(String newNum) {
 
@@ -34,10 +36,12 @@ public class NumberEventController extends EventController{
                 handleNumber(newNum);
                 break;
         }
-        // number 가 들어왔을때는 항상 BigLabel render
+        // number 가 들어왔을때는 항상 bigLabel render
         renderBigLabel();
     }
-    
+
+    //================================== PRIVATE FUNCTIONS =================================//
+
     // negate 일때는 smallLabel 이 최신화되는 경우가 있음
     // 그래서 필요에 따라 renderSmallLabel 함수를 넣어줘야함
     // 1. 일반 + negate (잘됨)
