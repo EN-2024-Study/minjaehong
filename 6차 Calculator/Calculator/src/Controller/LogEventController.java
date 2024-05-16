@@ -79,15 +79,24 @@ public class LogEventController extends EventController{
     private void putLogPanelBackToDefaultLocation(){
         GridBagConstraints gbc = new GridBagConstraints();
 
+        int fixedWidth = 300;
+        int fixedHeight = 600;
+        Dimension fixedSize = new Dimension(fixedWidth, fixedHeight);
+        mainFrame.getLogPanel().setPreferredSize(fixedSize);
+        mainFrame.getLogPanel().setMinimumSize(fixedSize);
+        mainFrame.getLogPanel().setMaximumSize(fixedSize);
+
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 2;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        mainFrame.add(mainFrame.getLogPanel(),gbc);
+        gbc.weightx = 0.0;
+        gbc.weighty = 0.0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
 
+        mainFrame.add(mainFrame.getLogPanel(),gbc);
+        
         mainFrame.getResultPanel().setBackground(Color.WHITE);
         mainFrame.getLogPanel().setVisible(false);
         mainFrame.getButtonPanel().setVisible(true);

@@ -61,6 +61,14 @@ public class EraserEventController extends EventController{
 
     private void handleBackSpace(){
 
+        /*
+        if(operatorDeque.size()==1 && operatorDeque.getLast().equals("=")){
+            operatorDeque.clear();
+            mainFrame.setSmallLabel(" ");
+            return;
+        }
+        */
+
         // 새 숫자를 입력할때만 써져야함
         // 이미 들어간 숫자 삭제는 불가능해야함
         // 그래서 숫자가 연산자 개수보다 많을때만 가능

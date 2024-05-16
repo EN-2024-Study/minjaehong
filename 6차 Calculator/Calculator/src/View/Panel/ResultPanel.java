@@ -37,8 +37,9 @@ public class ResultPanel extends JPanel {
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
         showLogButton = new JButton(scaledIcon);
+        showLogButton.setSize(20,20);
         showLogButton.setActionCommand("showLogButton");
-        showLogButton.setBorderPainted(true); // 버튼 테두리 설정
+        showLogButton.setBorderPainted(false); // 버튼 테두리 설정
         showLogButton.setContentAreaFilled(false); // 버튼 영역 배경 표시 설정
         showLogButton.setFocusable(true);
     }

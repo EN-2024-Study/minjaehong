@@ -32,6 +32,7 @@ public class MainFrame extends JFrame {
         GridBagLayout grid = new GridBagLayout();
         setLayout(grid);
 
+        // add resultPanel
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -42,6 +43,7 @@ public class MainFrame extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
         this.add(resultPanel,gbc);
 
+        // add buttonPanel
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
@@ -50,13 +52,24 @@ public class MainFrame extends JFrame {
         gbc.weighty = 0.6;
         this.add(buttonPanel,gbc);
 
+        // add logPanel
+        int fixedWidth = 300;
+        int fixedHeight = 600;
+        Dimension fixedSize = new Dimension(fixedWidth, fixedHeight);
+        logPanel.setPreferredSize(fixedSize);
+        logPanel.setMinimumSize(fixedSize);
+        logPanel.setMaximumSize(fixedSize);
+
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 2;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        this.add(logPanel,gbc);
+        gbc.weightx = 0.0;
+        gbc.weighty = 0.0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+
+        this.add(logPanel, gbc);
     }
 
     public MainFrame(){

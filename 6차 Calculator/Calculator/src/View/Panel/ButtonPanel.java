@@ -65,6 +65,39 @@ public class ButtonPanel extends JPanel {
         }
     }
 
+    /*
+    private void initializeButtonPanel() {
+        createComponents();
+
+        GridBagLayout grid = new GridBagLayout();
+        setLayout(grid);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 0.0; // No stretching horizontally
+        gbc.weighty = 0.0; // No stretching vertically
+        gbc.fill = GridBagConstraints.NONE; // Do not resize the buttons
+        gbc.insets = new Insets(1, 1, 1, 1); // Padding
+
+        // Set the fixed size for the buttons
+        Dimension buttonSize = new Dimension(80, 80); // Example size, adjust as needed
+        for (int i = 0; i < buttonArr.length; i++) {
+            buttonArr[i].setPreferredSize(buttonSize);
+            buttonArr[i].setMinimumSize(buttonSize);
+            buttonArr[i].setMaximumSize(buttonSize);
+        }
+
+        // Add buttons to the panel
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 4; col++) {
+                int curIdx = row * 4 + col;
+                gbc.gridx = col;
+                gbc.gridy = row;
+                this.add(buttonArr[curIdx], gbc);
+            }
+        }
+    }
+    */
+
     // listener binding 해주기 위해 필요함
     public JButton[] getButtonArray() { return buttonArr; }
 

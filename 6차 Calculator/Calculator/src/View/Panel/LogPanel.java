@@ -27,7 +27,6 @@ public class LogPanel extends JPanel{
     }
 
     private void initializeLogPanel() {
-
         createComponents();
 
         this.setLayout(new BorderLayout());
@@ -35,6 +34,13 @@ public class LogPanel extends JPanel{
 
         // label 들 붙일 labelPanel 을 들고 있는 scrollPane 을 LogPanel 에 붙이기
         this.add(scrollPane, BorderLayout.CENTER);
+
+        int fixedWidth = 400;
+        int fixedHeight = 600;
+        Dimension fixedSize = new Dimension(fixedWidth, fixedHeight);
+        setPreferredSize(fixedSize);
+        setMinimumSize(fixedSize);
+        setMaximumSize(fixedSize);
     }
 
     private void createScrollPane(){
