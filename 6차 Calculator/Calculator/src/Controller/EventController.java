@@ -148,7 +148,7 @@ public abstract class EventController{
 
     // E 포함된 BigDecimal 로 바꿔줌
     protected String changeToEngineeredString(String curNum){
-        BigDecimal standardNum = new BigDecimal("10E+14");
+        BigDecimal standardNum = new BigDecimal("100E+14");
 
         // 예외일때는 skip
         if(curNum.contains(".") || curNum.contains("negate") || curNum.equals("cant divide by zero!")) return curNum;

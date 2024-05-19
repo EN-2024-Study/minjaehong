@@ -29,7 +29,6 @@ public class Calculator {
     }
 
     private void initializeComponents() {
-
         this.mainFrame = new MainFrame();
 
         // numberDeque 는 default 상태가 0이 들어가 있는 상태

@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class ButtonPanel extends JPanel {
 
-    private Font mainFont;
+    public Font mainFont;
     private JButton[] buttonArr;
 
     private final String[] buttonName={
