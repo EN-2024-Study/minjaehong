@@ -50,30 +50,6 @@ public class MainController {
         curDirectory = rootDirectory;
     }
 
-    private void handleCD(String parameters) throws IOException {
-        curDirectory = mainService.changeDirectory(curDirectory, parameters);
-    }
-
-    private void handleDIR(String parameters) throws IOException {
-        OutputVO output = mainService.listFiles(curDirectory, parameters);
-        mainView.printReturnedResult(output);
-    }
-
-    private void handleCOPY(String parameters) throws IOException {
-        OutputVO output = mainService.copyFile(curDirectory, parameters);
-        mainView.printReturnedResult(output);
-    }
-
-    private void handleMOVE(String parameters){
-        mainService.moveFile(parameters);
-    }
-
-    private void handleHELP(){ mainView.showHelp(); }
-
-    private void handleCLS(){
-        mainView.clearPrompt();
-    }
-
     public void run() throws IOException {
         boolean isCmdRunning = true;
 
@@ -109,5 +85,30 @@ public class MainController {
                     break;
             }
         }
+    }
+
+    private void handleCD(String parameters) throws IOException {
+        curDirectory = mainService.changeDirectory(curDirectory, parameters);
+    }
+
+    private void handleDIR(String parameters) throws IOException {
+        OutputVO output = mainService.listFiles(curDirectory, parameters);
+        mainView.printReturnedResult(output);
+    }
+
+    private void handleCOPY(String parameters) throws IOException {
+        OutputVO output = mainService.copyFile(curDirectory, parameters);
+        mainView.printReturnedResult(output);
+    }
+
+    private void handleMOVE(String parameters) throws IOException {
+        OutputVO output = mainService.moveFile(curDirectory, parameters);
+        mainView.printReturnedResult(output);
+    }
+
+    private void handleHELP(){ mainView.showHelp(); }
+
+    private void handleCLS(){
+        mainView.clearPrompt();
     }
 }
