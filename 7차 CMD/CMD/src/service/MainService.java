@@ -5,6 +5,7 @@ import model.OutputVO;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Map;
 
 public class MainService {
 
@@ -14,17 +15,8 @@ public class MainService {
         this.mainModel = new MainModel(fileSystem, rootDirectory);
     }
 
-    public String changeDirectory(String curDirectory, String directoryPath) throws IOException {
-
-        String changedDirectory = mainModel.getCanonicalPath(curDirectory, directoryPath);
-
-        // 실제로 존재하면 바뀐 directory return 아니면 기존꺼 그대로 return
-        if (mainModel.checkIfDirectoryExists(changedDirectory) == true) {
-            return changedDirectory;
-        }
-        else {
-            return curDirectory;
-        }
+    public Map.Entry<String,OutputVO> changeDirectory(String curDirectory, String destination) throws IOException {
+        return mainModel.cd(curDirectory, destination);
     }
 
     public OutputVO listFiles(String curDirectory, String parameter) throws IOException {
@@ -39,12 +31,6 @@ public class MainService {
 
         return mainModel.dir(curDirectory, source);
     }
-
-    // File 클래스에 replace 함수가 있음
-    // copy 인자1 인자2
-    // copy 인자1
-
-    // 덮어쓰겠습니다를 먼저 호출?
 
     public OutputVO copyFile(String curDirectory, String parameters) throws IOException {
         String[] parameterArr = parameters.split(" ");

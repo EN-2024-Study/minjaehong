@@ -5,12 +5,12 @@ import model.OutputVO;
 import service.MainService;
 import view.MainView;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.Map;
 
 public class MainController {
 
@@ -88,7 +88,17 @@ public class MainController {
     }
 
     private void handleCD(String parameters) throws IOException {
-        curDirectory = mainService.changeDirectory(curDirectory, parameters);
+        // 바뀔 directory 명이랑 예외가 발생했을 시에 따른 OutputVO 를 pair 객체로 받기
+        // pair 객체로 return 하는 놈은 CD 밖에 없음. 얘만 예외임
+        Map.Entry<String, OutputVO> cdResult = mainService.changeDirectory(curDirectory, parameters);
+
+        // curDirectory 최신화
+        String changedDirectory = cdResult.getKey();
+        curDirectory = changedDirectory;
+        
+        // OutputVO view에 출력
+        OutputVO exceptionMessageVO = cdResult.getValue();
+        mainView.printReturnedResult(exceptionMessageVO);
     }
 
     private void handleDIR(String parameters) throws IOException {

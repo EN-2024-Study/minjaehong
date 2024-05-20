@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 public class MainModel {
 
@@ -38,6 +40,7 @@ public class MainModel {
 
         // 1. root 부터 시작하는 놈이면
         if (checkIfStartingFromRootDirectory(directoryPath)) {
+
         }
         // 2. 상대경로로 들어왔으면 조작해서 확인하기(.. or ../../ 같은거 or 내부 directory 일때)
         else {
@@ -50,13 +53,37 @@ public class MainModel {
     }
 
     // 특정 경로에 대한 file 이나 directory가 진짜로 존재하는 놈인지 판별해줌
-    public boolean checkIfDirectoryExists(String path) {
+    private boolean checkIfDirectoryExists(String path) {
         file = new File(path);
 
         if (file.exists()) return true;
         else return false;
     }
 
+    private boolean isDirectory(String destination){
+        File destinationFile = new File(destination);
+        if(destinationFile.isDirectory()) return true;
+        else return false;
+    }
+
+    //=================================== CD ===================================//
+
+    public Map.Entry<String, OutputVO> cd(String curDirectory, String destination) throws IOException {
+        String changedDirectory = getCanonicalPath(curDirectory, destination);
+
+        if(checkIfDirectoryExists(changedDirectory)){
+
+            if(isDirectory(changedDirectory)){
+                return new AbstractMap.SimpleEntry<>(changedDirectory, new OutputVO(""));
+            }
+
+            return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("Not a directory"));
+        }
+
+        return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("No such file or directory"));
+    }
+
+    //================================== DIR ===================================//
 
     public OutputVO dir(String curDirectory, String source) throws IOException {
         // curDirectory 기준으로 절대경로 찾아주기
@@ -64,7 +91,7 @@ public class MainModel {
 
         // 해당 directory가 실제로 존재하는지 검사
         if (checkIfDirectoryExists(directoryPath) == false) {
-            return new OutputVO("directory doesn't exist");
+            return new OutputVO("No such file or directory");
         }
 
         // 여기서부터는 진짜로 dir 작업 수행
