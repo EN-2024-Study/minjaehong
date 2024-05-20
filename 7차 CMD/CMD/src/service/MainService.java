@@ -1,7 +1,10 @@
 package service;
 
-import model.MainModel;
-import model.OutputVO;
+import model.DAO.CdDAO;
+import model.DAO.CopyDAO;
+import model.DAO.DirDAO;
+import model.DAO.MoveDAO;
+import model.VO.OutputVO;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -9,14 +12,20 @@ import java.util.Map;
 
 public class MainService {
 
-    private MainModel mainModel;
+    private CdDAO cdDAO;
+    private CopyDAO copyDAO;
+    private DirDAO dirDAO;
+    private MoveDAO moveDAO;
 
     public MainService(FileSystem fileSystem, String rootDirectory) {
-        this.mainModel = new MainModel(fileSystem, rootDirectory);
+        this.cdDAO = new CdDAO(fileSystem, rootDirectory);
+        this.copyDAO = new CopyDAO(fileSystem, rootDirectory);
+        this.dirDAO = new DirDAO(fileSystem,rootDirectory);
+        this.moveDAO = new MoveDAO(fileSystem, rootDirectory);
     }
 
-    public Map.Entry<String,OutputVO> changeDirectory(String curDirectory, String destination) throws IOException {
-        return mainModel.cd(curDirectory, destination);
+    public Map.Entry<String, OutputVO> changeDirectory(String curDirectory, String destination) throws IOException {
+        return cdDAO.cd(curDirectory, destination);
     }
 
     public OutputVO listFiles(String curDirectory, String parameter) throws IOException {
@@ -29,7 +38,7 @@ public class MainService {
             source = parameter;
         }
 
-        return mainModel.dir(curDirectory, source);
+        return dirDAO.dir(curDirectory, source);
     }
 
     public OutputVO copyFile(String curDirectory, String parameters) throws IOException {
@@ -40,11 +49,11 @@ public class MainService {
         }
 
         if (parameterArr.length == 1) {
-            return mainModel.copy(curDirectory, parameterArr[0]);
+            return copyDAO.copy(curDirectory, parameterArr[0]);
         }
 
         if (parameterArr.length == 2) {
-            return mainModel.copy(curDirectory, parameterArr[0], parameterArr[1]);
+            return copyDAO.copy(curDirectory, parameterArr[0], parameterArr[1]);
         }
 
         return new OutputVO("parameter number is wrong");
@@ -59,11 +68,11 @@ public class MainService {
         }
 
         if (parameterArr.length == 1) {
-            return mainModel.move(curDirectory, parameterArr[0]);
+            return moveDAO.move(curDirectory, parameterArr[0]);
         }
 
         if(parameterArr.length == 2){
-            return mainModel.move(curDirectory, parameterArr[0], parameterArr[1]);
+            return moveDAO.move(curDirectory, parameterArr[0], parameterArr[1]);
         }
 
         return new OutputVO("parameter number is wrong");

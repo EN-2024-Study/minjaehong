@@ -1,7 +1,7 @@
 package view;
 
-import model.InputVO;
-import model.OutputVO;
+import model.VO.InputVO;
+import model.VO.OutputVO;
 
 import java.io.*;
 
@@ -34,11 +34,7 @@ public class MainView {
     }
 
     public void clearPrompt(){
-        try {
-            Runtime.getRuntime().exec("cls");
-        }catch(IOException e){
 
-        }
     }
 
     public void showHelp(){

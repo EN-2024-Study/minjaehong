@@ -1,7 +1,7 @@
 package controller;
 
-import model.InputVO;
-import model.OutputVO;
+import model.VO.InputVO;
+import model.VO.OutputVO;
 import service.MainService;
 import view.MainView;
 
@@ -44,12 +44,14 @@ public class MainController {
         Iterator<Path> iterator = rootDirectories.iterator();
         Path directory = iterator.next();
         rootDirectory = directory.toString();
-        System.out.println(rootDirectory);
-        System.out.println(separator);
+        //System.out.println(rootDirectory);
+        //System.out.println(separator);
 
+        // 현재 directory rootDirectory 로 최신화
         curDirectory = rootDirectory;
     }
 
+    // file folder 명에 공백 있을 경우 "" 로 감싸줘야함!
     public void run() throws IOException {
         boolean isCmdRunning = true;
 
