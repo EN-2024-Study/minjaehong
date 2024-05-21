@@ -18,19 +18,17 @@ public class MoveDAO extends CmdDAO {
     // 이때 이름은 원래 sourceName 그대로임
     public OutputVO move(String curDirectory, String source) throws IOException {
 
-        source = getCanonicalPath(curDirectory, source);
-        Path sourcePath = Paths.get(source);
+        Path sourcePath = getNormalizedPath(curDirectory, source);
 
         // curDirectory 에 sourceName 가진 파일을 Path 로 설정하기 위한 작업
-        String sourceName = sourcePath.getFileName().toString();
-        Path destinationPath = Paths.get(curDirectory, seperator, sourceName);
+        Path destinationPath = Paths.get(curDirectory, String.valueOf(sourcePath.getFileName()));
 
         // source가 진짜로 존재하는 놈인지 검사
-        if (checkIfDirectoryExists(source) == false) {
+        if (checkIfDirectoryExists(sourcePath) == false) {
             return new OutputVO("original file doesnt exist");
         }
         // 옮길려는 곳에 똑같은 이름의 파일이 존재하는지 확인
-        if (checkIfDirectoryExists(destinationPath.toString())) {
+        if (checkIfDirectoryExists(destinationPath)) {
             return new OutputVO("destination file already exists in curDirectory");
         }
 
@@ -42,28 +40,24 @@ public class MoveDAO extends CmdDAO {
     public OutputVO move(String curDirectory, String source, String destination) throws IOException {
 
         // sourcePath 생성
-        source = getCanonicalPath(curDirectory, source);
+        Path sourcePath = getNormalizedPath(curDirectory, source);
+
         // source 가 진짜 존재하는지 검사
-        if (checkIfDirectoryExists(source) == false) {
+        if (checkIfDirectoryExists(sourcePath) == false) {
             return new OutputVO("source file doesnt exist");
         }
-        Path sourcePath = Paths.get(source);
 
         // destinationPath 생성
-        destination = getCanonicalPath(curDirectory, destination);
-        Path destinationPath;
+        Path destinationPath = getNormalizedPath(curDirectory, destination);
 
         // 만약 destination 이 directory 이면
         // 파일명이 아니기 때문에 해당 directory 내 똑같은 파일명으로 PATH 를 설정해줘야함
-        if(isDirectory(destination)){
-            String sourceName = sourcePath.getFileName().toString();
-            destinationPath = Paths.get(curDirectory, seperator, sourceName);
-        }else{
-            destinationPath = Paths.get(destination);
+        if(isDirectory(destinationPath)){
+            destinationPath = Paths.get(destinationPath.toString(), String.valueOf(sourcePath.getFileName()));
         }
 
         // destination이 이미 존재하는지 검사
-        if (checkIfDirectoryExists(destination) == true) {
+        if (checkIfDirectoryExists(destinationPath) == true) {
             return new OutputVO("destination file already exist");
         }
 

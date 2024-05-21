@@ -5,6 +5,7 @@ import model.VO.OutputVO;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystem;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,8 +26,8 @@ public class DirDAO extends CmdDAO {
         sb.setLength(0);
 
         // target directory 가 진짜 존재하는지 검사
-        source = getCanonicalPath(curDirectory, source);
-        if (checkIfDirectoryExists(source) == false) {
+        Path sourcePath = getNormalizedPath(curDirectory, source);
+        if (checkIfDirectoryExists(sourcePath) == false) {
             return new OutputVO("No such file or directory");
         }
 
