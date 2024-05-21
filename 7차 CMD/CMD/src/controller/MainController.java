@@ -10,6 +10,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class MainController {
@@ -24,7 +25,7 @@ public class MainController {
     private MainService mainService;
     
     private String command;
-    private String parameters;
+    private List<String> parameters;
 
     public MainController(){
         initializeCMD();
@@ -44,15 +45,13 @@ public class MainController {
         Iterator<Path> iterator = rootDirectories.iterator();
         Path directory = iterator.next();
         rootDirectory = directory.toString();
-        //System.out.println(rootDirectory);
-        //System.out.println(separator);
 
         // 현재 directory rootDirectory 로 최신화
         curDirectory = rootDirectory;
     }
 
     // file folder 명에 공백 있을 경우 "" 로 감싸줘야함!
-    public void run() throws IOException {
+    public void run() throws IOException, InterruptedException {
         boolean isCmdRunning = true;
 
         while(isCmdRunning){
@@ -89,7 +88,7 @@ public class MainController {
         }
     }
 
-    private void handleCD(String parameters) throws IOException {
+    private void handleCD(List<String> parameters) throws IOException {
         // 바뀔 directory 명이랑 예외가 발생했을 시에 따른 OutputVO 를 pair 객체로 받기
         // pair 객체로 return 하는 놈은 CD 밖에 없음. 얘만 예외임
         Map.Entry<String, OutputVO> cdResult = mainService.changeDirectory(curDirectory, parameters);
@@ -103,24 +102,24 @@ public class MainController {
         mainView.printReturnedResult(exceptionMessageVO);
     }
 
-    private void handleDIR(String parameters) throws IOException {
+    private void handleDIR(List<String> parameters) throws IOException {
         OutputVO output = mainService.listFiles(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
-    private void handleCOPY(String parameters) throws IOException {
+    private void handleCOPY(List<String> parameters) throws IOException {
         OutputVO output = mainService.copyFile(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
-    private void handleMOVE(String parameters) throws IOException {
+    private void handleMOVE(List<String> parameters) throws IOException {
         OutputVO output = mainService.moveFile(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
     private void handleHELP(){ mainView.showHelp(); }
 
-    private void handleCLS(){
+    private void handleCLS() throws IOException, InterruptedException {
         mainView.clearPrompt();
     }
 }

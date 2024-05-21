@@ -37,7 +37,7 @@ public class CmdDAO {
 
         // 1. root 부터 시작하는 놈이면
         if (checkIfStartingFromRootDirectory(directoryPath)) {
-
+            // 아무것도 안해도 됨
         }
         // 2. 상대경로로 들어왔으면 조작해서 확인하기(.. or ../../ 같은거 or 내부 directory 일때)
         else {

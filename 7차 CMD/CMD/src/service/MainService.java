@@ -1,13 +1,12 @@
 package service;
 
-import model.DAO.CdDAO;
-import model.DAO.CopyDAO;
-import model.DAO.DirDAO;
-import model.DAO.MoveDAO;
-import model.VO.OutputVO;
+import model.DAO.*;
+import model.VO.*;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainService {
@@ -24,57 +23,68 @@ public class MainService {
         this.moveDAO = new MoveDAO(fileSystem, rootDirectory);
     }
 
-    public Map.Entry<String, OutputVO> changeDirectory(String curDirectory, String destination) throws IOException {
+    public Map.Entry<String, OutputVO> changeDirectory(String curDirectory, List<String> parameters) throws IOException {
+
+        if(parameters.size()==0){
+            return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO(curDirectory));
+        }
+
+        if(parameters.size()>2){
+            // 지정된 경로를 찾을 수 없습니다
+            return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("No such file or directory"));
+        }
+
+        String destination = parameters.get(0);
         return cdDAO.cd(curDirectory, destination);
     }
 
-    public OutputVO listFiles(String curDirectory, String parameter) throws IOException {
+    public OutputVO listFiles(String curDirectory, List<String> parameters) throws IOException {
 
         String source;
 
-        if (parameter.isEmpty()) {
+        if(parameters.size()>1){
+            // 지정된 경로를 찾을 수 없습니다
+            new OutputVO("No such file or directory");
+        }
+
+        if (parameters.size()==0) {
             source = curDirectory;
         } else {
-            source = parameter;
+            source = parameters.get(0);
         }
 
         return dirDAO.dir(curDirectory, source);
     }
 
-    public OutputVO copyFile(String curDirectory, String parameters) throws IOException {
-        String[] parameterArr = parameters.split(" ");
+    public OutputVO copyFile(String curDirectory, List<String> parameters) throws IOException {
 
-        if (parameterArr.length == 0) {
+        if (parameters.size() == 0) {
             return new OutputVO("parameter number is 0");
         }
 
-        if (parameterArr.length == 1) {
-            return copyDAO.copy(curDirectory, parameterArr[0]);
+        if (parameters.size() == 1) {
+            return copyDAO.copy(curDirectory, parameters.get(0));
         }
 
-        if (parameterArr.length == 2) {
-            return copyDAO.copy(curDirectory, parameterArr[0], parameterArr[1]);
+        if (parameters.size() == 2) {
+            return copyDAO.copy(curDirectory, parameters.get(0), parameters.get(1));
         }
 
+        // 명령 구문이 올바르지 않습니다
         return new OutputVO("parameter number is wrong");
     }
 
-    public OutputVO moveFile(String curDirectory, String parameters) throws IOException {
+    public OutputVO moveFile(String curDirectory, List<String> parameters) throws IOException {
 
-        String[] parameterArr = parameters.split(" ");
-
-        if (parameterArr.length == 0) {
-            return new OutputVO("parameter number is 0");
+        if (parameters.size() == 1) {
+            return moveDAO.move(curDirectory, parameters.get(0));
         }
 
-        if (parameterArr.length == 1) {
-            return moveDAO.move(curDirectory, parameterArr[0]);
+        if(parameters.size() == 2){
+            return moveDAO.move(curDirectory, parameters.get(0), parameters.get(1));
         }
 
-        if(parameterArr.length == 2){
-            return moveDAO.move(curDirectory, parameterArr[0], parameterArr[1]);
-        }
-
+        // 명령 구문이 올바르지 않습니다
         return new OutputVO("parameter number is wrong");
     }
 }

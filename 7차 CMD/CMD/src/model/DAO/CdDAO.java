@@ -13,6 +13,7 @@ public class CdDAO extends CmdDAO {
     }
 
     public Map.Entry<String, OutputVO> cd(String curDirectory, String destination) throws IOException {
+
         String changedDirectory = getCanonicalPath(curDirectory, destination);
 
         if(checkIfDirectoryExists(changedDirectory)){

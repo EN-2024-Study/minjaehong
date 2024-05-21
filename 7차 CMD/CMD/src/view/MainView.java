@@ -33,8 +33,15 @@ public class MainView {
         System.out.println();
     }
 
-    public void clearPrompt(){
-
+    public void clearPrompt() throws IOException, InterruptedException {
+        /*
+        final String os = System.getProperty("os.name");
+        if(os.contains("Windows")) {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        }else{
+            Runtime.getRuntime().exec("clear");
+        }
+         */
     }
 
     public void showHelp(){
@@ -44,8 +51,8 @@ public class MainView {
                 + "COPY     하나 이상의 파일을 다른 위치로 복사합니다.\n"
                 + "DIR      디렉터리에 있는 파일과 하위 디렉터리 목록을 보여줍니다.\n"
                 + "MOVE     하나 이상의 파일을 한 디렉터리에서 다른 디렉터리로 이동합니다.\n"
-                + "EXIT     CMD.EXE 프로그램(명령 인터프리터)을 종료합니다.\n"
                 + "HELP     Windows 명령에 대한 도움말 정보를 제공합니다.\n"
+                + "EXIT     CMD.EXE 프로그램(명령 인터프리터)을 종료합니다.\n"
                 + "도구에 대한 자세한 내용은 온라인 도움말의 명령줄 참조를 참조하십시오.";
 
         System.out.println(helpText);
