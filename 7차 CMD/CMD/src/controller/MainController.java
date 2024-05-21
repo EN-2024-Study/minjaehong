@@ -15,17 +15,12 @@ import java.util.Map;
 
 public class MainController {
 
-    private String rootDirectory;
     private FileSystem fileSystem;
-    private String seperator;
-
+    private String rootDirectory;
     private String curDirectory;
 
     private MainView mainView;
     private MainService mainService;
-    
-    private String command;
-    private List<String> parameters;
 
     public MainController(){
         initializeCMD();
@@ -38,10 +33,6 @@ public class MainController {
     private void initializeCMD(){
         fileSystem = FileSystems.getDefault();
 
-        seperator = fileSystem.getSeparator();
-
-        System.out.println(seperator);
-
         Iterable<Path> rootDirectories = fileSystem.getRootDirectories();
         
         Iterator<Path> iterator = rootDirectories.iterator();
@@ -52,9 +43,10 @@ public class MainController {
         curDirectory = rootDirectory;
     }
 
-    // file folder 명에 공백 있을 경우 "" 로 감싸줘야함!
     public void run() throws IOException, InterruptedException {
         boolean isCmdRunning = true;
+        String command;
+        List<String> parameters;
 
         while(isCmdRunning){
             InputVO input = mainView.getInput(curDirectory);
@@ -64,22 +56,22 @@ public class MainController {
 
             switch(command){
                 case "cd":
-                    handleCD(parameters);
+                    execCD(parameters);
                     break;
                 case "dir":
-                    handleDIR(parameters);
+                    execDIR(parameters);
                     break;
                 case "copy":
-                    handleCOPY(parameters);
+                    execCOPY(parameters);
                     break;
                 case "move":
-                    handleMOVE(parameters);
+                    execMOVE(parameters);
                     break;
                 case "help":
-                    handleHELP();
+                    execHELP();
                     break;
                 case "cls":
-                    handleCLS();
+                    execCLS();
                     break;
                 case "exit":
                     isCmdRunning = false;
@@ -90,7 +82,7 @@ public class MainController {
         }
     }
 
-    private void handleCD(List<String> parameters) throws IOException {
+    private void execCD(List<String> parameters) throws IOException {
         // 바뀔 directory 명이랑 예외가 발생했을 시에 따른 OutputVO 를 pair 객체로 받기
         // pair 객체로 return 하는 놈은 CD 밖에 없음. 얘만 예외임
         Map.Entry<String, OutputVO> cdResult = mainService.changeDirectory(curDirectory, parameters);
@@ -104,24 +96,24 @@ public class MainController {
         mainView.printReturnedResult(exceptionMessageVO);
     }
 
-    private void handleDIR(List<String> parameters) throws IOException {
+    private void execDIR(List<String> parameters) throws IOException {
         OutputVO output = mainService.listDirectory(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
-    private void handleCOPY(List<String> parameters) throws IOException {
+    private void execCOPY(List<String> parameters) throws IOException {
         OutputVO output = mainService.copyFile(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
-    private void handleMOVE(List<String> parameters) throws IOException {
+    private void execMOVE(List<String> parameters) throws IOException {
         OutputVO output = mainService.moveFile(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
-    private void handleHELP(){ mainView.showHelp(); }
+    private void execHELP(){ mainView.showHelp(); }
 
-    private void handleCLS() throws IOException, InterruptedException {
+    private void execCLS() throws IOException, InterruptedException {
         mainView.clearPrompt();
     }
 }

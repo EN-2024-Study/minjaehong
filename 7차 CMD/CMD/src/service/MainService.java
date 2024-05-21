@@ -77,7 +77,6 @@ public class MainService {
             return moveDAO.move(curDirectory, parameters.get(0), parameters.get(1));
         }
 
-        // 명령 구문이 올바르지 않습니다
-        return new OutputVO("parameter number is wrong");
+        return new OutputVO("명령 구문이 올바르지 않습니다");
     }
 }

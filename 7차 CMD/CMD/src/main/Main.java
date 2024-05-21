@@ -1,49 +1,23 @@
 package main;
 
 import controller.MainController;
-import model.VO.InputVO;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Main {
     // Windows 도 Unix 랑 동일하게 모든 것을 파일 취급함
     public static void main(String[] args) throws IOException, InterruptedException {
-        //System.out.print(System.getProperty("os.name"));
-        //System.out.println(System.getProperty(" [version os.version]"));
-        //System.out.println("(c) Microsoft Corporation. All rights reserved.");
+        System.out.print(System.getProperty("os.name"));
+        System.out.println(System.getProperty(" [version os.version]"));
+        System.out.println("(c) Microsoft Corporation. All rights reserved.");
 
         MainController mainController = new MainController();
         mainController.run();
-//
-//        Path destinationPath = Paths.get("C:", "A","B","C");
-//        System.out.println(destinationPath.getRoot());
-//        System.out.println(destinationPath.getParent());
-//        System.out.println(destinationPath.toString());
-//
-//        destinationPath = Paths.get("ACAS/SADFASB/ASDFSAD", "../A/B/C");
-//        destinationPath = destinationPath.normalize();
-//        System.out.println(destinationPath.getRoot());
-//        System.out.println(destinationPath.getParent());
-//        System.out.println(destinationPath.toString());
-//
-//        destinationPath = Paths.get("HERE/HERE/HERE", "../../A/B/C");
-//        destinationPath = destinationPath.normalize();
-//        System.out.println(destinationPath.getRoot());
-//        System.out.println(destinationPath.getParent());
-//        System.out.println(destinationPath.toString());
     }
 }
 
-
-// INPUT VO TEST CODE
-//    InputVO testVO = new InputVO("cd a.txt");
-//        System.out.println(testVO.getCommand());
+//                INPUT VO TEST CODE
+//                InputVO testVO = new InputVO("cd a.txt");
+//                System.out.println(testVO.getCommand());
 //                System.out.println(testVO.getParameters());
 //
 //                testVO = new InputVO("cd      a.txt");

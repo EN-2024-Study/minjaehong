@@ -8,14 +8,13 @@ public class InputVO {
 
     private String command;
     private List<String> parameters;
-
+    
     public InputVO(String input){
-
         initializeInputDTO(input);
     }
 
     // O(N)
-    private String modifyInputString(String input){
+    private String modifyColonCombinedInput(String input){
         StringBuilder sb = new StringBuilder();
 
         boolean insideColon = false;
@@ -37,6 +36,7 @@ public class InputVO {
         return sb.toString();
     }
 
+    // 공백포함된 파일명 폴더명일 경우 "" 로 감싸서 들어옴
     private void initializeInputDTO(String input){
 
         String parameterString;
@@ -48,9 +48,14 @@ public class InputVO {
             return;
         }
 
+        // cd. cd.. cd\ cd/ 로 시작하는거 예외처리
+        if(input.startsWith("cd.") || input.startsWith("cd..") || input.startsWith("cd/") || input.startsWith("cd\\")){
+            input = "cd " + input.substring(2);
+        }
+        
         // 만약 " 콜론을 포함한다면 콜론 없는 문자열로 변환
         if(input.contains("\"")){
-            input = modifyInputString(input);
+            input = modifyColonCombinedInput(input);
         }
 
         // 여기서부터는 따옴표는 없고 공백이랑 따옴표 내 공백은 물음표 처리된 문자열 처리하는거임

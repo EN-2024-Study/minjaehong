@@ -8,16 +8,16 @@ public class CmdDAO {
 
     protected FileSystem fileSystem;
     protected String rootDirectory;
-    protected String seperator;
+    protected String separater;
 
     protected CmdDAO(FileSystem fileSystem, String rootDirectory){
         this.fileSystem = fileSystem;
         this.rootDirectory = rootDirectory;
-        this.seperator = fileSystem.getSeparator();
+        this.separater = fileSystem.getSeparator();
     }
 
     protected final boolean checkIfStartingFromRootDirectory(String directoryPath) {
-        if (directoryPath.startsWith(rootDirectory) || directoryPath.startsWith(seperator) || directoryPath.startsWith("/")) {
+        if (directoryPath.startsWith(rootDirectory) || directoryPath.startsWith(separater) || directoryPath.startsWith("/")) {
             return true;
         }
         return false;

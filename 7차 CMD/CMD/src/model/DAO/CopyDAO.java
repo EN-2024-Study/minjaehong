@@ -11,7 +11,6 @@ public class CopyDAO extends CmdDAO {
         super(fileSystem, rootDirectory);
     }
 
-
     // 1. 인자 1개
     // curDirectory에 source와 동일한 이름으로 복사하는거임
     public OutputVO copy(String curDirectory, String source) throws IOException {
@@ -44,7 +43,7 @@ public class CopyDAO extends CmdDAO {
 
         // source가 진짜 존재하는 놈인지 검사
         if (checkIfDirectoryExists(sourcePath) == false) {
-            return new OutputVO("source file doesnt exist");
+            return new OutputVO("지정된 파일을 찾을 수 없습니다");
         }
 
         Path destinationPath = getNormalizedPath(curDirectory, destination);
