@@ -30,21 +30,19 @@ public class MainService {
         }
 
         if(parameters.size()>2){
-            // 지정된 경로를 찾을 수 없습니다
-            return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("No such file or directory"));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("지정된 경로를 찾을 수 없습니다"));
         }
 
         String destination = parameters.get(0);
         return cdDAO.cd(curDirectory, destination);
     }
 
-    public OutputVO listFiles(String curDirectory, List<String> parameters) throws IOException {
+    public OutputVO listDirectory(String curDirectory, List<String> parameters) throws IOException {
 
         String source;
 
         if(parameters.size()>1){
-            // 지정된 경로를 찾을 수 없습니다
-            new OutputVO("No such file or directory");
+            new OutputVO("지정된 경로를 찾을 수 없습니다");
         }
 
         if (parameters.size()==0) {
@@ -58,10 +56,6 @@ public class MainService {
 
     public OutputVO copyFile(String curDirectory, List<String> parameters) throws IOException {
 
-        if (parameters.size() == 0) {
-            return new OutputVO("parameter number is 0");
-        }
-
         if (parameters.size() == 1) {
             return copyDAO.copy(curDirectory, parameters.get(0));
         }
@@ -70,8 +64,7 @@ public class MainService {
             return copyDAO.copy(curDirectory, parameters.get(0), parameters.get(1));
         }
 
-        // 명령 구문이 올바르지 않습니다
-        return new OutputVO("parameter number is wrong");
+        return new OutputVO("명령 구문이 올바르지 않습니다");
     }
 
     public OutputVO moveFile(String curDirectory, List<String> parameters) throws IOException {

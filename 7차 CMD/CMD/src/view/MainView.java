@@ -30,7 +30,6 @@ public class MainView {
 
     public void printReturnedResult(OutputVO result){
         System.out.println(result.getOutput());
-        System.out.println();
     }
 
     public void clearPrompt() throws IOException, InterruptedException {

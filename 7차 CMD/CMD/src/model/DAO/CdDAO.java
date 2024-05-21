@@ -22,9 +22,9 @@ public class CdDAO extends CmdDAO {
                 return new AbstractMap.SimpleEntry<>(changedDirectory, new OutputVO(""));
             }
 
-            return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("Not a directory"));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("디렉터리 이름이 올바르지 않습니다."));
         }
 
-        return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("No such file or directory"));
+        return new AbstractMap.SimpleEntry<>(curDirectory, new OutputVO("지정된 경로를 찾을 수 없습니다."));
     }
 }

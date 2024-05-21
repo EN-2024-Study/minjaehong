@@ -54,7 +54,6 @@ public class InputVO {
         }
 
         // 여기서부터는 따옴표는 없고 공백이랑 따옴표 내 공백은 물음표 처리된 문자열 처리하는거임
-
         int spaceIdx = input.indexOf(" ");
 
         // 공백이 없을때

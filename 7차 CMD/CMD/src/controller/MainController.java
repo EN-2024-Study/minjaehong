@@ -17,7 +17,7 @@ public class MainController {
 
     private String rootDirectory;
     private FileSystem fileSystem;
-    private String separator;
+    private String seperator;
 
     private String curDirectory;
 
@@ -38,7 +38,9 @@ public class MainController {
     private void initializeCMD(){
         fileSystem = FileSystems.getDefault();
 
-        separator = fileSystem.getSeparator();
+        seperator = fileSystem.getSeparator();
+
+        System.out.println(seperator);
 
         Iterable<Path> rootDirectories = fileSystem.getRootDirectories();
         
@@ -103,7 +105,7 @@ public class MainController {
     }
 
     private void handleDIR(List<String> parameters) throws IOException {
-        OutputVO output = mainService.listFiles(curDirectory, parameters);
+        OutputVO output = mainService.listDirectory(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
