@@ -1,13 +1,13 @@
 package model.VO;
 
 public class MessageVO {
-    private String output;
+    private String message;
 
-    public MessageVO(String output){
-        this.output = output;
+    public MessageVO(String message){
+        this.message = message;
     }
 
-    public String getOutput(){
-        return output;
+    public String getMessage(){
+        return message;
     }
 }

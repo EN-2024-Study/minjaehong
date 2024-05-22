@@ -53,7 +53,7 @@ public class MainController {
         this.curDirectory = rootDirectory;
     }
 
-    public void run() throws IOException, InterruptedException {
+    public void run() throws IOException{
         boolean isCmdRunning = true;
         String command;
         List<String> parameters;
@@ -98,9 +98,9 @@ public class MainController {
     private String execCD(List<String> parameters) throws IOException {
         Map.Entry<String, MessageVO> cdResult = cdService.handleCommand(curDirectory, parameters);
 
-        // getValue 로 exceptionMessage 추출 후 view 에 전달
-        MessageVO exceptionMessageVO = cdResult.getValue();
-        mainView.printReturnedResult(exceptionMessageVO);
+        // getValue 로 message 추출 후 view 에 전달
+        MessageVO messageVO = cdResult.getValue();
+        mainView.printMessageVO(messageVO);
 
         // getKey 로 바뀐 directory 추출 후 changedDirectory return 해서 curDirectory 최신화
         String changedDirectory = cdResult.getKey();
@@ -109,27 +109,31 @@ public class MainController {
 
     // parameter 로 여러개가 들어오면 여러개의 DirVO를 보내서 출력함
     private void execDIR(List<String> parameters) throws IOException {
-        
+
         // 인자가 0개이면 대상이 parameter 에 curDirectory 수동 추가
         if (parameters.size()==0) parameters.add(curDirectory);
 
-        // 한 개씩 제거하면서 출력
+        // List를 한 개씩 제거하면서 진행
         int parameterLength = parameters.size();
         for(int i=0;i<parameterLength;i++) {
             DirVO dirVO = dirService.handleCommand(curDirectory, parameters);
-            mainView.printDirResult(dirVO);
+            mainView.printDirVO(dirVO);
             parameters.remove(0);
+            // 맨 마지막 DirVO이고 해당 directory가 존재하지 않을 경우
+            if(parameters.size()==0 && dirVO.checkIfDirectoryExists()==false){
+                mainView.printMessageVO(new MessageVO("파일을 찾을 수 없습니다\n\n"));
+            }
         }
     }
 
     private void execCOPY(List<String> parameters) throws IOException {
         MessageVO output = copyService.handleCommand(curDirectory, parameters);
-        mainView.printReturnedResult(output);
+        mainView.printMessageVO(output);
     }
 
     private void execMOVE(List<String> parameters) throws IOException {
         MessageVO output = moveService.handleCommand(curDirectory, parameters);
-        mainView.printReturnedResult(output);
+        mainView.printMessageVO(output);
     }
 
     private void execHELP(){ mainView.showHelp(); }

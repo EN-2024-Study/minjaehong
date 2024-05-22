@@ -1,23 +1,38 @@
 package model.VO;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class DirVO {
-    List<FileInfo> fileInfoList;
+    List<FileVO> fileVOList;
     private String curDirectory;
     private String sourcePathString;
+    private int fileCnt;
+    private int dirCnt;
+    private long totalFileSize;
 
     public DirVO(String curDirectory, String sourcePathString){
         this.curDirectory = curDirectory;
         this.sourcePathString = sourcePathString;
-        fileInfoList = new ArrayList<>();
+
+        this.fileVOList = new ArrayList<>();
+        this.fileCnt = 0;
+        this.dirCnt = 0;
+        this.totalFileSize = 0;
     }
 
     public void addNewFileInfo(Date date, boolean isDirectory, long fileSize, String fileName){
-        fileInfoList.add(new FileInfo(date, isDirectory, fileSize, fileName));
+        FileVO curFile = new FileVO(date, isDirectory, fileSize, fileName);
+        if(curFile.isDirectory()) {
+            dirCnt++;
+        }
+        else {
+            fileCnt++;
+            totalFileSize += fileSize;
+        }
+
+        fileVOList.add(curFile);
     }
 
     public boolean checkIfDirectoryExists(){
@@ -34,8 +49,19 @@ public class DirVO {
     public String getSourcePathString(){
         return sourcePathString;
     }
+    public List<FileVO> getFileInfoList(){
+        return fileVOList;
+    }
 
-    public List<FileInfo> getFileInfoList(){
-        return fileInfoList;
+    public int getFileCnt() {
+        return fileCnt;
+    }
+
+    public int getDirCnt() {
+        return dirCnt;
+    }
+
+    public long getTotalFileSize() {
+        return totalFileSize;
     }
 }

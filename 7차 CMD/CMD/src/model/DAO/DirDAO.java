@@ -5,34 +5,11 @@ import model.VO.DirVO;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Locale;
 
 public class DirDAO{
-
-    private SimpleDateFormat dateFormat;
-    private Date lastModifiedDate;
-
-    private StringBuilder resultSb;
-    private StringBuilder fileInfoSb;
-
-    private String dateToFormatString;
-    private String fileSize;
-    private String fileCntString;
-    private String dirCntString;
-    private String totalFileSizeString;
-    private String totalMemoryLeftString;
-
-    public DirDAO() {
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd a hh:mm", Locale.KOREAN);
-        lastModifiedDate = new Date();
-
-        resultSb = new StringBuilder();
-        fileInfoSb = new StringBuilder();
-    }
 
     private void addParentFolders(File sourceDirectory, LinkedList<File> fileList){
         // rootDirectory 일때 예외처리
@@ -45,7 +22,8 @@ public class DirDAO{
     }
 
     // 여기서부터는 진짜로 dir 작업 수행
-    // directory가 존재할때만 호출됨
+    // 존재성이 확인된 애들만 호출됨
+    // 한개의 폴더에 대한 탐색임
     public DirVO dir(String curDirectory, Path sourcePath) throws IOException {
 
         File source = new File(sourcePath.toString());
@@ -64,6 +42,7 @@ public class DirDAO{
             for (File file : fileList) {
 
                 // 숨겨진 파일이면 skip
+                // canRead canWrite 로도 skip 해야함??
                 if (file.isHidden()) continue;
 
                 Date lastModifiedDate = new Date();

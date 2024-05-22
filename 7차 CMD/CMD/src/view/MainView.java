@@ -1,7 +1,7 @@
 package view;
 
 import model.VO.DirVO;
-import model.VO.FileInfo;
+import model.VO.FileVO;
 import model.VO.InputVO;
 import model.VO.MessageVO;
 
@@ -27,27 +27,25 @@ public class MainView {
         System.out.print(curDirectory + "> ");
     }
 
-    public InputVO getInput(String curDirectory) {
+    public InputVO getInput(String curDirectory) throws IOException {
         printCurDirectory(curDirectory);
         String input = "";
-        try {
-            input = br.readLine();
-        } catch (IOException e) {
 
-        }
+        input = br.readLine();
+
         return new InputVO(input);
     }
 
-    public void printReturnedResult(MessageVO result) {
-        System.out.println(result.getOutput());
+    public void printMessageVO(MessageVO messageVO) {
+        System.out.println(messageVO.getMessage());
     }
 
     //============================= dir 관련 변수들 =============================//
 
     boolean wasLatestOneExisting = true;
 
-    // 한 개의 DirVO 에 대한 정보 출력
-    public void printDirResult(DirVO dirVO) {
+    // 한 개의 폴더(DirVO)에 대한 정보 출력
+    public void printDirVO(DirVO dirVO) {
         sb.setLength(0);
 
         // 만약 존재하지 않으면 return
@@ -59,39 +57,49 @@ public class MainView {
             return;
         }
 
+        // 전꺼가 존재하지 않았으면 문구 하나 출력
         if(wasLatestOneExisting==false){
-            wasLatestOneExisting = true;
             sb.append("파일을 찾을 수 없습니다\n\n");
         }
 
+        wasLatestOneExisting = true;
+        
         sb.append(dirVO.getSourcePathString());
-        sb.append(" ");
-        sb.append("디렉터리\n\n");
+        sb.append(" 디렉터리\n\n");
 
-        List<FileInfo> fileInfoQueue = dirVO.getFileInfoList();
+        List<FileVO> fileVOQueue = dirVO.getFileInfoList();
 
-        for (int i = 0; i < fileInfoQueue.size(); i++) {
-            FileInfo fileInfo = fileInfoQueue.get(i);
+        for (int i = 0; i < fileVOQueue.size(); i++) {
+            FileVO fileVO = fileVOQueue.get(i);
 
             // DATE
-            sb.append(dateFormat.format(fileInfo.getLastModifiedDate()));
+            sb.append(dateFormat.format(fileVO.getLastModifiedDate()));
             sb.append(" ");
 
             // DIR OR NOT
-            if (fileInfo.isDirectory()) sb.append("<DIR> ");
+            if (fileVO.isDirectory()) sb.append("<DIR> ");
             else sb.append("      ");
 
             // SIZE
-            String fileSize = String.format("%,d", fileInfo.getFileSize());
-            if(fileSize.equals("0") || fileInfo.isDirectory() || fileInfo.getFileName().equals(".") || fileInfo.getFileName().equals("..")) fileSize = "";
+            String fileSize = String.format("%,d", fileVO.getFileSize());
+            if(fileSize.equals("0") || fileVO.isDirectory() || fileVO.getFileName().equals(".") || fileVO.getFileName().equals("..")) fileSize = "";
             fileSize = String.format("%" + 10 + "s", fileSize);
+
             sb.append(fileSize);
             sb.append(" ");
 
-            sb.append(fileInfo.getFileName());
+            sb.append(fileVO.getFileName());
             sb.append("\n");
         }
 
+        sb.append(String.format("%15s", String.format("%,d", dirVO.getFileCnt())));
+        sb.append(" 파일    ");
+        sb.append(String.format("%15s", String.format("%,d", dirVO.getTotalFileSize())));
+        sb.append(" 바이트\n");
+        sb.append(String.format("%15s", String.format("%,d", dirVO.getDirCnt())));
+        sb.append(" 디렉터리");
+        sb.append(String.format("%15s", String.format("%,d", dirVO.getTotalFileSize())));
+        sb.append(" 바이트 남음\n");
 
         System.out.println(sb.toString());
     }
