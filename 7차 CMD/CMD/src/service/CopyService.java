@@ -1,14 +1,14 @@
 package service;
 
 import model.DAO.CopyDAO;
-import model.VO.OutputVO;
+import model.VO.MessageVO;
 import utility.Validator;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
 
-public class CopyService extends CmdService{
+public class CopyService extends CmdService<MessageVO>{
 
     private CopyDAO copyDAO;
 
@@ -31,16 +31,16 @@ public class CopyService extends CmdService{
         return destinationPath;
     }
 
-    public OutputVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
+    public MessageVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));
         if (validator.checkIfDirectoryExists(sourcePath) == false) {
-            return new OutputVO("지정된 파일을 찾을 수 없습니다.");
+            return new MessageVO("지정된 파일을 찾을 수 없습니다.");
         }
 
         Path destinationPath = getDestinationPath(curDirectory, sourcePath, parameters);
         if (validator.checkIfDirectoryExists(destinationPath) == true) {
-            return new OutputVO("destination file already exist");
+            return new MessageVO("destination file already exist");
         }
 
         return copyDAO.copy(sourcePath, destinationPath);

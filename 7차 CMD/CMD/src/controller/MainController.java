@@ -1,7 +1,8 @@
 package controller;
 
+import model.VO.DirVO;
 import model.VO.InputVO;
-import model.VO.OutputVO;
+import model.VO.MessageVO;
 import service.*;
 import utility.Validator;
 import view.MainView;
@@ -92,13 +93,13 @@ public class MainController {
         }
     }
 
+    // 바뀔 directory 명이랑 예외가 발생했을 시에 따른 MessageVO 를 CdService에서 pair 객체로 받기
+    // pair 객체로 받고 return 하는 놈은 CD 밖에 없음. 얘만 예외임
     private String execCD(List<String> parameters) throws IOException {
-        // 바뀔 directory 명이랑 예외가 발생했을 시에 따른 OutputVO 를 pair 객체로 받기
-        // pair 객체로 return 하는 놈은 CD 밖에 없음. 얘만 예외임
-        Map.Entry<String, OutputVO> cdResult = cdService.handleCd(curDirectory, parameters);
+        Map.Entry<String, MessageVO> cdResult = cdService.handleCommand(curDirectory, parameters);
 
         // getValue 로 exceptionMessage 추출 후 view 에 전달
-        OutputVO exceptionMessageVO = cdResult.getValue();
+        MessageVO exceptionMessageVO = cdResult.getValue();
         mainView.printReturnedResult(exceptionMessageVO);
 
         // getKey 로 바뀐 directory 추출 후 changedDirectory return 해서 curDirectory 최신화
@@ -106,24 +107,34 @@ public class MainController {
         return changedDirectory;
     }
 
+    // parameter 로 여러개가 들어오면 여러개의 DirVO를 보내서 출력함
     private void execDIR(List<String> parameters) throws IOException {
-        OutputVO output = dirService.handleCommand(curDirectory, parameters);
-        mainView.printReturnedResult(output);
+        
+        // 인자가 0개이면 대상이 parameter 에 curDirectory 수동 추가
+        if (parameters.size()==0) parameters.add(curDirectory);
+
+        // 한 개씩 제거하면서 출력
+        int parameterLength = parameters.size();
+        for(int i=0;i<parameterLength;i++) {
+            DirVO dirVO = dirService.handleCommand(curDirectory, parameters);
+            mainView.printDirResult(dirVO);
+            parameters.remove(0);
+        }
     }
 
     private void execCOPY(List<String> parameters) throws IOException {
-        OutputVO output = copyService.handleCommand(curDirectory, parameters);
+        MessageVO output = copyService.handleCommand(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
     private void execMOVE(List<String> parameters) throws IOException {
-        OutputVO output = moveService.handleCommand(curDirectory, parameters);
+        MessageVO output = moveService.handleCommand(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
     private void execHELP(){ mainView.showHelp(); }
 
-    private void execCLS() throws IOException, InterruptedException {
-        mainView.clearPrompt();
+    private void execCLS(){
+
     }
 }

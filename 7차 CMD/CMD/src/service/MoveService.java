@@ -1,7 +1,7 @@
 package service;
 
 import model.DAO.MoveDAO;
-import model.VO.OutputVO;
+import model.VO.MessageVO;
 import utility.Validator;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class MoveService extends CmdService{
+public class MoveService extends CmdService<MessageVO>{
 
     private MoveDAO moveDAO;
 
@@ -36,21 +36,21 @@ public class MoveService extends CmdService{
         return destinationPath;
     }
 
-    public OutputVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
+    public MessageVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
         
         // 인자 개수 안맞는거 예외처리
-        if(parameters.size() > 2) return new OutputVO("명령 구문이 올바르지 않습니다");
+        if(parameters.size() > 2) return new MessageVO("명령 구문이 올바르지 않습니다");
 
         // sourcePath 존재성 검사
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));
         if (validator.checkIfDirectoryExists(sourcePath) == false) {
-            return new OutputVO("지정된 파일을 찾을 수 없습니다.");
+            return new MessageVO("지정된 파일을 찾을 수 없습니다.");
         }
 
         // destinationPath 존재성 검사
         Path destinationPath = getDestinationPath(curDirectory, sourcePath, parameters);
         if (validator.checkIfDirectoryExists(destinationPath)) {
-            return new OutputVO("destination file already exists in curDirectory");
+            return new MessageVO("destination file already exists in curDirectory");
         }
 
         // 다 통과했으면 진짜로 move 실행시키기

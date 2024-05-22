@@ -1,5 +1,7 @@
 package model.DAO;
 
+import model.VO.DirVO;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,16 +34,6 @@ public class DirDAO{
         fileInfoSb = new StringBuilder();
     }
 
-    private long getMaximumFileSize(LinkedList<File> fileList){
-        long longestSize = 0;
-        for (int i=0;i<fileList.size();i++) {
-            if (fileList.get(i).length() > longestSize) {
-                longestSize = fileList.get(i).length();
-            }
-        }
-        return longestSize;
-    }
-    
     private void addParentFolders(File sourceDirectory, LinkedList<File> fileList){
         // rootDirectory 일때 예외처리
         // Parent가 존재할때만 fileList에 추가
@@ -52,102 +44,58 @@ public class DirDAO{
         fileList.add(0, sourceDirectory);
     }
 
-    private String getCertainFileInfoToString(File file, int maximumSpaceCnt){
-
-        fileInfoSb.setLength(0);
-
-        // DATE
-        lastModifiedDate.setTime(file.lastModified());
-        dateToFormatString = dateFormat.format(lastModifiedDate);
-        fileInfoSb.append(dateToFormatString);
-        fileInfoSb.append(" ");
-
-        // DIR OR NOT
-        if (file.isDirectory()) fileInfoSb.append("<DIR> ");
-        else fileInfoSb.append("      ");
-
-        // SIZE
-        fileSize = String.format("%,d", file.length());
-        int curFileSizeCnt = fileSize.length();
-        if(file.isDirectory()){
-            curFileSizeCnt = 0;
-            fileSize="";
-        }
-
-        for (int k = 0; k < maximumSpaceCnt - curFileSizeCnt; k++) fileInfoSb.append(" ");
-        fileInfoSb.append(fileSize);
-        fileInfoSb.append(" ");
-
-        return fileInfoSb.toString();
-    }
-
     // 여기서부터는 진짜로 dir 작업 수행
     // directory가 존재할때만 호출됨
-    public String dir(String curDirectory, Path sourcePath) throws IOException {
+    public DirVO dir(String curDirectory, Path sourcePath) throws IOException {
 
-        resultSb.setLength(0);
+        File source = new File(sourcePath.toString());
 
-        File sourceDirectory = new File(sourcePath.toString());
+        // 우선 존재하는 파일이니까 curDirectory sourcePath.toString() 으로 기본 정보 초기화해주면서 객체 생성
+        DirVO resultVO = new DirVO(curDirectory, sourcePath.toString());
 
-        if (sourceDirectory.isDirectory()) {
-            // sourcePath directory 안에 있는 File 모두 불러오기
-            LinkedList<File> fileList = new LinkedList<>(Arrays.asList(sourceDirectory.listFiles()));
+        // 1. source가 폴더일때
+        if (source.isDirectory()) {
 
-            // 정렬해주기 위해 가장 큰 사이즈 찾기
-            long longestSize = getMaximumFileSize(fileList);
-            int maximumSpaceCnt = String.format("%,d", longestSize).length();
+            // 폴더 안에 있는 파일들 모두 불러오기
+            LinkedList<File> fileList = new LinkedList<>(Arrays.asList(source.listFiles()));
 
-            // . .. folder 추가할 수 있으면 추가하기
-            addParentFolders(sourceDirectory, fileList);
+            addParentFolders(source, fileList);
 
-            int fileCnt = 0;
-            int dirCnt = 0;
-            long totalFileSize = 0;
+            for (File file : fileList) {
 
-            if (fileList != null) {
-                for (File file : fileList) {
+                // 숨겨진 파일이면 skip
+                if (file.isHidden()) continue;
 
-                    // default로 숨겨진 파일이면 skip
-                    if (file.isHidden() == true) continue;
-                    if (file.isDirectory()) dirCnt++;
-                    else {
-                        fileCnt++;
-                        totalFileSize += file.length();
-                    }
+                Date lastModifiedDate = new Date();
+                lastModifiedDate.setTime(file.lastModified());
 
-                    resultSb.append(getCertainFileInfoToString(file, maximumSpaceCnt));
+                boolean isFolder = file.isDirectory();
 
-                    if (file.equals(sourceDirectory)) {
-                        resultSb.append(".");
-                    } else if (file.equals(sourceDirectory.getParentFile())) {
-                        resultSb.append("..");
-                    } else {
-                        resultSb.append(file.getName());
-                    }
-                    resultSb.append("\n");
+                long fileSize = file.length();
+
+                String fileName = file.getName();
+                if (file.equals(source)) {
+                    fileName = ".";
+                } else if (file.equals(source.getParentFile())) {
+                    fileName = "..";
                 }
 
-                fileCntString = String.format("%,d 파일     ",fileCnt);
-                for(int i=0;i<27-fileCntString.length();i++) resultSb.append(" ");
-                resultSb.append(fileCntString);
-                totalFileSizeString = String.format("%,d", totalFileSize);
-                for(int i=0;i<17-totalFileSizeString.length();i++) resultSb.append(" ");
-                resultSb.append(totalFileSizeString);
-                resultSb.append(" 바이트\n");
-
-                dirCntString = String.format("%,d 디렉터리 ",dirCnt);
-                for(int i=0;i<27-dirCntString.length();i++) resultSb.append(" ");
-                resultSb.append(dirCntString);
-                totalMemoryLeftString = String.format("%,d", sourceDirectory.length());
-                for(int i=0;i<17-totalMemoryLeftString.length();i++) resultSb.append(" ");
-                resultSb.append(totalMemoryLeftString);
-                resultSb.append(" 바이트 남음\n");
+                resultVO.addNewFileInfo(lastModifiedDate, isFolder, fileSize, fileName);
             }
-        } else {
-            resultSb.append(getCertainFileInfoToString(sourceDirectory,10));
-            resultSb.append("\n");
+        }
+        // 2. source가 파일일때는 그냥 자기 자신에 대한 정보만 저장하면 됨
+        else {
+            Date lastModifiedDate = new Date();
+            lastModifiedDate.setTime(source.lastModified());
+
+            boolean isFolder = source.isDirectory();
+
+            long fileSize = source.length();
+
+            String fileName = source.getName();
+            resultVO.addNewFileInfo(lastModifiedDate, isFolder, fileSize, fileName);
         }
 
-        return resultSb.toString();
+        return resultVO;
     }
 }

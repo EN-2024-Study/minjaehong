@@ -39,6 +39,8 @@ public class InputVO {
     // 공백포함된 파일명 폴더명일 경우 "" 로 감싸서 들어옴
     private void initializeInputDTO(String input){
 
+        input = input.trim();
+
         String parameterString;
         parameters = new ArrayList<>();
 

@@ -1,9 +1,9 @@
 package model.VO;
 
-public class OutputVO {
+public class MessageVO {
     private String output;
 
-    public OutputVO(String output){
+    public MessageVO(String output){
         this.output = output;
     }
 

@@ -1,14 +1,15 @@
 package service;
 
 import model.DAO.DirDAO;
-import model.VO.OutputVO;
+import model.VO.DirVO;
+import model.VO.MessageVO;
 import utility.Validator;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-public class DirService extends CmdService{
+public class DirService extends CmdService<DirVO>{
 
     private DirDAO dirDAO;
     private StringBuilder resultSb;
@@ -32,29 +33,14 @@ public class DirService extends CmdService{
         return true;
     }
 
-    // dir 은 인자 제약이 없음
-    public OutputVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
+    // 1개의 디렉토리에 대한 정보 (DirVO)만 넘김
+    public DirVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
-        resultSb.setLength(0);
-        resultSb.append(" C 드라이브의 볼륨에는 이름이 없습니다.\n 볼륨 일련 번호: 40F1-46D4\n\n");
+        Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));
 
-        // 인자가 0개이면 대상이 parameter 에 curDirectory 수동 추가
-        if (parameters.size()==0) parameters.add(curDirectory);
+        // 실제로 sourcePath 가 존재하지 않으면 그냥 DirVO 하나 넘김
+        if (checkIfDirectoryExists(sourcePath) == false) return new DirVO(curDirectory, "");
 
-        for(int i=0;i<parameters.size();i++){
-            
-            Path sourcePath = getNormalizedPath(curDirectory, parameters.get(i));
-
-            if(validator.isDirectory(sourcePath)) resultSb.append(sourcePath.toString());
-            else resultSb.append(curDirectory);
-            resultSb.append(" 디렉터리\n\n");
-
-            // 실제로 sourcePath 가 존재하지 않으면 skip
-            if(checkIfDirectoryExists(sourcePath)==false) continue;
-
-            resultSb.append(dirDAO.dir(curDirectory, sourcePath));
-        }
-
-        return new OutputVO(resultSb.toString());
+        return dirDAO.dir(curDirectory, sourcePath);
     }
 }

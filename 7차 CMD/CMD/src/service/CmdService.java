@@ -1,6 +1,6 @@
 package service;
 
-import model.VO.OutputVO;
+import model.VO.MessageVO;
 import utility.Validator;
 
 import java.io.File;
@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public abstract class CmdService {
+public abstract class CmdService<ReturnVO> {
 
     protected Validator validator;
 
@@ -20,7 +20,7 @@ public abstract class CmdService {
     // 상대경로나 절대경로로 들어온걸 정규경로로 return 해줌
     protected final Path getNormalizedPath(String curDirectory, String directoryPath) throws IOException {
 
-        Path retPath;
+        Path retPath = Paths.get("");
 
         // 1. root 부터 시작하는 놈이면 바로 Path 객체 만들어주기
         // 얘는 C:/ 부터 시작하는 놈인거임
@@ -42,5 +42,5 @@ public abstract class CmdService {
         return retPath;
     }
 
-    public abstract OutputVO handleCommand(String curDirectory, List<String> parameters) throws IOException;
+    public abstract ReturnVO handleCommand(String curDirectory, List<String> parameters) throws IOException;
 }

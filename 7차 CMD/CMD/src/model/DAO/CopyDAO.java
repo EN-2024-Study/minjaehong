@@ -1,6 +1,6 @@
 package model.DAO;
 
-import model.VO.OutputVO;
+import model.VO.MessageVO;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -10,10 +10,10 @@ public class CopyDAO{
 
     }
 
-    public OutputVO copy(Path sourcePath, Path destinationPath) throws IOException {
+    public MessageVO copy(Path sourcePath, Path destinationPath) throws IOException {
 
         Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
-        return new OutputVO(sourcePath.getFileName() + " copied at " + destinationPath.toString());
+        return new MessageVO(sourcePath.getFileName() + " copied at " + destinationPath.toString());
     }
 }
