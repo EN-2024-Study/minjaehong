@@ -2,10 +2,8 @@ package controller;
 
 import model.VO.InputVO;
 import model.VO.OutputVO;
-import service.CdService;
-import service.DirService;
-import service.MainService;
-import service.MoveService;
+import service.*;
+import utility.Validator;
 import view.MainView;
 
 import java.io.IOException;
@@ -18,38 +16,40 @@ import java.util.Map;
 
 public class MainController {
 
-    private FileSystem fileSystem;
-    private String rootDirectory;
     private String curDirectory;
 
+    private Validator validator;
+
     private MainView mainView;
-    private MainService mainService;
+    
     private CdService cdService;
     private DirService dirService;
     private MoveService moveService;
+    private CopyService copyService;
 
     public MainController(){
         initializeCMD();
 
-        mainView = new MainView();
-        mainService = new MainService(fileSystem, rootDirectory);
-        cdService = new CdService(fileSystem, rootDirectory);
-        dirService = new DirService(fileSystem, rootDirectory);
-        moveService = new MoveService(fileSystem, rootDirectory);
+        this.mainView = new MainView();
+        this.cdService = new CdService(validator);
+        this.dirService = new DirService(validator);
+        this.moveService = new MoveService(validator);
+        this.copyService = new CopyService(validator);
     }
 
-    // OS에 따른 FileSystem, rootDirectory 지정해주기
+    // service들에 쓸 validator와 curDirectory 시작 시 초기화
     private void initializeCMD(){
-        fileSystem = FileSystems.getDefault();
+        FileSystem fileSystem = FileSystems.getDefault();
 
         Iterable<Path> rootDirectories = fileSystem.getRootDirectories();
         
         Iterator<Path> iterator = rootDirectories.iterator();
         Path directory = iterator.next();
-        rootDirectory = directory.toString();
+        String rootDirectory = directory.toString();
 
-        // 현재 directory rootDirectory 로 최신화
-        curDirectory = rootDirectory;
+        this.validator = new Validator(fileSystem, rootDirectory);
+
+        this.curDirectory = rootDirectory;
     }
 
     public void run() throws IOException, InterruptedException {
@@ -65,7 +65,7 @@ public class MainController {
 
             switch(command){
                 case "cd":
-                    execCD(parameters);
+                    curDirectory = execCD(parameters);
                     break;
                 case "dir":
                     execDIR(parameters);
@@ -86,37 +86,38 @@ public class MainController {
                     isCmdRunning = false;
                     break;
                 default:
+                    mainView.showWrongCommand(command);
                     break;
             }
         }
     }
 
-    private void execCD(List<String> parameters) throws IOException {
+    private String execCD(List<String> parameters) throws IOException {
         // 바뀔 directory 명이랑 예외가 발생했을 시에 따른 OutputVO 를 pair 객체로 받기
         // pair 객체로 return 하는 놈은 CD 밖에 없음. 얘만 예외임
-        Map.Entry<String, OutputVO> cdResult = cdService.changeDirectory(curDirectory, parameters);
+        Map.Entry<String, OutputVO> cdResult = cdService.handleCd(curDirectory, parameters);
 
-        // curDirectory 최신화
-        String changedDirectory = cdResult.getKey();
-        curDirectory = changedDirectory;
-        
-        // OutputVO view에 출력
+        // getValue 로 exceptionMessage 추출 후 view 에 전달
         OutputVO exceptionMessageVO = cdResult.getValue();
         mainView.printReturnedResult(exceptionMessageVO);
+
+        // getKey 로 바뀐 directory 추출 후 changedDirectory return 해서 curDirectory 최신화
+        String changedDirectory = cdResult.getKey();
+        return changedDirectory;
     }
 
     private void execDIR(List<String> parameters) throws IOException {
-        OutputVO output = dirService.listDirectory(curDirectory, parameters);
+        OutputVO output = dirService.handleCommand(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
     private void execCOPY(List<String> parameters) throws IOException {
-        OutputVO output = mainService.copyFile(curDirectory, parameters);
+        OutputVO output = copyService.handleCommand(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
     private void execMOVE(List<String> parameters) throws IOException {
-        OutputVO output = moveService.moveFile(curDirectory, parameters);
+        OutputVO output = moveService.handleCommand(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 

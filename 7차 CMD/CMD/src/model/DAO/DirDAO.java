@@ -1,10 +1,7 @@
 package model.DAO;
 
-import model.VO.OutputVO;
-
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -12,21 +9,30 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class DirDAO extends CmdDAO {
+public class DirDAO{
 
     private SimpleDateFormat dateFormat;
     private Date lastModifiedDate;
-    private StringBuilder sb;
 
-    public DirDAO(FileSystem fileSystem, String rootDirectory) {
-        super(fileSystem, rootDirectory);
+    private StringBuilder resultSb;
+    private StringBuilder fileInfoSb;
 
+    private String dateToFormatString;
+    private String fileSize;
+    private String fileCntString;
+    private String dirCntString;
+    private String totalFileSizeString;
+    private String totalMemoryLeftString;
+
+    public DirDAO() {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd a hh:mm", Locale.KOREAN);
         lastModifiedDate = new Date();
-        sb = new StringBuilder();
+
+        resultSb = new StringBuilder();
+        fileInfoSb = new StringBuilder();
     }
 
-    private long getMaximumSizeCnt(LinkedList<File> fileList){
+    private long getMaximumFileSize(LinkedList<File> fileList){
         long longestSize = 0;
         for (int i=0;i<fileList.size();i++) {
             if (fileList.get(i).length() > longestSize) {
@@ -41,56 +47,54 @@ public class DirDAO extends CmdDAO {
         // Parent가 존재할때만 fileList에 추가
         if(sourceDirectory.getParentFile()!= null) {
             fileList.add(0, sourceDirectory.getParentFile());
-            System.out.println(fileList.get(0).length());
         }
         // 현재 directory fileList에 추가
         fileList.add(0, sourceDirectory);
-        System.out.println(fileList.get(0).length());
     }
 
-    private String getCertainFileInfo(File file, int maximumSpaceCnt){
+    private String getCertainFileInfoToString(File file, int maximumSpaceCnt){
 
-        StringBuilder sb = new StringBuilder();
+        fileInfoSb.setLength(0);
 
+        // DATE
         lastModifiedDate.setTime(file.lastModified());
-        String dateString = dateFormat.format(lastModifiedDate);
+        dateToFormatString = dateFormat.format(lastModifiedDate);
+        fileInfoSb.append(dateToFormatString);
+        fileInfoSb.append(" ");
 
-        sb.append(dateString);
-        sb.append(" ");
+        // DIR OR NOT
+        if (file.isDirectory()) fileInfoSb.append("<DIR> ");
+        else fileInfoSb.append("      ");
 
-        if (file.isDirectory()) {
-            sb.append("<DIR> ");
-        } else {
-            sb.append("      ");
-        }
-
-        String sizeStr = String.format("%,d", file.length());
-        int curFileSizeCnt = sizeStr.length();
+        // SIZE
+        fileSize = String.format("%,d", file.length());
+        int curFileSizeCnt = fileSize.length();
         if(file.isDirectory()){
             curFileSizeCnt = 0;
-            sizeStr="";
+            fileSize="";
         }
 
-        for (int k = 0; k < maximumSpaceCnt - curFileSizeCnt; k++) sb.append(" ");
-        sb.append(sizeStr);
-        sb.append(" ");
+        for (int k = 0; k < maximumSpaceCnt - curFileSizeCnt; k++) fileInfoSb.append(" ");
+        fileInfoSb.append(fileSize);
+        fileInfoSb.append(" ");
 
-        return sb.toString();
+        return fileInfoSb.toString();
     }
 
+    // 여기서부터는 진짜로 dir 작업 수행
+    // directory가 존재할때만 호출됨
     public String dir(String curDirectory, Path sourcePath) throws IOException {
 
-        sb.setLength(0);
+        resultSb.setLength(0);
 
-        // 여기서부터는 진짜로 dir 작업 수행
         File sourceDirectory = new File(sourcePath.toString());
 
-        if (isDirectory(sourcePath)) {
+        if (sourceDirectory.isDirectory()) {
             // sourcePath directory 안에 있는 File 모두 불러오기
             LinkedList<File> fileList = new LinkedList<>(Arrays.asList(sourceDirectory.listFiles()));
 
             // 정렬해주기 위해 가장 큰 사이즈 찾기
-            long longestSize = getMaximumSizeCnt(fileList);
+            long longestSize = getMaximumFileSize(fileList);
             int maximumSpaceCnt = String.format("%,d", longestSize).length();
 
             // . .. folder 추가할 수 있으면 추가하기
@@ -98,6 +102,7 @@ public class DirDAO extends CmdDAO {
 
             int fileCnt = 0;
             int dirCnt = 0;
+            long totalFileSize = 0;
 
             if (fileList != null) {
                 for (File file : fileList) {
@@ -105,26 +110,44 @@ public class DirDAO extends CmdDAO {
                     // default로 숨겨진 파일이면 skip
                     if (file.isHidden() == true) continue;
                     if (file.isDirectory()) dirCnt++;
-                    else fileCnt++;
+                    else {
+                        fileCnt++;
+                        totalFileSize += file.length();
+                    }
 
-                    sb.append(getCertainFileInfo(file, maximumSpaceCnt));
+                    resultSb.append(getCertainFileInfoToString(file, maximumSpaceCnt));
 
                     if (file.equals(sourceDirectory)) {
-                        sb.append(".");
+                        resultSb.append(".");
                     } else if (file.equals(sourceDirectory.getParentFile())) {
-                        sb.append("..");
+                        resultSb.append("..");
                     } else {
-                        sb.append(file.getName());
+                        resultSb.append(file.getName());
                     }
-                    sb.append("\n");
+                    resultSb.append("\n");
                 }
-                sb.append(String.format("%d files\n", fileCnt));
+
+                fileCntString = String.format("%,d 파일     ",fileCnt);
+                for(int i=0;i<27-fileCntString.length();i++) resultSb.append(" ");
+                resultSb.append(fileCntString);
+                totalFileSizeString = String.format("%,d", totalFileSize);
+                for(int i=0;i<17-totalFileSizeString.length();i++) resultSb.append(" ");
+                resultSb.append(totalFileSizeString);
+                resultSb.append(" 바이트\n");
+
+                dirCntString = String.format("%,d 디렉터리 ",dirCnt);
+                for(int i=0;i<27-dirCntString.length();i++) resultSb.append(" ");
+                resultSb.append(dirCntString);
+                totalMemoryLeftString = String.format("%,d", sourceDirectory.length());
+                for(int i=0;i<17-totalMemoryLeftString.length();i++) resultSb.append(" ");
+                resultSb.append(totalMemoryLeftString);
+                resultSb.append(" 바이트 남음\n");
             }
         } else {
-            sb.append(getCertainFileInfo(sourceDirectory,10));
-            sb.append("\n");
+            resultSb.append(getCertainFileInfoToString(sourceDirectory,10));
+            resultSb.append("\n");
         }
 
-        return sb.toString();
+        return resultSb.toString();
     }
 }

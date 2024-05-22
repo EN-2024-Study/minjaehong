@@ -1,16 +1,14 @@
 package model.DAO;
 
-import model.DAO.CmdDAO;
 import model.VO.OutputVO;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 
-public class MoveDAO extends CmdDAO {
+public class MoveDAO{
 
-    public MoveDAO(FileSystem fileSystem, String rootDirectory) {
-        super(fileSystem, rootDirectory);
+    public MoveDAO() {
+
     }
 
     // 인자가 1개이든 2개이든
@@ -19,6 +17,6 @@ public class MoveDAO extends CmdDAO {
 
         Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
-        return new OutputVO("file move complete");
+        return new OutputVO(sourcePath.getFileName() + " moved to " + destinationPath.toString());
     }
 }

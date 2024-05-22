@@ -80,6 +80,8 @@ public class InputVO {
             String curToken = tokenizer.nextToken();
             parameters.add(curToken.replace("?"," "));
         }
+
+        command = command.toLowerCase();
     }
 
     public String getCommand(){
