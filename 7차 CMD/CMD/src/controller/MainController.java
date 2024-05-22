@@ -2,7 +2,10 @@ package controller;
 
 import model.VO.InputVO;
 import model.VO.OutputVO;
+import service.CdService;
+import service.DirService;
 import service.MainService;
+import service.MoveService;
 import view.MainView;
 
 import java.io.IOException;
@@ -21,15 +24,21 @@ public class MainController {
 
     private MainView mainView;
     private MainService mainService;
+    private CdService cdService;
+    private DirService dirService;
+    private MoveService moveService;
 
     public MainController(){
         initializeCMD();
 
         mainView = new MainView();
         mainService = new MainService(fileSystem, rootDirectory);
+        cdService = new CdService(fileSystem, rootDirectory);
+        dirService = new DirService(fileSystem, rootDirectory);
+        moveService = new MoveService(fileSystem, rootDirectory);
     }
 
-    // OS에 따른 FileSystem, rootDirectory, seperator 지정해주기
+    // OS에 따른 FileSystem, rootDirectory 지정해주기
     private void initializeCMD(){
         fileSystem = FileSystems.getDefault();
 
@@ -85,7 +94,7 @@ public class MainController {
     private void execCD(List<String> parameters) throws IOException {
         // 바뀔 directory 명이랑 예외가 발생했을 시에 따른 OutputVO 를 pair 객체로 받기
         // pair 객체로 return 하는 놈은 CD 밖에 없음. 얘만 예외임
-        Map.Entry<String, OutputVO> cdResult = mainService.changeDirectory(curDirectory, parameters);
+        Map.Entry<String, OutputVO> cdResult = cdService.changeDirectory(curDirectory, parameters);
 
         // curDirectory 최신화
         String changedDirectory = cdResult.getKey();
@@ -97,7 +106,7 @@ public class MainController {
     }
 
     private void execDIR(List<String> parameters) throws IOException {
-        OutputVO output = mainService.listDirectory(curDirectory, parameters);
+        OutputVO output = dirService.listDirectory(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 
@@ -107,7 +116,7 @@ public class MainController {
     }
 
     private void execMOVE(List<String> parameters) throws IOException {
-        OutputVO output = mainService.moveFile(curDirectory, parameters);
+        OutputVO output = moveService.moveFile(curDirectory, parameters);
         mainView.printReturnedResult(output);
     }
 

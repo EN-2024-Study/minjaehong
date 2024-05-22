@@ -13,56 +13,12 @@ public class MoveDAO extends CmdDAO {
         super(fileSystem, rootDirectory);
     }
 
-    // 1. move 인자1 일때
-    // 인자1 을 curDirectory 로 옮겨야함
-    // 이때 이름은 원래 sourceName 그대로임
-    public OutputVO move(String curDirectory, String source) throws IOException {
-
-        Path sourcePath = getNormalizedPath(curDirectory, source);
-
-        // curDirectory 에 sourceName 가진 파일을 Path 로 설정하기 위한 작업
-        Path destinationPath = Paths.get(curDirectory, String.valueOf(sourcePath.getFileName()));
-
-        // source가 진짜로 존재하는 놈인지 검사
-        if (checkIfDirectoryExists(sourcePath) == false) {
-            return new OutputVO("original file doesnt exist");
-        }
-        // 옮길려는 곳에 똑같은 이름의 파일이 존재하는지 확인
-        if (checkIfDirectoryExists(destinationPath)) {
-            return new OutputVO("destination file already exists in curDirectory");
-        }
+    // 인자가 1개이든 2개이든
+    // 모두 service 에서 정제되서 여기로 들어옴
+    public OutputVO move(Path sourcePath, Path destinationPath) throws IOException {
 
         Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
         return new OutputVO("file move complete");
-    }
-
-    public OutputVO move(String curDirectory, String source, String destination) throws IOException {
-
-        // sourcePath 생성
-        Path sourcePath = getNormalizedPath(curDirectory, source);
-
-        // source 가 진짜 존재하는지 검사
-        if (checkIfDirectoryExists(sourcePath) == false) {
-            return new OutputVO("source file doesnt exist");
-        }
-
-        // destinationPath 생성
-        Path destinationPath = getNormalizedPath(curDirectory, destination);
-
-        // 만약 destination 이 directory 이면
-        // 파일명이 아니기 때문에 해당 directory 내 똑같은 파일명으로 PATH 를 설정해줘야함
-        if(isDirectory(destinationPath)){
-            destinationPath = Paths.get(destinationPath.toString(), String.valueOf(sourcePath.getFileName()));
-        }
-
-        // destination이 이미 존재하는지 검사
-        if (checkIfDirectoryExists(destinationPath) == true) {
-            return new OutputVO("destination file already exist");
-        }
-
-        Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-
-        return new OutputVO(source + " moved to " + destination);
     }
 }

@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.Locale;
 
 public class DirDAO extends CmdDAO {
-    private File sourceDirectory;
 
     private SimpleDateFormat dateFormat;
     private Date lastModifiedDate;
@@ -37,7 +36,7 @@ public class DirDAO extends CmdDAO {
         return longestSize;
     }
     
-    private void addParentFolders(LinkedList<File> fileList){
+    private void addParentFolders(File sourceDirectory, LinkedList<File> fileList){
         // rootDirectory 일때 예외처리
         // Parent가 존재할때만 fileList에 추가
         if(sourceDirectory.getParentFile()!= null) {
@@ -49,29 +48,53 @@ public class DirDAO extends CmdDAO {
         System.out.println(fileList.get(0).length());
     }
 
-    public OutputVO dir(String curDirectory, String source) throws IOException {
+    private String getCertainFileInfo(File file, int maximumSpaceCnt){
+
+        StringBuilder sb = new StringBuilder();
+
+        lastModifiedDate.setTime(file.lastModified());
+        String dateString = dateFormat.format(lastModifiedDate);
+
+        sb.append(dateString);
+        sb.append(" ");
+
+        if (file.isDirectory()) {
+            sb.append("<DIR> ");
+        } else {
+            sb.append("      ");
+        }
+
+        String sizeStr = String.format("%,d", file.length());
+        int curFileSizeCnt = sizeStr.length();
+        if(file.isDirectory()){
+            curFileSizeCnt = 0;
+            sizeStr="";
+        }
+
+        for (int k = 0; k < maximumSpaceCnt - curFileSizeCnt; k++) sb.append(" ");
+        sb.append(sizeStr);
+        sb.append(" ");
+
+        return sb.toString();
+    }
+
+    public String dir(String curDirectory, Path sourcePath) throws IOException {
 
         sb.setLength(0);
 
-        // target directory 가 진짜 존재하는지 검사
-        Path sourcePath = getNormalizedPath(curDirectory, source);
-        if (checkIfDirectoryExists(sourcePath) == false) {
-            return new OutputVO("파일을 찾을 수 없습니다.");
-        }
-
         // 여기서부터는 진짜로 dir 작업 수행
-        if (isDirectory(sourcePath)) {
-            sourceDirectory = new File(source);
+        File sourceDirectory = new File(sourcePath.toString());
 
+        if (isDirectory(sourcePath)) {
             // sourcePath directory 안에 있는 File 모두 불러오기
             LinkedList<File> fileList = new LinkedList<>(Arrays.asList(sourceDirectory.listFiles()));
-            
+
             // 정렬해주기 위해 가장 큰 사이즈 찾기
             long longestSize = getMaximumSizeCnt(fileList);
             int maximumSpaceCnt = String.format("%,d", longestSize).length();
 
             // . .. folder 추가할 수 있으면 추가하기
-            addParentFolders(fileList);
+            addParentFolders(sourceDirectory, fileList);
 
             int fileCnt = 0;
             int dirCnt = 0;
@@ -80,51 +103,28 @@ public class DirDAO extends CmdDAO {
                 for (File file : fileList) {
 
                     // default로 숨겨진 파일이면 skip
-                    if(file.isHidden()==true) continue;
+                    if (file.isHidden() == true) continue;
+                    if (file.isDirectory()) dirCnt++;
+                    else fileCnt++;
 
-                    lastModifiedDate.setTime(file.lastModified());
-                    String dateString = dateFormat.format(lastModifiedDate);
+                    sb.append(getCertainFileInfo(file, maximumSpaceCnt));
 
-                    sb.append(dateString);
-                    sb.append(" ");
-
-                    if (file.isDirectory()) {
-                        dirCnt++;
-                        sb.append("<DIR> ");
-                    } else {
-                        fileCnt++;
-                        sb.append("      ");
-                    }
-
-                    String sizeStr = String.format("%,d", file.length());
-                    int curFileSizeCnt = sizeStr.length();
-                    if(sizeStr.equals("0") || file.equals(sourceDirectory.getParentFile()) || file.equals(sourceDirectory)){
-                        curFileSizeCnt = 0;
-                        sizeStr="";
-                    }
-
-                    for (int k = 0; k < maximumSpaceCnt - curFileSizeCnt; k++) sb.append(" ");
-                    sb.append(sizeStr);
-                    sb.append(" ");
-
-                    if(file.equals(sourceDirectory)){
+                    if (file.equals(sourceDirectory)) {
                         sb.append(".");
-                    }else if(file.equals(sourceDirectory.getParentFile())){
+                    } else if (file.equals(sourceDirectory.getParentFile())) {
                         sb.append("..");
-                    }else{
+                    } else {
                         sb.append(file.getName());
                     }
                     sb.append("\n");
                 }
+                sb.append(String.format("%d files\n", fileCnt));
             }
-
-            sb.append(String.format("%d files\n", fileCnt));
-            sb.append(String.format("%d directories", dirCnt));
-
         } else {
-            sb.append("is not a directory");
+            sb.append(getCertainFileInfo(sourceDirectory,10));
+            sb.append("\n");
         }
 
-        return new OutputVO(sb.toString());
+        return sb.toString();
     }
 }

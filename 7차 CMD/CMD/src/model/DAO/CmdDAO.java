@@ -10,13 +10,13 @@ public class CmdDAO {
     protected String rootDirectory;
     protected String separater;
 
-    protected CmdDAO(FileSystem fileSystem, String rootDirectory){
+    public CmdDAO(FileSystem fileSystem, String rootDirectory){
         this.fileSystem = fileSystem;
         this.rootDirectory = rootDirectory;
         this.separater = fileSystem.getSeparator();
     }
 
-    protected final boolean checkIfStartingFromRootDirectory(String directoryPath) {
+    public final boolean checkIfStartingFromRootDirectory(String directoryPath) {
         if (directoryPath.startsWith(rootDirectory) || directoryPath.startsWith(separater) || directoryPath.startsWith("/")) {
             return true;
         }
@@ -24,7 +24,7 @@ public class CmdDAO {
     }
 
     // 상대경로나 절대경로로 들어온걸 정규경로로 return 해줌
-    protected final Path getNormalizedPath(String curDirectory, String directoryPath) throws IOException {
+    public final Path getNormalizedPath(String curDirectory, String directoryPath) throws IOException {
 
         Path retPath;
 
@@ -49,7 +49,7 @@ public class CmdDAO {
     }
 
     // 특정 PATH 가 존재하는지 확인
-    protected final boolean checkIfDirectoryExists(Path path) {
+    public final boolean checkIfDirectoryExists(Path path) {
         File file = new File(path.toString());
 
         if (file.exists()) return true;
@@ -57,7 +57,7 @@ public class CmdDAO {
         return false;
     }
 
-    protected final boolean isDirectory(Path path){
+    public final boolean isDirectory(Path path){
         File destinationFile = new File(path.toString());
 
         if(destinationFile.isDirectory()) return true;
