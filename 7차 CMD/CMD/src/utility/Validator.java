@@ -2,21 +2,18 @@ package utility;
 
 import java.io.File;
 import java.nio.file.FileSystem;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Validator {
-    private FileSystem fileSystem;
     private String rootDirectory;
     private String separater;
 
-    public Validator(FileSystem fileSystem, String rootDirectory){
-        this.fileSystem = fileSystem;
+    public Validator(String rootDirectory){
         this.rootDirectory = rootDirectory;
-        this.separater = fileSystem.getSeparator();
+        this.separater = System.getProperty("file.separator");
     }
 
+    // rootDirectory에서 시작하는지 확인
     public final boolean checkIfStartingFromRootDirectory(String directoryPath) {
         if (directoryPath.startsWith(rootDirectory) || directoryPath.startsWith(separater) || directoryPath.startsWith("/")) {
             return true;
@@ -27,7 +24,7 @@ public class Validator {
     // 특정 PATH 가 존재하는지 확인
     public final boolean checkIfDirectoryExists(Path path) {
 
-        File file = new File(path.toString());
+        File file = path.toFile();
 
         if (file.exists()) return true;
 
@@ -35,7 +32,7 @@ public class Validator {
     }
 
     public final boolean isDirectory(Path path){
-        File destinationFile = new File(path.toString());
+        File destinationFile = path.toFile();
 
         if(destinationFile.isDirectory()) return true;
 

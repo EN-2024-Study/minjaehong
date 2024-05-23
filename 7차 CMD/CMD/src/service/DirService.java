@@ -33,6 +33,7 @@ public class DirService extends CmdService<DirVO>{
     }
 
     // 1개의 폴더에 대한 정보 (DirVO)만 넘김
+    @Override
     public DirVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));

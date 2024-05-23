@@ -8,6 +8,7 @@ public class FileVO {
     private long fileSize;
     private String fileName;
 
+
     public FileVO(Date date, boolean isDirectory, long fileSize, String fileName){
         this.lastModifiedDate = date;
         this.isDirectory = isDirectory;

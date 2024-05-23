@@ -24,7 +24,7 @@ public class MainView {
     }
 
     private void printCurDirectory(String curDirectory) {
-        System.out.print(curDirectory + "> ");
+        System.out.print("\n" + curDirectory + "> ");
     }
 
     public InputVO getInput(String curDirectory) throws IOException {
@@ -42,8 +42,6 @@ public class MainView {
 
     //============================= dir 관련 변수들 =============================//
 
-    boolean wasLatestOneExisting = true;
-
     // 한 개의 폴더(DirVO)에 대한 정보 출력
     public void printDirVO(DirVO dirVO) {
         sb.setLength(0);
@@ -51,19 +49,11 @@ public class MainView {
         // 만약 존재하지 않으면 return
         if (dirVO.checkIfDirectoryExists() == false) {
             sb.append(dirVO.getCurDirectory());
-            wasLatestOneExisting = false;
             sb.append(" 디렉터리\n\n");
-            System.out.println(sb.toString());
+            System.out.print(sb);
             return;
         }
 
-        // 전꺼가 존재하지 않았으면 문구 하나 출력
-        if(wasLatestOneExisting==false){
-            sb.append("파일을 찾을 수 없습니다\n\n");
-        }
-
-        wasLatestOneExisting = true;
-        
         sb.append(dirVO.getSourcePathString());
         sb.append(" 디렉터리\n\n");
 
@@ -101,10 +91,10 @@ public class MainView {
         sb.append(String.format("%15s", String.format("%,d", dirVO.getTotalFileSize())));
         sb.append(" 바이트 남음\n");
 
-        System.out.println(sb.toString());
+        System.out.print(sb);
     }
 
-    public void showHelp() {
+    public void printHelp() {
         String helpText = "특정 명령어에 대한 자세한 내용이 필요하면 HELP 명령어 이름을 입력하십시오.\n"
                 + "CD       현재 디렉터리 이름을 보여주거나 바꿉니다.\n"
                 + "CLS      화면을 지웁니다.\n"
@@ -115,10 +105,10 @@ public class MainView {
                 + "EXIT     CMD.EXE 프로그램(명령 인터프리터)을 종료합니다.\n"
                 + "도구에 대한 자세한 내용은 온라인 도움말의 명령줄 참조를 참조하십시오.";
 
-        System.out.println(helpText);
+        System.out.print(helpText);
     }
 
     public void showWrongCommand(String command) {
-        System.out.println(String.format("%s은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는 배치 파일이 아닙니다.", command));
+        System.out.print(String.format("%s은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는 배치 파일이 아닙니다.", command));
     }
 }

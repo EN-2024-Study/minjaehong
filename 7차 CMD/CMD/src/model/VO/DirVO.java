@@ -1,6 +1,7 @@
 package model.VO;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class DirVO {
     public String getSourcePathString(){
         return sourcePathString;
     }
+
     public List<FileVO> getFileInfoList(){
         return fileVOList;
     }
