@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 public class CpDAO {
 
-    public MessageVO executeCopy(Path sourcePath, Path destinationPath) throws IOException {
+    public boolean executeCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         // 이미 있는 파일이면 알아서 복사됨
         // 없는 파일이면 해당 이름으로 새로운게 생김
@@ -25,8 +25,11 @@ public class CpDAO {
         // 2-1 ABC가 파일이면
         // 2-2 ABC가 디렉토리이면
 
-        Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        if(sourcePath.equals(destinationPath)){
+            return false;
+        }
 
-        return new MessageVO(sourcePath.getFileName() + " copied at " + destinationPath);
+        Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        return true;
     }
 }
