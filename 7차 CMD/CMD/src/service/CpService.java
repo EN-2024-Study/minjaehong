@@ -1,5 +1,6 @@
 package service;
 
+import Constants.OverwriteEnum;
 import model.DAO.CpDAO;
 import model.VO.MessageVO;
 import controller.RuntimeController;
@@ -63,6 +64,25 @@ public class CpService extends CmdService<MessageVO> {
         return nameList;
     }
 
+    // 제대로된 입력 받을때까지 overwrite할건지 물어봄
+    private OverwriteEnum askOverwritePermission(File curSourceFile, Path destinationPath) throws IOException {
+
+        File destinationFile = destinationPath.toFile();
+
+        OverwriteEnum permission = OverwriteEnum.WRONG_INPUT;
+
+        boolean isValidPermission = false;
+
+        while(!isValidPermission){
+            permission = runtimeController.handleOverwritePermission(curSourceFile, Paths.get(destinationFile.getName(), curSourceFile.getName()));
+
+            if(!permission.equals(OverwriteEnum.WRONG_INPUT)){
+                isValidPermission = true;
+            }
+        }
+        return permission;
+    }
+
     @Override
     public MessageVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
@@ -108,6 +128,8 @@ public class CpService extends CmdService<MessageVO> {
 
     private MessageVO handleFileToFileCopy(Path sourcePath, Path destinationPath) throws IOException {
 
+        OverwriteEnum permission;
+        
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
         // destination이 존재하지 않을때
@@ -117,21 +139,22 @@ public class CpService extends CmdService<MessageVO> {
             return new MessageVO("1개 파일이 복사되었습니다.\n");
         }
 
-        File sourceFile = sourcePath.toFile();
-        File destinationFile = destinationPath.toFile();
-
         // 존재한다면 이미 있는 file overwrite할건지 물어보고 해야함
-        if (!runtimeController.handleOverwrite(sourceFile, Paths.get(destinationFile.getName(), sourceFile.getName()))) {
+        // 맞는거 입력할때까지 받기
+        permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
+
+        if(permission.equals(OverwriteEnum.NO)) {
             return new MessageVO("0개 파일이 복사되었습니다.");
         }
 
-        // 아니면 그냥 destinationPath로 복사해주면 됨
         cpDAO.executeCopy(sourcePath, destinationPath);
         return new MessageVO("1개 파일이 복사되었습니다.\n");
     }
 
     private MessageVO handleFileToDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
 
+        OverwriteEnum permission;
+        
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
         // destination이 존재하지 않을때는 그냥 파일 새로 생성해서 복사되게 하면 됨
@@ -149,8 +172,9 @@ public class CpService extends CmdService<MessageVO> {
         
         // 똑같은 파일명이 있으면 overwrite 여부 물어보기
         if(destinationContainingFileNameList.contains(sourceFile.getName())){
-            // 거절했으면 skip
-            if(runtimeController.handleOverwrite(sourceFile, Paths.get(destinationDirectory.getName(),sourceFile.getName()))){
+            permission = askOverwritePermission(sourceFile, destinationPath);
+            // NO면 바로 return
+            if(permission.equals(OverwriteEnum.NO)) {
                 return new MessageVO("0개 파일이 복사되었습니다.");
             }
         }
@@ -164,8 +188,9 @@ public class CpService extends CmdService<MessageVO> {
     private MessageVO handleDirectoryToFileCopy(Path sourcePath, Path destinationPath) {
 
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
+
         // destination이 존재하지 않을때
-        if (!doesDestinationExist) {
+        if(!doesDestinationExist) {
             return new MessageVO("COPY DIRECTORY TO NON-EXSITING FILE");
         }
 
@@ -174,18 +199,19 @@ public class CpService extends CmdService<MessageVO> {
 
     private MessageVO handleDirectoryToDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
 
+        OverwriteEnum permission = OverwriteEnum.WRONG_INPUT;
+
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
         
         // destination이 존재하지 않을때
         // 이럴때는 Directory to File 이랑 동일할때임
+        // handleDirectoryToFileCopy로 넘겨주기
         if (!doesDestinationExist) {
             handleDirectoryToFileCopy(sourcePath, destinationPath);
         }
 
         // 존재하면 sourceDirectory랑 destinationDirectory 의 파일들을 비교해가면서
         // overwrite 할건지 안할건지 물어봐가면서 진행해야함
-
-        File sourceDirectory = sourcePath.toFile();
         File destinationDirectory = destinationPath.toFile();
 
         // 각 Directory가 가지고 있는 파일들에 대한 ArrayList<File> 구하기
@@ -203,14 +229,12 @@ public class CpService extends CmdService<MessageVO> {
             // Directory이면 애초에 볼 필요가 없음 skip
             if (curSourceDirectoryFile.isDirectory()) continue;
 
-            // destination도 똑같은 파일명을 가지고 있으면 overwrite 할건지 물어봐야함
-            // 그래서 똑같은 파일명이 있으면 진짜로 물어보기
+            // 똑같은 파일명이 있으면 overwrite 여부 물어보기
             if (destinationContainingFileNameList.contains(curSourceDirectoryFile.getName())) {
-                // 만약 거절했으면 skip
-                if (runtimeController.handleOverwrite(curSourceDirectoryFile, Paths.get(destinationDirectory.getName(), curSourceDirectoryFile.getName())) == false) {
-                    continue;
-                }
+                permission = askOverwritePermission(curSourceDirectoryFile, destinationPath);
             }
+            // NO면 skip
+            if(permission.equals(OverwriteEnum.NO)) continue;
 
             cpDAO.executeCopy(curSourceDirectoryFile.toPath(), Paths.get(destinationPath.toString(), curSourceDirectoryFile.getName()));
 

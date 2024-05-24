@@ -1,6 +1,8 @@
 package controller;
 
+import Constants.OverwriteEnum;
 import model.VO.MessageVO;
+import model.VO.OverwritePermissionVO;
 import view.MainView;
 
 import java.io.File;
@@ -16,18 +18,13 @@ public class RuntimeController {
         mainView = new MainView();
     }
 
-    public boolean handleOverwrite(File sourceFile, Path destinationPath) throws IOException {
+    public OverwriteEnum handleOverwritePermission(File sourceFile, Path destinationPath) throws IOException {
 
         mainView.printMessageVO(new MessageVO(sourceFile.getAbsolutePath()+"\n"));
         mainView.printMessageVO(new MessageVO(destinationPath.toString()+"을(를) 덮어쓰시겠습니까? (Yes/No/All) "));
 
-        MessageVO messageVO = mainView.getRuntimeInput();
+        OverwritePermissionVO overwritePermissionVO = mainView.getOverwritePermission();
 
-        String userInput = messageVO.getMessage();
-        userInput = userInput.toLowerCase();
-
-        if(userInput.startsWith("y")) return true;
-
-        return false;
+        return overwritePermissionVO.getOverwritePermission();
     }
 }

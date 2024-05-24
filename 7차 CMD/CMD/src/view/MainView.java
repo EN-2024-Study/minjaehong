@@ -1,9 +1,6 @@
 package view;
 
-import model.VO.DirVO;
-import model.VO.FileVO;
-import model.VO.InputVO;
-import model.VO.MessageVO;
+import model.VO.*;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -36,9 +33,9 @@ public class MainView {
         return new InputVO(input);
     }
 
-    public MessageVO getRuntimeInput() throws IOException{
+    public OverwritePermissionVO getOverwritePermission() throws IOException{
         String input = br.readLine();
-        return new MessageVO(input);
+        return new OverwritePermissionVO(input);
     }
 
     public void printMessageVO(MessageVO messageVO) {
