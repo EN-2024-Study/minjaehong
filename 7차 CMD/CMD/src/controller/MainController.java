@@ -83,9 +83,9 @@ public class MainController {
                     break;
                 case "&":
                 case "&&":
-                    mainView.printMessageVO(new MessageVO(String.format("%s은(는) 예상되지 않았습니다.", command)));
+                    mainView.printMessageVO(new MessageVO(String.format("%s은(는) 예상되지 않았습니다.\n", command)));
                 default:
-                    mainView.printMessageVO(new MessageVO(String.format("%s은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는 배치 파일이 아닙니다.", command)));
+                    mainView.printMessageVO(new MessageVO(String.format("%s은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는 배치 파일이 아닙니다.\n", command)));
                     break;
             }
         }
@@ -105,12 +105,13 @@ public class MainController {
         return changedDirectory;
     }
 
-    // parameter 로 여러개가 들어오면 여러개의 DirVO를 보내서 출력함
+    // parameter 로 여러개가 들어오면 여러개의 DirVO를 DirDAO에서 가져와 view로 보냄
     private void execDIR(List<String> parameters) throws IOException {
 
         if (parameters.size()==0) parameters.add(curDirectory);
 
         int parameterLength = parameters.size();
+
         BitSet bitset = new BitSet(parameterLength);
 
         for(int i=0;i<parameterLength;i++) {
@@ -118,17 +119,17 @@ public class MainController {
 
             bitset.set(i,dirVO.checkIfDirectoryExists());
 
-
-            // 상황에 따른 파일을 찾을 수 없습니다 출력
+            // 상황에 따른 파일을 찾을 수 없습니다 출력 #1
             if((i>1 && bitset.get(i)==true && bitset.get(i-1)==false)){
-                mainView.printMessageVO(new MessageVO("파일을 찾을 수 없습니다\n\n"));
+                mainView.printMessageVO(new MessageVO("\n파일을 찾을 수 없습니다\n"));
             }
 
             mainView.printDirVO(dirVO);
             parameters.remove(0);
 
+            // 상황에 따른 파일을 찾을 수 없습니다 출력 #2
             if(bitset.get(i)==false && i==parameterLength-1){
-                mainView.printMessageVO(new MessageVO("파일을 찾을 수 없습니다\n\n"));
+                mainView.printMessageVO(new MessageVO("\n파일을 찾을 수 없습니다\n"));
             }
         }
     }

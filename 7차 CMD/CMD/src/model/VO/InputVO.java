@@ -8,10 +8,16 @@ public class InputVO {
 
     private String command;
     private List<String> parameters;
-    
+
     public InputVO(String input){
         initializeInputDTO(input);
     }
+
+    public String getCommand(){
+        return command;
+    }
+
+    public List<String> getParameters(){ return parameters; }
 
     // O(N)
     // 콜론을 빼주고 콜론 사이에 있는 공백을 ?로 바꿔서 내보냄
@@ -92,13 +98,5 @@ public class InputVO {
         }
 
         command = command.toLowerCase();
-    }
-
-    public String getCommand(){
-        return command;
-    }
-
-    public List<String> getParameters(){
-        return parameters;
     }
 }

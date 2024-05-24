@@ -36,8 +36,13 @@ public class MainView {
         return new InputVO(input);
     }
 
+    public MessageVO getRuntimeInput() throws IOException{
+        String input = br.readLine();
+        return new MessageVO(input);
+    }
+
     public void printMessageVO(MessageVO messageVO) {
-        System.out.println(messageVO.getMessage());
+        System.out.print(messageVO.getMessage());
     }
 
     //============================= dir 관련 변수들 =============================//
@@ -48,14 +53,16 @@ public class MainView {
 
         // 만약 존재하지 않으면 return
         if (dirVO.checkIfDirectoryExists() == false) {
+            sb.append("\n");
             sb.append(dirVO.getCurDirectory());
-            sb.append(" 디렉터리\n\n");
+            sb.append(" 디렉터리\n");
             System.out.print(sb);
             return;
         }
 
+        sb.append("\n");
         sb.append(dirVO.getSourcePathString());
-        sb.append(" 디렉터리\n\n");
+        sb.append("디렉터리\n");
 
         List<FileVO> fileVOQueue = dirVO.getFileInfoList();
 
@@ -106,9 +113,5 @@ public class MainView {
                 + "도구에 대한 자세한 내용은 온라인 도움말의 명령줄 참조를 참조하십시오.";
 
         System.out.print(helpText);
-    }
-
-    public void showWrongCommand(String command) {
-        System.out.print(String.format("%s은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는 배치 파일이 아닙니다.", command));
     }
 }

@@ -22,26 +22,26 @@ public class CdService extends CmdService<Map.Entry<String,MessageVO>>{
         }
 
         if(parameters.size()>1){
-            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("지정된 경로를 찾을 수 없습니다"));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("지정된 경로를 찾을 수 없습니다.\n"));
         }
 
         String destination = parameters.get(0);
-        return cd(curDirectory, destination);
+        return executeCD(curDirectory, destination);
     }
 
-    private Map.Entry<String, MessageVO> cd(String curDirectory, String destination) throws IOException {
+    private Map.Entry<String, MessageVO> executeCD(String curDirectory, String destination) throws IOException {
 
         Path changedDirectoryPath = getNormalizedPath(curDirectory, destination);
 
         if(validator.checkIfDirectoryExists(changedDirectoryPath)){
 
-            if(validator.isDirectory(changedDirectoryPath)){
+            if(validator.checkIfDirectory(changedDirectoryPath)){
                 return new AbstractMap.SimpleEntry<>(changedDirectoryPath.toString(), new MessageVO(""));
             }
 
-            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("디렉터리 이름이 올바르지 않습니다."));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("디렉터리 이름이 올바르지 않습니다.\n"));
         }
 
-        return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("지정된 경로를 찾을 수 없습니다."));
+        return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("지정된 경로를 찾을 수 없습니다.\n"));
     }
 }

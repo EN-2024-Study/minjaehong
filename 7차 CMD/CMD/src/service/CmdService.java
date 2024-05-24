@@ -1,6 +1,5 @@
 package service;
 
-import model.VO.MessageVO;
 import utility.Validator;
 
 import java.io.File;
@@ -27,6 +26,10 @@ public abstract class CmdService<ReturnVO> {
         if (validator.checkIfStartingFromRootDirectory(directoryPath)) {
             retPath = Paths.get(directoryPath);
         }
+        
+        // /// 이렇게 들어온거 예외처리해야함
+        // curDirectory에 붙었다가 Paths.get에서 터지는 놈들 잡아야함
+        
         // 2. 상대경로로 들어왔으면 curDirectory 이용해서 절대경로로 만들어주기
         // C:/A/B/C/../X/Y 형식으로 만들고
         else {

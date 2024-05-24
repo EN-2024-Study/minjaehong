@@ -25,7 +25,7 @@ public class DirDAO{
     // 여기서부터는 진짜로 dir 작업 수행
     // 존재성이 확인된 애들만 호출됨
     // 한개의 폴더에 대한 탐색임
-    public DirVO dir(String curDirectory, Path sourcePath) throws IOException {
+    public DirVO executeDir(String curDirectory, Path sourcePath) throws IOException {
 
         File source = sourcePath.toFile();
 

@@ -15,7 +15,8 @@ public class Validator {
 
     // rootDirectory에서 시작하는지 확인
     public final boolean checkIfStartingFromRootDirectory(String directoryPath) {
-        if (directoryPath.startsWith(rootDirectory) || directoryPath.startsWith(separater) || directoryPath.startsWith("/")) {
+        if (directoryPath.startsWith(rootDirectory) || directoryPath.startsWith(rootDirectory.toLowerCase()) ||
+                directoryPath.startsWith(separater) || directoryPath.startsWith("/")) {
             return true;
         }
         return false;
@@ -31,7 +32,7 @@ public class Validator {
         return false;
     }
 
-    public final boolean isDirectory(Path path){
+    public final boolean checkIfDirectory(Path path){
         File destinationFile = path.toFile();
 
         if(destinationFile.isDirectory()) return true;

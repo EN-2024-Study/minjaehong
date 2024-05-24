@@ -11,25 +11,14 @@ import java.util.List;
 public class DirService extends CmdService<DirVO>{
 
     private DirDAO dirDAO;
-    private StringBuilder resultSb;
 
     public DirService(Validator validator){
         super(validator);
         this.dirDAO = new DirDAO();
-        this.resultSb = new StringBuilder();
     }
 
     private boolean checkIfDirectoryExists(Path sourcePath){
-        if (validator.checkIfDirectoryExists(sourcePath)==false) {
-            resultSb.append(sourcePath);
-            resultSb.append(" 디렉터리\n\n");
-            resultSb.append("파일을 찾을 수 없습니다.\n");
-            return false;
-        }
-
-        resultSb.append(sourcePath);
-        resultSb.append(" 디렉터리\n\n");
-        return true;
+        return validator.checkIfDirectoryExists(sourcePath);
     }
 
     // 1개의 폴더에 대한 정보 (DirVO)만 넘김
@@ -42,6 +31,6 @@ public class DirService extends CmdService<DirVO>{
         if (checkIfDirectoryExists(sourcePath) == false) return new DirVO(curDirectory, "");
 
         // dirDAO를 통해서 한 개의 폴더에 대한 정보를 담은 DirVO를 받고 바로 return
-        return dirDAO.dir(curDirectory, sourcePath);
+        return dirDAO.executeDir(curDirectory, sourcePath);
     }
 }
