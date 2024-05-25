@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-// 한개의 폴더에 대한 정보 담음
+// 한 개의 Directory(폴더)에 대한 정보 담음
 public class DirVO {
-    List<FileVO> fileVOList;
+    private ArrayList<FileVO> fileVOList;
     private String curDirectory;
     private String sourcePathString;
     private int fileCnt;

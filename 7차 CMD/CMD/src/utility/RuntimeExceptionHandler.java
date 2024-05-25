@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-// enum 만들어서 yes no all 전달
 public class RuntimeExceptionHandler {
 
     private MainView mainView;

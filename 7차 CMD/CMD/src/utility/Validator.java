@@ -14,7 +14,7 @@ public class Validator {
     }
 
     // rootDirectory에서 시작하는지 확인
-    public final boolean checkIfStartingFromRootDirectory(String directoryPath) {
+    public boolean checkIfStartingFromRootDirectory(String directoryPath) {
         if (directoryPath.startsWith(rootDirectory) || directoryPath.startsWith(rootDirectory.toLowerCase()) ||
                 directoryPath.startsWith(separater) || directoryPath.startsWith("/")) {
             return true;
@@ -23,7 +23,7 @@ public class Validator {
     }
 
     // 특정 PATH 가 존재하는지 확인
-    public final boolean checkIfDirectoryExists(Path path) {
+    public boolean checkIfDirectoryExists(Path path) {
 
         File file = path.toFile();
 
@@ -33,10 +33,18 @@ public class Validator {
     }
 
     // destinationFile이 존재하지 않아도 잘 작동함
-    public final boolean checkIfDirectory(Path path){
+    public boolean checkIfDirectory(Path path){
         File destinationFile = path.toFile();
 
         if(destinationFile.isDirectory()) return true;
+
+        return false;
+    }
+
+    public boolean checkIfFile(Path path){
+        File destinationFile = path.toFile();
+
+        if(destinationFile.isFile()) return true;
 
         return false;
     }

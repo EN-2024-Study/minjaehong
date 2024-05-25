@@ -33,26 +33,28 @@ public class CpService extends ActionCmdService<MessageVO> {
         }
 
         // 인자 1개이든 2개이든 올바른 destinationPath를 반환
-        Path destinationPath = getDestinationPath(curDirectory, sourcePath, parameters);
+        Path destinationPath = getDestinationPath(curDirectory, parameters);
 
         // source 랑 destination이 directory인지 확인
         boolean isSourceDirectory = validator.checkIfDirectory(sourcePath);
         boolean isDestinationDirectory = validator.checkIfDirectory(destinationPath);
+        boolean isSourceFile = !isSourceDirectory;
+        boolean isDestinationFile = !isDestinationDirectory;
 
         // 그리고 그에 맞는 하위 handle 함수를 호출
 
         // FILE TO FILE
-        if (!isSourceDirectory && !isDestinationDirectory) {
+        if (isSourceFile && isDestinationFile) {
             return handleFileToFileCopy(sourcePath, destinationPath);
         }
 
         // FILE TO DIRECTORY
-        if (!isSourceDirectory && isDestinationDirectory) {
+        if (isSourceFile && isDestinationDirectory) {
             return handleFileToDirectoryCopy(sourcePath, destinationPath);
         }
 
         // DIRECTORY TO FILE
-        if (isSourceDirectory && !isDestinationDirectory) {
+        if (isSourceDirectory && isDestinationFile) {
             return handleDirectoryToFileCopy(sourcePath, destinationPath);
         }
 
@@ -61,7 +63,7 @@ public class CpService extends ActionCmdService<MessageVO> {
             return handleDirectoryToDirectoryCopy(sourcePath, destinationPath);
         }
 
-        return new MessageVO("if this is called something is wrong");
+        return new MessageVO("IF THIS IS PRINTED SOMETHING IS WRONG");
     }
 
     //======================================= COPY FILE TO FILE ========================================//
@@ -83,7 +85,6 @@ public class CpService extends ActionCmdService<MessageVO> {
     }
 
     private MessageVO handleFileToExistingFile(Path sourcePath, Path destinationPath) throws IOException {
-        OverwriteEnum permission;
 
         // 같은 파일일때
         if (sourcePath.equals(destinationPath)) {
@@ -91,7 +92,7 @@ public class CpService extends ActionCmdService<MessageVO> {
         }
 
         // 존재한다면 이미 있는 file overwrite할건지 물어보고 해야함
-        permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
+        OverwriteEnum permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
         if (permission.equals(OverwriteEnum.NO)) {
             return new MessageVO("0개 파일이 복사되었습니다.\n");

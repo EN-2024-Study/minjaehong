@@ -8,9 +8,9 @@ import java.util.*;
 
 public class MainView {
 
-    BufferedReader consoleReader;
-    BufferedWriter consoleWriter;
-    StringBuilder sb;
+    private BufferedReader consoleReader;
+    private BufferedWriter consoleWriter;
+    private StringBuilder sb;
 
     private SimpleDateFormat dateFormat;
     private String dirCmdIntroString;

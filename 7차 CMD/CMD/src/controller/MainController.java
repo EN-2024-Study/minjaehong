@@ -11,7 +11,6 @@ import view.MainView;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.BitSet;
@@ -69,6 +68,8 @@ public class MainController {
         }
         sb.append("(c) Microsoft Corporation. All rights reserved.\n");
 
+        reader.close();
+
         return sb.toString();
     }
 
@@ -87,6 +88,8 @@ public class MainController {
             sb.append(line);
             sb.append("\n");
         }
+
+        reader.close();
 
         return sb.toString();
     }
@@ -107,6 +110,7 @@ public class MainController {
         this.cdService = new CdService(validator);
         this.dirService = new DirService(validator);
 
+        // cpService mvService는 runtimeExceptionHandler 필요함
         this.cpService = new CpService(validator, runtimeExceptionHandler);
         this.mvService = new MvService(validator, runtimeExceptionHandler);
     }

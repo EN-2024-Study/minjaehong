@@ -2,7 +2,8 @@ package model.VO;
 
 import java.util.Date;
 
-// 한개의 파일에 대한 정보를 담음
+// 한개의 파일과 폴더에 대한 정보를 담음
+// DirVO가 FileVO ArrayList를 가지고 있음
 public class FileVO {
     private Date lastModifiedDate;
     private boolean isDirectory;

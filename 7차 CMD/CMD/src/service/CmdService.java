@@ -8,7 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public abstract class CmdService<ReturnVO> {
+// CmdService > CdService = DirService
+// CmdService > ActionCmdService > MvService = CpService
+public abstract class CmdService<T> {
 
     protected Validator validator;
 
@@ -45,5 +47,5 @@ public abstract class CmdService<ReturnVO> {
         return retPath;
     }
 
-    public abstract ReturnVO handleCommand(String curDirectory, List<String> parameters) throws IOException;
+    public abstract T handleCommand(String curDirectory, List<String> parameters) throws IOException;
 }

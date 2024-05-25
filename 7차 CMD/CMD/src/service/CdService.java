@@ -9,6 +9,9 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
+// CD는 예외적으로 DAO가 없음
+// 그냥 해당 PATH가 존재하는지 안하는지 확인만 하면 되기 때문
+// Pair 객체로 return (바뀔 디렉터리, MessageVO)
 public class CdService extends CmdService<Map.Entry<String,MessageVO>>{
 
     public CdService(Validator validator){
@@ -33,6 +36,7 @@ public class CdService extends CmdService<Map.Entry<String,MessageVO>>{
 
         Path changedDirectoryPath = getNormalizedPath(curDirectory, destination);
 
+        // 만약 해당 경로가 존재한다면
         if(validator.checkIfDirectoryExists(changedDirectoryPath)){
 
             if(validator.checkIfDirectory(changedDirectoryPath)){

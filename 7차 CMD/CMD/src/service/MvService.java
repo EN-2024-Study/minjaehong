@@ -36,32 +36,34 @@ public class MvService extends ActionCmdService<MessageVO> {
         }
 
         // 인자 1개이든 2개이든 올바른 destinationPath를 반환
-        Path destinationPath = getDestinationPath(curDirectory, sourcePath, parameters);
+        Path destinationPath = getDestinationPath(curDirectory, parameters);
 
         // destination이 존재하지 않을때
         if(!validator.checkIfDirectoryExists(destinationPath)){
-            return handleNonExistingSourceMove(sourcePath, destinationPath);
+            return handleNonExistingDestinationMove(sourcePath, destinationPath);
         }
 
         // 여기까지 왔으면 이제 source destination은 둘 다 존재하는거임
         // source랑 destination이 directory인지 확인
         boolean isSourceDirectory = validator.checkIfDirectory(sourcePath);
         boolean isDestinationDirectory = validator.checkIfDirectory(destinationPath);
+        boolean isSourceFile = !isSourceDirectory;
+        boolean isDestinationFile = !isDestinationDirectory;
 
         // 그리고 그에 맞는 하위 handle 함수를 호출
 
         // FILE TO FILE
-        if (!isSourceDirectory && !isDestinationDirectory) {
+        if (isSourceFile && isDestinationFile) {
             return handleFileToFileMove(sourcePath, destinationPath);
         }
 
         // FILE TO DIRECTORY
-        if (!isSourceDirectory && isDestinationDirectory) {
+        if (isSourceFile && isDestinationDirectory) {
             return handleFileToDirectoryMove(sourcePath, destinationPath);
         }
 
         // DIRECTORY TO FILE
-        if (isSourceDirectory && !isDestinationDirectory) {
+        if (isSourceDirectory && isDestinationFile) {
             return handleDirectoryToFileMove(sourcePath, destinationPath);
         }
 
@@ -70,13 +72,13 @@ public class MvService extends ActionCmdService<MessageVO> {
             return handleDirectoryToDirectoryMove(sourcePath, destinationPath);
         }
 
-        return new MessageVO("if this is called something is wrong");
+        return new MessageVO("IF THIS IS PRINTED SOMETHING IS WRONG");
     }
 
     //==================================== MOVE NON EXISTING FILE =====================================//
 
     // move는 destination이 존재하지 않으면 source가 파일이든 폴더이든 그냥 이름만 바꿈. 그래서 바로 mvDAO 호출하고 return하면 됨
-    private MessageVO handleNonExistingSourceMove(Path sourcePath, Path destinationPath) throws IOException{
+    private MessageVO handleNonExistingDestinationMove(Path sourcePath, Path destinationPath) throws IOException{
         boolean isSourceDirectory = validator.checkIfDirectory(sourcePath);
 
         mvDAO.executeMove(sourcePath, destinationPath);
@@ -90,9 +92,8 @@ public class MvService extends ActionCmdService<MessageVO> {
     //======================================= MOVE FILE TO FILE ========================================//
 
     private MessageVO handleFileToFileMove(Path sourcePath, Path destinationPath) throws IOException {
-        OverwriteEnum permission;
 
-        permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
+        OverwriteEnum permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
         if (permission.equals(OverwriteEnum.NO)) {
             return new MessageVO("0개 파일이 복사되었습니다.\n");

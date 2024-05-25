@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class ActionCmdService<ReturnVO> extends CmdService<ReturnVO>{
+// CP MV 명령어의 부모 클래스
+// CmdService > ActionCmdService > MvService = CpService
+// CP MV의 overwritePermission을 해결해주는 runtimeExceptionHandler 보유
+public abstract class ActionCmdService<T> extends CmdService<T>{
 
     private RuntimeExceptionHandler runtimeExceptionHandler;
 
@@ -21,7 +24,9 @@ public abstract class ActionCmdService<ReturnVO> extends CmdService<ReturnVO>{
         this.runtimeExceptionHandler = runtimeExceptionHandler;
     }
 
-    protected Path getDestinationPath(String curDirectory, Path sourcePath, List<String> parameters) throws IOException {
+    // 인자가 1개든 2개든
+    // 올바른 destinationPath를 return
+    protected final Path getDestinationPath(String curDirectory, List<String> parameters) throws IOException {
         Path destinationPath = null;
 
         if (parameters.size() == 1) {
@@ -38,7 +43,7 @@ public abstract class ActionCmdService<ReturnVO> extends CmdService<ReturnVO>{
     // Directory가 가지고 있는 Directory들을 List로 return
     // file이면 그냥 자기 자신을 List에 저장해서 return
     // folder면 file folder 모두 저장해서 return
-    protected ArrayList<File> getContainingContentsList(Path folderPath) {
+    protected final ArrayList<File> getContainingContentsList(Path folderPath) {
 
         File source = folderPath.toFile();
         ArrayList<File> contentsList = new ArrayList<>();
@@ -52,7 +57,7 @@ public abstract class ActionCmdService<ReturnVO> extends CmdService<ReturnVO>{
     }
 
     // 특정 Directory 내 Directory 이름들만 저장한 ArrayList return
-    protected ArrayList<String> getContainingFileAndFolderNameList(List<File> fileList) {
+    protected final ArrayList<String> getContainingFileAndFolderNameList(List<File> fileList) {
 
         ArrayList<String> nameList = new ArrayList<>();
 
@@ -63,12 +68,12 @@ public abstract class ActionCmdService<ReturnVO> extends CmdService<ReturnVO>{
         return nameList;
     }
 
-    protected void showCurWorkingFile(String curWorkingDirectoryName) throws IOException {
+    protected final void showCurWorkingFile(String curWorkingDirectoryName) throws IOException {
         runtimeExceptionHandler.showCurWorkingFile(curWorkingDirectoryName);
     }
 
     // runtimeController를 통해 제대로된 입력 받을때까지 overwrite할건지 물어봄
-    protected OverwriteEnum askOverwritePermission(File curSourceFile, Path destinationPath) throws IOException {
+    protected final OverwriteEnum askOverwritePermission(File curSourceFile, Path destinationPath) throws IOException {
 
         File destinationFile = destinationPath.toFile();
 
