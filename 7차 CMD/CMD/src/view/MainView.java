@@ -8,44 +8,54 @@ import java.util.*;
 
 public class MainView {
 
-    BufferedReader br;
+    BufferedReader consoleReader;
+    BufferedWriter consoleWriter;
     StringBuilder sb;
 
     private SimpleDateFormat dateFormat;
 
     public MainView() {
-        br = new BufferedReader(new InputStreamReader(System.in));
+        consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        consoleWriter = new BufferedWriter(new OutputStreamWriter(System.out));
         sb = new StringBuilder();
 
         dateFormat = new SimpleDateFormat("yyyy-MM-dd a hh:mm", Locale.KOREAN);
     }
 
-    private void printCurDirectory(String curDirectory) {
-        System.out.print("\n" + curDirectory + "> ");
+    public void printSystemOSInfo() throws IOException {
+        consoleWriter.write(System.getProperty("os.name"));
+        consoleWriter.write("[" + System.getProperty("os.version") + "]" + "\n");
+        consoleWriter.write("(c) Microsoft Corporation. All rights reserved."+"\n");
+        consoleWriter.flush();
+    }
+
+    private void printCurDirectory(String curDirectory) throws IOException {
+        consoleWriter.write("\n");
+        consoleWriter.write(curDirectory+"> ");
+        consoleWriter.flush();
     }
 
     public InputVO getInput(String curDirectory) throws IOException {
         printCurDirectory(curDirectory);
         String input = "";
 
-        input = br.readLine();
+        input = consoleReader.readLine();
 
         return new InputVO(input);
     }
 
     public OverwritePermissionVO getOverwritePermission() throws IOException{
-        String input = br.readLine();
+        String input = consoleReader.readLine();
         return new OverwritePermissionVO(input);
     }
 
-    public void printMessageVO(MessageVO messageVO) {
-        System.out.print(messageVO.getMessage());
+    public void printMessageVO(MessageVO messageVO) throws IOException {
+        consoleWriter.write(messageVO.getMessage());
+        consoleWriter.flush();
     }
 
-    //============================= dir 관련 변수들 =============================//
-
     // 한 개의 폴더(DirVO)에 대한 정보 출력
-    public void printDirVO(DirVO dirVO) {
+    public void printDirVO(DirVO dirVO) throws IOException {
         sb.setLength(0);
 
         // 만약 존재하지 않으면 return
@@ -59,7 +69,7 @@ public class MainView {
 
         sb.append("\n");
         sb.append(dirVO.getSourcePathString());
-        sb.append("디렉터리\n");
+        sb.append(" 디렉터리\n");
 
         List<FileVO> fileVOQueue = dirVO.getFileInfoList();
 
@@ -92,13 +102,14 @@ public class MainView {
         sb.append(" 바이트\n");
         sb.append(String.format("%15s", String.format("%,d", dirVO.getDirCnt())));
         sb.append(" 디렉터리");
-        sb.append(String.format("%15s", String.format("%,d", dirVO.getTotalFileSize())));
+        sb.append(String.format("%15s", String.format("%,d", dirVO.getFreeSpaceSize())));
         sb.append(" 바이트 남음\n");
 
-        System.out.print(sb);
+        consoleWriter.write(sb.toString());
+        consoleWriter.flush();
     }
 
-    public void printHelp() {
+    public void printHelp() throws IOException {
         String helpText = "특정 명령어에 대한 자세한 내용이 필요하면 HELP 명령어 이름을 입력하십시오.\n"
                 + "CD       현재 디렉터리 이름을 보여주거나 바꿉니다.\n"
                 + "CLS      화면을 지웁니다.\n"
@@ -109,6 +120,14 @@ public class MainView {
                 + "EXIT     CMD.EXE 프로그램(명령 인터프리터)을 종료합니다.\n"
                 + "도구에 대한 자세한 내용은 온라인 도움말의 명령줄 참조를 참조하십시오.";
 
-        System.out.print(helpText);
+        consoleWriter.write(helpText);
+        consoleWriter.flush();
+    }
+
+    public void returnResources() throws IOException {
+        consoleReader.close();
+
+        consoleWriter.flush();
+        consoleWriter.close();
     }
 }

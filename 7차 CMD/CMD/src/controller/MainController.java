@@ -43,8 +43,6 @@ public class MainController {
         this.curDirectory = System.getProperty("user.home");
         Path curPath = Paths.get(curDirectory);
         this.rootDirectory = curPath.getRoot().toString();
-        System.out.println(rootDirectory);
-
         this.validator = new Validator(rootDirectory);
     }
 
@@ -52,6 +50,8 @@ public class MainController {
         boolean isCmdRunning = true;
         String command;
         List<String> parameters;
+
+        mainView.printSystemOSInfo();
 
         while(isCmdRunning){
             InputVO input = mainView.getInput(curDirectory);
@@ -79,6 +79,7 @@ public class MainController {
                     execCLS();
                     break;
                 case "exit":
+                    execEXIT();
                     isCmdRunning = false;
                     break;
                 case "&":
@@ -144,9 +145,13 @@ public class MainController {
         mainView.printMessageVO(output);
     }
 
-    private void execHELP(){ mainView.printHelp(); }
+    private void execHELP() throws IOException { mainView.printHelp(); }
 
     private void execCLS(){
 
+    }
+
+    private void execEXIT() throws IOException {
+        mainView.returnResources();
     }
 }
