@@ -39,27 +39,27 @@ public class CpService extends CmdService<MessageVO> {
 
     // folder가 가지고 있는 파일들을 List로 return
     // file이면 그냥 자기 자신을 List에 저장해서 return
-    private ArrayList<File> getContainingFileList(Path folderPath){
+    private ArrayList<File> getContainingFileList(Path folderPath) {
         File source = folderPath.toFile();
         ArrayList<File> containingFileList = new ArrayList<>();
 
-        if(source.isFile()){
+        if (source.isFile()) {
             containingFileList.add(source);
-        }else{
+        } else {
             containingFileList.addAll(Arrays.asList(source.listFiles()));
         }
         return containingFileList;
     }
 
     // 특정 파일 내 파일명만 저장한 ArrayList return
-    private ArrayList<String> getContainingFileNameList(List<File> fileList){
-        
+    private ArrayList<String> getContainingFileNameList(List<File> fileList) {
+
         ArrayList<String> nameList = new ArrayList<>();
-        
-        for (File curFile : fileList) { 
-            nameList.add(curFile.getName()); 
+
+        for (File curFile : fileList) {
+            nameList.add(curFile.getName());
         }
-        
+
         return nameList;
     }
 
@@ -72,10 +72,10 @@ public class CpService extends CmdService<MessageVO> {
 
         boolean isValidPermission = false;
 
-        while(!isValidPermission){
+        while (!isValidPermission) {
             permission = runtimeController.handleOverwritePermission(curSourceFile, Paths.get(destinationFile.getName(), curSourceFile.getName()));
 
-            if(!permission.equals(OverwriteEnum.WRONG_INPUT)){
+            if (!permission.equals(OverwriteEnum.WRONG_INPUT)) {
                 isValidPermission = true;
             }
         }
@@ -93,7 +93,7 @@ public class CpService extends CmdService<MessageVO> {
         if (!validator.checkIfDirectoryExists(sourcePath)) {
             return new MessageVO("지정된 파일을 찾을 수 없습니다.\n");
         }
-        
+
         // 인자 1개이든 2개이든 올바른 destinationPath를 반환
         Path destinationPath = getDestinationPath(curDirectory, sourcePath, parameters);
 
@@ -104,22 +104,22 @@ public class CpService extends CmdService<MessageVO> {
         // 그리고 그에 맞는 하위 handle 함수를 호출
 
         // directory to directory
-        if(!isSourceDirectory && !isDestinationDirectory){
+        if (!isSourceDirectory && !isDestinationDirectory) {
             return handleFileToFileCopy(sourcePath, destinationPath);
         }
 
         // file to directory
-        if(!isSourceDirectory && isDestinationDirectory){
+        if (!isSourceDirectory && isDestinationDirectory) {
             return handleFileToDirectoryCopy(sourcePath, destinationPath);
         }
 
         // directory to file
-        if(isSourceDirectory && !isDestinationDirectory){
+        if (isSourceDirectory && !isDestinationDirectory) {
             return handleDirectoryToFileCopy(sourcePath, destinationPath);
         }
 
         // directory to directory
-        if(isSourceDirectory && isDestinationDirectory){
+        if (isSourceDirectory && isDestinationDirectory) {
             return handleDirectoryToDirectoryCopy(sourcePath, destinationPath);
         }
 
@@ -129,17 +129,17 @@ public class CpService extends CmdService<MessageVO> {
     private MessageVO handleFileToFileCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         OverwriteEnum permission;
-        
+
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
         // destination이 존재하지 않을때
-        if(!doesDestinationExist){
+        if (!doesDestinationExist) {
             cpDAO.executeCopy(sourcePath, destinationPath);
             return new MessageVO("1개 파일이 복사되었습니다.\n");
         }
 
         // 같은 파일일때
-        if(sourcePath.equals(destinationPath)){
+        if (sourcePath.equals(destinationPath)) {
             return new MessageVO("같은 파일로 복사할 수 없습니다.\n0개 파일이 복사되었습니다.\n");
         }
 
@@ -147,7 +147,7 @@ public class CpService extends CmdService<MessageVO> {
         // 맞는거 입력할때까지 받기
         permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
-        if(permission.equals(OverwriteEnum.NO)) {
+        if (permission.equals(OverwriteEnum.NO)) {
             return new MessageVO("0개 파일이 복사되었습니다.\n");
         }
 
@@ -158,11 +158,11 @@ public class CpService extends CmdService<MessageVO> {
     private MessageVO handleFileToDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         OverwriteEnum permission = OverwriteEnum.WRONG_INPUT;
-        
+
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
         // destination이 존재하지 않을때는 그냥 파일 새로 생성해서 복사되게 하면 됨
-        if(!doesDestinationExist){
+        if (!doesDestinationExist) {
             cpDAO.executeCopy(sourcePath, destinationPath);
             return new MessageVO("1개 파일이 복사되었습니다.\n");
         }
@@ -173,10 +173,10 @@ public class CpService extends CmdService<MessageVO> {
         // destination Directory 폴더 내 파일명들 저장. 겹치는거 있는지 확인해야함
         ArrayList<File> destinationContainingFileList = getContainingFileList(destinationPath);
         ArrayList<String> destinationContainingFileNameList = getContainingFileNameList(destinationContainingFileList);
-        
+
         // 똑같은 파일명이 있으면 overwrite 여부 물어보기
         // 근데 permission이 ALL이 아닐때만 물어보면 됨
-        if(!permission.equals(OverwriteEnum.ALL)) {
+        if (!permission.equals(OverwriteEnum.ALL)) {
             if (destinationContainingFileNameList.contains(sourceFile.getName())) {
                 permission = askOverwritePermission(sourceFile, destinationPath);
                 // NO면 바로 return
@@ -195,7 +195,7 @@ public class CpService extends CmdService<MessageVO> {
     // 디렉토리에 여러 파일이 있어도 딱 한파일만 복사됨
     private MessageVO handleDirectoryToFileCopy(Path sourcePath, Path destinationPath) throws IOException {
 
-        
+
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
         StringBuilder sb = new StringBuilder();
@@ -206,21 +206,23 @@ public class CpService extends CmdService<MessageVO> {
 
         // sourceDirectory에 있는 파일들 다 불러오기
         ArrayList<File> sourceContainingFileList = getContainingFileList(sourcePath);
-        
+
         // destination 파일이 존재하지 않으면 생성해줌
         // destination 파일이 존재하면 빨대만 꽂아놓음
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(destinationPath.toString()));
+        BufferedReader bufferedReader;
 
-        if(!doesDestinationExist) {
-            for(File curSourceFile : sourceContainingFileList) {
-                if(curSourceFile.isDirectory()) continue;
+        if (!doesDestinationExist) {
+            for (File curSourceFile : sourceContainingFileList) {
+                if (curSourceFile.isDirectory()) continue;
 
-                sb.append(curSourceFile.getParentFile().getName()+"\\"+curSourceFile.getName()+"\n");
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(curSourceFile));
+                sb.append(curSourceFile.getParentFile().getName() + "\\" + curSourceFile.getName() + "\n");
+                bufferedReader = new BufferedReader(new FileReader(curSourceFile));
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     bufferedWriter.write(line);
                 }
+                bufferedReader.close();
             }
 
             bufferedWriter.close();
@@ -232,8 +234,32 @@ public class CpService extends CmdService<MessageVO> {
         // 덮어쓰겠냐고 물어봄
         // 그 중 Yes나 ALL 들어오면 진짜 그것만 하고 나머지 복사안함
         // 그리고 1개 파일이 복사되었습니다 뜸
+        OverwriteEnum permission = OverwriteEnum.WRONG_INPUT;
+        int copiedCnt = 0;
+        for (File curSourceFile : sourceContainingFileList) {
+            if (curSourceFile.isDirectory()) continue;
 
-        return new MessageVO("COPY DIRECTORY TO EXSITING FILE\n");
+            sb.append(curSourceFile.getParentFile().getName() + "\\" + curSourceFile.getName() + "\n");
+
+            // ALL이 아닐때만 물어보기
+            if (!permission.equals(OverwriteEnum.ALL)) {
+                permission = askOverwritePermission(curSourceFile,destinationPath);
+                
+                if(permission.equals(OverwriteEnum.NO)) continue;
+            }
+
+            bufferedReader = new BufferedReader(new FileReader(curSourceFile));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                bufferedWriter.write(line);
+            }
+            bufferedReader.close();
+            copiedCnt++;
+        }
+
+        bufferedWriter.close();
+        sb.append(copiedCnt + "개 파일이 복사되었습니다.\n");
+        return new MessageVO(sb.toString());
     }
 
     private MessageVO handleDirectoryToDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
@@ -241,11 +267,11 @@ public class CpService extends CmdService<MessageVO> {
         OverwriteEnum permission = OverwriteEnum.WRONG_INPUT;
 
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
-        
+
         // destination이 존재하지 않을때
         // 이럴때는 Directory to File 이랑 동일할때임
         // handleDirectoryToFileCopy로 넘겨주기
-        if(!doesDestinationExist) {
+        if (!doesDestinationExist) {
             handleDirectoryToFileCopy(sourcePath, destinationPath);
         }
 
@@ -268,15 +294,15 @@ public class CpService extends CmdService<MessageVO> {
 
             // 똑같은 파일명이 있으면 overwrite 여부 물어보기
             // 근데 permission이 ALL이 아닐때만 물어보면 됨
-            if(!permission.equals(OverwriteEnum.ALL)) {
+            if (!permission.equals(OverwriteEnum.ALL)) {
                 if (destinationContainingFileNameList.contains(curSourceDirectoryFile.getName())) {
                     permission = askOverwritePermission(curSourceDirectoryFile, destinationPath);
                 }
                 // NO면 skip
                 if (permission.equals(OverwriteEnum.NO)) continue;
             }
-            
-            if(sourcePath.equals(destinationPath)){
+
+            if (sourcePath.equals(destinationPath)) {
                 return new MessageVO("같은 파일로 복사할 수 없습니다.\n0개 파일이 복사되었습니다.\n");
             }
 
