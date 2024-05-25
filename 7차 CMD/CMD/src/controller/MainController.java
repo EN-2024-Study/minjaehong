@@ -4,10 +4,14 @@ import model.VO.DirVO;
 import model.VO.InputVO;
 import model.VO.MessageVO;
 import service.*;
+import utility.RuntimeExceptionHandler;
 import utility.Validator;
 import view.MainView;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.BitSet;
@@ -16,42 +20,101 @@ import java.util.Map;
 
 public class MainController {
 
+    // VIEW
+    private MainView mainView;
+
+    // SETTINGS
     private String rootDirectory;
     private String curDirectory;
 
+    // UTILITIES
     private Validator validator;
+    private RuntimeExceptionHandler runtimeExceptionHandler;
 
-    private MainView mainView;
-    
+    // SERVICES
     private CdService cdService;
     private DirService dirService;
     private MvService mvService;
     private CpService cpService;
 
-    public MainController(){
-        initializeCMD();
-
-        this.mainView = new MainView();
-        this.cdService = new CdService(validator);
-        this.dirService = new DirService(validator);
-        this.mvService = new MvService(validator);
-        this.cpService = new CpService(validator);
+    public MainController() throws IOException {
+        initializeView();
+        initializeSettings();
+        initializeUtilities();
+        initializeServices();
     }
 
-    // service들에 쓸 validator와 curDirectory 시작 시 초기화
-    private void initializeCMD(){
+    // VIEW 초기화
+    // dir 시 default로 출력되는 구문 초기화
+    // 맨 처음에만 os랑 버전 출력하기
+    private void initializeView() throws IOException{
+        this.mainView = new MainView();
+        mainView.setDirCmdIntroString(getDirCmdIntroString());
+        mainView.printMessageVO(new MessageVO(getOSandVersionInfo()));
+    }
+
+    // 처음에만 OS랑 버전 출력하기
+    private String getOSandVersionInfo() throws IOException {
+        StringBuilder sb = new StringBuilder();
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.command("cmd.exe", "/C", "ver");
+
+        Process process = builder.start();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(),"MS949"));
+        String line;
+        while((line = reader.readLine())!=null){
+            sb.append(line);
+            sb.append("\n");
+        }
+        sb.append("(c) Microsoft Corporation. All rights reserved.\n");
+
+        return sb.toString();
+    }
+
+    // dir 시 default로 출력되는 구문 구하기
+    private String getDirCmdIntroString() throws IOException {
+        StringBuilder sb = new StringBuilder();
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.command("cmd.exe", "/C", "vol");
+
+        Process process = builder.start();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(),"MS949"));
+
+        String line;
+        while((line = reader.readLine())!=null){
+            sb.append(line);
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    // 시작 directory 랑 rootdirectory 설정
+    private void initializeSettings() throws IOException {
         this.curDirectory = System.getProperty("user.home");
         Path curPath = Paths.get(curDirectory);
         this.rootDirectory = curPath.getRoot().toString();
+    }
+
+    private void initializeUtilities(){
         this.validator = new Validator(rootDirectory);
+        this.runtimeExceptionHandler = new RuntimeExceptionHandler(mainView);
+    }
+
+    private void initializeServices(){
+        this.cdService = new CdService(validator);
+        this.dirService = new DirService(validator);
+
+        this.cpService = new CpService(validator, runtimeExceptionHandler);
+        this.mvService = new MvService(validator, runtimeExceptionHandler);
     }
 
     public void run() throws IOException{
         boolean isCmdRunning = true;
         String command;
         List<String> parameters;
-
-        mainView.printSystemOSInfo();
 
         while(isCmdRunning){
             InputVO input = mainView.getInput(curDirectory);

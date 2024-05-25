@@ -13,6 +13,7 @@ public class MainView {
     StringBuilder sb;
 
     private SimpleDateFormat dateFormat;
+    private String dirCmdIntroString;
 
     public MainView() {
         consoleReader = new BufferedReader(new InputStreamReader(System.in));
@@ -22,11 +23,8 @@ public class MainView {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd a hh:mm", Locale.KOREAN);
     }
 
-    public void printSystemOSInfo() throws IOException {
-        consoleWriter.write(System.getProperty("os.name"));
-        consoleWriter.write("[" + System.getProperty("os.version") + "]" + "\n");
-        consoleWriter.write("(c) Microsoft Corporation. All rights reserved."+"\n");
-        consoleWriter.flush();
+    public void setDirCmdIntroString(String dirCmdIntroString){
+        this.dirCmdIntroString = dirCmdIntroString;
     }
 
     private void printCurDirectory(String curDirectory) throws IOException {
@@ -58,18 +56,20 @@ public class MainView {
     public void printDirVO(DirVO dirVO) throws IOException {
         sb.setLength(0);
 
+        sb.append(dirCmdIntroString);
+
         // 만약 존재하지 않으면 return
         if (dirVO.checkIfDirectoryExists() == false) {
             sb.append("\n");
             sb.append(dirVO.getCurDirectory());
-            sb.append(" 디렉터리\n");
+            sb.append(" 디렉터리\n\n");
             System.out.print(sb);
             return;
         }
 
         sb.append("\n");
         sb.append(dirVO.getSourcePathString());
-        sb.append(" 디렉터리\n");
+        sb.append(" 디렉터리\n\n");
 
         List<FileVO> fileVOQueue = dirVO.getFileInfoList();
 
