@@ -1,6 +1,6 @@
-package controller;
+package utility;
 
-import Constants.OverwriteEnum;
+import constants.OverwriteEnum;
 import model.VO.MessageVO;
 import model.VO.OverwritePermissionVO;
 import view.MainView;
@@ -10,16 +10,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 // enum 만들어서 yes no all 전달
-public class RuntimeController {
+public class RuntimeExceptionHandler {
 
-    MainView mainView;
+    private MainView mainView;
 
-    public RuntimeController(){
-        mainView = new MainView();
+    public RuntimeExceptionHandler(MainView mainView){
+        this.mainView = mainView;
     }
 
-    public void printCurWorkingFile(File sourceFile) throws IOException {
-        mainView.printMessageVO(new MessageVO(sourceFile.getCanonicalPath()+"\n"));
+    public void showCurWorkingFile(String curWorkingFile) throws IOException {
+        mainView.printMessageVO(new MessageVO(curWorkingFile));
     }
 
     public OverwriteEnum handleOverwritePermission(File sourceFile, Path destinationPath) throws IOException {

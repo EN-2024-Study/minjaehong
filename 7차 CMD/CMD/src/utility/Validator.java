@@ -32,6 +32,7 @@ public class Validator {
         return false;
     }
 
+    // destinationFile이 존재하지 않아도 잘 작동함
     public final boolean checkIfDirectory(Path path){
         File destinationFile = path.toFile();
 
