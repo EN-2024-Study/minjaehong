@@ -30,7 +30,7 @@ public class DirDAO{
         File source = sourcePath.toFile();
 
         // 우선 존재하는 파일이니까 curDirectory sourcePath.toString() 으로 기본 정보 초기화해주면서 객체 생성
-        DirVO resultVO = new DirVO(curDirectory, sourcePath.toString());
+        DirVO dirVO = new DirVO(curDirectory, sourcePath.toString(), source.getFreeSpace());
 
         // 1. source가 폴더일때
         if (source.isDirectory()) {
@@ -45,9 +45,7 @@ public class DirDAO{
                 File file = fileList.get(i);
 
                 // 숨겨진 파일이면 skip
-                // canRead canWrite 로도 skip 해야함??
-                if(file.isHidden()) continue;
-                if(Files.isReadable(file.toPath())==false) continue;
+                if(file.isHidden() || !Files.isReadable(file.toPath())) continue;
 
                 // DATE
                 Date lastModifiedDate = new Date();
@@ -67,7 +65,7 @@ public class DirDAO{
                     fileName = "..";
                 }
 
-                resultVO.addNewFileInfo(lastModifiedDate, isDirectory, fileSize, fileName);
+                dirVO.addNewFileInfo(lastModifiedDate, isDirectory, fileSize, fileName);
             }
         }
         // 2. source가 파일일때는 그냥 자기 자신에 대한 정보만 저장하면 됨
@@ -80,9 +78,9 @@ public class DirDAO{
             long fileSize = source.length();
 
             String fileName = source.getName();
-            resultVO.addNewFileInfo(lastModifiedDate, isFolder, fileSize, fileName);
+            dirVO.addNewFileInfo(lastModifiedDate, isFolder, fileSize, fileName);
         }
 
-        return resultVO;
+        return dirVO;
     }
 }

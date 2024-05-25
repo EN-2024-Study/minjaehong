@@ -11,22 +11,6 @@ public class MvDAO {
     // 모두 service 에서 정제되서 여기로 들어옴
     public MessageVO executeMove(Path sourcePath, Path destinationPath, boolean doesDestinationExists) throws IOException {
 
-        if(sourcePath.toFile().isFile()){
-            if(doesDestinationExists){
-
-            }else{
-
-            }
-        }
-
-        if(sourcePath.toFile().isDirectory()){
-            if(doesDestinationExists){
-
-            }else{
-
-            }
-        }
-
         Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
         return new MessageVO(sourcePath.getFileName() + " moved to " + destinationPath);

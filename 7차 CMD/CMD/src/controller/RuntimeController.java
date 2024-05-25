@@ -18,9 +18,12 @@ public class RuntimeController {
         mainView = new MainView();
     }
 
+    public void printCurWorkingFile(File sourceFile) throws IOException {
+        mainView.printMessageVO(new MessageVO(sourceFile.getCanonicalPath()+"\n"));
+    }
+
     public OverwriteEnum handleOverwritePermission(File sourceFile, Path destinationPath) throws IOException {
 
-        mainView.printMessageVO(new MessageVO(sourceFile.getAbsolutePath()+"\n"));
         mainView.printMessageVO(new MessageVO(destinationPath.toString()+"을(를) 덮어쓰시겠습니까? (Yes/No/All) "));
 
         OverwritePermissionVO overwritePermissionVO = mainView.getOverwritePermission();

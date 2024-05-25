@@ -2,6 +2,7 @@ package model.VO;
 
 import java.util.Date;
 
+// 한개의 파일에 대한 정보를 담음
 public class FileVO {
     private Date lastModifiedDate;
     private boolean isDirectory;

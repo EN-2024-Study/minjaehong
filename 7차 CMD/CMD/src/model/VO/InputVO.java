@@ -22,9 +22,10 @@ public class InputVO {
     // O(N)
     // 콜론을 빼주고 콜론 사이에 있는 공백을 ?로 바꿔서 내보냄
     private String modifyColonCombinedInput(String input){
-        StringBuilder sb = new StringBuilder();
 
+        StringBuilder sb = new StringBuilder();
         boolean insideColon = false;
+
         for(int i=0;i<input.length();i++){
             char ch = input.charAt(i);
 
@@ -61,6 +62,9 @@ public class InputVO {
         }
 
         // cd. cd.. cd\ cd/ 로 시작하는거 예외처리
+        // CD C:::
+        //CD \\\\\\\\\\\\
+        // 이거 터짐
         if(input.startsWith("cd.") || input.startsWith("cd..") || input.startsWith("cd/") || input.startsWith("cd\\")){
             input = "cd " + input.substring(2);
         }

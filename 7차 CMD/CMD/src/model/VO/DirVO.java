@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+// 한개의 폴더에 대한 정보 담음
 public class DirVO {
     List<FileVO> fileVOList;
     private String curDirectory;
@@ -11,8 +12,9 @@ public class DirVO {
     private int fileCnt;
     private int dirCnt;
     private long totalFileSize;
+    private long freeSpaceSize;
 
-    public DirVO(String curDirectory, String sourcePathString){
+    public DirVO(String curDirectory, String sourcePathString, long freeSpaceSize){
         this.curDirectory = curDirectory;
         this.sourcePathString = sourcePathString;
 
@@ -20,6 +22,7 @@ public class DirVO {
         this.fileCnt = 0;
         this.dirCnt = 0;
         this.totalFileSize = 0;
+        this.freeSpaceSize = freeSpaceSize;
     }
 
     public void addNewFileInfo(Date date, boolean isDirectory, long fileSize, String fileName){
@@ -65,4 +68,6 @@ public class DirVO {
     public long getTotalFileSize() {
         return totalFileSize;
     }
+
+    public long getFreeSpaceSize() { return freeSpaceSize; }
 }

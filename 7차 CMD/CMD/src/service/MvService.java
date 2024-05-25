@@ -43,9 +43,9 @@ public class MvService extends CmdService<MessageVO>{
         // 인자 개수 안맞는거 예외처리
         if(parameters.size() > 2) return new MessageVO("명령 구문이 올바르지 않습니다.\n");
 
-        // source가 존재하지 않으면 예외처리 (source가 파일이든 디렉터리이든 존재하지 않으면 이 구문 뜨는건 똑같음)
+        // 애초에 source가 존재하지 않으면 예외처리 (source가 파일이든 디렉터리이든 존재하지 않으면 이 구문 뜨는건 똑같음)
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));
-        if (validator.checkIfDirectoryExists(sourcePath) == false) {
+        if (!validator.checkIfDirectoryExists(sourcePath)) {
             return new MessageVO("지정된 파일을 찾을 수 없습니다.\n");
         }
 
