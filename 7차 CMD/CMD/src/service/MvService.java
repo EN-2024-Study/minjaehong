@@ -1,5 +1,6 @@
 package service;
 
+import constants.Constants;
 import constants.OverwriteEnum;
 import model.DAO.CpDAO;
 import model.DAO.MvDAO;
@@ -27,12 +28,12 @@ public class MvService extends ActionCmdService<MessageVO> {
     public MessageVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
         // 1. 인자 개수 안맞으면 return
-        if (parameters.size() < 1 || parameters.size() > 2) return new MessageVO("명령 구문이 올바르지 않습니다.\n");
+        if (parameters.size() < 1 || parameters.size() > 2) return new MessageVO(Constants.WRONG_COMMAND);
 
         // 2. 애초에 source가 존재하지 않으면 return
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));
         if (!validator.checkIfDirectoryExists(sourcePath)) {
-            return new MessageVO("지정된 파일을 찾을 수 없습니다.\n");
+            return new MessageVO(Constants.CANT_FIND_CERTAIN_FILE);
         }
 
         // 인자 1개이든 2개이든 올바른 destinationPath를 반환
@@ -84,9 +85,9 @@ public class MvService extends ActionCmdService<MessageVO> {
         mvDAO.executeMove(sourcePath, destinationPath);
 
         if(isSourceDirectory){
-            return new MessageVO("1개의 디렉터리를 이동했습니다.\n");
+            return new MessageVO(Constants.ONE_DIRECTORY_MOVED);
         }
-        return new MessageVO("1개의 파일을 이동했습니다.\n");
+        return new MessageVO(Constants.ONE_FILE_MOVED);
     }
 
     //======================================= MOVE FILE TO FILE ========================================//
@@ -96,11 +97,11 @@ public class MvService extends ActionCmdService<MessageVO> {
         OverwriteEnum permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
         if (permission.equals(OverwriteEnum.NO)) {
-            return new MessageVO("0개 파일이 복사되었습니다.\n");
+            return new MessageVO(Constants.ZERO_FILE_MOVED);
         }
 
         mvDAO.executeMove(sourcePath, destinationPath);
-        return new MessageVO("1개 파일이 복사되었습니다.\n");
+        return new MessageVO(Constants.ONE_FILE_MOVED);
     }
 
     //===================================== MOVE FILE TO DIRECTORY =====================================//
@@ -121,7 +122,7 @@ public class MvService extends ActionCmdService<MessageVO> {
                 permission = askOverwritePermission(sourceFile, destinationPath);
                 // NO면 바로 return
                 if (permission.equals(OverwriteEnum.NO)) {
-                    return new MessageVO("0개 파일을 이동했습니다.\n");
+                    return new MessageVO(Constants.ZERO_FILE_MOVED);
                 }
                 break;
             }
@@ -129,7 +130,7 @@ public class MvService extends ActionCmdService<MessageVO> {
 
         mvDAO.executeMove(sourcePath, Paths.get(destinationPath.toString(), sourceFile.getName()));
 
-        return new MessageVO("1개 파일을 이동했습니다.\n");
+        return new MessageVO(Constants.ONE_FILE_MOVED);
     }
 
     //===================================== MOVE DIRECTORY TO FILE =====================================//
@@ -139,11 +140,11 @@ public class MvService extends ActionCmdService<MessageVO> {
         OverwriteEnum permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
         if (permission.equals(OverwriteEnum.NO)) {
-            return new MessageVO("0개 디렉터리를 이동했습니다.\n");
+            return new MessageVO(Constants.ZERO_DIRECTORY_MOVED);
         }
 
         mvDAO.executeMove(sourcePath, destinationPath);
-        return new MessageVO("1개 디렉터리를 이동했습니다.\n");
+        return new MessageVO(Constants.ONE_DIRECTORY_MOVED);
     }
 
     //================================== MOVE DIRECTORY TO DIRECTORY ===================================//
@@ -166,15 +167,15 @@ public class MvService extends ActionCmdService<MessageVO> {
                 permission = askOverwritePermission(sourceFile, destinationPath);
 
                 if (permission.equals(OverwriteEnum.NO)) {
-                    return new MessageVO("1개 디렉터리를 이동했습니다.\n");
+                    return new MessageVO(Constants.ONE_DIRECTORY_MOVED);
                 }else{
-                    return new MessageVO("액세스가 거부되었습니다.\n");
+                    return new MessageVO(Constants.ACCESS_DENIED);
                 }
             }
         }
 
         mvDAO.executeMove(sourcePath, Paths.get(destinationPath.toString(), sourceFile.getName()));
 
-        return new MessageVO("1개 디렉터리를 이동했습니다.\n");
+        return new MessageVO(Constants.ONE_DIRECTORY_MOVED);
     }
 }

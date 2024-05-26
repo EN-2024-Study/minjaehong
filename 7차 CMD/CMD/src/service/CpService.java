@@ -1,5 +1,6 @@
 package service;
 
+import constants.Constants;
 import constants.OverwriteEnum;
 import model.DAO.CpDAO;
 import model.VO.MessageVO;
@@ -24,12 +25,12 @@ public class CpService extends ActionCmdService<MessageVO> {
     public MessageVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
         // 1. 인자 개수 안맞으면 return
-        if (parameters.size() < 1 || parameters.size() > 2) return new MessageVO("명령 구문이 올바르지 않습니다.\n");
+        if (parameters.size() < 1 || parameters.size() > 2) return new MessageVO(Constants.WRONG_COMMAND);
 
         // 2. 애초에 source가 존재하지 않으면 return
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));
         if (!validator.checkIfDirectoryExists(sourcePath)) {
-            return new MessageVO("지정된 파일을 찾을 수 없습니다.\n");
+            return new MessageVO(Constants.CANT_FIND_CERTAIN_FILE);
         }
 
         // 인자 1개이든 2개이든 올바른 destinationPath를 반환
@@ -81,26 +82,26 @@ public class CpService extends ActionCmdService<MessageVO> {
 
     private MessageVO handleFileToNonExistingFile(Path sourcePath, Path destinationPath) throws IOException {
         cpDAO.executeCopy(sourcePath, destinationPath);
-        return new MessageVO("1개 파일이 복사되었습니다.\n");
+        return new MessageVO(Constants.ONE_FILE_COPIED);
     }
 
     private MessageVO handleFileToExistingFile(Path sourcePath, Path destinationPath) throws IOException {
 
         // 같은 파일일때
         if (sourcePath.equals(destinationPath)) {
-            return new MessageVO("같은 파일로 복사할 수 없습니다.\n0개 파일이 복사되었습니다.\n");
+            return new MessageVO(Constants.CANT_COPY_TO_SAME_FILE);
         }
 
         // 존재한다면 이미 있는 file overwrite할건지 물어보고 해야함
         OverwriteEnum permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
         if (permission.equals(OverwriteEnum.NO)) {
-            return new MessageVO("0개 파일이 복사되었습니다.\n");
+            return new MessageVO(Constants.ZERO_FILE_COPIED);
         }
 
         cpDAO.executeCopy(sourcePath, destinationPath);
 
-        return new MessageVO("1개 파일이 복사되었습니다.\n");
+        return new MessageVO(Constants.ONE_FILE_COPIED);
     }
 
     //===================================== COPY FILE TO DIRECTORY =====================================//
@@ -119,7 +120,7 @@ public class CpService extends ActionCmdService<MessageVO> {
     // destination이 존재하지 않을때는 그냥 파일 새로 생성해서 복사되게 하면 됨
     private MessageVO handleFileToNonExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
         cpDAO.executeCopy(sourcePath, destinationPath);
-        return new MessageVO("1개 파일이 복사되었습니다.\n");
+        return new MessageVO(Constants.ONE_FILE_COPIED);
     }
 
     private MessageVO handleFileToExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
@@ -139,7 +140,7 @@ public class CpService extends ActionCmdService<MessageVO> {
                 permission = askOverwritePermission(sourceFile, destinationPath);
                 // NO면 바로 return
                 if (permission.equals(OverwriteEnum.NO)) {
-                    return new MessageVO("0개 파일이 복사되었습니다.\n");
+                    return new MessageVO(Constants.ZERO_FILE_COPIED);
                 }
                 break;
             }
@@ -147,7 +148,7 @@ public class CpService extends ActionCmdService<MessageVO> {
 
         cpDAO.executeCopy(sourcePath, Paths.get(destinationPath.toString(), sourceFile.getName()));
 
-        return new MessageVO("1개 파일이 복사되었습니다.\n");
+        return new MessageVO(Constants.ONE_FILE_COPIED);
     }
 
     //===================================== COPY DIRECTORY TO FILE =====================================//
@@ -185,7 +186,7 @@ public class CpService extends ActionCmdService<MessageVO> {
         }
 
         bufferedWriter.close();
-        sb.append("1개 파일이 복사되었습니다.\n");
+        sb.append(Constants.ONE_FILE_COPIED);
         return new MessageVO(sb.toString());
     }
 
@@ -221,7 +222,7 @@ public class CpService extends ActionCmdService<MessageVO> {
         }
 
         bufferedWriter.close();
-        sb.append(copiedCnt + "개 파일이 복사되었습니다.\n");
+        sb.append(copiedCnt + Constants.N_FILE_COPIED);
         return new MessageVO(sb.toString());
     }
 
@@ -275,7 +276,7 @@ public class CpService extends ActionCmdService<MessageVO> {
             }
 
             if (sourcePath.equals(destinationPath)) {
-                return new MessageVO("같은 파일로 복사할 수 없습니다.\n0개 파일이 복사되었습니다.\n");
+                return new MessageVO(Constants.CANT_COPY_TO_SAME_FILE);
             }
 
             cpDAO.executeCopy(curSourceDirectoryFile.toPath(), Paths.get(destinationPath.toString(), curSourceDirectoryFile.getName()));
@@ -283,6 +284,6 @@ public class CpService extends ActionCmdService<MessageVO> {
             copiedCnt++;
         }
 
-        return new MessageVO(copiedCnt + " 개 파일이 복사되었습니다.\n");
+        return new MessageVO(copiedCnt + Constants.N_FILE_COPIED);
     }
 }

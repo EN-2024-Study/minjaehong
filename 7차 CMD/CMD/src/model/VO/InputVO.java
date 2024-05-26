@@ -52,6 +52,7 @@ public class InputVO {
         parameters = new ArrayList<>();
 
         input = input.trim();
+        input = input.toLowerCase();
 
         input.replace(',',' ');
 
@@ -100,7 +101,5 @@ public class InputVO {
             String curToken = tokenizer.nextToken();
             parameters.add(curToken.replace("?"," "));
         }
-
-        command = command.toLowerCase();
     }
 }

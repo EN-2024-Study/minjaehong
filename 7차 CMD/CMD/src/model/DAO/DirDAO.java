@@ -1,5 +1,6 @@
 package model.DAO;
 
+import constants.Constants;
 import model.VO.DirVO;
 
 import java.io.File;
@@ -60,9 +61,9 @@ public class DirDAO{
                 // FILE NAME
                 String fileName = file.getName();
                 if (file.equals(source)) {
-                    fileName = ".";
+                    fileName = Constants.TO_ME;
                 } else if (file.equals(source.getParentFile())) {
-                    fileName = "..";
+                    fileName = Constants.TO_PARENT;
                 }
 
                 dirVO.addNewFileInfo(lastModifiedDate, isDirectory, fileSize, fileName);

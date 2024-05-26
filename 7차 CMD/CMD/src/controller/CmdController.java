@@ -1,12 +1,13 @@
 package controller;
 
+import constants.Constants;
 import model.VO.DirVO;
 import model.VO.InputVO;
 import model.VO.MessageVO;
 import service.*;
 import utility.RuntimeExceptionHandler;
 import utility.Validator;
-import view.MainView;
+import view.CmdView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,10 +18,10 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 
-public class MainController {
+public class CmdController {
 
     // VIEW
-    private MainView mainView;
+    private CmdView cmdView;
 
     // SETTINGS
     private String rootDirectory;
@@ -36,7 +37,7 @@ public class MainController {
     private MvService mvService;
     private CpService cpService;
 
-    public MainController() throws IOException {
+    public CmdController() throws IOException {
         initializeView();
         initializeSettings();
         initializeUtilities();
@@ -47,16 +48,16 @@ public class MainController {
     // dir 시 default로 출력되는 구문 초기화
     // 맨 처음에만 os랑 버전 출력하기
     private void initializeView() throws IOException{
-        this.mainView = new MainView();
-        mainView.setDirCmdIntroString(getDirCmdIntroString());
-        mainView.printMessageVO(new MessageVO(getOSandVersionInfo()));
+        this.cmdView = new CmdView();
+        cmdView.setDirCmdIntroString(getDirCmdIntroString());
+        cmdView.printMessageVO(new MessageVO(getOSandVersionInfo()));
     }
 
     // 처음에만 OS랑 버전 출력하기
     private String getOSandVersionInfo() throws IOException {
         StringBuilder sb = new StringBuilder();
         ProcessBuilder builder = new ProcessBuilder();
-        builder.command("cmd.exe", "/C", "ver");
+        builder.command(Constants.CMD_EXE, Constants.EXECUTE, Constants.VER);
 
         Process process = builder.start();
 
@@ -66,7 +67,7 @@ public class MainController {
             sb.append(line);
             sb.append("\n");
         }
-        sb.append("(c) Microsoft Corporation. All rights reserved.\n");
+        sb.append(Constants.MICROSOFT_LICENSE);
 
         reader.close();
 
@@ -77,7 +78,7 @@ public class MainController {
     private String getDirCmdIntroString() throws IOException {
         StringBuilder sb = new StringBuilder();
         ProcessBuilder builder = new ProcessBuilder();
-        builder.command("cmd.exe", "/C", "vol");
+        builder.command(Constants.CMD_EXE, Constants.EXECUTE, Constants.VOL);
 
         Process process = builder.start();
 
@@ -96,14 +97,14 @@ public class MainController {
 
     // 시작 directory 랑 rootdirectory 설정
     private void initializeSettings() throws IOException {
-        this.curDirectory = System.getProperty("user.home");
+        this.curDirectory = System.getProperty(Constants.USER_HOME);
         Path curPath = Paths.get(curDirectory);
         this.rootDirectory = curPath.getRoot().toString();
     }
 
     private void initializeUtilities(){
         this.validator = new Validator(rootDirectory);
-        this.runtimeExceptionHandler = new RuntimeExceptionHandler(mainView);
+        this.runtimeExceptionHandler = new RuntimeExceptionHandler(cmdView);
     }
 
     private void initializeServices(){
@@ -121,13 +122,13 @@ public class MainController {
         List<String> parameters;
 
         while(isCmdRunning){
-            InputVO input = mainView.getInput(curDirectory);
+            InputVO input = cmdView.getInput(curDirectory);
 
             command = input.getCommand();
             parameters = input.getParameters();
 
             if(validator.checkIfValidParameters(parameters)==false) {
-                mainView.printMessageVO(new MessageVO("파일 이름, 디렉터리 이름 또는 볼륨 레이블 구문이 잘못되었습니다.\n"));
+                cmdView.printMessageVO(new MessageVO(Constants.WRONG_LABEL));
                 continue;
             }
 
@@ -165,9 +166,9 @@ public class MainController {
                     break;
                 case "&":
                 case "&&":
-                    mainView.printMessageVO(new MessageVO(String.format("%s은(는) 예상되지 않았습니다.\n", command)));
+                    cmdView.printMessageVO(new MessageVO(String.format(Constants.NOT_EXPECTED, command)));
                 default:
-                    mainView.printMessageVO(new MessageVO(String.format("%s은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는 배치 파일이 아닙니다.\n", command)));
+                    cmdView.printMessageVO(new MessageVO(String.format(Constants.WRONG_COMMAND, command)));
                     break;
             }
         }
@@ -180,7 +181,7 @@ public class MainController {
 
         // getValue 로 message 추출 후 view 에 전달
         MessageVO messageVO = cdResult.getValue();
-        mainView.printMessageVO(messageVO);
+        cmdView.printMessageVO(messageVO);
 
         // getKey 로 바뀐 directory 추출 후 changedDirectory return 해서 curDirectory 최신화
         String changedDirectory = cdResult.getKey();
@@ -196,7 +197,7 @@ public class MainController {
 
         BitSet bitset = new BitSet(parameterLength);
 
-        mainView.printDriveInfo();
+        cmdView.printDriveInfo();
 
         for(int i=0;i<parameterLength;i++) {
             DirVO dirVO = dirService.handleCommand(curDirectory, parameters);
@@ -205,34 +206,34 @@ public class MainController {
 
             // 상황에 따른 파일을 찾을 수 없습니다 출력 #1
             if((i>1 && bitset.get(i)==true && bitset.get(i-1)==false)){
-                mainView.printMessageVO(new MessageVO("\n파일을 찾을 수 없습니다\n"));
+                cmdView.printMessageVO(new MessageVO(Constants.CANT_FIND_FILE));
             }
 
-            mainView.printDirVO(dirVO);
+            cmdView.printDirVO(dirVO);
             parameters.remove(0);
 
             // 상황에 따른 파일을 찾을 수 없습니다 출력 #2
             if(bitset.get(i)==false && i==parameterLength-1){
-                mainView.printMessageVO(new MessageVO("\n파일을 찾을 수 없습니다\n"));
+                cmdView.printMessageVO(new MessageVO(Constants.CANT_FIND_FILE));
             }
         }
     }
 
     private void execCOPY(List<String> parameters) throws IOException {
         MessageVO output = cpService.handleCommand(curDirectory, parameters);
-        mainView.printMessageVO(output);
+        cmdView.printMessageVO(output);
     }
 
     private void execMOVE(List<String> parameters) throws IOException {
         MessageVO output = mvService.handleCommand(curDirectory, parameters);
-        mainView.printMessageVO(output);
+        cmdView.printMessageVO(output);
     }
 
-    private void execHELP() throws IOException { mainView.printHelp(); }
+    private void execHELP() throws IOException { cmdView.printHelp(); }
 
-    private void execCLS() throws IOException { mainView.printClear(); }
+    private void execCLS() throws IOException { cmdView.printClear(); }
 
     private void execEXIT() throws IOException {
-        mainView.returnResources();
+        cmdView.returnResources();
     }
 }

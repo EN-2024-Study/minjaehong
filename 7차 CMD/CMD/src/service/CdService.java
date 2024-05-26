@@ -1,5 +1,6 @@
 package service;
 
+import constants.Constants;
 import model.VO.MessageVO;
 import utility.Validator;
 
@@ -25,7 +26,7 @@ public class CdService extends CmdService<Map.Entry<String,MessageVO>>{
         }
 
         if(parameters.size()>1){
-            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("지정된 경로를 찾을 수 없습니다.\n"));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO(Constants.CANT_FIND_CERTAIN_ROUTE));
         }
 
         String destination = parameters.get(0);
@@ -43,9 +44,9 @@ public class CdService extends CmdService<Map.Entry<String,MessageVO>>{
                 return new AbstractMap.SimpleEntry<>(changedDirectoryPath.toString(), new MessageVO(""));
             }
 
-            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("디렉터리 이름이 올바르지 않습니다.\n"));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO(Constants.WRONG_DIRECTORY_NAME));
         }
 
-        return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO("지정된 경로를 찾을 수 없습니다.\n"));
+        return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO(Constants.CANT_FIND_CERTAIN_ROUTE));
     }
 }
