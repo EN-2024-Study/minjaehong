@@ -1,4 +1,4 @@
-package constants;
+package AAA;
 
 public enum OverwriteEnum {
     YES, NO, ALL, WRONG_INPUT;
