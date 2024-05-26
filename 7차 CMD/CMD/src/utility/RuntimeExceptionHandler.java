@@ -1,7 +1,7 @@
 package utility;
 
-import AAA.Constants;
-import AAA.OverwriteEnum;
+import constant.Constants;
+import constant.OverwriteEnum;
 import model.VO.MessageVO;
 import model.VO.OverwritePermissionVO;
 import view.CmdView;

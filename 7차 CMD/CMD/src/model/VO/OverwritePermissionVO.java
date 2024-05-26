@@ -1,6 +1,6 @@
 package model.VO;
 
-import AAA.OverwriteEnum;
+import constant.OverwriteEnum;
 
 public class OverwritePermissionVO {
 

@@ -1,6 +1,6 @@
 package view;
 
-import AAA.Constants;
+import constant.Constants;
 import model.VO.*;
 
 import java.io.*;

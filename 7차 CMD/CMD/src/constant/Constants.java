@@ -1,4 +1,4 @@
-package AAA;
+package constant;
 
 public final class Constants {
 
