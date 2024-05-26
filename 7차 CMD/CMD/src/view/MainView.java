@@ -52,11 +52,14 @@ public class MainView {
         consoleWriter.flush();
     }
 
+    public void printDriveInfo() throws IOException {
+        consoleWriter.write(dirCmdIntroString);
+        consoleWriter.flush();
+    }
+
     // 한 개의 폴더(DirVO)에 대한 정보 출력
     public void printDirVO(DirVO dirVO) throws IOException {
         sb.setLength(0);
-
-        sb.append(dirCmdIntroString);
 
         // 만약 존재하지 않으면 return
         if (dirVO.checkIfDirectoryExists() == false) {
@@ -118,7 +121,7 @@ public class MainView {
                 + "MOVE     하나 이상의 파일을 한 디렉터리에서 다른 디렉터리로 이동합니다.\n"
                 + "HELP     Windows 명령에 대한 도움말 정보를 제공합니다.\n"
                 + "EXIT     CMD.EXE 프로그램(명령 인터프리터)을 종료합니다.\n"
-                + "도구에 대한 자세한 내용은 온라인 도움말의 명령줄 참조를 참조하십시오.";
+                + "도구에 대한 자세한 내용은 온라인 도움말의 명령줄 참조를 참조하십시오.\n";
 
         consoleWriter.write(helpText);
         consoleWriter.flush();

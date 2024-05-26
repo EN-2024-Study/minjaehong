@@ -136,6 +136,10 @@ public class MainController {
                 parameters.set(i,parameters.get(i).trim());
             }
 
+            if(command.isBlank()){
+                continue;
+            }
+
             switch(command){
                 case "cd":
                     curDirectory = execCD(parameters);
@@ -191,6 +195,8 @@ public class MainController {
         int parameterLength = parameters.size();
 
         BitSet bitset = new BitSet(parameterLength);
+
+        mainView.printDriveInfo();
 
         for(int i=0;i<parameterLength;i++) {
             DirVO dirVO = dirService.handleCommand(curDirectory, parameters);
