@@ -18,7 +18,6 @@ public class Validator {
     }
 
     public boolean checkIfValidParameters(List<String> parameters) {
-        boolean areParametersValid = true;
 
         for (String parameter : parameters) {
             String temp = parameter;

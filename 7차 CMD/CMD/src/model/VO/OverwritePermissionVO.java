@@ -4,13 +4,13 @@ import constants.OverwriteEnum;
 
 public class OverwritePermissionVO {
 
-    OverwriteEnum overwritePermission;
+    private OverwriteEnum overwritePermission;
 
     public OverwritePermissionVO(String input){
-        initialize(input);
+        initializeVO(input);
     }
 
-    private void initialize(String input){
+    private void initializeVO(String input){
 
         if(input.isEmpty()){
             overwritePermission = OverwriteEnum.WRONG_INPUT;

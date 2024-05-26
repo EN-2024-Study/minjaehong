@@ -224,9 +224,7 @@ public class MainController {
 
     private void execHELP() throws IOException { mainView.printHelp(); }
 
-    private void execCLS(){
-        
-    }
+    private void execCLS() throws IOException { mainView.printClear(); }
 
     private void execEXIT() throws IOException {
         mainView.returnResources();

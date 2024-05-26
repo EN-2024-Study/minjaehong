@@ -124,6 +124,12 @@ public class MainView {
         consoleWriter.flush();
     }
 
+    public void printClear() throws IOException {
+        String clearText = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+        consoleWriter.write(clearText);
+        consoleWriter.flush();
+    }
+
     public void returnResources() throws IOException {
         consoleReader.close();
 
