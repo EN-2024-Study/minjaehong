@@ -24,7 +24,7 @@ public class CpService extends ActionCmdService<MessageVO> {
     public MessageVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
         // 1. 인자 개수 안맞으면 return
-        if (parameters.size() > 2) return new MessageVO("명령 구문이 올바르지 않습니다.\n");
+        if (parameters.size() < 1 || parameters.size() > 2) return new MessageVO("명령 구문이 올바르지 않습니다.\n");
 
         // 2. 애초에 source가 존재하지 않으면 return
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));

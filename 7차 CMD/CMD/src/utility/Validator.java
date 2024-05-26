@@ -1,8 +1,12 @@
 package utility;
 
+import model.VO.MessageVO;
+
 import java.io.File;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class Validator {
     private String rootDirectory;
@@ -11,6 +15,30 @@ public class Validator {
     public Validator(String rootDirectory){
         this.rootDirectory = rootDirectory;
         this.separater = System.getProperty("file.separator");
+    }
+
+    public boolean checkIfValidParameters(List<String> parameters) {
+        boolean areParametersValid = true;
+
+        for (String parameter : parameters) {
+            String temp = parameter;
+
+            if (checkIfStartingFromRootDirectory(parameter)) {
+                Path path = Paths.get(parameter);
+                String root = path.getRoot().toString();
+
+                temp = path.toString().substring(root.length());
+            }
+
+            if (temp.contains("?") || temp.contains(":") || temp.contains("*")
+                    || temp.contains("\\\\") || temp.contains("//")
+                    || temp.contains("|") || temp.contains("<") || temp.contains(">")
+                    || temp.contains(":")) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // rootDirectory에서 시작하는지 확인
@@ -37,14 +65,6 @@ public class Validator {
         File destinationFile = path.toFile();
 
         if(destinationFile.isDirectory()) return true;
-
-        return false;
-    }
-
-    public boolean checkIfFile(Path path){
-        File destinationFile = path.toFile();
-
-        if(destinationFile.isFile()) return true;
 
         return false;
     }

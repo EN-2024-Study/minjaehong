@@ -126,6 +126,16 @@ public class MainController {
             command = input.getCommand();
             parameters = input.getParameters();
 
+            if(validator.checkIfValidParameters(parameters)==false) {
+                mainView.printMessageVO(new MessageVO("파일 이름, 디렉터리 이름 또는 볼륨 레이블 구문이 잘못되었습니다.\n"));
+                continue;
+            }
+
+            // ?로 변환시키고 남은 공백 없애기
+            for(int i=0;i< parameters.size();i++){
+                parameters.set(i,parameters.get(i).trim());
+            }
+
             switch(command){
                 case "cd":
                     curDirectory = execCD(parameters);
@@ -215,7 +225,7 @@ public class MainController {
     private void execHELP() throws IOException { mainView.printHelp(); }
 
     private void execCLS(){
-
+        
     }
 
     private void execEXIT() throws IOException {
