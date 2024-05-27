@@ -3,11 +3,12 @@ package handler;
 import constant.OverwriteEnum;
 import model.DTO.OverwritePermissionDTO;
 
+// String 값 받고 그걸 분석해서 OverwritePermissionDTO return
 public class OverwritePermissionHandler {
 
-    OverwriteEnum overwritePermission;
-
     public OverwritePermissionDTO handleOverWritePermission(String input){
+
+        OverwriteEnum overwritePermission;
 
         if(input.isEmpty()){
             overwritePermission = OverwriteEnum.WRONG_INPUT;

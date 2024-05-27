@@ -1,11 +1,12 @@
 package controller;
 
 import constant.Constants;
+import controller.command.CommandController;
 import handler.ControllerMapper;
 import handler.InputHandler;
 import model.DTO.InputDTO;
 import model.DTO.MessageDTO;
-import utility.CmdInitializer;
+import utility.CmdFactory;
 import utility.RuntimeController;
 import utility.Validator;
 import view.CmdView;
@@ -15,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FrontController {
+
+    // FACTORY
+    private CmdFactory cmdFactory;
 
     // VIEW
     private CmdView cmdView;
@@ -33,26 +37,21 @@ public class FrontController {
     // CONTROLLERS
     private ArrayList<CommandController> controllerList;
 
-    private CmdInitializer cmdInitializer;
-
     public FrontController() throws IOException {
-        this.cmdInitializer = new CmdInitializer();
 
-        this.cmdView = cmdInitializer.createView();
-
-        this.validator = cmdInitializer.createValidator();
-        this.runtimeController = cmdInitializer.createRuntimeController(cmdView);
-
-        this.controllerList = cmdInitializer.createControllers(cmdView, validator, runtimeController);
-
-        this.inputHandler = cmdInitializer.createInputHandler();
-        this.controllerMapper = cmdInitializer.createControllerMapper(controllerList);
-
-        initializeSettings();
-    }
-
-    private void initializeSettings() throws IOException {
         this.curDirectory = System.getProperty(Constants.USER_HOME);
+
+        this.cmdFactory = new CmdFactory();
+
+        this.cmdView = cmdFactory.createView();
+
+        this.validator = cmdFactory.createValidator();
+        this.runtimeController = cmdFactory.createRuntimeController(cmdView);
+
+        this.controllerList = cmdFactory.createControllers(cmdView, validator, runtimeController);
+
+        this.inputHandler = cmdFactory.createInputHandler();
+        this.controllerMapper = cmdFactory.createControllerMapper(controllerList);
     }
 
     public void run() throws IOException{
@@ -61,18 +60,17 @@ public class FrontController {
         List<String> parameters;
 
         while(isCmdRunning){
-            String input = cmdView.getInput(curDirectory);
 
+            String input = cmdView.getInput(curDirectory);
             InputDTO inputDTO = inputHandler.handleInput(input);
 
             command = inputDTO.getCommand();
+            if(command.isBlank()) continue;
             parameters = inputDTO.getParameters();
-
             if(validator.checkIfValidParameters(parameters)==false) {
                 cmdView.printMessageDTO(new MessageDTO(Constants.WRONG_LABEL));
                 continue;
             }
-            if(command.isBlank()){ continue; }
 
             CommandController curController = controllerMapper.getMappedController(command);
 

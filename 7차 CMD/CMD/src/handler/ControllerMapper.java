@@ -1,14 +1,13 @@
 package handler;
 
-import controller.*;
-import view.CmdView;
+import controller.command.CommandController;
 
 import java.util.ArrayList;
 
 // command를 보고 그에 알맞는 controller를 반환해줌
 public class ControllerMapper {
 
-    ArrayList<CommandController> controllerList;
+    private final ArrayList<CommandController> controllerList;
 
     public ControllerMapper(ArrayList<CommandController> controllerList) {
         this.controllerList = controllerList;
@@ -25,6 +24,12 @@ public class ControllerMapper {
                 return controllerList.get(2);
             case "move":
                 return controllerList.get(3);
+            case "help":
+                return controllerList.get(4);
+            case "cls":
+                return controllerList.get(5);
+            case "exit":
+                return controllerList.get(6);
             default:
                 return null;
         }

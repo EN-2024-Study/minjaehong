@@ -1,9 +1,5 @@
-package controller;
+package controller.command;
 
-import model.DTO.MessageDTO;
-import service.CpService;
-import utility.RuntimeController;
-import utility.Validator;
 import view.CmdView;
 
 import java.io.IOException;

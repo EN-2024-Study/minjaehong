@@ -1,7 +1,7 @@
 package utility;
 
 import constant.Constants;
-import controller.*;
+import controller.command.*;
 import handler.ControllerMapper;
 import handler.InputHandler;
 import model.DTO.MessageDTO;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class CmdInitializer {
+public class CmdFactory {
 
     // VIEW 초기화
     // dir 시 default로 출력되는 구문 초기화

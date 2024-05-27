@@ -1,4 +1,4 @@
-package controller;
+package controller.command;
 
 import constant.Constants;
 import model.DTO.DirDTO;

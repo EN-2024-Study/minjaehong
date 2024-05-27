@@ -8,35 +8,10 @@ import java.util.StringTokenizer;
 // 클래스가 꼭 변수가 있어야하는건 아님!
 // 클래스를 구조체라고 생각하면 안됨
 // 그냥 특정 역할을 하는 함수만 있어도 됨!
-// 이건 InputDTO를 받고 command랑 parameter로 분리해주는 작업을 함
+
+// String 값 받고 그걸 분석해서 inputDTO return
 public class InputHandler {
-    // O(N)
-    // 콜론을 빼주고 콜론 사이에 있는 공백을 ?로 바꿔서 내보냄
-    private String modifyColonCombinedInput(String input){
 
-        StringBuilder sb = new StringBuilder();
-        boolean insideColon = false;
-
-        for(int i=0;i<input.length();i++){
-            char ch = input.charAt(i);
-
-            if(ch == '\"'){
-                insideColon = !insideColon;
-                continue;
-            }
-
-            if(ch == ' ' && insideColon){
-                sb.append('?');
-            }else{
-                sb.append(ch);
-            }
-        }
-
-        return sb.toString();
-    }
-
-    // cd 일 경우 인자가 1개로 취급하기 때문에 공백 포함된게 ""로 안들어와도 됨
-    // dir 일 경우 공백포함된 파일명 폴더명일 경우 "" 로 감싸서 들어옴
     public InputDTO handleInput(String input){
 
         String command;
@@ -97,5 +72,30 @@ public class InputHandler {
         }
 
         return new InputDTO(command, parameterList);
+    }
+
+    // O(N)
+    // 콜론을 빼주고 콜론 사이에 있는 공백을 ?로 바꿔서 내보냄
+    private String modifyColonCombinedInput(String input){
+
+        StringBuilder sb = new StringBuilder();
+        boolean insideColon = false;
+
+        for(int i=0;i<input.length();i++){
+            char ch = input.charAt(i);
+
+            if(ch == '\"'){
+                insideColon = !insideColon;
+                continue;
+            }
+
+            if(ch == ' ' && insideColon){
+                sb.append('?');
+            }else{
+                sb.append(ch);
+            }
+        }
+
+        return sb.toString();
     }
 }
