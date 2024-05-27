@@ -23,7 +23,6 @@ public class FrontController {
     // VIEW
     private CmdView cmdView;
 
-    // SETTINGS
     private String curDirectory;
 
     // UTILITIES
@@ -54,8 +53,23 @@ public class FrontController {
         this.controllerMapper = cmdFactory.createControllerMapper(controllerList);
     }
 
+    private boolean checkIfValidInputDTO(InputDTO inputDTO) throws IOException {
+        String command = inputDTO.getCommand();
+        List<String> parameters = inputDTO.getParameters();
+
+        if(command.isBlank() || command.isEmpty()) return false;
+
+        if(!validator.checkIfValidParameters(parameters)) {
+            cmdView.printMessageDTO(new MessageDTO(Constants.WRONG_LABEL));
+            return false;
+        }
+
+        return true;
+    }
+
     public void run() throws IOException{
         boolean isCmdRunning = true;
+
         String command;
         List<String> parameters;
 
@@ -64,15 +78,14 @@ public class FrontController {
             String input = cmdView.getInput(curDirectory);
             InputDTO inputDTO = inputHandler.handleInput(input);
 
+            if(!checkIfValidInputDTO(inputDTO)) continue;
+
             command = inputDTO.getCommand();
-            if(command.isBlank()) continue;
             parameters = inputDTO.getParameters();
-            if(validator.checkIfValidParameters(parameters)==false) {
-                cmdView.printMessageDTO(new MessageDTO(Constants.WRONG_LABEL));
-                continue;
-            }
 
             CommandController curController = controllerMapper.getMappedController(command);
+
+            if(command.equals("exit")) isCmdRunning = false;
 
             if(curController==null){
                 cmdView.printMessageDTO(new MessageDTO(String.format(Constants.WRONG_CMD, command)));
