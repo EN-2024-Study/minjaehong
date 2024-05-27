@@ -90,7 +90,8 @@ public class FrontController {
             if(curController==null){
                 cmdView.printMessageDTO(new MessageDTO(String.format(Constants.WRONG_CMD, command)));
             }else{
-                curDirectory = curController.executeCommand(curDirectory, parameters);
+                View view = curController.executeCommand(curDirectory, parameters);
+                view.render();
             }
         }
     }

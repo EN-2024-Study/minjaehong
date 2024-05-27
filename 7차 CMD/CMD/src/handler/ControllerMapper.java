@@ -1,6 +1,9 @@
 package handler;
 
+import controller.command.CdController;
 import controller.command.CommandController;
+import utility.Validator;
+import view.CmdView;
 
 import java.util.ArrayList;
 
@@ -17,7 +20,7 @@ public class ControllerMapper {
 
         switch (command) {
             case "cd":
-                return controllerList.get(0);
+                return new CdController(new CmdView(), new Validator());
             case "dir":
                 return controllerList.get(1);
             case "copy":

@@ -21,7 +21,7 @@ public class DirController extends CommandController{
     }
 
     @Override
-    public String executeCommand(String curDirectory, List<String> parameters) throws IOException {
+    public View executeCommand(String curDirectory, List<String> parameters) throws IOException {
         if (parameters.size()==0) parameters.add(curDirectory);
 
         int parameterLength = parameters.size();
@@ -49,6 +49,6 @@ public class DirController extends CommandController{
             }
         }
 
-        return curDirectory;
+        return new dirView(dirDTO);
     }
 }
