@@ -1,7 +1,7 @@
 package service;
 
 import constant.OverwriteEnum;
-import utility.RuntimeExceptionHandler;
+import utility.RuntimeController;
 import utility.Validator;
 
 import java.io.File;
@@ -14,14 +14,14 @@ import java.util.List;
 
 // CP MV 명령어의 부모 클래스
 // CmdService > ActionCmdService > MvService = CpService
-// CP MV의 overwritePermission을 해결해주는 runtimeExceptionHandler 보유
+// CP MV의 overwritePermission을 해결해주는 runtimeController 보유
 public abstract class ActionCmdService<T> extends CmdService<T>{
 
-    private RuntimeExceptionHandler runtimeExceptionHandler;
+    private RuntimeController runtimeController;
 
-    protected ActionCmdService(Validator validator, RuntimeExceptionHandler runtimeExceptionHandler) {
+    protected ActionCmdService(Validator validator, RuntimeController runtimeController) {
         super(validator);
-        this.runtimeExceptionHandler = runtimeExceptionHandler;
+        this.runtimeController = runtimeController;
     }
 
     // 인자가 1개든 2개든
@@ -69,7 +69,7 @@ public abstract class ActionCmdService<T> extends CmdService<T>{
     }
 
     protected final void showCurWorkingFile(String curWorkingDirectoryName) throws IOException {
-        runtimeExceptionHandler.showCurWorkingFile(curWorkingDirectoryName);
+        runtimeController.showCurWorkingFile(curWorkingDirectoryName);
     }
 
     // runtimeController를 통해 제대로된 입력 받을때까지 overwrite할건지 물어봄
@@ -82,7 +82,7 @@ public abstract class ActionCmdService<T> extends CmdService<T>{
         boolean isValidPermission = false;
 
         while (!isValidPermission) {
-            permission = runtimeExceptionHandler.handleOverwritePermission(curSourceFile, Paths.get(destinationFile.getName(), curSourceFile.getName()));
+            permission = runtimeController.handleOverwritePermission(curSourceFile, Paths.get(destinationFile.getName(), curSourceFile.getName()));
 
             if (!permission.equals(OverwriteEnum.WRONG_INPUT)) {
                 isValidPermission = true;

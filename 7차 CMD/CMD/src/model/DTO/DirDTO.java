@@ -1,12 +1,12 @@
-package model.VO;
+package model.DTO;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 // 한 개의 Directory(폴더)에 대한 정보 담음
-public class DirVO {
-    private ArrayList<FileVO> fileVOList;
+public class DirDTO {
+    private ArrayList<FileDTO> fileDTOList;
     private String curDirectory;
     private String sourcePathString;
     private int fileCnt;
@@ -14,11 +14,11 @@ public class DirVO {
     private long totalFileSize;
     private long freeSpaceSize;
 
-    public DirVO(String curDirectory, String sourcePathString, long freeSpaceSize){
+    public DirDTO(String curDirectory, String sourcePathString, long freeSpaceSize){
         this.curDirectory = curDirectory;
         this.sourcePathString = sourcePathString;
 
-        this.fileVOList = new ArrayList<>();
+        this.fileDTOList = new ArrayList<>();
         this.fileCnt = 0;
         this.dirCnt = 0;
         this.totalFileSize = 0;
@@ -26,7 +26,7 @@ public class DirVO {
     }
 
     public void addNewFileInfo(Date date, boolean isDirectory, long fileSize, String fileName){
-        FileVO curFile = new FileVO(date, isDirectory, fileSize, fileName);
+        FileDTO curFile = new FileDTO(date, isDirectory, fileSize, fileName);
         if(curFile.isDirectory()) {
             dirCnt++;
         }
@@ -35,7 +35,7 @@ public class DirVO {
             totalFileSize += fileSize;
         }
 
-        fileVOList.add(curFile);
+        fileDTOList.add(curFile);
     }
 
     public boolean checkIfDirectoryExists(){
@@ -53,8 +53,8 @@ public class DirVO {
         return sourcePathString;
     }
 
-    public List<FileVO> getFileInfoList(){
-        return fileVOList;
+    public List<FileDTO> getFileInfoList(){
+        return fileDTOList;
     }
 
     public int getFileCnt() {

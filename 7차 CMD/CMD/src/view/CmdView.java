@@ -1,7 +1,7 @@
 package view;
 
 import constant.Constants;
-import model.VO.*;
+import model.DTO.*;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -34,22 +34,22 @@ public class CmdView {
         consoleWriter.flush();
     }
 
-    public InputVO getInput(String curDirectory) throws IOException {
+    public String getInput(String curDirectory) throws IOException {
         printCurDirectory(curDirectory);
         String input = "";
 
         input = consoleReader.readLine();
 
-        return new InputVO(input);
+        return input;
     }
 
-    public OverwritePermissionVO getOverwritePermission() throws IOException{
+    public String getOverwritePermission() throws IOException{
         String input = consoleReader.readLine();
-        return new OverwritePermissionVO(input);
+        return input;
     }
 
-    public void printMessageVO(MessageVO messageVO) throws IOException {
-        consoleWriter.write(messageVO.getMessage());
+    public void printMessageDTO(MessageDTO messageDTO) throws IOException {
+        consoleWriter.write(messageDTO.getMessage());
         consoleWriter.flush();
     }
 
@@ -58,55 +58,54 @@ public class CmdView {
         consoleWriter.flush();
     }
 
-    // 한 개의 폴더(DirVO)에 대한 정보 출력
-    public void printDirVO(DirVO dirVO) throws IOException {
+    // 한 개의 폴더(DirDTO)에 대한 정보 출력
+    public void printDirDTO(DirDTO dirDTO) throws IOException {
         sb.setLength(0);
 
         // 만약 존재하지 않으면 return
-        if (dirVO.checkIfDirectoryExists() == false) {
+        if (dirDTO.checkIfDirectoryExists() == false) {
             sb.append("\n");
-            sb.append(dirVO.getCurDirectory());
+            sb.append(dirDTO.getCurDirectory());
             sb.append(Constants.DIR_DIRECTORY);
             System.out.print(sb);
             return;
         }
 
         sb.append("\n");
-        sb.append(dirVO.getSourcePathString());
+        sb.append(dirDTO.getSourcePathString());
         sb.append(Constants.DIR_DIRECTORY);
 
-        List<FileVO> fileVOQueue = dirVO.getFileInfoList();
+        List<FileDTO> fileDTOQueue = dirDTO.getFileInfoList();
 
-        for (int i = 0; i < fileVOQueue.size(); i++) {
-            FileVO fileVO = fileVOQueue.get(i);
-
+        for (FileDTO fileDTO : fileDTOQueue) {
             // DATE
-            sb.append(dateFormat.format(fileVO.getLastModifiedDate()));
+            sb.append(dateFormat.format(fileDTO.getLastModifiedDate()));
             sb.append(" ");
 
             // DIR OR NOT
-            if (fileVO.isDirectory()) sb.append(Constants.DIR_SYMBOL);
+            if (fileDTO.isDirectory()) sb.append(Constants.DIR_SYMBOL);
             else sb.append("      ");
 
             // SIZE
-            String fileSize = String.format("%,d", fileVO.getFileSize());
-            if(fileSize.equals("0") || fileVO.isDirectory() || fileVO.getFileName().equals(".") || fileVO.getFileName().equals("..")) fileSize = "";
+            String fileSize = String.format("%,d", fileDTO.getFileSize());
+            if (fileSize.equals("0") || fileDTO.isDirectory() || fileDTO.getFileName().equals(".") || fileDTO.getFileName().equals(".."))
+                fileSize = "";
             fileSize = String.format("%" + 10 + "s", fileSize);
 
             sb.append(fileSize);
             sb.append(" ");
 
-            sb.append(fileVO.getFileName());
+            sb.append(fileDTO.getFileName());
             sb.append("\n");
         }
 
-        sb.append(String.format("%15s", String.format("%,d", dirVO.getFileCnt())));
+        sb.append(String.format("%15s", String.format("%,d", dirDTO.getFileCnt())));
         sb.append(Constants.DIR_FILE);
-        sb.append(String.format("%15s", String.format("%,d", dirVO.getTotalFileSize())));
+        sb.append(String.format("%15s", String.format("%,d", dirDTO.getTotalFileSize())));
         sb.append(Constants.DIR_BYTE);
-        sb.append(String.format("%15s", String.format("%,d", dirVO.getDirCnt())));
+        sb.append(String.format("%15s", String.format("%,d", dirDTO.getDirCnt())));
         sb.append(" 디렉터리");
-        sb.append(String.format("%15s", String.format("%,d", dirVO.getFreeSpaceSize())));
+        sb.append(String.format("%15s", String.format("%,d", dirDTO.getFreeSpaceSize())));
         sb.append(Constants.DIR_BYTE_LEFT);
 
         consoleWriter.write(sb.toString());

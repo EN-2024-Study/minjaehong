@@ -1,10 +1,9 @@
-package model.VO;
+package model.DTO;
 
-// Service 나 Controller
-public class MessageVO {
+public class MessageDTO {
     private String message;
 
-    public MessageVO(String message){
+    public MessageDTO(String message){
         this.message = message;
     }
 

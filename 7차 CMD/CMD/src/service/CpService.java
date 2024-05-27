@@ -3,8 +3,8 @@ package service;
 import constant.Constants;
 import constant.OverwriteEnum;
 import model.DAO.CpDAO;
-import model.VO.MessageVO;
-import utility.RuntimeExceptionHandler;
+import model.DTO.MessageDTO;
+import utility.RuntimeController;
 import utility.Validator;
 
 import java.io.*;
@@ -12,25 +12,25 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CpService extends ActionCmdService<MessageVO> {
+public class CpService extends ActionCmdService<MessageDTO> {
 
     private CpDAO cpDAO;
 
-    public CpService(Validator validator, RuntimeExceptionHandler runtimeExceptionHandler) {
-        super(validator, runtimeExceptionHandler);
+    public CpService(Validator validator, RuntimeController runtimeController) {
+        super(validator, runtimeController);
         this.cpDAO = new CpDAO();
     }
 
     @Override
-    public MessageVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
+    public MessageDTO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
         // 1. 인자 개수 안맞으면 return
-        if (parameters.size() < 1 || parameters.size() > 2) return new MessageVO(Constants.WRONG_COMMAND);
+        if (parameters.size() < 1 || parameters.size() > 2) return new MessageDTO(Constants.WRONG_COMMAND);
 
         // 2. 애초에 source가 존재하지 않으면 return
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));
         if (!validator.checkIfDirectoryExists(sourcePath)) {
-            return new MessageVO(Constants.CANT_FIND_CERTAIN_FILE);
+            return new MessageDTO(Constants.CANT_FIND_CERTAIN_FILE);
         }
 
         // 인자 1개이든 2개이든 올바른 destinationPath를 반환
@@ -64,12 +64,12 @@ public class CpService extends ActionCmdService<MessageVO> {
             return handleDirectoryToDirectoryCopy(sourcePath, destinationPath);
         }
 
-        return new MessageVO("IF THIS IS PRINTED SOMETHING IS WRONG");
+        return new MessageDTO("IF THIS IS PRINTED SOMETHING IS WRONG");
     }
 
     //======================================= COPY FILE TO FILE ========================================//
 
-    private MessageVO handleFileToFileCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleFileToFileCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
@@ -80,33 +80,33 @@ public class CpService extends ActionCmdService<MessageVO> {
         return handleFileToExistingFile(sourcePath, destinationPath);
     }
 
-    private MessageVO handleFileToNonExistingFile(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleFileToNonExistingFile(Path sourcePath, Path destinationPath) throws IOException {
         cpDAO.executeCopy(sourcePath, destinationPath);
-        return new MessageVO(Constants.ONE_FILE_COPIED);
+        return new MessageDTO(Constants.ONE_FILE_COPIED);
     }
 
-    private MessageVO handleFileToExistingFile(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleFileToExistingFile(Path sourcePath, Path destinationPath) throws IOException {
 
         // 같은 파일일때
         if (sourcePath.equals(destinationPath)) {
-            return new MessageVO(Constants.CANT_COPY_TO_SAME_FILE);
+            return new MessageDTO(Constants.CANT_COPY_TO_SAME_FILE);
         }
 
         // 존재한다면 이미 있는 file overwrite할건지 물어보고 해야함
         OverwriteEnum permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
         if (permission.equals(OverwriteEnum.NO)) {
-            return new MessageVO(Constants.ZERO_FILE_COPIED);
+            return new MessageDTO(Constants.ZERO_FILE_COPIED);
         }
 
         cpDAO.executeCopy(sourcePath, destinationPath);
 
-        return new MessageVO(Constants.ONE_FILE_COPIED);
+        return new MessageDTO(Constants.ONE_FILE_COPIED);
     }
 
     //===================================== COPY FILE TO DIRECTORY =====================================//
 
-    private MessageVO handleFileToDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleFileToDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
@@ -118,12 +118,12 @@ public class CpService extends ActionCmdService<MessageVO> {
     }
 
     // destination이 존재하지 않을때는 그냥 파일 새로 생성해서 복사되게 하면 됨
-    private MessageVO handleFileToNonExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleFileToNonExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
         cpDAO.executeCopy(sourcePath, destinationPath);
-        return new MessageVO(Constants.ONE_FILE_COPIED);
+        return new MessageDTO(Constants.ONE_FILE_COPIED);
     }
 
-    private MessageVO handleFileToExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleFileToExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         OverwriteEnum permission = OverwriteEnum.WRONG_INPUT;
 
@@ -140,7 +140,7 @@ public class CpService extends ActionCmdService<MessageVO> {
                 permission = askOverwritePermission(sourceFile, destinationPath);
                 // NO면 바로 return
                 if (permission.equals(OverwriteEnum.NO)) {
-                    return new MessageVO(Constants.ZERO_FILE_COPIED);
+                    return new MessageDTO(Constants.ZERO_FILE_COPIED);
                 }
                 break;
             }
@@ -148,12 +148,12 @@ public class CpService extends ActionCmdService<MessageVO> {
 
         cpDAO.executeCopy(sourcePath, Paths.get(destinationPath.toString(), sourceFile.getName()));
 
-        return new MessageVO(Constants.ONE_FILE_COPIED);
+        return new MessageDTO(Constants.ONE_FILE_COPIED);
     }
 
     //===================================== COPY DIRECTORY TO FILE =====================================//
 
-    private MessageVO handleDirectoryToFileCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleDirectoryToFileCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
@@ -164,7 +164,7 @@ public class CpService extends ActionCmdService<MessageVO> {
         return handleDirectoryToExistingFileCopy(sourcePath, destinationPath);
     }
 
-    private MessageVO handleDirectoryToNonExistingFileCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleDirectoryToNonExistingFileCopy(Path sourcePath, Path destinationPath) throws IOException {
         StringBuilder sb = new StringBuilder();
 
         ArrayList<File> sourceContentsList = getContainingContentsList(sourcePath);
@@ -187,10 +187,10 @@ public class CpService extends ActionCmdService<MessageVO> {
 
         bufferedWriter.close();
         sb.append(Constants.ONE_FILE_COPIED);
-        return new MessageVO(sb.toString());
+        return new MessageDTO(sb.toString());
     }
 
-    private MessageVO handleDirectoryToExistingFileCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleDirectoryToExistingFileCopy(Path sourcePath, Path destinationPath) throws IOException {
         StringBuilder sb = new StringBuilder();
 
         ArrayList<File> sourceFileAndFolderList = getContainingContentsList(sourcePath);
@@ -222,13 +222,13 @@ public class CpService extends ActionCmdService<MessageVO> {
         }
 
         bufferedWriter.close();
-        sb.append(copiedCnt + Constants.N_FILE_COPIED);
-        return new MessageVO(sb.toString());
+        sb.append(copiedCnt).append(Constants.N_FILE_COPIED);
+        return new MessageDTO(sb.toString());
     }
 
     //===================================== COPY FILE TO DIRECTORY =====================================//
 
-    private MessageVO handleDirectoryToDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleDirectoryToDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         boolean doesDestinationExist = validator.checkIfDirectoryExists(destinationPath);
 
@@ -240,11 +240,11 @@ public class CpService extends ActionCmdService<MessageVO> {
         return handleDirectoryToExistingDirectoryCopy(sourcePath, destinationPath);
     }
 
-    private MessageVO handleDirectoryToNonExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
-        return handleDirectoryToFileCopy(sourcePath, destinationPath);
+    private void handleDirectoryToNonExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
+        handleDirectoryToFileCopy(sourcePath, destinationPath);
     }
 
-    private MessageVO handleDirectoryToExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleDirectoryToExistingDirectoryCopy(Path sourcePath, Path destinationPath) throws IOException {
 
         OverwriteEnum permission = OverwriteEnum.WRONG_INPUT;
 
@@ -257,9 +257,7 @@ public class CpService extends ActionCmdService<MessageVO> {
 
         int copiedCnt = 0;
 
-        for (int i = 0; i < sourceContainingFileList.size(); i++) {
-            File curSourceDirectoryFile = sourceContainingFileList.get(i);
-
+        for (File curSourceDirectoryFile : sourceContainingFileList) {
             // Directory이면 애초에 볼 필요가 없음 skip
             if (curSourceDirectoryFile.isDirectory()) continue;
 
@@ -276,7 +274,7 @@ public class CpService extends ActionCmdService<MessageVO> {
             }
 
             if (sourcePath.equals(destinationPath)) {
-                return new MessageVO(Constants.CANT_COPY_TO_SAME_FILE);
+                return new MessageDTO(Constants.CANT_COPY_TO_SAME_FILE);
             }
 
             cpDAO.executeCopy(curSourceDirectoryFile.toPath(), Paths.get(destinationPath.toString(), curSourceDirectoryFile.getName()));
@@ -284,6 +282,6 @@ public class CpService extends ActionCmdService<MessageVO> {
             copiedCnt++;
         }
 
-        return new MessageVO(copiedCnt + Constants.N_FILE_COPIED);
+        return new MessageDTO(copiedCnt + Constants.N_FILE_COPIED);
     }
 }

@@ -54,7 +54,7 @@ public final class Constants {
     public static final String ZERO_FILE_COPIED = "0개 파일이 복사되었습니다.\n";
     public static final String ONE_FILE_COPIED = "1개 파일이 복사되었습니다.\n";
     public static final String CANT_COPY_TO_SAME_FILE = "같은 파일로 복사할 수 없습니다.\n0개 파일이 복사되었습니다.\n";
-    public static final String N_FILE_COPIED = " 개 파일이 복사되었습니다.\n";
+    public static final String N_FILE_COPIED = "개 파일이 복사되었습니다.\n";
 
     // MVSERVICE
     public static final String ZERO_FILE_MOVED = "1개의 파일을 이동했습니다.\n";

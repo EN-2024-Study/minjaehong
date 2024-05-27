@@ -3,8 +3,8 @@ package service;
 import constant.Constants;
 import constant.OverwriteEnum;
 import model.DAO.MvDAO;
-import model.VO.MessageVO;
-import utility.RuntimeExceptionHandler;
+import model.DTO.MessageDTO;
+import utility.RuntimeController;
 import utility.Validator;
 
 import java.io.File;
@@ -14,25 +14,25 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MvService extends ActionCmdService<MessageVO> {
+public class MvService extends ActionCmdService<MessageDTO> {
 
-    private MvDAO mvDAO;
+    private final MvDAO mvDAO;
 
-    public MvService(Validator validator, RuntimeExceptionHandler runtimeExceptionHandler) {
-        super(validator, runtimeExceptionHandler);
+    public MvService(Validator validator, RuntimeController runtimeController) {
+        super(validator, runtimeController);
         this.mvDAO = new MvDAO();
     }
 
     @Override
-    public MessageVO handleCommand(String curDirectory, List<String> parameters) throws IOException {
+    public MessageDTO handleCommand(String curDirectory, List<String> parameters) throws IOException {
 
         // 1. 인자 개수 안맞으면 return
-        if (parameters.size() < 1 || parameters.size() > 2) return new MessageVO(Constants.WRONG_COMMAND);
+        if (parameters.size() < 1 || parameters.size() > 2) return new MessageDTO(Constants.WRONG_COMMAND);
 
         // 2. 애초에 source가 존재하지 않으면 return
         Path sourcePath = getNormalizedPath(curDirectory, parameters.get(0));
         if (!validator.checkIfDirectoryExists(sourcePath)) {
-            return new MessageVO(Constants.CANT_FIND_CERTAIN_FILE);
+            return new MessageDTO(Constants.CANT_FIND_CERTAIN_FILE);
         }
 
         // 인자 1개이든 2개이든 올바른 destinationPath를 반환
@@ -72,40 +72,40 @@ public class MvService extends ActionCmdService<MessageVO> {
             return handleDirectoryToDirectoryMove(sourcePath, destinationPath);
         }
 
-        return new MessageVO("IF THIS IS PRINTED SOMETHING IS WRONG");
+        return new MessageDTO("IF THIS IS PRINTED SOMETHING IS WRONG");
     }
 
     //==================================== MOVE NON EXISTING FILE =====================================//
 
     // move는 destination이 존재하지 않으면 source가 파일이든 폴더이든 그냥 이름만 바꿈. 그래서 바로 mvDAO 호출하고 return하면 됨
-    private MessageVO handleNonExistingDestinationMove(Path sourcePath, Path destinationPath) throws IOException{
+    private MessageDTO handleNonExistingDestinationMove(Path sourcePath, Path destinationPath) throws IOException{
         boolean isSourceDirectory = validator.checkIfDirectory(sourcePath);
 
         mvDAO.executeMove(sourcePath, destinationPath);
 
         if(isSourceDirectory){
-            return new MessageVO(Constants.ONE_DIRECTORY_MOVED);
+            return new MessageDTO(Constants.ONE_DIRECTORY_MOVED);
         }
-        return new MessageVO(Constants.ONE_FILE_MOVED);
+        return new MessageDTO(Constants.ONE_FILE_MOVED);
     }
 
     //======================================= MOVE FILE TO FILE ========================================//
 
-    private MessageVO handleFileToFileMove(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleFileToFileMove(Path sourcePath, Path destinationPath) throws IOException {
 
         OverwriteEnum permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
         if (permission.equals(OverwriteEnum.NO)) {
-            return new MessageVO(Constants.ZERO_FILE_MOVED);
+            return new MessageDTO(Constants.ZERO_FILE_MOVED);
         }
 
         mvDAO.executeMove(sourcePath, destinationPath);
-        return new MessageVO(Constants.ONE_FILE_MOVED);
+        return new MessageDTO(Constants.ONE_FILE_MOVED);
     }
 
     //===================================== MOVE FILE TO DIRECTORY =====================================//
 
-    private MessageVO handleFileToDirectoryMove(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleFileToDirectoryMove(Path sourcePath, Path destinationPath) throws IOException {
         OverwriteEnum permission;
 
         File sourceFile = sourcePath.toFile();
@@ -114,14 +114,12 @@ public class MvService extends ActionCmdService<MessageVO> {
         ArrayList<File> destinationContentsList = getContainingContentsList(destinationPath);
 
         // 똑같은 파일명이 있고 그게 파일이면 overwrite 여부 물어보기
-        for(int i=0;i<destinationContentsList.size();i++){
-            File curContent = destinationContentsList.get(i);
-
-            if(curContent.getName().equals(sourceFile.getName()) && curContent.isFile()) {
+        for (File curContent : destinationContentsList) {
+            if (curContent.getName().equals(sourceFile.getName()) && curContent.isFile()) {
                 permission = askOverwritePermission(sourceFile, destinationPath);
                 // NO면 바로 return
                 if (permission.equals(OverwriteEnum.NO)) {
-                    return new MessageVO(Constants.ZERO_FILE_MOVED);
+                    return new MessageDTO(Constants.ZERO_FILE_MOVED);
                 }
                 break;
             }
@@ -129,26 +127,26 @@ public class MvService extends ActionCmdService<MessageVO> {
 
         mvDAO.executeMove(sourcePath, Paths.get(destinationPath.toString(), sourceFile.getName()));
 
-        return new MessageVO(Constants.ONE_FILE_MOVED);
+        return new MessageDTO(Constants.ONE_FILE_MOVED);
     }
 
     //===================================== MOVE DIRECTORY TO FILE =====================================//
 
-    private MessageVO handleDirectoryToFileMove(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleDirectoryToFileMove(Path sourcePath, Path destinationPath) throws IOException {
 
         OverwriteEnum permission = askOverwritePermission(sourcePath.toFile(), destinationPath);
 
         if (permission.equals(OverwriteEnum.NO)) {
-            return new MessageVO(Constants.ZERO_DIRECTORY_MOVED);
+            return new MessageDTO(Constants.ZERO_DIRECTORY_MOVED);
         }
 
         mvDAO.executeMove(sourcePath, destinationPath);
-        return new MessageVO(Constants.ONE_DIRECTORY_MOVED);
+        return new MessageDTO(Constants.ONE_DIRECTORY_MOVED);
     }
 
     //================================== MOVE DIRECTORY TO DIRECTORY ===================================//
 
-    private MessageVO handleDirectoryToDirectoryMove(Path sourcePath, Path destinationPath) throws IOException {
+    private MessageDTO handleDirectoryToDirectoryMove(Path sourcePath, Path destinationPath) throws IOException {
         OverwriteEnum permission = OverwriteEnum.WRONG_INPUT;
 
         File sourceFile = sourcePath.toFile();
@@ -157,24 +155,22 @@ public class MvService extends ActionCmdService<MessageVO> {
         ArrayList<File> destinationContentsList = getContainingContentsList(destinationPath);
 
         // 똑같은 폴더명이 있고 그게 폴더면 overwrite 여부 물어보기
-        for(int i=0;i<destinationContentsList.size();i++){
-            File curContent = destinationContentsList.get(i);
-
+        for (File curContent : destinationContentsList) {
             // 똑같은 폴더명이 있고 그게 폴더면 overwrite 여부 물어보기
             // 똑같은게 있으면 절대로 dao까지 가지 않음
-            if(curContent.getName().equals(sourceFile.getName()) && curContent.isDirectory()) {
+            if (curContent.getName().equals(sourceFile.getName()) && curContent.isDirectory()) {
                 permission = askOverwritePermission(sourceFile, destinationPath);
 
                 if (permission.equals(OverwriteEnum.NO)) {
-                    return new MessageVO(Constants.ONE_DIRECTORY_MOVED);
-                }else{
-                    return new MessageVO(Constants.ACCESS_DENIED);
+                    return new MessageDTO(Constants.ONE_DIRECTORY_MOVED);
+                } else {
+                    return new MessageDTO(Constants.ACCESS_DENIED);
                 }
             }
         }
 
         mvDAO.executeMove(sourcePath, Paths.get(destinationPath.toString(), sourceFile.getName()));
 
-        return new MessageVO(Constants.ONE_DIRECTORY_MOVED);
+        return new MessageDTO(Constants.ONE_DIRECTORY_MOVED);
     }
 }

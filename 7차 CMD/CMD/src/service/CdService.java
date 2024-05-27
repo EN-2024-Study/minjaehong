@@ -1,7 +1,7 @@
 package service;
 
 import constant.Constants;
-import model.VO.MessageVO;
+import model.DTO.MessageDTO;
 import utility.Validator;
 
 import java.io.IOException;
@@ -12,28 +12,28 @@ import java.util.Map;
 
 // CD는 예외적으로 DAO가 없음
 // 그냥 해당 PATH가 존재하는지 안하는지 확인만 하면 되기 때문
-// Pair 객체로 return (바뀔 디렉터리, MessageVO)
-public class CdService extends CmdService<Map.Entry<String,MessageVO>>{
+// Pair 객체로 return (바뀔 디렉터리, MessageDTO)
+public class CdService extends CmdService<Map.Entry<String, MessageDTO>>{
 
     public CdService(Validator validator){
         super(validator);
     }
 
     @Override
-    public Map.Entry<String, MessageVO> handleCommand(String curDirectory, List<String> parameters) throws IOException {
+    public Map.Entry<String, MessageDTO> handleCommand(String curDirectory, List<String> parameters) throws IOException {
         if(parameters.size()==0){
-            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO(curDirectory));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageDTO(curDirectory));
         }
 
         if(parameters.size()>1){
-            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO(Constants.CANT_FIND_CERTAIN_ROUTE));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageDTO(Constants.CANT_FIND_CERTAIN_ROUTE));
         }
 
         String destination = parameters.get(0);
         return executeCD(curDirectory, destination);
     }
 
-    private Map.Entry<String, MessageVO> executeCD(String curDirectory, String destination) throws IOException {
+    private Map.Entry<String, MessageDTO> executeCD(String curDirectory, String destination) throws IOException {
 
         Path changedDirectoryPath = getNormalizedPath(curDirectory, destination);
 
@@ -41,12 +41,12 @@ public class CdService extends CmdService<Map.Entry<String,MessageVO>>{
         if(validator.checkIfDirectoryExists(changedDirectoryPath)){
 
             if(validator.checkIfDirectory(changedDirectoryPath)){
-                return new AbstractMap.SimpleEntry<>(changedDirectoryPath.toString(), new MessageVO(""));
+                return new AbstractMap.SimpleEntry<>(changedDirectoryPath.toString(), new MessageDTO(""));
             }
 
-            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO(Constants.WRONG_DIRECTORY_NAME));
+            return new AbstractMap.SimpleEntry<>(curDirectory, new MessageDTO(Constants.WRONG_DIRECTORY_NAME));
         }
 
-        return new AbstractMap.SimpleEntry<>(curDirectory, new MessageVO(Constants.CANT_FIND_CERTAIN_ROUTE));
+        return new AbstractMap.SimpleEntry<>(curDirectory, new MessageDTO(Constants.CANT_FIND_CERTAIN_ROUTE));
     }
 }

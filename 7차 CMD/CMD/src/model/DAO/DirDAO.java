@@ -1,7 +1,7 @@
 package model.DAO;
 
 import constant.Constants;
-import model.VO.DirVO;
+import model.DTO.DirDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,12 +26,12 @@ public class DirDAO{
     // 여기서부터는 진짜로 dir 작업 수행
     // 존재성이 확인된 애들만 호출됨
     // 한개의 폴더에 대한 탐색임
-    public DirVO executeDir(String curDirectory, Path sourcePath) throws IOException {
+    public DirDTO executeDir(String curDirectory, Path sourcePath) throws IOException {
 
         File source = sourcePath.toFile();
 
         // 우선 존재하는 파일이니까 curDirectory sourcePath.toString() 으로 기본 정보 초기화해주면서 객체 생성
-        DirVO dirVO = new DirVO(curDirectory, sourcePath.toString(), source.getFreeSpace());
+        DirDTO dirDTO = new DirDTO(curDirectory, sourcePath.toString(), source.getFreeSpace());
 
         // 1. source가 폴더일때
         if (source.isDirectory()) {
@@ -66,7 +66,7 @@ public class DirDAO{
                     fileName = Constants.TO_PARENT;
                 }
 
-                dirVO.addNewFileInfo(lastModifiedDate, isDirectory, fileSize, fileName);
+                dirDTO.addNewFileInfo(lastModifiedDate, isDirectory, fileSize, fileName);
             }
         }
         // 2. source가 파일일때는 그냥 자기 자신에 대한 정보만 저장하면 됨
@@ -79,9 +79,9 @@ public class DirDAO{
             long fileSize = source.length();
 
             String fileName = source.getName();
-            dirVO.addNewFileInfo(lastModifiedDate, isFolder, fileSize, fileName);
+            dirDTO.addNewFileInfo(lastModifiedDate, isFolder, fileSize, fileName);
         }
 
-        return dirVO;
+        return dirDTO;
     }
 }

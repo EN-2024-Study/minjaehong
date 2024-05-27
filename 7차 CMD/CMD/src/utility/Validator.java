@@ -1,19 +1,18 @@
 package utility;
 
-import model.VO.MessageVO;
+import constant.Constants;
 
 import java.io.File;
-import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class Validator {
-    private String rootDirectory;
-    private String separater;
+    private final String rootDirectory;
+    private final String separater;
 
-    public Validator(String rootDirectory){
-        this.rootDirectory = rootDirectory;
+    public Validator(){
+        this.rootDirectory = Paths.get(System.getProperty(Constants.USER_HOME)).getRoot().toString();
         this.separater = System.getProperty("file.separator");
     }
 
@@ -31,8 +30,7 @@ public class Validator {
 
             if (temp.contains("?") || temp.contains(":") || temp.contains("*")
                     || temp.contains("\\\\") || temp.contains("//")
-                    || temp.contains("|") || temp.contains("<") || temp.contains(">")
-                    || temp.contains(":")) {
+                    || temp.contains("|") || temp.contains("<") || temp.contains(">")) {
                 return false;
             }
         }

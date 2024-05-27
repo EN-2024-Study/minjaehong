@@ -1,20 +1,17 @@
-package model.VO;
+package handler;
 
 import constant.OverwriteEnum;
+import model.DTO.OverwritePermissionDTO;
 
-public class OverwritePermissionVO {
+public class OverwritePermissionHandler {
 
-    private OverwriteEnum overwritePermission;
+    OverwriteEnum overwritePermission;
 
-    public OverwritePermissionVO(String input){
-        initializeVO(input);
-    }
-
-    private void initializeVO(String input){
+    public OverwritePermissionDTO handleOverWritePermission(String input){
 
         if(input.isEmpty()){
             overwritePermission = OverwriteEnum.WRONG_INPUT;
-            return;
+            return new OverwritePermissionDTO(overwritePermission);
         }
 
         input = input.toUpperCase();
@@ -34,9 +31,7 @@ public class OverwritePermissionVO {
             default:
                 overwritePermission = OverwriteEnum.WRONG_INPUT;
         }
-    }
 
-    public OverwriteEnum getOverwritePermission() {
-        return overwritePermission;
+        return new OverwritePermissionDTO(overwritePermission);
     }
 }
