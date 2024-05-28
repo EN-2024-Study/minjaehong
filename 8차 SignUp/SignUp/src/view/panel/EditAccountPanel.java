@@ -1,12 +1,6 @@
 package view.panel;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class EditAccountPanel extends CreateAccountPanel{
-
-    private JButton editButton;
-    private JButton cancelEditButton;
 
     public EditAccountPanel(){
         super();
@@ -15,8 +9,12 @@ public class EditAccountPanel extends CreateAccountPanel{
     }
 
     private void createComponents(){
-        editButton = new JButton("EDIT");
-        cancelEditButton = new JButton("CANCEL EDIT");
+        idCheckButton.setActionCommand("editAccountPanel_checkId");
+        phoneNumCheckButton.setActionCommand("editAccountPanel_checkPhoneNum");
+        zipCodeCheckButton.setActionCommand("editAccountPanel_checkPhoneNum");
+
+        submitButton.setActionCommand("editAccountPanel_submit");
+        cancelButton.setActionCommand("editAccountPanel_cancel");
     }
 
     private void initializePanel() {
@@ -25,15 +23,16 @@ public class EditAccountPanel extends CreateAccountPanel{
         idCheckButton.setVisible(false);
         idInstructionLabel.setVisible(false);
 
-        GridBagLayout layout = (GridBagLayout) this.getLayout();
-        GridBagConstraints gbc = layout.getConstraints(submitButton);
+        phoneNumLabel.setVisible(false);
+        phoneNumCheckButton.setVisible(false);
+        phoneNumTextField.setVisible(false);
 
-        this.remove(submitButton);
-        this.add(editButton, gbc);
+        nameLabel.setVisible(false);
+        nameInstructionLabel.setVisible(false);
+        nameTextField.setVisible(false);
 
-        gbc = layout.getConstraints(cancelButton);
-
-        this.remove(cancelButton);
-        this.add(cancelEditButton, gbc);
+        birthdayLabel.setVisible(false);
+        birthdayInstructionLabel.setVisible(false);
+        birthdayTextField.setVisible(false);
     }
 }

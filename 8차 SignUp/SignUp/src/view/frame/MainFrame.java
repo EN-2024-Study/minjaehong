@@ -6,8 +6,8 @@ import java.awt.*;
 public class MainFrame extends JFrame {
     public MainFrame(){
         setTitle("SignUp");
-        setSize(new Dimension(800,800));
-        setMinimumSize(new Dimension(1000,1000));
+        setSize(new Dimension(900,900));
+        setMinimumSize(new Dimension(860,860));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 }

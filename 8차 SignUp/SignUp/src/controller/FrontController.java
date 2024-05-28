@@ -1,34 +1,51 @@
 package controller;
 
-import Utility.ControllerMapper;
-import controller.panelcontroller.*;
-import view.frame.MainFrame;
+import utility.ControllerMapper;
+import utility.ViewHandler;
+import controller.eventController.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 // FrontController 는 ControllerMapper 를 통해서 ActionEvent e를 보낼 Controller 를 받음
+// ViewHandler 는 ActionEvent e가 view 를 바꿔야하는 명령이면 view 를 바꿔줌
 public class FrontController implements ActionListener {
 
     private ControllerMapper controllerMapper;
+    private ViewHandler viewHandler;
 
-    private Executable mappedController;
-    private PanelChangeController panelChangeController;
+    private EventController mappedController;
 
-    public FrontController(List<Executable> controllerList){
-        controllerMapper = new ControllerMapper(controllerList);
-        //panelChangeController = new PanelChangeController();
+    public FrontController(ControllerMapper controllerMapper, ViewHandler viewHandler){
+        this.controllerMapper = controllerMapper;
+        this.viewHandler = viewHandler;
     }
 
-    // 화면바꾸기를 여기서??
+    private boolean checkIfPanelChangeNeeded(ActionEvent e){
+        String command = e.getActionCommand();
+        if(command.equals("loginPanel_createAccount")||
+                command.equals("loginPanel_login")||
+                command.equals("createAccountPanel_submit") ||
+                command.equals("createAccountPanel_cancel")||
+                command.equals("userHomePanel_edit")||
+                command.equals("userHomePanel_logOut")||
+                command.equals("userHomePanel_delete")||
+                command.equals("editAccountPanel_cancel") ||
+                command.equals("editAccountPanel_submit")) {
+            return true;
+        }
+        return false;
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         mappedController = controllerMapper.getMappedController(e);
-        mappedController.execute(e);
 
-        // 위에서 boolean으로 바꾸고 true 면 바꾸게 하기
-        // panel 바꿔야하면 바꾸기
-        panelChangeController.execute(e);
+        if(mappedController != null)  mappedController.handleButtonEvent(e);
+
+        if(checkIfPanelChangeNeeded(e)){
+            viewHandler.handleButtonEvent(e);
+        }
     }
 }

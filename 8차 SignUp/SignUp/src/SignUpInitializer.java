@@ -1,13 +1,11 @@
-import controller.FrontController;
-import controller.PanelChangeController;
-import controller.panelcontroller.*;
+import utility.ControllerMapper;
+import utility.ViewHandler;
+import controller.*;
+import controller.eventController.*;
 import view.frame.MainFrame;
-import view.panel.CreateAccountPanel;
-import view.panel.LoginPanel;
-import view.panel.UserHomePanel;
+import view.panel.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class SignUpInitializer {
@@ -16,8 +14,9 @@ public class SignUpInitializer {
     private LoginPanel loginPanel;
     private CreateAccountPanel createAccountPanel;
     private UserHomePanel userHomePanel;
+    private EditAccountPanel editAccountPanel;
 
-    private ArrayList<Executable> controllerList;
+    private ArrayList<EventController> controllerList;
     private ArrayList<JPanel> panelList;
 
     private FrontController frontController;
@@ -31,7 +30,7 @@ public class SignUpInitializer {
     }
 
     public void run(){
-        mainFrame.add(createAccountPanel);
+        mainFrame.add(loginPanel);
         mainFrame.setVisible(true);
     }
 
@@ -43,6 +42,13 @@ public class SignUpInitializer {
         this.loginPanel = new LoginPanel();
         this.createAccountPanel = new CreateAccountPanel();
         this.userHomePanel = new UserHomePanel();
+        this.editAccountPanel = new EditAccountPanel();
+
+        panelList = new ArrayList<>();
+        panelList.add(loginPanel);
+        panelList.add(createAccountPanel);
+        panelList.add(userHomePanel);
+        panelList.add(editAccountPanel);
     }
 
     private void createControllers(){
@@ -50,10 +56,9 @@ public class SignUpInitializer {
         this.controllerList.add(new LoginController(loginPanel));
         this.controllerList.add(new CreateAccountController(createAccountPanel));
         this.controllerList.add(new UserHomeController(userHomePanel));
+        this.controllerList.add(new EditAccountController(editAccountPanel));
 
-        this.controllerList.add(new PanelChangeController(mainFrame, loginPanel, createAccountPanel, userHomePanel));
-
-        this.frontController = new FrontController(controllerList);
+        this.frontController = new FrontController(new ControllerMapper(controllerList), new ViewHandler(mainFrame, panelList));
     }
 
     private void bindFrontControllerToPanels() {
@@ -66,5 +71,15 @@ public class SignUpInitializer {
         createAccountPanel.zipCodeCheckButton.addActionListener(frontController);
         createAccountPanel.submitButton.addActionListener(frontController);
         createAccountPanel.cancelButton.addActionListener(frontController);
+
+        userHomePanel.deleteButton.addActionListener(frontController);
+        userHomePanel.editButton.addActionListener(frontController);
+        userHomePanel.logOutButton.addActionListener(frontController);
+
+        editAccountPanel.idCheckButton.addActionListener(frontController);
+        editAccountPanel.phoneNumCheckButton.addActionListener(frontController);
+        editAccountPanel.zipCodeCheckButton.addActionListener(frontController);
+        editAccountPanel.submitButton.addActionListener(frontController);
+        editAccountPanel.cancelButton.addActionListener(frontController);
     }
 }
