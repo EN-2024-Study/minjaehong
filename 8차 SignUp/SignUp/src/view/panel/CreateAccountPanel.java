@@ -3,40 +3,37 @@ package view.panel;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 public class CreateAccountPanel extends JPanel {
 
-    JLabel idLabel;
+    public JLabel idLabel;
     public JTextField idTextField;
     public JButton idCheckButton;
-    JLabel idInstructionLabel;
+    public JLabel idInstructionLabel;
 
-    JLabel pwLabel;
-    JTextField pwTextField;
-    JLabel pwInstructionLabel;
+    public JLabel pwLabel;
+    public JTextField pwTextField;
+    public JLabel pwInstructionLabel;
 
-    JLabel nameLabel;
-    JTextField nameTextField;
-    JLabel nameInstructionLabel;
+    public JLabel nameLabel;
+    public JTextField nameTextField;
+    public JLabel nameInstructionLabel;
 
-    JLabel phoneNumLabel;
+    public JLabel phoneNumLabel;
     public JTextField phoneNumTextField;
     public JButton phoneNumCheckButton;
 
-    JLabel birthdayLabel;
-    JTextField birthdayTextField;
-    JLabel birthdayInstructionLabel;
+    public JLabel birthdayLabel;
+    public JTextField birthdayTextField;
+    public JLabel birthdayInstructionLabel;
 
-    JLabel emailLabel;
-    JTextField emailTextField;
+    public JLabel emailLabel;
+    public JTextField emailTextField;
 
-    JLabel addressLabel;
+    public JLabel addressLabel;
     public JTextField addressTextField;
 
-    JLabel zipCodeLabel;
+    public JLabel zipCodeLabel;
     public JTextField zipCodeTextField;
     public JButton zipCodeCheckButton;
 
@@ -69,7 +66,7 @@ public class CreateAccountPanel extends JPanel {
         phoneNumLabel = new JLabel("Phone Number", SwingConstants.RIGHT);
         phoneNumLabel.setBorder(new LineBorder(Color.BLACK));
         phoneNumTextField = new JTextField(15);
-        phoneNumCheckButton = new JButton("중복확인");
+        phoneNumCheckButton = new JButton("중복 확인");
         phoneNumCheckButton.setActionCommand("createAccountPanel_checkPhoneNum");
 
         birthdayLabel = new JLabel("Birthday", SwingConstants.RIGHT);
@@ -84,7 +81,7 @@ public class CreateAccountPanel extends JPanel {
         zipCodeLabel = new JLabel("ZipCode", SwingConstants.RIGHT);
         zipCodeLabel.setBorder(new LineBorder(Color.BLACK));
         zipCodeTextField = new JTextField(15);
-        zipCodeCheckButton = new JButton("주소찾기");
+        zipCodeCheckButton = new JButton("주소 찾기");
         zipCodeCheckButton.setActionCommand("createAccountPanel_checkZipCode");
 
         addressLabel = new JLabel("Address", SwingConstants.RIGHT);

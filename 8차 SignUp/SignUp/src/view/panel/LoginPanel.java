@@ -1,7 +1,9 @@
 package view.panel;
 
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
+import java.text.NumberFormat;
 
 public class LoginPanel extends JPanel {
 
@@ -21,8 +23,16 @@ public class LoginPanel extends JPanel {
     }
 
     private void createComponents(){
+        NumberFormat format = NumberFormat.getIntegerInstance();
+
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setAllowsInvalid(false); // Don't allow invalid input
+        formatter.setMinimum(0); // Minimum value
+        formatter.setMaximum(999999); // Maximum value to allow only 6 digits
+
         idLabel = new JLabel("ID",SwingConstants.RIGHT);
-        idTextField = new JTextField(15);
+        idTextField = new JFormattedTextField(formatter);
 
         pwLabel = new JLabel("PW",SwingConstants.RIGHT);
         pwTextField = new JTextField(15);

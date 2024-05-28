@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 // ActionCommand 를 확인하고 Panel 갈아끼워줌
-public class ViewHandler implements EventController {
+public class ViewHandler extends EventController {
 
     private MainFrame mainFrame;
 

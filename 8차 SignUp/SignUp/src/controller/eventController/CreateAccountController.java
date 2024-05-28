@@ -1,16 +1,52 @@
 package controller.eventController;
 
+import model.dto.AccountDTO;
+import model.dto.TextFieldDTO;
+import service.SignUpService;
 import view.panel.CreateAccountPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class CreateAccountController implements EventController {
+public class CreateAccountController extends EventController {
 
     private CreateAccountPanel createAccountPanel;
 
     public CreateAccountController(CreateAccountPanel createAccountPanel){
         this.createAccountPanel = createAccountPanel;
+        this.signUpService = new SignUpService();
+    }
+
+    private void checkID(){
+        String inputText = createAccountPanel.idTextField.getText();
+        boolean exists = signUpService.checkIfIDExists(new TextFieldDTO(inputText));
+        showCheckResultMessage(createAccountPanel, createAccountPanel.idTextField, exists);
+    }
+
+    private void checkPhoneNum(){
+        String inputText = createAccountPanel.phoneNumTextField.getText();
+        boolean exists = signUpService.checkIfIDExists(new TextFieldDTO(inputText));
+        showCheckResultMessage(createAccountPanel, createAccountPanel.phoneNumTextField, exists);
+    }
+
+    private void submit(){
+        String userID = createAccountPanel.idTextField.getText();
+        String userPW = createAccountPanel.pwTextField.getText();
+        String userName = createAccountPanel.nameTextField.getText();
+        String userPhoneNum = createAccountPanel.phoneNumTextField.getText();
+        String userBirth = createAccountPanel.birthdayTextField.getText();
+        String userEmail = createAccountPanel.emailTextField.getText();
+        String userZipcode = createAccountPanel.zipCodeTextField.getText();
+        String userAddress = createAccountPanel.addressTextField.getText();
+
+        signUpService.addAccount(new AccountDTO(userID, userPW, userName, userPhoneNum, userBirth, userEmail, userZipcode, userAddress));
+
+        JOptionPane.showMessageDialog(createAccountPanel, "createAccount success!");
+        clearPanel();
+    }
+
+    private void cancel(){
+        clearPanel();
     }
 
     private void clearPanel(){
@@ -29,31 +65,22 @@ public class CreateAccountController implements EventController {
 
         switch(actionCommand){
             case "createAccountPanel_checkId":
-                inputText = createAccountPanel.idTextField.getText();
-                JOptionPane.showMessageDialog(createAccountPanel, inputText + " available!");
-                createAccountPanel.idTextField.setEnabled(false);
+                checkID();
                 break;
 
             case "createAccountPanel_checkPhoneNum":
-                inputText = createAccountPanel.phoneNumTextField.getText();
-                JOptionPane.showMessageDialog(createAccountPanel, inputText + " available!");
-                createAccountPanel.phoneNumTextField.setEnabled(false);
-                break;// panel 에서 값 받아오기
+                checkPhoneNum();
+                break;
 
             case "createAccountPanel_checkZipCode":
-                inputText = createAccountPanel.zipCodeTextField.getText();
-                JOptionPane.showMessageDialog(createAccountPanel, inputText + " available!");
-                createAccountPanel.zipCodeTextField.setEnabled(false);
-                break;// panel 에서 값 받아오기
+                break;
 
             case "createAccountPanel_submit":
-                // service 통해서 실제로 account 하나 생성해주기
-                JOptionPane.showMessageDialog(createAccountPanel, "createAccount success!");
-                clearPanel();
+                submit();
                 break;
 
             case "createAccountPanel_cancel":
-                clearPanel();
+                cancel();
                 break;
         }
     }

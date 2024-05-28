@@ -4,7 +4,7 @@ import view.panel.UserHomePanel;
 
 import java.awt.event.ActionEvent;
 
-public class UserHomeController implements EventController {
+public class UserHomeController extends EventController {
 
     private UserHomePanel userHomePanel;
 

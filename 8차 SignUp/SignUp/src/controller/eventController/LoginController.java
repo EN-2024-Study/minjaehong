@@ -5,7 +5,7 @@ import view.panel.LoginPanel;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class LoginController implements EventController {
+public class LoginController extends EventController {
 
     private LoginPanel loginPanel;
 
