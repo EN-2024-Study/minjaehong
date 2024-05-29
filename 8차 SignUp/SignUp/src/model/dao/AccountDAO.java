@@ -151,10 +151,10 @@ public class AccountDAO {
 
         Connection conn = null;
 
-        String curPw;
-        String curEmail;
-        String curAddress;
-        String curZipcode;
+        String curPw = "";
+        String curEmail = "";
+        String curAddress = "";
+        String curZipcode= "";
         
         try{
             conn = dbConnector.GetConnection();
@@ -165,12 +165,15 @@ public class AccountDAO {
             resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()){
-
+                curPw = resultSet.getString("userpw");
+                curEmail = resultSet.getString("useremail");
+                curAddress = resultSet.getString("userzipcode");
+                curZipcode = resultSet.getString("useraddress");
             }
         }catch(SQLException e){
-
+            e.printStackTrace();
         }
-        return new UpdateInfoDTO();
+        return new UpdateInfoDTO(curPw, curEmail, curZipcode, curAddress);
     }
     //============================= ADD ===============================//
 

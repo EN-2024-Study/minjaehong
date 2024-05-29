@@ -25,6 +25,8 @@ public class UserHomePanel extends JPanel {
     public void deleteCookie() {this.userId = "";}
 
     private void createComponents(){
+        userLabel = new JLabel("");
+
         editButton = new JButton("EDIT");
         editButton.setActionCommand("userHomePanel_edit");
 

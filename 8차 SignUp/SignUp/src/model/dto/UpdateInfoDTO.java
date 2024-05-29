@@ -17,15 +17,15 @@ public class UpdateInfoDTO {
         return userPW;
     }
 
-    public String getUseremail() {
+    public String getUserEmail() {
         return useremail;
     }
 
-    public String getUserzipcode() {
+    public String getUserZipcode() {
         return userzipcode;
     }
 
-    public String getUseraddress() {
+    public String getUserAddress() {
         return useraddress;
     }
 }

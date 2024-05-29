@@ -14,7 +14,5 @@ public class LoginDTO {
         return id;
     }
 
-    public String getPw() {
-        return pw;
-    }
+    public String getPw() { return pw; }
 }

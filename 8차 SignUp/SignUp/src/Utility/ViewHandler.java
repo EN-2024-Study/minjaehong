@@ -30,27 +30,6 @@ public class ViewHandler extends EventController {
         this.editAccountPanel = (EditAccountPanel)panelList.get(3);
     }
 
-    private void clearCreateAccountPanel(){
-        createAccountPanel.idTextField.setText("");
-        createAccountPanel.idTextField.setEnabled(true);
-        createAccountPanel.phoneNumTextField.setText("");
-        createAccountPanel.phoneNumTextField.setEnabled(true);
-        createAccountPanel.zipCodeTextField.setText("");
-        createAccountPanel.zipCodeTextField.setEnabled(true);
-    }
-
-    private void clearEditAccountPanel(){
-        editAccountPanel.pwTextField.setText("");
-        editAccountPanel.emailTextField.setText("");
-        editAccountPanel.addressTextField.setText("");
-        editAccountPanel.zipCodeTextField.setText("");
-    }
-
-    private void clearLoginPanel(){
-        loginPanel.idTextField.setText("");
-        loginPanel.pwTextField.setText("");
-    }
-
     public void setCookie(String userId){
         userHomePanel.setCookie(userId);
     }
@@ -104,5 +83,26 @@ public class ViewHandler extends EventController {
         mainFrame.revalidate();
         mainFrame.repaint();
         mainFrame.setVisible(true);
+    }
+
+    private void clearCreateAccountPanel(){
+        createAccountPanel.idTextField.setText("");
+        createAccountPanel.idTextField.setEnabled(true);
+        createAccountPanel.phoneNumTextField.setText("");
+        createAccountPanel.phoneNumTextField.setEnabled(true);
+        createAccountPanel.zipCodeTextField.setText("");
+        createAccountPanel.zipCodeTextField.setEnabled(true);
+    }
+
+    private void clearEditAccountPanel(){
+        editAccountPanel.pwTextField.setText("");
+        editAccountPanel.emailTextField.setText("");
+        editAccountPanel.addressTextField.setText("");
+        editAccountPanel.zipCodeTextField.setText("");
+    }
+
+    private void clearLoginPanel(){
+        loginPanel.idTextField.setText("");
+        loginPanel.pwTextField.setText("");
     }
 }
