@@ -2,6 +2,7 @@ package service;
 
 import model.dao.AccountDAO;
 import model.dto.AccountDTO;
+import model.dto.LoginDTO;
 import model.dto.TextFieldDTO;
 
 public class SignUpService {
@@ -23,8 +24,8 @@ public class SignUpService {
         return false;
     }
 
-    public boolean checkIfValidLogin(TextFieldDTO textFieldDTO){
-        if(accountDAO.checkIfValidLogin(textFieldDTO)) return true;
+    public boolean checkIfValidLogin(LoginDTO loginDTO){
+        if(accountDAO.checkIfValidLogin(loginDTO)) return true;
         return false;
     }
 

@@ -4,14 +4,25 @@ import javax.swing.*;
 
 public class UserHomePanel extends JPanel {
 
+    public JLabel userLabel;
+
     public JButton editButton;
     public JButton logOutButton;
     public JButton deleteButton;
+
+    public String userId;
 
     public UserHomePanel() {
         createComponents();
         initializePanel();
     }
+
+    public void setCookie(String userId){
+        this.userId = userId;
+        this.userLabel.setText(userId);
+    }
+
+    public void deleteCookie() {this.userId = "";}
 
     private void createComponents(){
         editButton = new JButton("EDIT");
@@ -25,6 +36,7 @@ public class UserHomePanel extends JPanel {
     }
 
     private void initializePanel(){
+        this.add(userLabel);
         this.add(editButton);
         this.add(logOutButton);
         this.add(deleteButton);

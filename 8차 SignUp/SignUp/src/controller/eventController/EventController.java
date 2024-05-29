@@ -1,7 +1,7 @@
 package controller.eventController;
 
-import model.dto.TextFieldDTO;
 import service.SignUpService;
+import utility.ViewHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 public abstract class EventController {
 
     protected SignUpService signUpService;
+    protected ViewHandler viewHandler;
 
     public abstract void handleButtonEvent(ActionEvent e);
 
@@ -17,7 +18,6 @@ public abstract class EventController {
 
         if(exists) {
             JOptionPane.showMessageDialog(panel, inputText + " already exists!");
-            textField.setEnabled(false);
         }else {
             JOptionPane.showMessageDialog(panel, inputText + " available!");
             textField.setEnabled(false);

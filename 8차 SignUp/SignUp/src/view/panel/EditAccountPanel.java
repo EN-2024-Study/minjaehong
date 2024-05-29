@@ -4,20 +4,13 @@ public class EditAccountPanel extends CreateAccountPanel{
 
     public EditAccountPanel(){
         super();
-        this.createComponents();
         this.initializePanel();
     }
 
-    private void createComponents(){
-        idCheckButton.setActionCommand("editAccountPanel_checkId");
-        phoneNumCheckButton.setActionCommand("editAccountPanel_checkPhoneNum");
-        zipCodeCheckButton.setActionCommand("editAccountPanel_checkPhoneNum");
-
+    private void initializePanel() {
         submitButton.setActionCommand("editAccountPanel_submit");
         cancelButton.setActionCommand("editAccountPanel_cancel");
-    }
 
-    private void initializePanel() {
         idLabel.setVisible(false);
         idTextField.setVisible(false);
         idCheckButton.setVisible(false);
@@ -34,5 +27,15 @@ public class EditAccountPanel extends CreateAccountPanel{
         birthdayLabel.setVisible(false);
         birthdayInstructionLabel.setVisible(false);
         birthdayTextField.setVisible(false);
+    }
+
+    public boolean returnTextFieldsValidity(){
+
+        if(!pwTextField.checkValidity()) return false;
+        if(!emailTextField.checkValidity()) return false;
+        if(!addressTextField.checkValidity()) return false;
+        if(!zipCodeTextField.checkValidity()) return false;
+
+        return true;
     }
 }

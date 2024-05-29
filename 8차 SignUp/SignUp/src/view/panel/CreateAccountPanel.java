@@ -1,5 +1,7 @@
 package view.panel;
 
+import view.MyTextField;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -7,38 +9,51 @@ import java.awt.*;
 public class CreateAccountPanel extends JPanel {
 
     public JLabel idLabel;
-    public JTextField idTextField;
+    public MyTextField idTextField;
     public JButton idCheckButton;
     public JLabel idInstructionLabel;
 
     public JLabel pwLabel;
-    public JTextField pwTextField;
+    public MyTextField pwTextField;
     public JLabel pwInstructionLabel;
 
     public JLabel nameLabel;
-    public JTextField nameTextField;
+    public MyTextField nameTextField;
     public JLabel nameInstructionLabel;
 
     public JLabel phoneNumLabel;
-    public JTextField phoneNumTextField;
+    public MyTextField phoneNumTextField;
     public JButton phoneNumCheckButton;
 
     public JLabel birthdayLabel;
-    public JTextField birthdayTextField;
+    public MyTextField birthdayTextField;
     public JLabel birthdayInstructionLabel;
 
     public JLabel emailLabel;
-    public JTextField emailTextField;
+    public MyTextField emailTextField;
 
     public JLabel addressLabel;
-    public JTextField addressTextField;
+    public MyTextField addressTextField;
 
     public JLabel zipCodeLabel;
-    public JTextField zipCodeTextField;
+    public MyTextField zipCodeTextField;
     public JButton zipCodeCheckButton;
 
     public JButton submitButton;
     public JButton cancelButton;
+
+    public boolean returnTextFieldsValidity(){
+        if(!idTextField.checkValidity()) return false;
+        if(!pwTextField.checkValidity()) return false;
+        if(!nameTextField.checkValidity()) return false;
+        if(!phoneNumTextField.checkValidity()) return false;
+        if(!birthdayTextField.checkValidity()) return false;
+        if(!emailTextField.checkValidity()) return false;
+        if(!addressTextField.checkValidity()) return false;
+        if(!zipCodeTextField.checkValidity()) return false;
+
+        return true;
+    }
 
     public CreateAccountPanel() {
         createComponents();
@@ -48,45 +63,45 @@ public class CreateAccountPanel extends JPanel {
     private void createComponents() {
         idLabel = new JLabel("ID", SwingConstants.RIGHT);
         idLabel.setBorder(new LineBorder(Color.BLACK));
-        idTextField = new JTextField(15);
-        idCheckButton = new JButton("중복확인");
+        idTextField = new MyTextField("ID",8,12,"^([a-zA-Z0-9]{8,12})$",this);
+        idCheckButton = new JButton("중복 체크");
         idCheckButton.setActionCommand("createAccountPanel_checkId");
-        idInstructionLabel = new JLabel("only 14 words allowed");
+        idInstructionLabel = new JLabel("영문 대소문자 + 숫자 (8~12글자)");
 
         pwLabel = new JLabel("PW", SwingConstants.RIGHT);
         pwLabel.setBorder(new LineBorder(Color.BLACK));
-        pwTextField = new JTextField(15);
-        pwInstructionLabel = new JLabel("only 14 words allowed");
+        pwTextField = new MyTextField("PW",8,12,"^([a-zA-Z0-9~!@#]{8,12})$",this);
+        pwInstructionLabel = new JLabel("영어 대소문자 + 숫자 + 특수기호 8~12글자");
 
         nameLabel = new JLabel("NAME", SwingConstants.RIGHT);
         nameLabel.setBorder(new LineBorder(Color.BLACK));
-        nameTextField = new JTextField(15);
-        nameInstructionLabel = new JLabel("only 2-10 words allowed");
+        nameTextField = new MyTextField("NAME",4,10,"^([a-zA-Z가-힣]{4,10})$",this);
+        nameInstructionLabel = new JLabel("이름을 적어주세요");
 
-        phoneNumLabel = new JLabel("Phone Number", SwingConstants.RIGHT);
+        phoneNumLabel = new JLabel("PHONENUM", SwingConstants.RIGHT);
         phoneNumLabel.setBorder(new LineBorder(Color.BLACK));
-        phoneNumTextField = new JTextField(15);
-        phoneNumCheckButton = new JButton("중복 확인");
+        phoneNumTextField = new MyTextField("PHONENUM",13,13, "^(010-(\\d{4})-\\d{4})$",this);
+        phoneNumCheckButton = new JButton("중복 체크");
         phoneNumCheckButton.setActionCommand("createAccountPanel_checkPhoneNum");
 
-        birthdayLabel = new JLabel("Birthday", SwingConstants.RIGHT);
+        birthdayLabel = new JLabel("BIRTHDAY", SwingConstants.RIGHT);
         birthdayLabel.setBorder(new LineBorder(Color.BLACK));
-        birthdayTextField = new JTextField(15);
-        birthdayInstructionLabel = new JLabel("ex) 010225");
+        birthdayTextField = new MyTextField("NAME",6,6,"^([0-9]{6})$",this);
+        birthdayInstructionLabel = new JLabel("6자리 생년월일 적어주세요");
 
-        emailLabel = new JLabel("Email", SwingConstants.RIGHT);
+        emailLabel = new JLabel("EMAIL", SwingConstants.RIGHT);
         emailLabel.setBorder(new LineBorder(Color.BLACK));
-        emailTextField = new JTextField(15);
+        emailTextField = new MyTextField("EMAIL",10,20,"^([a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-z]{2,3}+)$",this);
 
-        zipCodeLabel = new JLabel("ZipCode", SwingConstants.RIGHT);
+        zipCodeLabel = new JLabel("ZIPCODE", SwingConstants.RIGHT);
         zipCodeLabel.setBorder(new LineBorder(Color.BLACK));
-        zipCodeTextField = new JTextField(15);
+        zipCodeTextField = new MyTextField("ZIPCODE",5,5,"^([0-9]{5,5})$",this);
         zipCodeCheckButton = new JButton("주소 찾기");
         zipCodeCheckButton.setActionCommand("createAccountPanel_checkZipCode");
 
-        addressLabel = new JLabel("Address", SwingConstants.RIGHT);
+        addressLabel = new JLabel("ADDRESS", SwingConstants.RIGHT);
         addressLabel.setBorder(new LineBorder(Color.BLACK));
-        addressTextField = new JTextField(15);
+        addressTextField = new MyTextField("ADDRESS",10,20,"^([가-힣]{10,20})$",this);
 
         submitButton = new JButton("SUBMIT");
         submitButton.setActionCommand("createAccountPanel_submit");
@@ -184,7 +199,6 @@ public class CreateAccountPanel extends JPanel {
         gbc.insets = new Insets(5, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         this.add(nameInstructionLabel, gbc);
-
 
         gbc.gridx = centerX - 1;
         gbc.gridy = 8;

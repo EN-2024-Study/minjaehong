@@ -4,7 +4,9 @@ import constant.Querys;
 import model.AppConfig;
 import model.DBConnector;
 import model.dto.AccountDTO;
+import model.dto.LoginDTO;
 import model.dto.TextFieldDTO;
+import model.dto.UpdateInfoDTO;
 
 import java.sql.*;
 
@@ -64,24 +66,79 @@ public class AccountDAO {
             if(resultSet.next()){
                 exists = resultSet.getBoolean(1);
             }
-            
-            if(exists){
-                return true;
-            }
+
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return false;
+
+        return exists;
     }
 
     public boolean checkIfPhoneNumExists(TextFieldDTO textFieldDTO){
+        Connection conn = null;
 
-        return true;
+        boolean exists = false;
+        try{
+            conn = dbConnector.GetConnection();
+
+            String query = Querys.checkIfPhoneNumExists;
+
+            preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, textFieldDTO.getValue());
+
+            resultSet = preparedStatement.executeQuery();
+
+            // resultSet 내 cursor 옮기기
+            if(resultSet.next()){
+                exists = resultSet.getBoolean(1);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return exists;
     }
 
-    public boolean checkIfValidLogin(TextFieldDTO textFieldDTO){
+    public boolean checkIfValidLogin(LoginDTO loginDTO){
 
-        return true;
+        String id = loginDTO.getId();
+        String pw = loginDTO.getPw();
+
+        Connection conn = null;
+        boolean isValid = false;
+
+        try{
+            conn = dbConnector.GetConnection();
+
+            String query = Querys.checkIfValidLogin;
+
+            preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, pw);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                isValid = resultSet.getBoolean(1);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return isValid;
     }
 
     public TextFieldDTO getPWOfCertainID(TextFieldDTO textFieldDTO){
@@ -89,6 +146,32 @@ public class AccountDAO {
         return new TextFieldDTO("hi");
     }
 
+    // 여기 하고 있었음
+    public UpdateInfoDTO getUpdatableData(String userId){
+
+        Connection conn = null;
+
+        String curPw;
+        String curEmail;
+        String curAddress;
+        String curZipcode;
+        
+        try{
+            conn = dbConnector.GetConnection();
+
+            preparedStatement = conn.prepareStatement(Querys.getUpdatableUserInfos);
+            preparedStatement.setString(1, userId);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+
+            }
+        }catch(SQLException e){
+
+        }
+        return new UpdateInfoDTO();
+    }
     //============================= ADD ===============================//
 
     public void Add(AccountDTO accountDTO){
@@ -143,8 +226,8 @@ public class AccountDAO {
             if(success>0) System.out.println("[SUCCESS] DELETE ACCOUNT");
             else System.out.println("[FAIL] DELETE ACCOUNT");
 
-            conn.close();
             preparedStatement.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

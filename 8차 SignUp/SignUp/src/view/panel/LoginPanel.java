@@ -1,17 +1,17 @@
 package view.panel;
 
+import view.MyTextField;
+
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.text.NumberFormat;
 
 public class LoginPanel extends JPanel {
 
     public JLabel idLabel;
-    public JTextField idTextField;
+    public MyTextField idTextField;
 
     public JLabel pwLabel;
-    public JTextField pwTextField;
+    public MyTextField pwTextField;
 
     public JButton loginButton;
     public JButton findPasswordButton;
@@ -23,19 +23,11 @@ public class LoginPanel extends JPanel {
     }
 
     private void createComponents(){
-        NumberFormat format = NumberFormat.getIntegerInstance();
-
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setValueClass(Integer.class);
-        formatter.setAllowsInvalid(false); // Don't allow invalid input
-        formatter.setMinimum(0); // Minimum value
-        formatter.setMaximum(999999); // Maximum value to allow only 6 digits
-
         idLabel = new JLabel("ID",SwingConstants.RIGHT);
-        idTextField = new JFormattedTextField(formatter);
+        idTextField = new MyTextField("ID",8,12,"^([a-zA-Z0-9]{8,12})$",this);
 
         pwLabel = new JLabel("PW",SwingConstants.RIGHT);
-        pwTextField = new JTextField(15);
+        pwTextField = new MyTextField("PW",10,12,"^([a-zA-Z0-9~!@#]{8,12})$",this);
 
         loginButton = new JButton("LOGIN");
         loginButton.setActionCommand("loginPanel_login");
@@ -45,6 +37,13 @@ public class LoginPanel extends JPanel {
 
         createAccountButton = new JButton("CREATE ACCOUNT");
         createAccountButton.setActionCommand("loginPanel_createAccount");
+    }
+
+    public boolean returnTextFieldsValidity(){
+        if(!idTextField.checkValidity()) return false;
+        if(!pwTextField.checkValidity()) return false;
+
+        return true;
     }
 
     private void initializePanel(){

@@ -19,12 +19,21 @@ public class SignUpInitializer {
     private ArrayList<EventController> controllerList;
     private ArrayList<JPanel> panelList;
 
+    // UTILITY
+    private ControllerMapper controllerMapper;
+    private ViewHandler viewHandler;
+
     private FrontController frontController;
 
     public SignUpInitializer(){
         createFrame();
         createPanels();
+
+        this.viewHandler = new ViewHandler(mainFrame, panelList);
+
         createControllers();
+
+        this.controllerMapper = new ControllerMapper(controllerList);
 
         bindFrontControllerToPanels();
     }
@@ -53,15 +62,19 @@ public class SignUpInitializer {
 
     private void createControllers(){
         this.controllerList = new ArrayList<>();
-        this.controllerList.add(new LoginController(loginPanel));
-        this.controllerList.add(new CreateAccountController(createAccountPanel));
-        this.controllerList.add(new UserHomeController(userHomePanel));
-        this.controllerList.add(new EditAccountController(editAccountPanel));
-
-        this.frontController = new FrontController(new ControllerMapper(controllerList), new ViewHandler(mainFrame, panelList));
+        this.controllerList.add(new LoginController(loginPanel, viewHandler));
+        this.controllerList.add(new CreateAccountController(createAccountPanel, viewHandler));
+        this.controllerList.add(new UserHomeController(userHomePanel, viewHandler));
+        this.controllerList.add(new EditAccountController(editAccountPanel, viewHandler));
     }
 
+    // 리팩토링한거 잘되나 확인 ㄱㄱ
+    // viewhandler 모든 컨트롤러가 가지고 있게 했음
+
     private void bindFrontControllerToPanels() {
+
+        frontController = new FrontController(controllerMapper);
+
         loginPanel.createAccountButton.addActionListener(frontController);
         loginPanel.loginButton.addActionListener(frontController);
         loginPanel.findPasswordButton.addActionListener(frontController);

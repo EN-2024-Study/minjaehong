@@ -2,6 +2,7 @@ package controller.eventController;
 
 import model.dto.TextFieldDTO;
 import service.SignUpService;
+import utility.ViewHandler;
 import view.panel.EditAccountPanel;
 
 import javax.swing.*;
@@ -11,8 +12,9 @@ public class EditAccountController extends EventController {
 
     private EditAccountPanel editAccountPanel;
 
-    public EditAccountController(EditAccountPanel editAccountPanel){
+    public EditAccountController(EditAccountPanel editAccountPanel, ViewHandler viewHandler){
         this.editAccountPanel = editAccountPanel;
+        this.viewHandler = viewHandler;
         this.signUpService = new SignUpService();
     }
 
@@ -28,23 +30,21 @@ public class EditAccountController extends EventController {
         showCheckResultMessage(editAccountPanel, editAccountPanel.phoneNumTextField, exists);
     }
 
-    private void cancel(){
-        clearPanel();
+    private void submit(ActionEvent e){
+        if(editAccountPanel.returnTextFieldsValidity()){
+            // signUpService.updateAccount();
+            JOptionPane.showMessageDialog(editAccountPanel, "EDIT SUCCESS!");
+            viewHandler.handleButtonEvent(e);
+        }
     }
 
-    private void clearPanel(){
-        editAccountPanel.idTextField.setText("");
-        editAccountPanel.idTextField.setEnabled(true);
-        editAccountPanel.phoneNumTextField.setText("");
-        editAccountPanel.phoneNumTextField.setEnabled(true);
-        editAccountPanel.zipCodeTextField.setText("");
-        editAccountPanel.zipCodeTextField.setEnabled(true);
+    private void cancel(ActionEvent e){
+        viewHandler.handleButtonEvent(e);
     }
 
     @Override
     public void handleButtonEvent(ActionEvent e) {
         String actionCommand = e.getActionCommand();
-        String inputText;
 
         switch(actionCommand){
             case "editAccountPanel_checkId":
@@ -56,16 +56,13 @@ public class EditAccountController extends EventController {
                 break;
 
             case "editAccountPanel_checkZipCode":
-                inputText = editAccountPanel.zipCodeTextField.getText();
-                JOptionPane.showMessageDialog(editAccountPanel, inputText + " available!");
-                editAccountPanel.zipCodeTextField.setEnabled(false);
                 break;
 
             case "editAccountPanel_submit":
-
+                submit(e);
                 break;
             case "editAccountPanel_cancel":
-
+                cancel(e);
                 break;
         }
     }

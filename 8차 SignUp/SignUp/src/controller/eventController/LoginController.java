@@ -1,5 +1,9 @@
 package controller.eventController;
 
+import model.dto.LoginDTO;
+import model.dto.TextFieldDTO;
+import service.SignUpService;
+import utility.ViewHandler;
 import view.panel.LoginPanel;
 
 import javax.swing.*;
@@ -9,8 +13,42 @@ public class LoginController extends EventController {
 
     private LoginPanel loginPanel;
 
-    public LoginController(LoginPanel loginPanel){
+    public LoginController(LoginPanel loginPanel, ViewHandler viewHandler){
         this.loginPanel = loginPanel;
+        this.viewHandler = viewHandler;
+        this.signUpService = new SignUpService();
+    }
+    
+    private void login(ActionEvent e){
+        if(!loginPanel.returnTextFieldsValidity()) {
+            return;
+        }
+
+        String inputID = loginPanel.idTextField.getText();
+        String inputPW = loginPanel.pwTextField.getText();
+
+        if(signUpService.checkIfValidLogin(new LoginDTO(inputID, inputPW))) {
+            JOptionPane.showMessageDialog(loginPanel, "로그인 성공!");
+            viewHandler.setCookie(inputID);
+            viewHandler.handleButtonEvent(e);
+        }else{
+            JOptionPane.showMessageDialog(loginPanel, "로그인 실패!");
+        }
+    }
+
+    private void findPassword(){
+        String userInput = JOptionPane.showInputDialog(loginPanel, "당신의 ID를 입력하세요");
+
+        TextFieldDTO pw = signUpService.getPWOfCertainID(new TextFieldDTO(userInput));
+        if (!pw.getValue().isEmpty()) {
+            JOptionPane.showMessageDialog(loginPanel, "당신의 비밀번호는 " + pw.getValue() +" 입니다!");
+        }else{
+            JOptionPane.showMessageDialog(loginPanel, "ID가 존재하지 않습니다!");
+        }
+    }
+
+    private void createAccount(ActionEvent e){
+        viewHandler.handleButtonEvent(e);
     }
 
     @Override
@@ -19,19 +57,15 @@ public class LoginController extends EventController {
 
         switch(actionCommand){
             case "loginPanel_login":
-                System.out.println("login");
+                login(e);
                 break;
 
             case "loginPanel_findPassword":
-                String userInput = JOptionPane.showInputDialog(loginPanel, "Enter your ID:");
-
-                if (userInput != null) {
-                    JOptionPane.showMessageDialog(loginPanel, "Your PW is this!");
-                }
+                findPassword();
                 break;
 
             case "loginPanel_createAccount":
-                System.out.println("createAccount");
+                createAccount(e);
                 break;
         }
     }
