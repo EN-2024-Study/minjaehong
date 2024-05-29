@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DBConnector {
-    public Connection GetConnection(){
+    public Connection getConnection(){
         Connection newConnectionObject = null;
 
         try{

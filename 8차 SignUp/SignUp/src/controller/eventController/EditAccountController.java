@@ -1,6 +1,6 @@
 package controller.eventController;
 
-import model.dto.TextFieldDTO;
+import model.dto.ValueDTO;
 import service.SignUpService;
 import utility.ViewHandler;
 import view.panel.EditAccountPanel;
@@ -16,30 +16,6 @@ public class EditAccountController extends EventController {
         this.editAccountPanel = editAccountPanel;
         this.viewHandler = viewHandler;
         this.signUpService = new SignUpService();
-    }
-
-    private void checkID(){
-        String inputText = editAccountPanel.idTextField.getText();
-        boolean exists = signUpService.checkIfIDExists(new TextFieldDTO(inputText));
-        showCheckResultMessage(editAccountPanel, editAccountPanel.idTextField, exists);
-    }
-
-    private void checkPhoneNum(){
-        String inputText = editAccountPanel.phoneNumTextField.getText();
-        boolean exists = signUpService.checkIfPhoneNumExists(new TextFieldDTO(inputText));
-        showCheckResultMessage(editAccountPanel, editAccountPanel.phoneNumTextField, exists);
-    }
-
-    private void submit(ActionEvent e){
-        if(editAccountPanel.returnTextFieldsValidity()){
-            // signUpService.updateAccount();
-            JOptionPane.showMessageDialog(editAccountPanel, "EDIT SUCCESS!");
-            viewHandler.handleButtonEvent(e);
-        }
-    }
-
-    private void cancel(ActionEvent e){
-        viewHandler.handleButtonEvent(e);
     }
 
     @Override
@@ -65,5 +41,29 @@ public class EditAccountController extends EventController {
                 cancel(e);
                 break;
         }
+    }
+
+    private void checkID(){
+        String inputText = editAccountPanel.idTextField.getText();
+        boolean exists = signUpService.checkIfIDExists(new ValueDTO(inputText));
+        showCheckResultMessage(editAccountPanel, editAccountPanel.idTextField, exists);
+    }
+
+    private void checkPhoneNum(){
+        String inputText = editAccountPanel.phoneNumTextField.getText();
+        boolean exists = signUpService.checkIfPhoneNumExists(new ValueDTO(inputText));
+        showCheckResultMessage(editAccountPanel, editAccountPanel.phoneNumTextField, exists);
+    }
+
+    private void submit(ActionEvent e){
+        if(editAccountPanel.returnTextFieldsValidity()){
+            // signUpService.updateAccount();
+            JOptionPane.showMessageDialog(editAccountPanel, "EDIT SUCCESS!");
+            viewHandler.handleButtonEvent(e);
+        }
+    }
+
+    private void cancel(ActionEvent e){
+        viewHandler.handleButtonEvent(e);
     }
 }

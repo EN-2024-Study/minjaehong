@@ -1,9 +1,9 @@
 package model.dto;
 
-public class TextFieldDTO {
+public class ValueDTO {
     private String value;
 
-    public TextFieldDTO(String value){
+    public ValueDTO(String value){
         this.value = value;
     }
 

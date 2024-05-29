@@ -3,7 +3,7 @@ package service;
 import model.dao.AccountDAO;
 import model.dto.AccountDTO;
 import model.dto.LoginDTO;
-import model.dto.TextFieldDTO;
+import model.dto.ValueDTO;
 
 public class SignUpService {
 
@@ -14,13 +14,13 @@ public class SignUpService {
     }
 
     // READ
-    public boolean checkIfIDExists(TextFieldDTO textFieldDTO){
-        if(accountDAO.checkIfIDExists(textFieldDTO)) return true;
+    public boolean checkIfIDExists(ValueDTO valueDTO){
+        if(accountDAO.checkIfIDExists(valueDTO)) return true;
         return false;
     }
 
-    public boolean checkIfPhoneNumExists(TextFieldDTO textFieldDTO){
-        if(accountDAO.checkIfPhoneNumExists(textFieldDTO)) return true;
+    public boolean checkIfPhoneNumExists(ValueDTO valueDTO){
+        if(accountDAO.checkIfPhoneNumExists(valueDTO)) return true;
         return false;
     }
 
@@ -29,14 +29,14 @@ public class SignUpService {
         return false;
     }
 
-    public TextFieldDTO getPWOfCertainID(TextFieldDTO textFieldDTO){
+    public ValueDTO getPWOfCertainID(ValueDTO valueDTO){
         
         // ID가 존재자체를 안하면 깡통 DTO 보내기
-        if(!checkIfIDExists(textFieldDTO)){
-            return new TextFieldDTO("");
+        if(!checkIfIDExists(valueDTO)){
+            return new ValueDTO("");
         }
         
-        return accountDAO.getPWOfCertainID(textFieldDTO);
+        return accountDAO.getPWOfCertainID(valueDTO);
     }
 
     // CREATE
@@ -50,7 +50,7 @@ public class SignUpService {
     }
 
     // DELETE
-    public void deleteAccount(TextFieldDTO textFieldDTO){
-        accountDAO.Delete(textFieldDTO);
+    public void deleteAccount(ValueDTO valueDTO){
+        accountDAO.Delete(valueDTO);
     }
 }

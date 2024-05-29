@@ -5,7 +5,7 @@ import model.AppConfig;
 import model.DBConnector;
 import model.dto.AccountDTO;
 import model.dto.LoginDTO;
-import model.dto.TextFieldDTO;
+import model.dto.ValueDTO;
 import model.dto.UpdateInfoDTO;
 
 import java.sql.*;
@@ -17,7 +17,6 @@ public class AccountDAO {
     private DBConnector dbConnector;
 
     private PreparedStatement preparedStatement; // 동적쿼리문. ? 있는것들
-    private Statement statement; // 정적쿼리문. ?로 받을 인자가 없음
     private ResultSet resultSet; // 결과 반환받는 자료형
     
     // singleton 으로 해놔 conn 변수가 딱 한번만 초기화되게 하자
@@ -47,19 +46,20 @@ public class AccountDAO {
 
     //=========================== SINGLETON =============================//
 
-    //============================= GET ===============================//
-    public boolean checkIfIDExists(TextFieldDTO textFieldDTO) {
+    //============================= GET ===============================//'
+
+    public boolean checkIfIDExists(ValueDTO valueDTO) {
         Connection conn = null;
         boolean exists = false;
         
         try {
             // 새로운 Connection 객체 받기
-            conn = dbConnector.GetConnection();
+            conn = dbConnector.getConnection();
 
             String query = Querys.checkIfIDExists;
             preparedStatement = conn.prepareStatement(query);
 
-            preparedStatement.setString(1, textFieldDTO.getValue());
+            preparedStatement.setString(1, valueDTO.getValue());
             
             resultSet = preparedStatement.executeQuery();
             
@@ -78,17 +78,17 @@ public class AccountDAO {
         return exists;
     }
 
-    public boolean checkIfPhoneNumExists(TextFieldDTO textFieldDTO){
+    public boolean checkIfPhoneNumExists(ValueDTO valueDTO){
         Connection conn = null;
 
         boolean exists = false;
         try{
-            conn = dbConnector.GetConnection();
+            conn = dbConnector.getConnection();
 
             String query = Querys.checkIfPhoneNumExists;
 
             preparedStatement = conn.prepareStatement(query);
-            preparedStatement.setString(1, textFieldDTO.getValue());
+            preparedStatement.setString(1, valueDTO.getValue());
 
             resultSet = preparedStatement.executeQuery();
 
@@ -116,7 +116,7 @@ public class AccountDAO {
         boolean isValid = false;
 
         try{
-            conn = dbConnector.GetConnection();
+            conn = dbConnector.getConnection();
 
             String query = Querys.checkIfValidLogin;
 
@@ -141,9 +141,34 @@ public class AccountDAO {
         return isValid;
     }
 
-    public TextFieldDTO getPWOfCertainID(TextFieldDTO textFieldDTO){
+    public ValueDTO getPWOfCertainID(ValueDTO valueDTO){
 
-        return new TextFieldDTO("hi");
+        Connection conn = null;
+
+        String curID = valueDTO.getValue();
+        String pw = "";
+
+        try{
+            conn = dbConnector.getConnection();
+
+            preparedStatement = conn.prepareStatement(Querys.getPWOfCertainID);
+            preparedStatement.setString(1, curID);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                pw = resultSet.getString("userpw");
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new ValueDTO(pw);
     }
 
     // 여기 하고 있었음
@@ -157,7 +182,7 @@ public class AccountDAO {
         String curZipcode= "";
         
         try{
-            conn = dbConnector.GetConnection();
+            conn = dbConnector.getConnection();
 
             preparedStatement = conn.prepareStatement(Querys.getUpdatableUserInfos);
             preparedStatement.setString(1, userId);
@@ -170,6 +195,11 @@ public class AccountDAO {
                 curAddress = resultSet.getString("userzipcode");
                 curZipcode = resultSet.getString("useraddress");
             }
+
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+
         }catch(SQLException e){
             e.printStackTrace();
         }
@@ -181,16 +211,9 @@ public class AccountDAO {
         Connection conn = null;
 
         try{
-            conn = dbConnector.GetConnection();
+            conn = dbConnector.getConnection();
 
-            statement = conn.createStatement();
-
-            String addAccount = "INSERT INTO account " +
-                    "(userid, userpw, username, userphonenum, userbirth, useremail, userzipcode, useraddress) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-            // 미리 틀이 준비된 query 문 세팅하기
-            preparedStatement = conn.prepareStatement(addAccount);
+            preparedStatement = conn.prepareStatement(Querys.addAccount);
 
             preparedStatement.setString(1, accountDTO.getUserId());
             preparedStatement.setString(2, accountDTO.getUserPw());
@@ -208,6 +231,7 @@ public class AccountDAO {
 
             preparedStatement.close();
             conn.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -215,14 +239,16 @@ public class AccountDAO {
 
     //=========================== DELETE =============================//
 
-    public void Delete(TextFieldDTO textFieldDTO){
+    public void Delete(ValueDTO valueDTO){
         Connection conn = null;
 
+        String deletingID = valueDTO.getValue();
+
         try{
-            conn = dbConnector.GetConnection();
+            conn = dbConnector.getConnection();
 
             preparedStatement = conn.prepareStatement(Querys.deleteAccount);
-            preparedStatement.setString(1, textFieldDTO.getValue());
+            preparedStatement.setString(1, deletingID);
 
             int success = preparedStatement.executeUpdate();
 

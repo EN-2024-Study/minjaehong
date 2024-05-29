@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 // ActionCommand 를 확인하고 Panel 초기화하고 갈아끼워줌
+// Login 시
 public class ViewHandler extends EventController {
 
     private MainFrame mainFrame;

@@ -1,7 +1,7 @@
 package controller.eventController;
 
 import model.dto.AccountDTO;
-import model.dto.TextFieldDTO;
+import model.dto.ValueDTO;
 import service.SignUpService;
 import utility.ViewHandler;
 import view.panel.CreateAccountPanel;
@@ -36,14 +36,11 @@ public class CreateAccountController extends EventController {
                 break;
 
             case "createAccountPanel_submit":
-                if(submit()){
-                    JOptionPane.showMessageDialog(createAccountPanel, "createAccount success!");
-                    viewHandler.handleButtonEvent(e);
-                }
+                submit(e);
                 break;
 
             case "createAccountPanel_cancel":
-                viewHandler.handleButtonEvent(e);
+                cancel(e);
                 break;
         }
     }
@@ -53,7 +50,7 @@ public class CreateAccountController extends EventController {
         if(!createAccountPanel.idTextField.checkValidity()){
             return;
         }
-        boolean exists = signUpService.checkIfIDExists(new TextFieldDTO(inputText));
+        boolean exists = signUpService.checkIfIDExists(new ValueDTO(inputText));
         showCheckResultMessage(createAccountPanel, createAccountPanel.idTextField, exists);
     }
 
@@ -62,13 +59,13 @@ public class CreateAccountController extends EventController {
         if(!createAccountPanel.phoneNumTextField.checkValidity()){
             return;
         }
-        boolean exists = signUpService.checkIfIDExists(new TextFieldDTO(inputText));
+        boolean exists = signUpService.checkIfIDExists(new ValueDTO(inputText));
         showCheckResultMessage(createAccountPanel, createAccountPanel.phoneNumTextField, exists);
     }
 
-    private boolean submit(){
+    private void submit(ActionEvent e){
         if(!createAccountPanel.returnTextFieldsValidity()){
-            return false;
+            return;
         }
 
         String userID = createAccountPanel.idTextField.getText();
@@ -81,6 +78,12 @@ public class CreateAccountController extends EventController {
         String userAddress = createAccountPanel.addressTextField.getText();
 
         signUpService.addAccount(new AccountDTO(userID, userPW, userName, userPhoneNum, userBirth, userEmail, userZipcode, userAddress));
-        return true;
+
+        JOptionPane.showMessageDialog(createAccountPanel, "createAccount success!");
+        viewHandler.handleButtonEvent(e);
+    }
+
+    private void cancel(ActionEvent e){
+        viewHandler.handleButtonEvent(e);
     }
 }
